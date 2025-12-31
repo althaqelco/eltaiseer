@@ -1,0 +1,733 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { useRouter, useParams } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import {
+  ArrowRight,
+  Save,
+  MapPin,
+  Home,
+  DollarSign,
+  Image as ImageIcon,
+  Phone,
+  CheckCircle2,
+  Plus,
+  X,
+  Loader2,
+  Upload,
+} from "lucide-react";
+import { PLACE_CATEGORIES, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/damiettaPlaces";
+import { getPropertyById, updateProperty } from "@/lib/propertyStore";
+import { Property } from "@/lib/mockData";
+import { uploadImage, validateImageFile, compressImage } from "@/lib/imageUpload";
+
+const PROPERTY_TYPES = [
+  "شقة",
+  "شقة فاخرة",
+  "فيلا منفصلة",
+  "دوبلكس",
+  "بنتهاوس",
+  "تاون هاوس",
+  "محل تجاري",
+  "مقر إداري",
+  "عيادة",
+  "أرض",
+  "مبنى تحت الإنشاء",
+  "شاليه",
+  "روف",
+];
+
+export default function EditPropertyClient() {
+  const router = useRouter();
+  const params = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [property, setProperty] = useState<Property | null>(null);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [newImageUrl, setNewImageUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    price: "",
+    type: "",
+    district: "",
+    address: "",
+    area_sqm: "",
+    bedrooms: "0",
+    bathrooms: "0",
+    level: "",
+    finishing: "",
+    status: "جاهز" as "جاهز" | "تحت الإنشاء" | "تم البيع",
+    contact_whatsapp: "",
+    isVerified: false,
+  });
+
+  useEffect(() => {
+    const id = params.id as string;
+    const foundProperty = getPropertyById(id);
+    
+    if (foundProperty) {
+      setProperty(foundProperty);
+      setFormData({
+        title: foundProperty.title,
+        price: String(foundProperty.price),
+        type: foundProperty.type,
+        district: foundProperty.location.district,
+        address: foundProperty.location.address,
+        area_sqm: String(foundProperty.details.area_sqm),
+        bedrooms: String(foundProperty.details.bedrooms),
+        bathrooms: String(foundProperty.details.bathrooms),
+        level: foundProperty.details.level,
+        finishing: foundProperty.details.finishing,
+        status: foundProperty.status || "جاهز",
+        contact_whatsapp: foundProperty.contact_whatsapp,
+        isVerified: foundProperty.isVerified,
+      });
+      setSelectedAmenities(foundProperty.amenities);
+      setImageUrls(foundProperty.images);
+    }
+    setIsLoading(false);
+  }, [params.id]);
+
+  const handleChange = (field: string, value: string | boolean) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const toggleAmenity = (amenity: string) => {
+    setSelectedAmenities((prev) =>
+      prev.includes(amenity)
+        ? prev.filter((a) => a !== amenity)
+        : [...prev, amenity]
+    );
+  };
+
+  const addImageUrl = () => {
+    if (newImageUrl.trim() && !imageUrls.includes(newImageUrl)) {
+      setImageUrls((prev) => [...prev, newImageUrl]);
+      setNewImageUrl("");
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    setUploadProgress("جاري رفع الصور...");
+
+    try {
+      const uploadedUrls: string[] = [];
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        setUploadProgress(`جاري رفع الصورة ${i + 1} من ${files.length}...`);
+        
+        const validation = validateImageFile(file);
+        if (!validation.valid) {
+          alert(validation.error);
+          continue;
+        }
+        
+        const compressedFile = await compressImage(file);
+        const url = await uploadImage(compressedFile);
+        uploadedUrls.push(url);
+      }
+      
+      if (uploadedUrls.length > 0) {
+        setImageUrls((prev) => [...prev, ...uploadedUrls]);
+        setUploadProgress(`تم رفع ${uploadedUrls.length} صورة بنجاح!`);
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      setUploadProgress("فشل في رفع الصور. حاول مرة أخرى.");
+    } finally {
+      setIsUploading(false);
+      setTimeout(() => setUploadProgress(""), 3000);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const removeImageUrl = (url: string) => {
+    setImageUrls((prev) => prev.filter((u) => u !== url));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!property) return;
+    
+    setIsSubmitting(true);
+
+    try {
+      const updatedProperty = updateProperty(property.id, {
+        title: formData.title,
+        price: Number(formData.price),
+        type: formData.type,
+        location: {
+          district: formData.district,
+          address: formData.address,
+        },
+        details: {
+          area_sqm: Number(formData.area_sqm),
+          bedrooms: Number(formData.bedrooms),
+          bathrooms: Number(formData.bathrooms),
+          level: formData.level,
+          finishing: formData.finishing,
+        },
+        status: formData.status as "جاهز" | "تحت الإنشاء" | "تم البيع",
+        amenities: selectedAmenities,
+        images: imageUrls.length > 0 ? imageUrls : property.images,
+        contact_whatsapp: formData.contact_whatsapp,
+        isVerified: formData.isVerified,
+      });
+
+      if (updatedProperty) {
+        alert("تم تحديث العقار بنجاح!");
+        router.push("/dashboard");
+      } else {
+        alert("حدث خطأ أثناء تحديث العقار");
+      }
+    } catch (error) {
+      console.error("Error updating property:", error);
+      alert("حدث خطأ أثناء تحديث العقار");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-orange-500" />
+      </div>
+    );
+  }
+
+  if (!property) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-16 text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            العقار غير موجود
+          </h1>
+          <p className="text-gray-600 mb-8">
+            عذراً، لم نتمكن من العثور على العقار المطلوب
+          </p>
+          <Button onClick={() => router.push("/dashboard")} className="bg-orange-500">
+            <ArrowRight className="h-4 w-4 ms-2" />
+            العودة للوحة التحكم
+          </Button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+
+      <main className="container mx-auto px-4 py-8">
+        {/* Page Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <Button asChild variant="ghost" size="icon">
+            <Link href="/dashboard">
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">تعديل العقار</h1>
+            <p className="text-gray-600 mt-1">
+              {property.id} - {property.title}
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Form */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Basic Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Home className="h-5 w-5 text-orange-500" />
+                    المعلومات الأساسية
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      عنوان العقار *
+                    </label>
+                    <Input
+                      required
+                      placeholder="مثال: شقة 120 متر بالحي الأول"
+                      value={formData.title}
+                      onChange={(e) => handleChange("title", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        نوع العقار *
+                      </label>
+                      <Select
+                        value={formData.type}
+                        onValueChange={(value) => handleChange("type", value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="اختر النوع" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PROPERTY_TYPES.map((type) => (
+                            <SelectItem key={type} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        السعر (جنيه) *
+                      </label>
+                      <Input
+                        required
+                        type="number"
+                        placeholder="0"
+                        value={formData.price}
+                        onChange={(e) => handleChange("price", e.target.value)}
+                        dir="ltr"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Location */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-orange-500" />
+                    الموقع
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      المنطقة *
+                    </label>
+                    <Select
+                      value={formData.district}
+                      onValueChange={(value) => handleChange("district", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر المنطقة" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-80">
+                        {PLACE_CATEGORIES.map((category) => (
+                          <SelectGroup key={category.id}>
+                            <SelectLabel className="text-orange-600 font-bold">
+                              {category.nameAr}
+                            </SelectLabel>
+                            {category.districts.map((district) => (
+                              <SelectItem key={district} value={district}>
+                                {district}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      العنوان التفصيلي
+                    </label>
+                    <Input
+                      placeholder="مثال: 15 شارع الجمهورية"
+                      value={formData.address}
+                      onChange={(e) => handleChange("address", e.target.value)}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Details */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <DollarSign className="h-5 w-5 text-orange-500" />
+                    التفاصيل والمواصفات
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        المساحة (م²) *
+                      </label>
+                      <Input
+                        required
+                        type="number"
+                        placeholder="0"
+                        value={formData.area_sqm}
+                        onChange={(e) => handleChange("area_sqm", e.target.value)}
+                        dir="ltr"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        غرف النوم
+                      </label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={formData.bedrooms}
+                        onChange={(e) => handleChange("bedrooms", e.target.value)}
+                        dir="ltr"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        الحمامات
+                      </label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={formData.bathrooms}
+                        onChange={(e) => handleChange("bathrooms", e.target.value)}
+                        dir="ltr"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        الدور
+                      </label>
+                      <Select
+                        value={formData.level}
+                        onValueChange={(value) => handleChange("level", value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="اختر" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {FLOOR_LEVELS.map((level) => (
+                            <SelectItem key={level} value={level}>
+                              {level}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      التشطيب
+                    </label>
+                    <Select
+                      value={formData.finishing}
+                      onValueChange={(value) => handleChange("finishing", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر نوع التشطيب" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FINISHING_TYPES.map((finish) => (
+                          <SelectItem key={finish} value={finish}>
+                            {finish}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Property Status */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      حالة العقار
+                    </label>
+                    <Select
+                      value={formData.status}
+                      onValueChange={(value) => handleChange("status", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر حالة العقار" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="جاهز">
+                          <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                            جاهز للسكن
+                          </span>
+                        </SelectItem>
+                        <SelectItem value="تحت الإنشاء">
+                          <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
+                            تحت الإنشاء
+                          </span>
+                        </SelectItem>
+                        <SelectItem value="تم البيع">
+                          <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                            تم البيع
+                          </span>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      المميزات والخدمات
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {AMENITIES.map((amenity) => (
+                        <Badge
+                          key={amenity}
+                          variant={
+                            selectedAmenities.includes(amenity)
+                              ? "default"
+                              : "outline"
+                          }
+                          className={`cursor-pointer transition-colors ${
+                            selectedAmenities.includes(amenity)
+                              ? "bg-orange-500 hover:bg-orange-600"
+                              : "hover:bg-gray-100"
+                          }`}
+                          onClick={() => toggleAmenity(amenity)}
+                        >
+                          {selectedAmenities.includes(amenity) && (
+                            <CheckCircle2 className="h-3 w-3 me-1" />
+                          )}
+                          {amenity}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Images */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ImageIcon className="h-5 w-5 text-orange-500" />
+                    الصور
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* File Upload Section */}
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-orange-400 transition-colors">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      multiple
+                      onChange={handleFileUpload}
+                      className="hidden"
+                      id="image-upload-edit"
+                      disabled={isUploading}
+                    />
+                    <label
+                      htmlFor="image-upload-edit"
+                      className="cursor-pointer flex flex-col items-center gap-2"
+                    >
+                      {isUploading ? (
+                        <>
+                          <Loader2 className="h-10 w-10 text-orange-500 animate-spin" />
+                          <span className="text-orange-600 font-medium">{uploadProgress}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="h-10 w-10 text-gray-400" />
+                          <span className="text-gray-600 font-medium">اضغط لرفع الصور</span>
+                          <span className="text-sm text-gray-400">JPG, PNG, WebP - حد أقصى 5MB للصورة</span>
+                        </>
+                      )}
+                    </label>
+                  </div>
+
+                  {uploadProgress && !isUploading && (
+                    <p className="text-sm text-green-600 text-center">{uploadProgress}</p>
+                  )}
+
+                  <Separator />
+
+                  {/* URL Input (Alternative) */}
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">أو أضف رابط صورة:</p>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="أدخل رابط الصورة (URL)"
+                        value={newImageUrl}
+                        onChange={(e) => setNewImageUrl(e.target.value)}
+                        dir="ltr"
+                      />
+                      <Button type="button" onClick={addImageUrl} variant="outline">
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Image Preview Grid */}
+                  {imageUrls.length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {imageUrls.map((url, index) => (
+                        <div key={index} className="relative group">
+                          <div className="aspect-video rounded-lg overflow-hidden bg-gray-100 relative">
+                            <Image
+                              src={url}
+                              alt={`صورة ${index + 1}`}
+                              fill
+                              className="object-cover"
+                              unoptimized
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeImageUrl(url)}
+                            className="absolute top-2 left-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                          {index === 0 && (
+                            <span className="absolute bottom-2 right-2 bg-orange-500 text-white text-xs px-2 py-1 rounded">
+                              رئيسية
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Contact */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Phone className="h-5 w-5 text-orange-500" />
+                    معلومات التواصل
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      رقم الواتساب *
+                    </label>
+                    <Input
+                      required
+                      placeholder="01001234567"
+                      value={formData.contact_whatsapp}
+                      onChange={(e) =>
+                        handleChange("contact_whatsapp", e.target.value)
+                      }
+                      dir="ltr"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <input
+                      type="checkbox"
+                      id="isVerified"
+                      checked={formData.isVerified}
+                      onChange={(e) =>
+                        handleChange("isVerified", e.target.checked)
+                      }
+                      className="w-5 h-5 text-orange-500 rounded"
+                    />
+                    <label htmlFor="isVerified" className="flex items-center gap-2">
+                      <CheckCircle2 className="h-5 w-5 text-blue-500" />
+                      <span>عقار موثق</span>
+                    </label>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Submit */}
+              <Card>
+                <CardContent className="p-6">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-orange-500 hover:bg-orange-600 h-12 text-lg gap-2"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        <Save className="h-5 w-5" />
+                        حفظ التعديلات
+                      </>
+                    )}
+                  </Button>
+
+                  <p className="text-center text-sm text-gray-500 mt-4">
+                    سيتم تحديث العقار مباشرة بعد الحفظ
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Property Info */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="font-bold text-gray-800 mb-4">معلومات العقار</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">رقم العقار</span>
+                      <span className="font-mono">{property.id}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">تاريخ الإضافة</span>
+                      <span>{property.createdAt.toLocaleDateString("ar-EG")}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </form>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

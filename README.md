@@ -1,4 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# التيسير للعقارات | El Taiseer Real Estate
+
+منصة عقارية متكاملة للبحث عن العقارات في دمياط الجديدة - شقق، فيلات، محلات تجارية، وأراضي.
+
+## About
+
+This is a [Next.js](https://nextjs.org) project for **El Taiseer Real Estate** (التيسير للعقارات), a comprehensive real estate platform for New Damietta, Egypt.
 
 ## Getting Started
 

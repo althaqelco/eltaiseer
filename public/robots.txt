@@ -1,0 +1,66 @@
+# robots.txt for التيسير للعقارات - eltaiseer.com
+# Real Estate Website - New Damietta, Egypt
+
+User-agent: *
+Allow: /
+Allow: /properties
+Allow: /property/
+Allow: /favorites
+
+# Disallow admin/dashboard pages
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /login
+
+# Disallow API routes if any
+Disallow: /api/
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://eltaiseer.com/sitemap.xml
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Google Images
+User-agent: Googlebot-Image
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Yandex
+User-agent: Yandex
+Allow: /
+Crawl-delay: 2
+
+# AI Crawlers - Allow for AI search engines
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
