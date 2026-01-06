@@ -309,59 +309,6 @@
                         </div>
                     </div>
                     
-                    <!-- Quantity Selection -->
-                    <div class="mb-5">
-                        <p class="font-bold mb-3">اختر العرض المناسب:</p>
-                        <div class="space-y-3">
-                            <!-- Option 1 -->
-                            <label class="block cursor-pointer">
-                                <input type="radio" name="qty" value="1" x-model="selectedQty" class="hidden peer">
-                                <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all hover:border-gray-600"
-                                     :class="selectedQty === '1' ? 'bg-neon-orange/10 border-neon-orange' : ''">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-lg">🎁</span>
-                                        <span class="font-semibold">اشتري 1</span>
-                                        <span class="text-neon-orange">✨</span>
-                                        <span class="text-gray-300 text-sm">طقم محمول</span>
-                                        <span class="text-neon-orange">✨</span>
-                                    </div>
-                                    <span class="font-bold text-sm">2,200 ج.م</span>
-                                </div>
-                            </label>
-                            
-                            <!-- Option 2 - Best Value -->
-                            <label class="block cursor-pointer relative">
-                                <input type="radio" name="qty" value="2" x-model="selectedQty" class="hidden peer">
-                                <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all hover:border-gray-600"
-                                     :class="selectedQty === '2' ? 'bg-neon-orange/10 border-neon-orange' : ''">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-lg">🎁</span>
-                                        <span class="font-semibold">اشتري 2</span>
-                                        <span class="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">وفر 9%</span>
-                                        <span class="text-gray-300 text-sm">🚗 طقم العائلة 🚗</span>
-                                    </div>
-                                    <span class="font-bold text-sm">3,999 ج.م</span>
-                                </div>
-                                <span class="absolute -top-2 right-4 bg-neon-orange text-black text-xs font-bold px-2 py-0.5 rounded-full">⭐ الأكثر مبيعاً</span>
-                            </label>
-                            
-                            <!-- Option 3 - Multi Pack -->
-                            <label class="block cursor-pointer relative">
-                                <input type="radio" name="qty" value="3" x-model="selectedQty" class="hidden peer">
-                                <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all hover:border-gray-600"
-                                     :class="selectedQty === '3' ? 'bg-neon-orange/10 border-neon-orange' : ''">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-lg">🎁</span>
-                                        <span class="font-semibold">اشتري 3</span>
-                                        <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">وفر 15%</span>
-                                        <span class="text-gray-300 text-sm">🌟 عرض مميز 🌟</span>
-                                    </div>
-                                    <span class="font-bold text-sm">5,599 ج.م</span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    
                     <!-- CTA Button -->
                     <a href="#order-form" class="block w-full bg-neon-orange hover:bg-orange-500 text-black text-center text-xl font-black py-4 rounded-xl pulse-btn transition-all duration-300 mb-6">
                         اطلب الآن والدفع عند الاستلام
