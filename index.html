@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="شاشة LED المرنة الذكية للسيارات - تحكم بلوتوث، مقاوم للماء، ألوان RGB. اطلب الآن بالدفع عند الاستلام.">
+    <title>LED Matrix Egypt - شاشة LED المرنة للسيارات</title>
+    
+    <!-- Critical: Preconnect to external domains -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- DNS Prefetch for faster resolution -->
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    
+    <!-- Critical CSS inline for instant render -->
+    <style>
+        *{font-family:'Cairo',sans-serif;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{background:#0a0a0a;color:#fff;margin:0}
+        .loading-placeholder{background:#1a1a1a;min-height:100vh}
+    </style>
+    
+    <!-- Load Tailwind with lower priority -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Defer Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Optimize font loading with display=swap -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-orange': '#FF9900',
+                        'dark-bg': '#0a0a0a',
+                        'dark-card': '#1a1a1a',
+                        'dark-border': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'cairo': ['Cairo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 153, 0, 0.5), 0 0 40px rgba(255, 153, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 153, 0, 0.8), 0 0 60px rgba(255, 153, 0, 0.5);
+            }
+        }
+        
+        .pulse-btn {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #FF9900 0%, #FFD700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .video-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .video-carousel {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 1px solid #2a2a2a;
+        }
+
+        .feature-card:hover {
+            border-color: #FF9900;
+            transform: translateY(-5px);
+        }
+
+        .offer-card {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+        }
+
+        .offer-card.highlighted {
+            border: 3px solid #FF9900;
+            background: linear-gradient(145deg, #2a1a00 0%, #1a1a1a 100%);
+        }
+
+        .timeline-line {
+            background: linear-gradient(180deg, #FF9900 0%, #FFD700 100%);
+        }
+
+        .egypt-stripe {
+            background: linear-gradient(to left, #000000 33%, #ce1126 33%, #ce1126 66%, #ebc036 66%);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .price-badge {
+            background: linear-gradient(135deg, #FF9900 0%, #FFD700 50%, #FF9900 100%);
+            background-size: 200% 200%;
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .trust-icon {
+            background: linear-gradient(145deg, #1f1f1f 0%, #141414 100%);
+        }
+
+        @keyframes flame {
+            0%, 100% { 
+                transform: scaleY(1) scaleX(1);
+                filter: brightness(1);
+            }
+            25% { 
+                transform: scaleY(1.1) scaleX(0.95);
+                filter: brightness(1.2);
+            }
+            50% { 
+                transform: scaleY(0.95) scaleX(1.05);
+                filter: brightness(0.9);
+            }
+            75% { 
+                transform: scaleY(1.05) scaleX(0.98);
+                filter: brightness(1.1);
+            }
+        }
+
+        .fire-animate {
+            display: inline-block;
+            animation: flame 0.5s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-white">
+
+    <!-- Egypt Flag Stripe -->
+    <div class="egypt-stripe h-2 w-full fixed top-0 z-[60]"></div>
+
+    <!-- Sticky Header -->
+    <header x-data="{ scrolled: false }" 
+            @scroll.window="scrolled = window.pageYOffset > 50"
+            :class="scrolled ? 'bg-dark-bg/95 backdrop-blur-md shadow-lg shadow-black/50' : 'bg-dark-bg/80'"
+            class="fixed top-2 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 bg-neon-orange rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2 2H5V5h14v14zm0-16H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                </div>
+                <span class="text-lg font-bold">LED Matrix Egypt</span>
+            </div>
+            <a href="#order-form" class="bg-neon-orange hover:bg-orange-500 text-black font-bold px-5 py-2 rounded-full transition-all duration-300 hover:scale-105 text-sm">
+                🛒 اطلب الآن
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section - Shopify Style -->
+    <section class="pt-16 pb-6 bg-dark-bg" x-data="{ 
+        selectedQty: '1', 
+        mainImage: 'images/Dual_Flexible_LED_Screen_Programmable_Kit_Full_Set.png',
+        images: [
+            'images/Dual_Flexible_LED_Screen_Programmable_Kit_Full_Set.png',
+            'images/Truck_Windshield_Flexible_LED_Sign_Devils_Eye_App_Control_Features.png',
+            'images/Flexible_LED_Car_Sign_Waterproof_Bluetooth_App_Control.png',
+            'images/Car_Rear_Window_Flexible_LED_Sign_Funny_Emoticons_App_Control_Jeep.png'
+        ]
+    }">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+                
+                <!-- Right Side - Product Info (RTL) -->
+                <div class="order-2 lg:order-1">
+                    <!-- Product Tags -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-dark-card border border-dark-border text-gray-300 text-xs px-3 py-1 rounded-full">تحكم بلوتوث 📱</span>
+                        <span class="bg-dark-card border border-dark-border text-gray-300 text-xs px-3 py-1 rounded-full">مقاوم للماء IP65 💧</span>
+                        <span class="bg-dark-card border border-dark-border text-gray-300 text-xs px-3 py-1 rounded-full">ألوان RGB 🎨</span>
+                    </div>
+                    
+                    <!-- Product Title -->
+                    <h1 class="text-2xl md:text-3xl lg:text-4xl font-black mb-2 leading-tight">
+                        شاشة LED المرنة الذكية للسيارات
+                    </h1>
+                    <p class="text-gray-400 mb-4">
+                        حول سيارتك إلى تحفة فنية متحركة - تحكم كامل من هاتفك
+                    </p>
+                    
+                    <!-- Rating -->
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="flex text-yellow-400">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        </div>
+                        <span class="font-bold text-white">4.9</span>
+                        <span class="text-gray-400 text-sm">(2,847 تقييم)</span>
+                    </div>
+                    
+                    <!-- Price Section -->
+                    <div class="flex flex-wrap items-baseline gap-3 mb-4">
+                        <span class="text-4xl font-black text-neon-orange" x-text="selectedQty === '1' ? '2,200' : (selectedQty === '2' ? '3,999' : '5,599')"></span>
+                        <span class="text-xl text-gray-400">ج.م</span>
+                        <span class="text-gray-500 line-through text-lg" x-text="selectedQty === '1' ? '2,500 ج.م' : (selectedQty === '2' ? '4,400 ج.م' : '6,600 ج.م')"></span>
+                        <span class="bg-red-500 text-white text-sm px-3 py-1 rounded-full font-bold flex items-center gap-1">
+                            <span>🏷️</span>
+                            <span x-text="selectedQty === '1' ? 'وفر 12%' : (selectedQty === '2' ? 'وفر 9%' : 'وفر 15%')"></span>
+                        </span>
+                    </div>
+                    
+                    <!-- Urgency Indicators -->
+                    <div class="space-y-2 mb-5" x-data="{
+                        viewers: 143,
+                        init() {
+                            setInterval(() => {
+                                const change = Math.random() > 0.5 ? 1 : -1;
+                                const amount = Math.floor(Math.random() * 3) + 1;
+                                this.viewers = Math.max(98, Math.min(189, this.viewers + (change * amount)));
+                            }, 3000 + Math.random() * 2000);
+                        }
+                    }">
+                        <!-- Stock Warning -->
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-xl fire-animate">🔥</span>
+                            <span class="text-red-400 font-semibold">أسرع! متبقي <span class="text-white font-bold">7</span> قطع فقط في المخزون</span>
+                        </div>
+                        
+                        <!-- Live Viewers -->
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="relative flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                            </span>
+                            <span class="text-gray-300"><span class="text-white font-bold transition-all" x-text="viewers"></span> شخص يشاهدون هذا المنتج الآن</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Countdown Timer -->
+                    <div class="bg-dark-card border border-red-500/30 rounded-xl p-3 mb-5" x-data="{ 
+                        hours: 2,
+                        minutes: 47, 
+                        seconds: 33,
+                        init() {
+                            setInterval(() => {
+                                if (this.seconds > 0) {
+                                    this.seconds--;
+                                } else if (this.minutes > 0) {
+                                    this.minutes--;
+                                    this.seconds = 59;
+                                } else if (this.hours > 0) {
+                                    this.hours--;
+                                    this.minutes = 59;
+                                    this.seconds = 59;
+                                }
+                            }, 1000);
+                        }
+                    }">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg">⏰</span>
+                                <span class="text-gray-300 text-sm font-semibold">العرض ينتهي خلال</span>
+                            </div>
+                            <div class="flex items-center gap-1 font-mono">
+                                <span class="bg-red-500 text-white px-2 py-1 rounded text-lg font-bold" x-text="String(hours).padStart(2, '0')"></span>
+                                <span class="text-red-500 font-bold text-xl">:</span>
+                                <span class="bg-red-500 text-white px-2 py-1 rounded text-lg font-bold" x-text="String(minutes).padStart(2, '0')"></span>
+                                <span class="text-red-500 font-bold text-xl">:</span>
+                                <span class="bg-red-500 text-white px-2 py-1 rounded text-lg font-bold" x-text="String(seconds).padStart(2, '0')"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quantity Selection -->
+                    <div class="mb-5">
+                        <p class="font-bold mb-3">اختر العرض المناسب:</p>
+                        <div class="space-y-3">
+                            <!-- Option 1 -->
+                            <label class="block cursor-pointer">
+                                <input type="radio" name="qty" value="1" x-model="selectedQty" class="hidden peer">
+                                <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all hover:border-gray-600"
+                                     :class="selectedQty === '1' ? 'bg-neon-orange/10 border-neon-orange' : ''">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-lg">🎁</span>
+                                        <span class="font-semibold">اشتري 1</span>
+                                        <span class="text-neon-orange">✨</span>
+                                        <span class="text-gray-300 text-sm">طقم محمول</span>
+                                        <span class="text-neon-orange">✨</span>
+                                    </div>
+                                    <span class="font-bold text-sm">2,200 ج.م</span>
+                                </div>
+                            </label>
+                            
+                            <!-- Option 2 - Best Value -->
+                            <label class="block cursor-pointer relative">
+                                <input type="radio" name="qty" value="2" x-model="selectedQty" class="hidden peer">
+                                <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all hover:border-gray-600"
+                                     :class="selectedQty === '2' ? 'bg-neon-orange/10 border-neon-orange' : ''">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-lg">🎁</span>
+                                        <span class="font-semibold">اشتري 2</span>
+                                        <span class="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">وفر 9%</span>
+                                        <span class="text-gray-300 text-sm">🚗 طقم العائلة 🚗</span>
+                                    </div>
+                                    <span class="font-bold text-sm">3,999 ج.م</span>
+                                </div>
+                                <span class="absolute -top-2 right-4 bg-neon-orange text-black text-xs font-bold px-2 py-0.5 rounded-full">⭐ الأكثر مبيعاً</span>
+                            </label>
+                            
+                            <!-- Option 3 - Multi Pack -->
+                            <label class="block cursor-pointer relative">
+                                <input type="radio" name="qty" value="3" x-model="selectedQty" class="hidden peer">
+                                <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all hover:border-gray-600"
+                                     :class="selectedQty === '3' ? 'bg-neon-orange/10 border-neon-orange' : ''">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-lg">🎁</span>
+                                        <span class="font-semibold">اشتري 3</span>
+                                        <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">وفر 15%</span>
+                                        <span class="text-gray-300 text-sm">🌟 عرض مميز 🌟</span>
+                                    </div>
+                                    <span class="font-bold text-sm">5,599 ج.م</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- CTA Button -->
+                    <a href="#order-form" class="block w-full bg-neon-orange hover:bg-orange-500 text-black text-center text-xl font-black py-4 rounded-xl pulse-btn transition-all duration-300 mb-6">
+                        اطلب الآن والدفع عند الاستلام
+                    </a>
+                    
+                    <!-- Trust Icons Row -->
+                    <div class="grid grid-cols-4 gap-2">
+                        <div class="text-center p-3 bg-dark-card rounded-xl border border-dark-border">
+                            <svg class="w-6 h-6 mx-auto mb-1 text-neon-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            <p class="text-xs text-gray-400">ضمان 3 سنوات</p>
+                        </div>
+                        <div class="text-center p-3 bg-dark-card rounded-xl border border-dark-border">
+                            <svg class="w-6 h-6 mx-auto mb-1 text-neon-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            <p class="text-xs text-gray-400">استبدال 14 يوم</p>
+                        </div>
+                        <div class="text-center p-3 bg-dark-card rounded-xl border border-dark-border">
+                            <svg class="w-6 h-6 mx-auto mb-1 text-neon-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            <p class="text-xs text-gray-400">شحن سريع</p>
+                        </div>
+                        <div class="text-center p-3 bg-dark-card rounded-xl border border-dark-border">
+                            <svg class="w-6 h-6 mx-auto mb-1 text-neon-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            <p class="text-xs text-gray-400">الدفع عند الاستلام</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Left Side - Product Gallery -->
+                <div class="order-1 lg:order-2">
+                    <!-- Main Image -->
+                    <div class="relative bg-dark-card rounded-2xl overflow-hidden mb-4 border border-dark-border">
+                        <img :src="mainImage" 
+                             alt="LED Matrix Screen"
+                             class="w-full aspect-square object-contain p-4">
+                        
+                        <!-- Navigation Arrows -->
+                        <button @click="let idx = images.indexOf(mainImage); mainImage = images[idx > 0 ? idx - 1 : images.length - 1]" 
+                                class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                        <button @click="let idx = images.indexOf(mainImage); mainImage = images[idx < images.length - 1 ? idx + 1 : 0]" 
+                                class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Thumbnails -->
+                    <div class="grid grid-cols-4 gap-2">
+                        <template x-for="(img, index) in images" :key="index">
+                            <button @click="mainImage = img" 
+                                    :class="mainImage === img ? 'ring-2 ring-neon-orange' : 'opacity-60 hover:opacity-100'"
+                                    class="bg-dark-card rounded-lg overflow-hidden border border-dark-border transition-all aspect-square">
+                                <img :src="img" :alt="'صورة ' + (index + 1)" class="w-full h-full object-contain p-1">
+                            </button>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Urgency Banner -->
+    <div class="bg-gradient-to-r from-red-600 to-red-500 py-3">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-center gap-2 text-white">
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-400"></span>
+                </span>
+                <span class="font-bold text-sm md:text-base">🔥 الكمية محدودة - احجز قطعتك الآن قبل نفاذ المخزون</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Video Reels Section -->
+    <section class="py-12 bg-dark-card overflow-hidden" x-data="{ 
+        playing: null,
+        videos: [
+            'videos/rp9eyh-h264-hd.mp4',
+            'videos/snaptik_7468947176090029318_hd.mp4',
+            'videos/snaptik_7477021853861678354_hd.mp4',
+            'videos/snaptik_7477773774125845765_hd.mp4',
+            'videos/snaptik_7498078648264609066_hd.mp4',
+            'videos/snaptik_7535671268977151240_v2.mp4',
+            'videos/snaptik_7580571136329633032_hd.mp4'
+        ],
+        playVideo(index) {
+            if (this.playing !== null && this.playing !== index) {
+                this.$refs['video' + this.playing].pause();
+            }
+            const video = this.$refs['video' + index];
+            if (video.paused) {
+                video.play();
+                this.playing = index;
+            } else {
+                video.pause();
+                this.playing = null;
+            }
+        },
+        scrollCarousel(direction) {
+            const carousel = this.$refs.videoCarousel;
+            const scrollAmount = 220;
+            carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        },
+        currentIndex: 2,
+        init() {
+            setTimeout(() => {
+                const carousel = this.$refs.videoCarousel;
+                if (carousel) {
+                    const videos = carousel.querySelectorAll('.snap-center');
+                    if (videos[2]) {
+                        const videoRect = videos[2].getBoundingClientRect();
+                        const carouselRect = carousel.getBoundingClientRect();
+                        const scrollPos = videos[2].offsetLeft - (carouselRect.width / 2) + (videoRect.width / 2);
+                        carousel.scrollLeft = scrollPos;
+                    }
+                }
+            }, 200);
+        }
+    }">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">
+                    🎬 <span class="gradient-text">شاهد المنتج في العمل</span>
+                </h2>
+                <p class="text-gray-400 text-sm md:hidden">استخدم الأسهم أو اسحب للتصفح</p>
+                <p class="text-gray-400 text-sm hidden md:block">اسحب لمشاهدة المزيد من الفيديوهات ←</p>
+            </div>
+            
+            <!-- Reels Carousel -->
+            <div class="relative">
+                <!-- Navigation Arrow - Right (scrolls left/previous) -->
+                <button @click="scrollCarousel(-1)" 
+                        class="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-neon-orange hover:text-orange-400 transition-all duration-300 hover:scale-125 active:scale-95 text-7xl md:text-8xl font-bold">
+                    &gt;
+                </button>
+                
+                <!-- Navigation Arrow - Left (scrolls right/next) -->
+                <button @click="scrollCarousel(1)" 
+                        class="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-neon-orange hover:text-orange-400 transition-all duration-300 hover:scale-125 active:scale-95 text-7xl md:text-8xl font-bold">
+                    &lt;
+                </button>
+                
+                <!-- Gradient Fade Left -->
+                <div class="absolute right-10 md:right-12 top-0 bottom-0 w-8 bg-gradient-to-l from-dark-card to-transparent z-10 pointer-events-none"></div>
+                <!-- Gradient Fade Right -->
+                <div class="absolute left-10 md:left-12 top-0 bottom-0 w-8 bg-gradient-to-r from-dark-card to-transparent z-10 pointer-events-none"></div>
+                
+                <div x-ref="videoCarousel" class="flex gap-4 overflow-x-auto pb-4 px-12 md:px-16 snap-x snap-mandatory video-carousel" style="scroll-padding: 1rem;">
+                    <!-- Video Reel 1 -->
+                    <div class="flex-shrink-0 snap-center">
+                        <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-neon-orange transition-all duration-300"
+                             @click="playVideo(0)">
+                            <video preload="metadata" poster="images/poster_rp9eyh-h264-hd.webp" x-ref="video0" src="videos/rp9eyh-h264-hd.mp4" 
+                                   class="w-full h-full object-cover" 
+                                   playsinline loop muted
+                                   @ended="playing = null"></video>
+                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all flex items-center justify-center"
+                                 x-show="playing !== 0">
+                                <div class="w-14 h-14 bg-neon-orange/90 rounded-full flex items-center justify-center shadow-lg">
+                                    <svg class="w-6 h-6 text-black mr-[-2px]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                <span class="text-xs text-white/80">فيديو #1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Reel 2 -->
+                    <div class="flex-shrink-0 snap-center">
+                        <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-neon-orange transition-all duration-300"
+                             @click="playVideo(1)">
+                            <video preload="metadata" poster="images/poster_snaptik_7468947176090029318_hd.webp" x-ref="video1" src="videos/snaptik_7468947176090029318_hd.mp4" 
+                                   class="w-full h-full object-cover" 
+                                   playsinline loop muted
+                                   @ended="playing = null"></video>
+                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all flex items-center justify-center"
+                                 x-show="playing !== 1">
+                                <div class="w-14 h-14 bg-neon-orange/90 rounded-full flex items-center justify-center shadow-lg">
+                                    <svg class="w-6 h-6 text-black mr-[-2px]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                <span class="text-xs text-white/80">فيديو #2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Reel 3 -->
+                    <div class="flex-shrink-0 snap-center">
+                        <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-neon-orange transition-all duration-300"
+                             @click="playVideo(2)">
+                            <video preload="metadata" poster="images/poster_snaptik_7477021853861678354_hd.webp" x-ref="video2" src="videos/snaptik_7477021853861678354_hd.mp4" 
+                                   class="w-full h-full object-cover" 
+                                   playsinline loop muted
+                                   @ended="playing = null"></video>
+                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all flex items-center justify-center"
+                                 x-show="playing !== 2">
+                                <div class="w-14 h-14 bg-neon-orange/90 rounded-full flex items-center justify-center shadow-lg">
+                                    <svg class="w-6 h-6 text-black mr-[-2px]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                <span class="text-xs text-white/80">فيديو #3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Reel 4 -->
+                    <div class="flex-shrink-0 snap-center">
+                        <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-neon-orange transition-all duration-300"
+                             @click="playVideo(3)">
+                            <video preload="metadata" poster="images/poster_snaptik_7477773774125845765_hd.webp" x-ref="video3" src="videos/snaptik_7477773774125845765_hd.mp4" 
+                                   class="w-full h-full object-cover" 
+                                   playsinline loop muted
+                                   @ended="playing = null"></video>
+                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all flex items-center justify-center"
+                                 x-show="playing !== 3">
+                                <div class="w-14 h-14 bg-neon-orange/90 rounded-full flex items-center justify-center shadow-lg">
+                                    <svg class="w-6 h-6 text-black mr-[-2px]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                <span class="text-xs text-white/80">فيديو #4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Reel 5 -->
+                    <div class="flex-shrink-0 snap-center">
+                        <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-neon-orange transition-all duration-300"
+                             @click="playVideo(4)">
+                            <video preload="metadata" poster="images/poster_snaptik_7498078648264609066_hd.webp" x-ref="video4" src="videos/snaptik_7498078648264609066_hd.mp4" 
+                                   class="w-full h-full object-cover" 
+                                   playsinline loop muted
+                                   @ended="playing = null"></video>
+                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all flex items-center justify-center"
+                                 x-show="playing !== 4">
+                                <div class="w-14 h-14 bg-neon-orange/90 rounded-full flex items-center justify-center shadow-lg">
+                                    <svg class="w-6 h-6 text-black mr-[-2px]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                <span class="text-xs text-white/80">فيديو #5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Reel 6 -->
+                    <div class="flex-shrink-0 snap-center">
+                        <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-neon-orange transition-all duration-300"
+                             @click="playVideo(5)">
+                            <video preload="metadata" poster="images/poster_snaptik_7535671268977151240_v2.webp" x-ref="video5" src="videos/snaptik_7535671268977151240_v2.mp4" 
+                                   class="w-full h-full object-cover" 
+                                   playsinline loop muted
+                                   @ended="playing = null"></video>
+                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all flex items-center justify-center"
+                                 x-show="playing !== 5">
+                                <div class="w-14 h-14 bg-neon-orange/90 rounded-full flex items-center justify-center shadow-lg">
+                                    <svg class="w-6 h-6 text-black mr-[-2px]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                <span class="text-xs text-white/80">فيديو #6</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Reel 7 -->
+                    <div class="flex-shrink-0 snap-center">
+                        <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-neon-orange transition-all duration-300"
+                             @click="playVideo(6)">
+                            <video preload="metadata" poster="images/poster_snaptik_7580571136329633032_hd.webp" x-ref="video6" src="videos/snaptik_7580571136329633032_hd.mp4" 
+                                   class="w-full h-full object-cover" 
+                                   playsinline loop muted
+                                   @ended="playing = null"></video>
+                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all flex items-center justify-center"
+                                 x-show="playing !== 6">
+                                <div class="w-14 h-14 bg-neon-orange/90 rounded-full flex items-center justify-center shadow-lg">
+                                    <svg class="w-6 h-6 text-black mr-[-2px]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                <span class="text-xs text-white/80">فيديو #7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="flex justify-center gap-2 mt-4">
+                <div class="flex items-center gap-1 text-gray-500 text-xs">
+                    <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+                    </svg>
+                    <span>اسحب للتصفح</span>
+                    <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6 Core Technologies -->
+    <section class="py-12 bg-dark-bg">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+                <span class="gradient-text">6 تقنيات أساسية</span>
+            </h2>
+            <img loading="lazy" src="images/Six_Core_Technologies_Infographic.webp" 
+                 alt="Six_Core_Technologies_Infographic.webp"
+                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl">
+        </div>
+    </section>
+
+    <!-- Usage Scenarios -->
+    <section class="py-12 bg-dark-card">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+                <span class="gradient-text">استخدامات متعددة</span>
+            </h2>
+            <img loading="lazy" src="images/LED_Screen_Application_Scenarios_Composite.webp" 
+                 alt="LED_Screen_Application_Scenarios_Composite.webp"
+                 class="w-full max-w-5xl mx-auto rounded-2xl shadow-2xl">
+        </div>
+    </section>
+
+    <!-- Product Quality -->
+    <section class="py-12 bg-dark-bg">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+                <span class="gradient-text">جودة عالية ومكونات متينة</span>
+            </h2>
+            <img loading="lazy" src="images/High_Quality_Product_Components_Details.webp" 
+                 alt="High_Quality_Product_Components_Details.webp"
+                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl mb-6">
+            <div class="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+                <img loading="lazy" src="images/Flexible_LED_Matrix_Adjustable_Brightness.webp" 
+                     alt="Flexible_LED_Matrix_Adjustable_Brightness.webp"
+                     class="w-full rounded-2xl shadow-xl">
+                <img loading="lazy" src="images/Flexible_LED_Waterproof_PU_Case.webp" 
+                     alt="Flexible_LED_Waterproof_PU_Case.webp"
+                     class="w-full rounded-2xl shadow-xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- App Control -->
+    <section class="py-12 bg-dark-card">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+                <span class="gradient-text">تحكم ذكي من التطبيق</span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto mb-6">
+                <img loading="lazy" src="images/Intelligent_App_Control_DIY_Features_Interface.webp" 
+                     alt="Intelligent_App_Control_DIY_Features_Interface.webp"
+                     class="w-full rounded-2xl shadow-2xl">
+                <img loading="lazy" src="images/Animation_Stock_Library_Display.webp" 
+                     alt="Animation_Stock_Library_Display.webp"
+                     class="w-full rounded-2xl shadow-2xl">
+            </div>
+            <img loading="lazy" src="images/App_Controlled_Flexible_LED_Sign_DIY_Design_Features.webp" 
+                 alt="App_Controlled_Flexible_LED_Sign_DIY_Design_Features.webp"
+                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-xl">
+        </div>
+    </section>
+
+    <!-- Installation Guide -->
+    <section class="py-12 bg-dark-bg">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+                <span class="gradient-text">تركيب سهل وسريع</span>
+            </h2>
+            <img loading="lazy" src="images/Car_Sign_Easy_Installation_Guide_Steps.webp" 
+                 alt="Car_Sign_Easy_Installation_Guide_Steps.webp"
+                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl">
+        </div>
+    </section>
+
+    <!-- Features Summary -->
+    <section class="py-12 bg-dark-card">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+                <span class="gradient-text">مميزات وأداء قوي</span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+                <img loading="lazy" src="images/Powerful_Performance_and_Key_Features_Summary.webp" 
+                     alt="Powerful_Performance_and_Key_Features_Summary.webp"
+                     class="w-full rounded-2xl shadow-xl">
+                <img loading="lazy" src="images/LED_Sign_Remote_Control_Functions_Diagram.webp" 
+                     alt="LED_Sign_Remote_Control_Functions_Diagram.webp"
+                     class="w-full rounded-2xl shadow-xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust & Certificates -->
+    <section class="py-12 bg-dark-card">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <img loading="lazy" src="images/Product_Qualification_and_Quality_Certifications.webp" 
+                     alt="Product_Qualification_and_Quality_Certifications.webp"
+                     class="w-full rounded-2xl">
+                <img loading="lazy" src="images/certificates.webp" 
+                     alt="certificates.webp"
+                     class="w-full rounded-2xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Form Section -->
+    <section class="py-20 bg-gradient-to-b from-dark-bg to-black" id="order-form">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-5xl font-black mb-4">
+                        📦 <span class="gradient-text">اطلب الآن</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg">الدفع عند الاستلام - بدون أي مخاطر</p>
+                </div>
+                
+                <!-- Product Image Before Form -->
+                <div class="mb-8">
+                    <img loading="lazy" src="images/Dual_Flexible_LED_Screen_Programmable_Kit_Full_Set.webp" 
+                         alt="Dual_Flexible_LED_Screen_Programmable_Kit_Full_Set.webp"
+                         class="w-full max-w-lg mx-auto rounded-2xl shadow-2xl">
+                </div>
+                
+                <form class="bg-dark-card border border-dark-border rounded-3xl p-8 shadow-2xl" 
+                      x-data="{ quantity: '1', total: 2200, name: '', phone: '', whatsapp: '', governorate: '', address: '', submitting: false }" 
+                      x-effect="total = quantity === '1' ? 2200 : (quantity === '2' ? 3999 : 5599)"
+                      @submit.prevent="
+                        submitting = true;
+                        fetch('/api/lead', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name, phone, whatsapp, governorate, address, quantity, total })
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            window.location.href = 'confirm.html?name=' + encodeURIComponent(name) + '&phone=' + encodeURIComponent(phone) + '&whatsapp=' + encodeURIComponent(whatsapp) + '&governorate=' + encodeURIComponent(governorate) + '&address=' + encodeURIComponent(address) + '&quantity=' + quantity + '&orderNumber=' + (data.orderNumber || '');
+                        })
+                        .catch(() => {
+                            window.location.href = 'confirm.html?name=' + encodeURIComponent(name) + '&phone=' + encodeURIComponent(phone) + '&whatsapp=' + encodeURIComponent(whatsapp) + '&governorate=' + encodeURIComponent(governorate) + '&address=' + encodeURIComponent(address) + '&quantity=' + quantity;
+                        });
+                      ">
+                    <div class="space-y-6">
+                        <!-- Quantity/Offer Selection First -->
+                        <div>
+                            <label class="block text-lg font-bold mb-4">اختر العرض المناسب *</label>
+                            <div class="space-y-3">
+                                <label class="cursor-pointer block">
+                                    <input type="radio" name="quantity" value="1" x-model="quantity" class="hidden peer">
+                                    <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🎁</span>
+                                            <span class="font-semibold">قطعة واحدة</span>
+                                            <span class="text-neon-orange">✨</span>
+                                        </div>
+                                        <span class="font-bold text-neon-orange">2,200 ج.م</span>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer block relative">
+                                    <input type="radio" name="quantity" value="2" x-model="quantity" class="hidden peer">
+                                    <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🎁</span>
+                                            <span class="font-semibold">قطعتين</span>
+                                            <span class="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">وفر 9%</span>
+                                        </div>
+                                        <span class="font-bold text-neon-orange">3,999 ج.م</span>
+                                    </div>
+                                    <span class="absolute -top-2 right-4 bg-neon-orange text-black text-xs font-bold px-2 py-0.5 rounded-full">⭐ الأكثر مبيعاً</span>
+                                </label>
+                                <label class="cursor-pointer block">
+                                    <input type="radio" name="quantity" value="3" x-model="quantity" class="hidden peer">
+                                    <div class="peer-checked:border-neon-orange peer-checked:bg-neon-orange/10 border-2 border-dark-border rounded-full py-3 px-5 flex items-center justify-between transition-all">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">🎁</span>
+                                            <span class="font-semibold">3 قطع</span>
+                                            <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">وفر 15%</span>
+                                        </div>
+                                        <span class="font-bold text-neon-orange">5,599 ج.م</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Name -->
+                        <div>
+                            <label class="block text-lg font-bold mb-2">الاسم بالكامل *</label>
+                            <input type="text" required x-model="name"
+                                   class="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-4 text-lg focus:border-neon-orange focus:outline-none transition-colors"
+                                   placeholder="أدخل اسمك">
+                        </div>
+                        
+                        <!-- Phone -->
+                        <div>
+                            <label class="block text-lg font-bold mb-2">رقم الهاتف *</label>
+                            <input type="tel" required x-model="phone"
+                                   class="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-4 text-lg focus:border-neon-orange focus:outline-none transition-colors"
+                                   placeholder="01xxxxxxxxx"
+                                   oninput="this.value = this.value.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))">
+                        </div>
+                        
+                        <!-- WhatsApp/Additional Phone -->
+                        <div>
+                            <label class="block text-lg font-bold mb-2">رقم الواتساب أو رقم إضافي *</label>
+                            <input type="tel" required x-model="whatsapp"
+                                   class="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-4 text-lg focus:border-neon-orange focus:outline-none transition-colors"
+                                   placeholder="رقم إضافي للتواصل"
+                                   oninput="this.value = this.value.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))">
+                        </div>
+                        
+                        <!-- Governorate -->
+                        <div>
+                            <label class="block text-lg font-bold mb-2">المحافظة *</label>
+                            <select required x-model="governorate"
+                                    class="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-4 text-lg focus:border-neon-orange focus:outline-none transition-colors">
+                                <option value="">اختر المحافظة</option>
+                                <option value="القاهرة">القاهرة</option>
+                                <option value="الجيزة">الجيزة</option>
+                                <option value="الإسكندرية">الإسكندرية</option>
+                                <option value="الدقهلية">الدقهلية</option>
+                                <option value="البحر الأحمر">البحر الأحمر</option>
+                                <option value="البحيرة">البحيرة</option>
+                                <option value="الفيوم">الفيوم</option>
+                                <option value="الغربية">الغربية</option>
+                                <option value="الإسماعيلية">الإسماعيلية</option>
+                                <option value="المنوفية">المنوفية</option>
+                                <option value="المنيا">المنيا</option>
+                                <option value="القليوبية">القليوبية</option>
+                                <option value="الوادي الجديد">الوادي الجديد</option>
+                                <option value="السويس">السويس</option>
+                                <option value="الشرقية">الشرقية</option>
+                                <option value="جنوب سيناء">جنوب سيناء</option>
+                                <option value="كفر الشيخ">كفر الشيخ</option>
+                                <option value="مطروح">مطروح</option>
+                                <option value="الأقصر">الأقصر</option>
+                                <option value="قنا">قنا</option>
+                                <option value="شمال سيناء">شمال سيناء</option>
+                                <option value="سوهاج">سوهاج</option>
+                                <option value="أسوان">أسوان</option>
+                                <option value="أسيوط">أسيوط</option>
+                                <option value="بني سويف">بني سويف</option>
+                                <option value="بورسعيد">بورسعيد</option>
+                                <option value="دمياط">دمياط</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Address -->
+                        <div>
+                            <label class="block text-lg font-bold mb-2">العنوان بالتفصيل *</label>
+                            <textarea required rows="3" x-model="address"
+                                      class="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-4 text-lg focus:border-neon-orange focus:outline-none transition-colors resize-none"
+                                      placeholder="المدينة - الشارع - رقم العمارة - علامة مميزة"></textarea>
+                        </div>
+                        
+                        <!-- Total -->
+                        <div class="bg-neon-orange/10 border border-neon-orange/30 rounded-xl p-6 text-center">
+                            <div class="text-gray-400 mb-2">الإجمالي المطلوب</div>
+                            <div class="text-4xl font-black text-neon-orange" x-text="total.toLocaleString() + ' جنيه'"></div>
+                            <div class="text-green-400 text-sm mt-2">✅ شامل الشحن المجاني</div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <button type="submit" 
+                                :disabled="submitting"
+                                :class="submitting ? 'opacity-70 cursor-wait' : 'hover:scale-105'"
+                                class="w-full bg-neon-orange hover:bg-orange-500 text-black text-xl font-black py-5 rounded-full pulse-btn transition-all duration-300">
+                            <span x-show="!submitting">✅ تأكيد الطلب (الدفع عند الاستلام)</span>
+                            <span x-show="submitting" class="flex items-center justify-center gap-2">
+                                <svg class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                جاري إرسال الطلب...
+                            </span>
+                        </button>
+                        
+                        <!-- Trust Elements -->
+                        <div class="text-center space-y-3">
+                            <p class="text-green-400 font-semibold">
+                                🛡️ ضمان استبدال واسترجاع خلال 14 يوم
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-4 text-gray-400 text-sm">
+                                <span>✅ ضمان 3 سنوات</span>
+                                <span>✅ شحن مجاني</span>
+                                <span>✅ الدفع عند الاستلام</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Safe Checkout -->
+                <div class="mt-6">
+                    <img loading="lazy" src="images/safe-checkout" 
+                         alt="Safe Checkout"
+                         class="w-full max-w-xl mx-auto">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-black border-t border-dark-border">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <div class="w-8 h-8 bg-neon-orange rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2 2H5V5h14v14zm0-16H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                </div>
+                <span class="text-lg font-bold">LED Matrix Egypt</span>
+            </div>
+            <p class="text-gray-500 text-sm">
+                © 2026 LED Matrix Egypt. جميع الحقوق محفوظة.
+            </p>
+            <div class="mt-6">
+                <img loading="lazy" src="images/shipping.gif" alt="shipping.gif" class="mx-auto w-full max-w-lg md:max-w-xl">
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp/CTA Button -->
+    <a href="#order-form" class="fixed bottom-6 left-6 z-50 bg-neon-orange hover:bg-orange-500 text-black font-bold px-6 py-3 rounded-full shadow-lg shadow-neon-orange/30 transition-all duration-300 hover:scale-110 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+        </svg>
+        اطلب الآن
+    </a>
+
+</body>
+</html>
