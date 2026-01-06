@@ -775,7 +775,10 @@
     </section>
 
     <!-- Order Form Section -->
-    <section class="py-20 bg-gradient-to-b from-dark-bg to-black" id="order-form">
+    <section class="py-20 relative overflow-hidden" id="order-form" style="background: linear-gradient(135deg, #4c1e81 0%, #1a0a2e 50%, #0a0a0a 100%);">
+        <!-- Decorative glow effects -->
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-pink/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-violet/20 rounded-full blur-3xl"></div>
         <div class="container mx-auto px-4">
             <div class="max-w-2xl mx-auto">
                 <div class="text-center mb-8">
@@ -792,7 +795,7 @@
                          class="w-full max-w-lg mx-auto rounded-2xl shadow-2xl">
                 </div>
                 
-                <form class="bg-dark-card border border-dark-border rounded-3xl p-8 shadow-2xl" 
+                <form class="relative bg-gradient-to-br from-brand-purple/30 to-dark-card border-2 border-brand-pink/30 rounded-3xl p-8 shadow-2xl shadow-brand-pink/10 backdrop-blur-sm" 
                       x-data="{ quantity: '1', total: 2200, name: '', phone: '', whatsapp: '', governorate: '', address: '', submitting: false }" 
                       x-effect="total = quantity === '1' ? 2200 : (quantity === '2' ? 3999 : 5599)"
                       @submit.prevent="
