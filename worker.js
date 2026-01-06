@@ -1,4 +1,73 @@
 // Cloudflare Worker for LED Matrix API
+// TikTok Events API Configuration
+const TIKTOK_PIXEL_ID = 'D5EFGBJC77UFB3QVPJFG';
+const TIKTOK_ACCESS_TOKEN = '069e3566c4b8b6054e1dfc1f639456ea5ac8979a';
+const TIKTOK_API_URL = 'https://business-api.tiktok.com/open_api/v1.3/event/track/';
+
+// Function to send event to TikTok Events API
+async function sendTikTokEvent(eventName, eventData, userInfo, request) {
+  try {
+    const eventTime = Math.floor(Date.now() / 1000);
+    const eventId = `${eventName}_${eventTime}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Hash phone number if provided
+    const hashedPhone = userInfo.phone ? await hashData(userInfo.phone) : undefined;
+    
+    const payload = {
+      pixel_code: TIKTOK_PIXEL_ID,
+      event: eventName,
+      event_id: eventId,
+      timestamp: new Date().toISOString(),
+      context: {
+        user_agent: request.headers.get('user-agent') || '',
+        ip: request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '',
+        page: {
+          url: request.headers.get('referer') || 'https://led-d06.pages.dev/'
+        },
+        user: {
+          phone_number: hashedPhone,
+          external_id: hashedPhone
+        }
+      },
+      properties: {
+        content_type: 'product',
+        content_name: 'LED Matrix Egypt - غمازة السيارات',
+        content_id: 'led-matrix-001',
+        currency: 'EGP',
+        value: eventData.value || 0,
+        num_items: eventData.quantity || 1,
+        description: eventData.description || ''
+      }
+    };
+
+    const response = await fetch(TIKTOK_API_URL, {
+      method: 'POST',
+      headers: {
+        'Access-Token': TIKTOK_ACCESS_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ data: [payload] })
+    });
+
+    const result = await response.json();
+    console.log('TikTok Event sent:', eventName, result);
+    return result;
+  } catch (error) {
+    console.error('TikTok Event error:', error);
+    return null;
+  }
+}
+
+// Simple hash function for user data (SHA256)
+async function hashData(data) {
+  if (!data) return undefined;
+  const encoder = new TextEncoder();
+  const dataBuffer = encoder.encode(data.toString().trim().toLowerCase());
+  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 export default {
   async fetch(request, env) {
     // Handle CORS
@@ -105,6 +174,24 @@ export default {
             body: JSON.stringify({ values: [row] })
           }
         );
+
+        // Send TikTok Events API - Lead Event (server-side tracking)
+        await sendTikTokEvent('Lead', {
+          value: total,
+          quantity: parseInt(quantity) || 1,
+          description: `Order #${orderNumber} - ${offerDetails}`
+        }, {
+          phone: phone
+        }, request);
+
+        // Also send CompleteRegistration event
+        await sendTikTokEvent('CompleteRegistration', {
+          value: total,
+          quantity: parseInt(quantity) || 1,
+          description: `Registration for Order #${orderNumber}`
+        }, {
+          phone: phone
+        }, request);
 
         return new Response(JSON.stringify({ success: true, orderNumber }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
