@@ -1,11 +1,12 @@
 // Cloudflare Worker for LED Matrix API
 // TikTok Events API Configuration
 const TIKTOK_PIXEL_ID = 'D5EFGBJC77UFB3QVPJFG';
-const TIKTOK_ACCESS_TOKEN = '069e3566c4b8b6054e1dfc1f639456ea5ac8979a';
 const TIKTOK_API_URL = 'https://business-api.tiktok.com/open_api/v1.3/event/track/';
 
+// Note: TIKTOK_ACCESS_TOKEN is now stored as environment secret
+
 // Function to send event to TikTok Events API
-async function sendTikTokEvent(eventName, eventData, userInfo, request) {
+async function sendTikTokEvent(eventName, eventData, userInfo, request, accessToken) {
   try {
     const eventTime = Math.floor(Date.now() / 1000);
     const eventId = `${eventName}_${eventTime}_${Math.random().toString(36).substr(2, 9)}`;
@@ -43,7 +44,7 @@ async function sendTikTokEvent(eventName, eventData, userInfo, request) {
     const response = await fetch(TIKTOK_API_URL, {
       method: 'POST',
       headers: {
-        'Access-Token': TIKTOK_ACCESS_TOKEN,
+        'Access-Token': accessToken,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ data: [payload] })
@@ -182,7 +183,7 @@ export default {
           description: `Order #${orderNumber} - ${offerDetails}`
         }, {
           phone: phone
-        }, request);
+        }, request, env.TIKTOK_ACCESS_TOKEN);
 
         // Also send CompleteRegistration event
         await sendTikTokEvent('CompleteRegistration', {
@@ -191,7 +192,7 @@ export default {
           description: `Registration for Order #${orderNumber}`
         }, {
           phone: phone
-        }, request);
+        }, request, env.TIKTOK_ACCESS_TOKEN);
 
         return new Response(JSON.stringify({ success: true, orderNumber }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
