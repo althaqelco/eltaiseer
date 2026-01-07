@@ -19,9 +19,18 @@
     
     <!-- Critical CSS inline for instant render - includes essential Tailwind utilities -->
     <style>
-        *{font-family:'Cairo',sans-serif;box-sizing:border-box;margin:0;padding:0}
+        /* Font fallback with size-adjust to prevent CLS */
+        @font-face{
+            font-family:'Cairo Fallback';
+            src:local('Arial');
+            size-adjust:105%;
+            ascent-override:90%;
+            descent-override:20%;
+            line-gap-override:0%;
+        }
+        *{font-family:'Cairo','Cairo Fallback',Arial,sans-serif;box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth}
-        body{background:#0a0a0a;color:#fff;line-height:1.5}
+        body{background:#0a0a0a;color:#fff;line-height:1.5;min-height:100vh}
         .container{width:100%;max-width:1280px;margin:0 auto;padding:0 1rem}
         .flex{display:flex}.grid{display:grid}.hidden{display:none}
         .items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}
@@ -67,6 +76,20 @@
     <!-- Optimize font loading with display=swap -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet"></noscript>
+    
+    <!-- Prevent CLS: Reserve space for dynamic content -->
+    <style>
+        .hero-section{min-height:600px}
+        .video-card{aspect-ratio:9/16;min-height:300px}
+        .product-image{aspect-ratio:1/1}
+        .feature-grid{min-height:200px}
+        .grid-cols-4{display:grid;grid-template-columns:repeat(4,1fr)}
+        /* Fix CLS for trust icons grid */
+        .grid.grid-cols-4.gap-2{min-height:80px}
+        .grid.grid-cols-4.gap-2>div{min-height:70px}
+        /* Fix thumbnails grid */
+        .grid.grid-cols-4.gap-2 button{min-height:80px;aspect-ratio:1/1}
+    </style>
     <style>
         @keyframes pulse-glow {
             0%, 100% {
@@ -331,7 +354,7 @@
                     </a>
                     
                     <!-- Trust Icons Row -->
-                    <div class="grid grid-cols-4 gap-2">
+                    <div class="grid grid-cols-4 gap-2" style="contain:layout style;">
                         <div class="text-center p-3 bg-dark-card rounded-xl border border-dark-border">
                             <svg class="w-6 h-6 mx-auto mb-1 text-brand-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
