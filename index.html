@@ -54,33 +54,30 @@
         @media(min-width:1024px){.lg\:grid-cols-2{grid-template-columns:repeat(2,1fr)}.lg\:order-1{order:1}.lg\:order-2{order:2}}
     </style>
     
-    <!-- Preload critical hero image -->
-    <link rel="preload" href="images/main.webp" as="image" type="image/webp" fetchpriority="high">
+    <!-- Preload critical hero image with high priority -->
+    <link rel="preload" href="images/main.webp" as="image" type="image/webp" fetchpriority="high" importance="high">
     
-    <!-- Load Tailwind after page interactive to reduce TBT -->
+    <!-- LCP optimization: inline styles for main image container -->
+    <style>
+        .lcp-image{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;padding:1rem;background:#1a1a1a;border-radius:1rem}
+    </style>
+    
+    <!-- Load Tailwind with async but immediate start -->
+    <script async src="https://cdn.tailwindcss.com"></script>
     <script>
-        if('requestIdleCallback' in window){
-            requestIdleCallback(function(){loadTailwind()});
-        }else{
-            setTimeout(loadTailwind,50);
-        }
-        function loadTailwind(){
-            var s=document.createElement('script');
-            s.src='https://cdn.tailwindcss.com';
-            s.async=true;
-            s.onload=function(){
+        window.addEventListener('load',function(){
+            if(typeof tailwind!=='undefined'){
                 tailwind.config={theme:{extend:{colors:{'brand-pink':'#f806b8','brand-purple':'#4c1e81','brand-violet':'#7c16d6','brand-light':'#eb64f6','brand-magenta':'#cf016f','brand-accent':'#a731ce','dark-bg':'#0a0a0a','dark-card':'#1a1a1a','dark-border':'#2a2a2a'},fontFamily:{'cairo':['Cairo','sans-serif']}}}};
-            };
-            document.head.appendChild(s);
-        }
+            }
+        });
     </script>
     
     <!-- Defer Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
-    <!-- Optimize font loading with display=swap -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet"></noscript>
+    <!-- Optimize font loading with display=optional to prevent CLS -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=optional" rel="stylesheet"></noscript>
     
     <!-- Prevent CLS: Reserve space for dynamic content -->
     <style>
@@ -397,8 +394,8 @@
                         <img src="images/main.webp"
                              x-bind:src="mainImage" 
                              alt="LED Matrix Screen"
-                             class="w-full aspect-square object-contain p-4"
-                             width="600" height="600" decoding="async" fetchpriority="high" style="aspect-ratio:1/1;">
+                             class="lcp-image w-full aspect-square object-contain p-4"
+                             width="600" height="600" fetchpriority="high" loading="eager" style="aspect-ratio:1/1;">
                         
                         <!-- Navigation Arrows -->
                         <button @click="let idx = images.indexOf(mainImage); mainImage = images[idx > 0 ? idx - 1 : images.length - 1]" 
