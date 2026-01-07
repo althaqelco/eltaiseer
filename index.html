@@ -25,7 +25,10 @@
         .loading-placeholder{background:#1a1a1a;min-height:100vh}
     </style>
     
-    <!-- Load Tailwind with lower priority -->
+    <!-- Preload critical hero image -->
+    <link rel="preload" href="images/main.webp" as="image" type="image/webp" fetchpriority="high">
+    
+    <!-- Load Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Defer Alpine.js -->
@@ -34,19 +37,6 @@
     <!-- Optimize font loading with display=swap -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
-    
-    <!-- TikTok Pixel Code Start -->
-    <script>
-    !function (w, d, t) {
-      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-    var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-    ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
-
-      ttq.load('D5EFGBJC77UFB3QVPJFG');
-      ttq.page();
-    }(window, document, 'ttq');
-    </script>
-    <!-- TikTok Pixel Code End -->
     
     <script>
         tailwind.config = {
@@ -70,15 +60,22 @@
             }
         }
     </script>
+    <!-- TikTok Pixel Code - Deferred for performance -->
+    <script>
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            !function (w, d, t) {
+              w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+              var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+              ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+              ttq.load('D5EFGBJC77UFB3QVPJFG');
+              ttq.page();
+            }(window, document, 'ttq');
+        }, 100);
+    });
+    </script>
+    <!-- TikTok Pixel Code End -->
     <style>
-        * {
-            font-family: 'Cairo', sans-serif;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
         @keyframes pulse-glow {
             0%, 100% {
                 box-shadow: 0 0 20px rgba(248, 6, 184, 0.5), 0 0 40px rgba(124, 22, 214, 0.3);
@@ -376,7 +373,8 @@
                     <div class="relative bg-dark-card rounded-2xl overflow-hidden mb-4 border border-dark-border">
                         <img :src="mainImage" 
                              alt="LED Matrix Screen"
-                             class="w-full aspect-square object-contain p-4">
+                             class="w-full aspect-square object-contain p-4"
+                             width="600" height="600" decoding="async" fetchpriority="high">
                         
                         <!-- Navigation Arrows -->
                         <button @click="let idx = images.indexOf(mainImage); mainImage = images[idx > 0 ? idx - 1 : images.length - 1]" 
@@ -399,7 +397,7 @@
                             <button @click="mainImage = img" 
                                     :class="mainImage === img ? 'ring-2 ring-brand-pink' : 'opacity-60 hover:opacity-100'"
                                     class="bg-dark-card rounded-lg overflow-hidden border border-dark-border transition-all aspect-square">
-                                <img :src="img" :alt="'صورة ' + (index + 1)" class="w-full h-full object-contain p-1">
+                                <img :src="img" :alt="'صورة ' + (index + 1)" class="w-full h-full object-contain p-1" width="100" height="100" decoding="async" loading="lazy">
                             </button>
                         </template>
                     </div>
@@ -438,6 +436,10 @@
                 this.$refs['video' + this.playing].pause();
             }
             const video = this.$refs['video' + index];
+            // Load video source if not loaded yet
+            if (video.dataset.src && !video.src) {
+                video.src = video.dataset.src;
+            }
             if (video.paused) {
                 video.play();
                 this.playing = index;
@@ -500,7 +502,7 @@
                     <div class="flex-shrink-0 snap-center">
                         <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-brand-pink transition-all duration-300"
                              @click="playVideo(0)">
-                            <video preload="metadata" poster="images/poster_rp9eyh-h264-hd.webp" x-ref="video0" src="videos/rp9eyh-h264-hd.mp4" 
+                            <video preload="none" poster="images/poster_rp9eyh-h264-hd.webp" x-ref="video0" data-src="videos/rp9eyh-h264-hd.mp4" 
                                    class="w-full h-full object-cover" 
                                    playsinline loop muted
                                    @ended="playing = null"></video>
@@ -522,7 +524,7 @@
                     <div class="flex-shrink-0 snap-center">
                         <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-brand-pink transition-all duration-300"
                              @click="playVideo(1)">
-                            <video preload="metadata" poster="images/poster_snaptik_7468947176090029318_hd.webp" x-ref="video1" src="videos/snaptik_7468947176090029318_hd.mp4" 
+                            <video preload="none" poster="images/poster_snaptik_7468947176090029318_hd.webp" x-ref="video1" data-src="videos/snaptik_7468947176090029318_hd.mp4" 
                                    class="w-full h-full object-cover" 
                                    playsinline loop muted
                                    @ended="playing = null"></video>
@@ -544,7 +546,7 @@
                     <div class="flex-shrink-0 snap-center">
                         <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-brand-pink transition-all duration-300"
                              @click="playVideo(2)">
-                            <video preload="metadata" poster="images/poster_snaptik_7477021853861678354_hd.webp" x-ref="video2" src="videos/snaptik_7477021853861678354_hd.mp4" 
+                            <video preload="none" poster="images/poster_snaptik_7477021853861678354_hd.webp" x-ref="video2" data-src="videos/snaptik_7477021853861678354_hd.mp4" 
                                    class="w-full h-full object-cover" 
                                    playsinline loop muted
                                    @ended="playing = null"></video>
@@ -566,7 +568,7 @@
                     <div class="flex-shrink-0 snap-center">
                         <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-brand-pink transition-all duration-300"
                              @click="playVideo(3)">
-                            <video preload="metadata" poster="images/poster_snaptik_7477773774125845765_hd.webp" x-ref="video3" src="videos/snaptik_7477773774125845765_hd.mp4" 
+                            <video preload="none" poster="images/poster_snaptik_7477773774125845765_hd.webp" x-ref="video3" data-src="videos/snaptik_7477773774125845765_hd.mp4" 
                                    class="w-full h-full object-cover" 
                                    playsinline loop muted
                                    @ended="playing = null"></video>
@@ -588,7 +590,7 @@
                     <div class="flex-shrink-0 snap-center">
                         <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-brand-pink transition-all duration-300"
                              @click="playVideo(4)">
-                            <video preload="metadata" poster="images/poster_snaptik_7498078648264609066_hd.webp" x-ref="video4" src="videos/snaptik_7498078648264609066_hd.mp4" 
+                            <video preload="none" poster="images/poster_snaptik_7498078648264609066_hd.webp" x-ref="video4" data-src="videos/snaptik_7498078648264609066_hd.mp4" 
                                    class="w-full h-full object-cover" 
                                    playsinline loop muted
                                    @ended="playing = null"></video>
@@ -610,7 +612,7 @@
                     <div class="flex-shrink-0 snap-center">
                         <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-brand-pink transition-all duration-300"
                              @click="playVideo(5)">
-                            <video preload="metadata" poster="images/poster_snaptik_7535671268977151240_v2.webp" x-ref="video5" src="videos/snaptik_7535671268977151240_v2.mp4" 
+                            <video preload="none" poster="images/poster_snaptik_7535671268977151240_v2.webp" x-ref="video5" data-src="videos/snaptik_7535671268977151240_v2.mp4" 
                                    class="w-full h-full object-cover" 
                                    playsinline loop muted
                                    @ended="playing = null"></video>
@@ -632,7 +634,7 @@
                     <div class="flex-shrink-0 snap-center">
                         <div class="relative w-[200px] md:w-[240px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl shadow-black/50 group cursor-pointer border-2 border-dark-border hover:border-brand-pink transition-all duration-300"
                              @click="playVideo(6)">
-                            <video preload="metadata" poster="images/poster_snaptik_7580571136329633032_hd.webp" x-ref="video6" src="videos/snaptik_7580571136329633032_hd.mp4" 
+                            <video preload="none" poster="images/poster_snaptik_7580571136329633032_hd.webp" x-ref="video6" data-src="videos/snaptik_7580571136329633032_hd.mp4" 
                                    class="w-full h-full object-cover" 
                                    playsinline loop muted
                                    @ended="playing = null"></video>
@@ -674,8 +676,9 @@
                 <span class="gradient-text">6 تقنيات أساسية</span>
             </h2>
             <img loading="lazy" src="images/Six_Core_Technologies_Infographic.webp" 
-                 alt="Six_Core_Technologies_Infographic.webp"
-                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl">
+                 alt="6 تقنيات أساسية للشاشة"
+                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl"
+                 width="896" height="504" decoding="async">
         </div>
     </section>
 
@@ -686,8 +689,9 @@
                 <span class="gradient-text">استخدامات متعددة</span>
             </h2>
             <img loading="lazy" src="images/LED_Screen_Application_Scenarios_Composite.webp" 
-                 alt="LED_Screen_Application_Scenarios_Composite.webp"
-                 class="w-full max-w-5xl mx-auto rounded-2xl shadow-2xl">
+                 alt="استخدامات متعددة للشاشة"
+                 class="w-full max-w-5xl mx-auto rounded-2xl shadow-2xl"
+                 width="1024" height="576" decoding="async">
         </div>
     </section>
 
@@ -698,15 +702,18 @@
                 <span class="gradient-text">جودة عالية ومكونات متينة</span>
             </h2>
             <img loading="lazy" src="images/High_Quality_Product_Components_Details.webp" 
-                 alt="High_Quality_Product_Components_Details.webp"
-                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl mb-6">
+                 alt="مكونات عالية الجودة"
+                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl mb-6"
+                 width="896" height="504" decoding="async">
             <div class="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
                 <img loading="lazy" src="images/Flexible_LED_Matrix_Adjustable_Brightness.webp" 
-                     alt="Flexible_LED_Matrix_Adjustable_Brightness.webp"
-                     class="w-full rounded-2xl shadow-xl">
+                     alt="سطوع قابل للتعديل"
+                     class="w-full rounded-2xl shadow-xl"
+                     width="448" height="336" decoding="async">
                 <img loading="lazy" src="images/Flexible_LED_Waterproof_PU_Case.webp" 
-                     alt="Flexible_LED_Waterproof_PU_Case.webp"
-                     class="w-full rounded-2xl shadow-xl">
+                     alt="غلاف مقاوم للماء"
+                     class="w-full rounded-2xl shadow-xl"
+                     width="448" height="336" decoding="async">
             </div>
         </div>
     </section>
@@ -719,15 +726,18 @@
             </h2>
             <div class="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto mb-6">
                 <img loading="lazy" src="images/Intelligent_App_Control_DIY_Features_Interface.webp" 
-                     alt="Intelligent_App_Control_DIY_Features_Interface.webp"
-                     class="w-full rounded-2xl shadow-2xl">
+                     alt="واجهة التحكم الذكي"
+                     class="w-full rounded-2xl shadow-2xl"
+                     width="512" height="384" decoding="async">
                 <img loading="lazy" src="images/Animation_Stock_Library_Display.webp" 
-                     alt="Animation_Stock_Library_Display.webp"
-                     class="w-full rounded-2xl shadow-2xl">
+                     alt="مكتبة الرسوم المتحركة"
+                     class="w-full rounded-2xl shadow-2xl"
+                     width="512" height="384" decoding="async">
             </div>
             <img loading="lazy" src="images/App_Controlled_Flexible_LED_Sign_DIY_Design_Features.webp" 
-                 alt="App_Controlled_Flexible_LED_Sign_DIY_Design_Features.webp"
-                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-xl">
+                 alt="مميزات التصميم الذاتي"
+                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-xl"
+                 width="896" height="504" decoding="async">
         </div>
     </section>
 
@@ -738,8 +748,9 @@
                 <span class="gradient-text">تركيب سهل وسريع</span>
             </h2>
             <img loading="lazy" src="images/Car_Sign_Easy_Installation_Guide_Steps.webp" 
-                 alt="Car_Sign_Easy_Installation_Guide_Steps.webp"
-                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl">
+                 alt="خطوات التركيب السهل"
+                 class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl"
+                 width="896" height="504" decoding="async">
         </div>
     </section>
 
@@ -751,11 +762,13 @@
             </h2>
             <div class="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto">
                 <img loading="lazy" src="images/Powerful_Performance_and_Key_Features_Summary.webp" 
-                     alt="Powerful_Performance_and_Key_Features_Summary.webp"
-                     class="w-full rounded-2xl shadow-xl">
+                     alt="أداء قوي ومميزات"
+                     class="w-full rounded-2xl shadow-xl"
+                     width="512" height="384" decoding="async">
                 <img loading="lazy" src="images/LED_Sign_Remote_Control_Functions_Diagram.webp" 
-                     alt="LED_Sign_Remote_Control_Functions_Diagram.webp"
-                     class="w-full rounded-2xl shadow-xl">
+                     alt="وظائف التحكم عن بعد"
+                     class="w-full rounded-2xl shadow-xl"
+                     width="512" height="384" decoding="async">
             </div>
         </div>
     </section>
@@ -765,11 +778,13 @@
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-2 gap-8 items-center">
                 <img loading="lazy" src="images/Product_Qualification_and_Quality_Certifications.webp" 
-                     alt="Product_Qualification_and_Quality_Certifications.webp"
-                     class="w-full rounded-2xl">
+                     alt="شهادات الجودة"
+                     class="w-full rounded-2xl"
+                     width="512" height="384" decoding="async">
                 <img loading="lazy" src="images/certificates.webp" 
-                     alt="certificates.webp"
-                     class="w-full rounded-2xl">
+                     alt="الشهادات"
+                     class="w-full rounded-2xl"
+                     width="512" height="384" decoding="async">
             </div>
         </div>
     </section>
@@ -792,7 +807,8 @@
                 <div class="mb-8">
                     <img loading="lazy" src="images/main.webp" 
                          alt="LED Matrix Egypt Product"
-                         class="w-full max-w-lg mx-auto rounded-2xl shadow-2xl">
+                         class="w-full max-w-lg mx-auto rounded-2xl shadow-2xl"
+                         width="512" height="512" decoding="async">
                 </div>
                 
                 <form class="relative bg-gradient-to-br from-brand-purple/30 to-dark-card border-2 border-brand-pink/30 rounded-3xl p-8 shadow-2xl shadow-brand-pink/10 backdrop-blur-sm" 
@@ -976,7 +992,8 @@
                 <div class="mt-6">
                     <img loading="lazy" src="images/safe-checkout" 
                          alt="Safe Checkout"
-                         class="w-full max-w-xl mx-auto">
+                         class="w-full max-w-xl mx-auto"
+                         width="576" height="80" decoding="async">
                 </div>
             </div>
         </div>
@@ -997,7 +1014,7 @@
                 © 2026 LED Matrix Egypt. جميع الحقوق محفوظة.
             </p>
             <div class="mt-6">
-                <img loading="lazy" src="images/shipping.gif" alt="shipping.gif" class="mx-auto w-full max-w-lg md:max-w-xl">
+                <img loading="lazy" src="images/shipping.gif" alt="شحن سريع" class="mx-auto w-full max-w-lg md:max-w-xl" width="576" height="200" decoding="async">
             </div>
         </div>
     </footer>
@@ -1009,6 +1026,45 @@
         </svg>
         اطلب الآن
     </a>
+
+    <!-- Lazy Load Videos with Intersection Observer -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const video = entry.target;
+                    if (video.dataset.src && !video.src) {
+                        video.src = video.dataset.src;
+                    }
+                    videoObserver.unobserve(video);
+                }
+            });
+        }, { rootMargin: '100px' });
+        
+        document.querySelectorAll('video[data-src]').forEach(video => {
+            videoObserver.observe(video);
+        });
+        
+        // Lazy load images that are below fold
+        const imgObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                    }
+                    imgObserver.unobserve(img);
+                }
+            });
+        }, { rootMargin: '50px' });
+        
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imgObserver.observe(img);
+        });
+    });
+    </script>
 
 </body>
 </html>
