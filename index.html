@@ -130,18 +130,18 @@
 
         /* Hero Slider - Mobile Optimized */
         .hero-slider-container {
-            aspect-ratio: 4/3;
             width: 100%;
-            max-width: 100%;
             contain: layout;
+            background: #111;
         }
         
         .hero-slider-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             object-position: center;
-            transition: opacity 0.4s ease-in-out;
+            transition: opacity 0.3s ease-in-out;
+            background: #111;
         }
         
         .hero-thumbnails {
@@ -161,16 +161,22 @@
             object-fit: cover;
         }
         
-        @media (max-width: 640px) {
+        /* Mobile - Full width slider */
+        @media (max-width: 768px) {
             .hero-slider-container {
+                margin: 0 -1rem;
+                width: calc(100% + 2rem);
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
                 aspect-ratio: 1/1;
-                max-height: 350px;
             }
             .hero-thumbnails {
-                gap: 6px;
+                gap: 4px;
+                margin-top: 8px;
             }
             .hero-thumbnails button {
-                max-height: 70px;
+                border-radius: 8px;
             }
         }
         
@@ -578,7 +584,7 @@
                         <img src="images/main.webp"
                              x-bind:src="mainImage" 
                              alt="LED Matrix Screen"
-                             class="lcp-image w-full object-contain p-4 hero-slider-image"
+                             class="lcp-image w-full h-full hero-slider-image"
                              width="600" height="600" fetchpriority="high" loading="eager">
                         
                         <!-- Slide Indicator Dots -->
