@@ -4,6 +4,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyCbmgvmk35VHgzdpsZR8P4tdgfZRprIV40",
@@ -22,6 +23,9 @@ export const storage = getStorage(app);
 
 // Initialize Auth
 export const auth = getAuth(app);
+
+// Initialize Firestore
+export const db = getFirestore(app);
 
 // Admin UID - only this user can access dashboard
 export const ADMIN_UID = "OaxywaxcdFNn3kTJeE7MJTq9M0L2";

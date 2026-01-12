@@ -2,9 +2,14 @@ import { Metadata } from "next";
 import PropertyDetailClient from "./PropertyDetailClient";
 import { MOCK_PROPERTIES } from "@/lib/mockData";
 
+// Allow dynamic params for Firestore-generated IDs
+export const dynamicParams = true;
+
 export function generateStaticParams() {
-  return Array.from({ length: 100 }, (_, i) => ({
-    id: `prop-${String(i + 1).padStart(3, "0")}`,
+  // Generate static params for mock properties
+  // Dynamic Firestore properties will be handled client-side
+  return MOCK_PROPERTIES.map((property) => ({
+    id: property.id,
   }));
 }
 

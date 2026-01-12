@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
+import { WhyUsSection } from "@/components/WhyUsSection";
+import { FeaturedDistricts } from "@/components/FeaturedDistricts";
 import { PropertyCard } from "@/components/PropertyCard";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Footer } from "@/components/Footer";
 import { Property } from "@/lib/mockData";
-import { getAllProperties } from "@/lib/propertyStore";
+import { getAllProperties, getAllPropertiesAsync } from "@/lib/propertyStore";
 import { Button } from "@/components/ui/button";
-import { LayoutGrid, List, SlidersHorizontal, X, Loader2 } from "lucide-react";
+import { LayoutGrid, List, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -21,22 +23,21 @@ export default function Home() {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 50000000 });
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(13);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 20;
 
   useEffect(() => {
-    const allProperties = getAllProperties();
-    setProperties(allProperties);
-    // Log 3 examples to console
-    console.log("🏠 التيسير للعقارات - Sample Properties:");
-    allProperties.slice(0, 3).forEach((p: Property, i: number) => {
-      console.log(`\n${i + 1}. ${p.title}`);
-      console.log(`   📍 ${p.location.district} - ${p.location.address}`);
-      console.log(`   💰 ${p.price.toLocaleString()} ${p.currency} (${p.category})`);
-      console.log(`   🏷️ ${p.type} | ${p.details.area_sqm}م² | ${p.details.finishing}`);
-      console.log(`   ✅ Verified: ${p.isVerified}`);
-    });
+    // Initial load from cache/mock
+    const cachedProperties = getAllProperties();
+    setProperties(cachedProperties);
+    
+    // Then fetch from Firestore
+    getAllPropertiesAsync().then((firestoreProperties) => {
+      if (firestoreProperties.length > 0) {
+        setProperties(firestoreProperties);
+        console.log(`🏠 تم تحميل ${firestoreProperties.length} عقار من Firestore`);
+      }
+    }).catch(console.error);
   }, []);
 
   const filteredProperties = useMemo(() => {
@@ -76,43 +77,47 @@ export default function Home() {
     });
   }, [properties, selectedDistricts, selectedTypes, priceRange, selectedStatus, selectedPaymentMethod]);
 
-  // Visible properties (for infinite scroll)
-  const visibleProperties = useMemo(() => {
-    return filteredProperties.slice(0, visibleCount);
-  }, [filteredProperties, visibleCount]);
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
+  
+  // Get properties for current page
+  const paginatedProperties = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredProperties.slice(startIndex, endIndex);
+  }, [filteredProperties, currentPage, ITEMS_PER_PAGE]);
 
-  // Load more function
-  const loadMore = useCallback(() => {
-    if (visibleCount >= filteredProperties.length) return;
-    setIsLoadingMore(true);
-    setTimeout(() => {
-      setVisibleCount((prev) => Math.min(prev + 12, filteredProperties.length));
-      setIsLoadingMore(false);
-    }, 300);
-  }, [visibleCount, filteredProperties.length]);
-
-  // Intersection Observer for infinite scroll
+  // Reset to page 1 when filters change
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isLoadingMore) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [loadMore, isLoadingMore]);
-
-  // Reset visible count when filters change
-  useEffect(() => {
-    setVisibleCount(13);
+    setCurrentPage(1);
   }, [selectedDistricts, selectedTypes, priceRange, selectedStatus, selectedPaymentMethod]);
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    document.getElementById("properties")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        pages.push(1, 2, 3, 4, "...", totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
+      }
+    }
+    return pages;
+  };
 
   const handleHeroSearch = (filters: {
     district: string;
@@ -148,7 +153,14 @@ export default function Home() {
     <div className="min-h-screen">
       <Header />
       
-      <HeroSection onSearch={handleHeroSearch} />
+      <HeroSection 
+        onSearch={handleHeroSearch} 
+        totalProperties={properties.length}
+        totalDistricts={new Set(properties.map(p => p.location.district)).size}
+      />
+
+      {/* Featured Districts */}
+      <FeaturedDistricts />
 
       {/* Properties Section */}
       <section id="properties" className="py-12 bg-gray-50">
@@ -276,41 +288,67 @@ export default function Home() {
                         : "flex flex-col gap-3 md:gap-4"
                     }
                   >
-                    {visibleProperties.map((property) => (
+                    {paginatedProperties.map((property) => (
                       <PropertyCard key={property.id} property={property} />
                     ))}
                   </div>
 
-                  {/* Load More Trigger */}
-                  {visibleCount < filteredProperties.length && (
-                    <div
-                      ref={loadMoreRef}
-                      className="flex justify-center items-center py-8"
-                    >
-                      {isLoadingMore ? (
-                        <div className="flex items-center gap-2 text-orange-500">
-                          <Loader2 className="h-5 w-5 animate-spin" />
-                          <span>جاري التحميل...</span>
-                        </div>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          onClick={loadMore}
-                          className="gap-2"
-                        >
-                          عرض المزيد ({filteredProperties.length - visibleCount} عقار)
-                        </Button>
-                      )}
+                  {/* Show count */}
+                  <div className="text-center text-sm text-gray-500 mt-6">
+                    عرض {(currentPage - 1) * ITEMS_PER_PAGE + 1} - {Math.min(currentPage * ITEMS_PER_PAGE, filteredProperties.length)} من {filteredProperties.length} عقار
+                  </div>
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-2 mt-8">
+                      {/* Previous Button */}
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="h-10 w-10"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+
+                      {/* Page Numbers */}
+                      <div className="flex items-center gap-1">
+                        {getPageNumbers().map((page, index) => (
+                          <Button
+                            key={index}
+                            variant={page === currentPage ? "default" : "outline"}
+                            size="icon"
+                            onClick={() => typeof page === "number" && handlePageChange(page)}
+                            disabled={page === "..."}
+                            className={`h-10 w-10 ${
+                              page === currentPage
+                                ? "bg-orange-500 hover:bg-orange-600 text-white"
+                                : page === "..."
+                                ? "cursor-default hover:bg-transparent"
+                                : ""
+                            }`}
+                          >
+                            {page}
+                          </Button>
+                        ))}
+                      </div>
+
+                      {/* Next Button */}
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="h-10 w-10"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
                     </div>
                   )}
 
-                  {/* Show count */}
-                  <div className="text-center text-sm text-gray-500 mt-4">
-                    عرض {visibleProperties.length} من {filteredProperties.length} عقار
-                  </div>
-
                   {/* View All Link */}
-                  <div className="text-center mt-6">
+                  <div className="text-center mt-8">
                     <Button asChild variant="default" className="bg-orange-500 hover:bg-orange-600">
                       <Link href="/properties">
                         عرض جميع العقارات
@@ -323,6 +361,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Why Us Section - Before Footer */}
+      <WhyUsSection />
 
       <Footer />
     </div>

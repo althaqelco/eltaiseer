@@ -1,94 +1,197 @@
 // lib/propertyStore.ts
 // Property Store - Client-side state management for properties
-// Uses localStorage for persistence across page navigations
+// Uses Firestore for cloud persistence + localStorage as cache
 
 import { Property } from "./mockData";
 import { MOCK_PROPERTIES } from "./mockData";
+import {
+  getPropertiesFromFirestore,
+  getPropertyFromFirestore,
+  addPropertyToFirestore,
+  updatePropertyInFirestore,
+  deletePropertyFromFirestore,
+} from "./firestoreProperties";
 
 const STORAGE_KEY = "eltaiseer_properties";
+const CACHE_TIMESTAMP_KEY = "eltaiseer_properties_timestamp";
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
 
-// Initialize properties from localStorage or mock data
-function initializeProperties(): Property[] {
-  if (typeof window === "undefined") {
-    return [...MOCK_PROPERTIES];
-  }
+// Check if cache is valid
+function isCacheValid(): boolean {
+  if (typeof window === "undefined") return false;
+  const timestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+  if (!timestamp) return false;
+  return Date.now() - parseInt(timestamp) < CACHE_DURATION;
+}
+
+// Get cached properties from localStorage
+function getCachedProperties(): Property[] | null {
+  if (typeof window === "undefined") return null;
   
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
+    if (stored && isCacheValid()) {
       const parsed = JSON.parse(stored);
-      // Convert date strings back to Date objects
       return parsed.map((p: Property) => ({
         ...p,
         createdAt: new Date(p.createdAt),
       }));
     }
   } catch (error) {
-    console.error("Error loading properties from localStorage:", error);
+    console.error("Error loading properties from cache:", error);
   }
-  
-  // First time - save mock data to localStorage
-  saveToStorage(MOCK_PROPERTIES);
-  return [...MOCK_PROPERTIES];
+  return null;
 }
 
-// Save properties to localStorage
-function saveToStorage(props: Property[]): void {
+// Save properties to localStorage cache
+function saveToCache(props: Property[]): void {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(props));
+    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
   } catch (error) {
-    console.error("Error saving properties to localStorage:", error);
+    console.error("Error saving properties to cache:", error);
   }
 }
 
-// Get properties (always fresh from storage)
-function getProperties(): Property[] {
-  return initializeProperties();
+// Clear cache to force refresh
+export function clearPropertiesCache(): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(CACHE_TIMESTAMP_KEY);
 }
 
-// Get all properties
+// Get all properties (sync version for SSR - returns mock data)
 export function getAllProperties(): Property[] {
-  return getProperties();
+  if (typeof window === "undefined") {
+    return [...MOCK_PROPERTIES];
+  }
+  
+  // Try to get from cache first
+  const cached = getCachedProperties();
+  if (cached && cached.length > 0) {
+    return cached;
+  }
+  
+  // Return mock data as fallback (async fetch will update)
+  return [...MOCK_PROPERTIES];
 }
 
-// Get property by ID
+// Get all properties from Firestore (async version)
+export async function getAllPropertiesAsync(): Promise<Property[]> {
+  try {
+    const properties = await getPropertiesFromFirestore();
+    
+    // If Firestore has data, use it
+    if (properties.length > 0) {
+      saveToCache(properties);
+      return properties;
+    }
+    
+    // Fallback to mock data
+    return [...MOCK_PROPERTIES];
+  } catch (error) {
+    console.error("Error fetching properties:", error);
+    
+    // Try cache
+    const cached = getCachedProperties();
+    if (cached) return cached;
+    
+    // Final fallback
+    return [...MOCK_PROPERTIES];
+  }
+}
+
+// Get property by ID (sync version)
 export function getPropertyById(id: string): Property | undefined {
-  return getProperties().find((p) => p.id === id);
+  return getAllProperties().find((p) => p.id === id);
 }
 
-// Add new property
+// Get property by ID (async version)
+export async function getPropertyByIdAsync(id: string): Promise<Property | null> {
+  try {
+    const property = await getPropertyFromFirestore(id);
+    if (property) return property;
+    
+    // Fallback to local search
+    return getAllProperties().find((p) => p.id === id) || null;
+  } catch (error) {
+    console.error("Error fetching property:", error);
+    return getAllProperties().find((p) => p.id === id) || null;
+  }
+}
+
+// Add new property (saves to Firestore)
+export async function addPropertyAsync(
+  property: Omit<Property, "id" | "createdAt">
+): Promise<{ success: boolean; property?: Property; error?: string }> {
+  try {
+    const result = await addPropertyToFirestore(property);
+    if (result.success && result.property) {
+      clearPropertiesCache(); // Clear cache to force refresh
+      return { success: true, property: result.property };
+    }
+    return { success: false, error: result.error || 'فشل في إضافة العقار' };
+  } catch (error) {
+    console.error("Error adding property:", error);
+    return { success: false, error: 'حدث خطأ أثناء إضافة العقار' };
+  }
+}
+
+// Legacy sync add (for backward compatibility - also saves to Firestore)
 export function addProperty(property: Omit<Property, "id" | "createdAt">): Property {
-  const currentProperties = getProperties();
-  const newProperty: Property = {
+  // Fire and forget - async save to Firestore
+  addPropertyAsync(property).catch(console.error);
+  
+  // Return immediately with temporary ID
+  const tempProperty: Property = {
     ...property,
-    id: `prop-${String(currentProperties.length + 1).padStart(3, "0")}`,
+    id: `temp-${Date.now()}`,
     createdAt: new Date(),
   };
-  const updatedProperties = [newProperty, ...currentProperties];
-  saveToStorage(updatedProperties);
-  return newProperty;
+  return tempProperty;
 }
 
-// Update property
+// Update property (async)
+export async function updatePropertyAsync(
+  id: string, 
+  updates: Partial<Property>
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const result = await updatePropertyInFirestore(id, updates);
+    if (result.success) {
+      clearPropertiesCache();
+    }
+    return result;
+  } catch (error) {
+    console.error("Error updating property:", error);
+    return { success: false, error: 'حدث خطأ أثناء تحديث العقار' };
+  }
+}
+
+// Legacy sync update
 export function updateProperty(id: string, updates: Partial<Property>): Property | null {
-  const currentProperties = getProperties();
-  const index = currentProperties.findIndex((p: Property) => p.id === id);
-  if (index === -1) return null;
-  
-  currentProperties[index] = { ...currentProperties[index], ...updates };
-  saveToStorage(currentProperties);
-  return currentProperties[index];
+  updatePropertyAsync(id, updates).catch(console.error);
+  return { ...updates, id } as Property;
 }
 
-// Delete property
+// Delete property (async)
+export async function deletePropertyAsync(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const result = await deletePropertyFromFirestore(id);
+    if (result.success) {
+      clearPropertiesCache();
+    }
+    return result;
+  } catch (error) {
+    console.error("Error deleting property:", error);
+    return { success: false, error: 'حدث خطأ أثناء حذف العقار' };
+  }
+}
+
+// Legacy sync delete
 export function deleteProperty(id: string): boolean {
-  const currentProperties = getProperties();
-  const index = currentProperties.findIndex((p: Property) => p.id === id);
-  if (index === -1) return false;
-  
-  currentProperties.splice(index, 1);
-  saveToStorage(currentProperties);
+  deletePropertyAsync(id).catch(console.error);
   return true;
 }
 
@@ -103,7 +206,7 @@ export function getPropertiesPage(
     maxPrice?: number;
   }
 ): { properties: Property[]; total: number; totalPages: number } {
-  let filtered = [...getProperties()];
+  let filtered = [...getAllProperties()];
 
   if (filters?.district) {
     filtered = filtered.filter((p) => p.location.district === filters.district);
@@ -132,7 +235,7 @@ export function getPropertiesPage(
 
 // Get related properties (same district or type)
 export function getRelatedProperties(property: Property, limit: number = 4): Property[] {
-  return getProperties()
+  return getAllProperties()
     .filter(
       (p: Property) =>
         p.id !== property.id &&
@@ -143,19 +246,19 @@ export function getRelatedProperties(property: Property, limit: number = 4): Pro
 
 // Get featured properties (verified ones)
 export function getFeaturedProperties(limit: number = 6): Property[] {
-  return getProperties().filter((p: Property) => p.isVerified).slice(0, limit);
+  return getAllProperties().filter((p: Property) => p.isVerified).slice(0, limit);
 }
 
 // Get latest properties
 export function getLatestProperties(limit: number = 6): Property[] {
-  return [...getProperties()]
+  return [...getAllProperties()]
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     .slice(0, limit);
 }
 
 // Generate unique ID
 export function generatePropertyId(): string {
-  return `prop-${String(getProperties().length + 1).padStart(3, "0")}`;
+  return `prop-${String(getAllProperties().length + 1).padStart(3, "0")}`;
 }
 
 // Clear all data and reset to mock data

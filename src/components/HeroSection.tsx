@@ -19,6 +19,8 @@ interface HeroSectionProps {
     district: string;
     type: string;
   }) => void;
+  totalProperties?: number;
+  totalDistricts?: number;
 }
 
 const PROPERTY_TYPE_OPTIONS = [
@@ -36,7 +38,7 @@ const PROPERTY_TYPE_OPTIONS = [
   { value: "روف", label: "روف" },
 ];
 
-export function HeroSection({ onSearch }: HeroSectionProps) {
+export function HeroSection({ onSearch, totalProperties = 50, totalDistricts = 20 }: HeroSectionProps) {
   const [selectedDistrict, setSelectedDistrict] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
 
@@ -147,15 +149,21 @@ export function HeroSection({ onSearch }: HeroSectionProps) {
         <div className="flex justify-center gap-6 sm:gap-8 md:gap-16 mt-6 md:mt-12">
           <div className="text-center">
             <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-              50+
+              {totalProperties}+
             </p>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base">عقار</p>
+            <p className="text-gray-300 text-xs sm:text-sm md:text-base">عقار متاح</p>
           </div>
           <div className="text-center">
             <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-              20+
+              {totalDistricts}+
             </p>
             <p className="text-gray-300 text-xs sm:text-sm md:text-base">منطقة</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
+              5+
+            </p>
+            <p className="text-gray-300 text-xs sm:text-sm md:text-base">سنوات خبرة</p>
           </div>
           <div className="text-center">
             <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">

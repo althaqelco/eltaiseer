@@ -38,7 +38,7 @@ import {
   Loader2,
   Home,
 } from "lucide-react";
-import { getAllProperties } from "@/lib/propertyStore";
+import { getAllProperties, getAllPropertiesAsync } from "@/lib/propertyStore";
 import { PLACE_CATEGORIES } from "@/lib/damiettaPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/damiettaPlaces";
@@ -58,7 +58,7 @@ const PROPERTY_TYPES = [
   "روف",
 ];
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 20;
 
 function PropertiesContent() {
   const searchParams = useSearchParams();
@@ -68,11 +68,21 @@ function PropertiesContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("all");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000000 });
 
   useEffect(() => {
-    const allProperties = getAllProperties();
-    setProperties(allProperties);
+    // Initial load
+    const cachedProperties = getAllProperties();
+    setProperties(cachedProperties);
+    
+    // Then fetch from Firestore
+    getAllPropertiesAsync().then((firestoreProperties) => {
+      if (firestoreProperties.length > 0) {
+        setProperties(firestoreProperties);
+      }
+    }).catch(console.error);
 
     // Check URL params
     const district = searchParams.get("district");
@@ -86,6 +96,8 @@ function PropertiesContent() {
       if (selectedDistrict !== "all" && p.location.district !== selectedDistrict)
         return false;
       if (selectedType !== "all" && p.type !== selectedType) return false;
+      if (selectedStatus !== "all" && p.status !== selectedStatus) return false;
+      if (selectedPaymentMethod !== "all" && p.payment.type !== selectedPaymentMethod) return false;
       if (p.price < priceRange.min || p.price > priceRange.max) return false;
       if (
         searchQuery &&
@@ -95,7 +107,7 @@ function PropertiesContent() {
         return false;
       return true;
     });
-  }, [properties, selectedDistrict, selectedType, priceRange, searchQuery]);
+  }, [properties, selectedDistrict, selectedType, selectedStatus, selectedPaymentMethod, priceRange, searchQuery]);
 
   const totalPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
   const paginatedProperties = filteredProperties.slice(
@@ -120,6 +132,8 @@ function PropertiesContent() {
   const clearFilters = () => {
     setSelectedDistrict("all");
     setSelectedType("all");
+    setSelectedStatus("all");
+    setSelectedPaymentMethod("all");
     setPriceRange({ min: 0, max: 100000000 });
     setSearchQuery("");
     setCurrentPage(1);
@@ -159,9 +173,9 @@ function PropertiesContent() {
         {/* Filters Bar */}
         <Card className="mb-8">
           <CardContent className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               {/* Search */}
-              <div className="relative md:col-span-2">
+              <div className="relative md:col-span-2 lg:col-span-2">
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="ابحث عن عقار..."
@@ -222,9 +236,49 @@ function PropertiesContent() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Second Row of Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Status Filter */}
+              <Select
+                value={selectedStatus}
+                onValueChange={(value) => {
+                  setSelectedStatus(value);
+                  setCurrentPage(1);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="حالة العقار" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">جميع الحالات</SelectItem>
+                  <SelectItem value="جاهز">جاهز للتسليم</SelectItem>
+                  <SelectItem value="تحت الإنشاء">تحت الإنشاء</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Payment Method Filter */}
+              <Select
+                value={selectedPaymentMethod}
+                onValueChange={(value) => {
+                  setSelectedPaymentMethod(value);
+                  setCurrentPage(1);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="طريقة الدفع" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">جميع طرق الدفع</SelectItem>
+                  <SelectItem value="كاش">كاش (نقدي)</SelectItem>
+                  <SelectItem value="تقسيط">تقسيط</SelectItem>
+                  <SelectItem value="كاش أو تقسيط">كاش أو تقسيط</SelectItem>
+                </SelectContent>
+              </Select>
 
               {/* View Toggle & Clear */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 lg:col-span-2 justify-end">
                 <div className="flex items-center bg-gray-100 rounded-lg p-1">
                   <Button
                     variant={viewMode === "grid" ? "default" : "ghost"}
@@ -245,7 +299,7 @@ function PropertiesContent() {
                 </div>
                 <Button variant="outline" onClick={clearFilters} className="gap-2">
                   <SlidersHorizontal className="h-4 w-4" />
-                  مسح
+                  مسح الفلاتر
                 </Button>
               </div>
             </div>

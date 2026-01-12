@@ -20,7 +20,7 @@ import {
   TrendingUp,
   CheckCircle2,
 } from "lucide-react";
-import { getAllProperties, deleteProperty } from "@/lib/propertyStore";
+import { getAllPropertiesAsync, deletePropertyAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
 
 export default function DashboardPage() {
@@ -32,16 +32,26 @@ export default function DashboardPage() {
     loadProperties();
   }, []);
 
-  const loadProperties = () => {
-    const allProperties = getAllProperties();
-    setProperties(allProperties);
-    setIsLoading(false);
+  const loadProperties = async () => {
+    try {
+      const allProperties = await getAllPropertiesAsync();
+      setProperties(allProperties);
+    } catch (error) {
+      console.error("Error loading properties:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("هل أنت متأكد من حذف هذا العقار؟")) {
-      deleteProperty(id);
-      loadProperties();
+      const result = await deletePropertyAsync(id);
+      if (result.success) {
+        alert("تم حذف العقار بنجاح");
+        loadProperties();
+      } else {
+        alert(result.error || "حدث خطأ أثناء حذف العقار");
+      }
     }
   };
 

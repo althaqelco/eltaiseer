@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Admin UID for El Taiseer Properties
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == 'OaxywaxcdFNn3kTJeE7MJTq9M0L2';
+    }
+    
+    // Properties collection rules
+    match /properties/{propertyId} {
+      // Anyone can read properties (public listing)
+      allow read: if true;
+      
+      // Only admin can create, update, or delete properties
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Deny all other collections by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

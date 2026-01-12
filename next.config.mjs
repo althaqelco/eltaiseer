@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Only use static export for production builds
+  // In development, we need dynamic routing for Firestore properties
+  ...(process.env.NODE_ENV === 'production' && process.env.STATIC_EXPORT === 'true' 
+    ? { output: 'export' } 
+    : {}),
   trailingSlash: true,
   images: {
     unoptimized: true,

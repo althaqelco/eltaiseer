@@ -35,7 +35,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { PLACE_CATEGORIES, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/damiettaPlaces";
-import { addProperty } from "@/lib/propertyStore";
+import { addPropertyAsync } from "@/lib/propertyStore";
 import { uploadImage, validateImageFile, compressImage } from "@/lib/imageUpload";
 
 const PROPERTY_TYPES = [
@@ -160,7 +160,7 @@ export default function AddPropertyPage() {
     setIsSubmitting(true);
 
     try {
-      const newProperty = addProperty({
+      const result = await addPropertyAsync({
         title: formData.title,
         description: formData.description || undefined,
         price: Number(formData.price),
@@ -193,8 +193,12 @@ export default function AddPropertyPage() {
         isVerified: formData.isVerified,
       });
 
-      alert("تم إضافة العقار بنجاح!");
-      router.push(`/property/${newProperty.id}`);
+      if (result.success && result.property) {
+        alert("تم إضافة العقار بنجاح!");
+        router.push(`/property/${result.property.id}`);
+      } else {
+        alert(result.error || "حدث خطأ أثناء إضافة العقار");
+      }
     } catch (error) {
       console.error("Error adding property:", error);
       alert("حدث خطأ أثناء إضافة العقار");

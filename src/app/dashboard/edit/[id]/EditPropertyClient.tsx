@@ -35,7 +35,7 @@ import {
   Upload,
 } from "lucide-react";
 import { PLACE_CATEGORIES, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/damiettaPlaces";
-import { getPropertyById, updateProperty } from "@/lib/propertyStore";
+import { getPropertyByIdAsync, updatePropertyAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
 import { uploadImage, validateImageFile, compressImage } from "@/lib/imageUpload";
 
@@ -85,30 +85,34 @@ export default function EditPropertyClient() {
   });
 
   useEffect(() => {
-    const id = params.id as string;
-    const foundProperty = getPropertyById(id);
+    const loadProperty = async () => {
+      const id = params.id as string;
+      const foundProperty = await getPropertyByIdAsync(id);
+      
+      if (foundProperty) {
+        setProperty(foundProperty);
+        setFormData({
+          title: foundProperty.title,
+          price: String(foundProperty.price),
+          type: foundProperty.type,
+          district: foundProperty.location.district,
+          address: foundProperty.location.address,
+          area_sqm: String(foundProperty.details.area_sqm),
+          bedrooms: String(foundProperty.details.bedrooms),
+          bathrooms: String(foundProperty.details.bathrooms),
+          level: foundProperty.details.level,
+          finishing: foundProperty.details.finishing,
+          status: foundProperty.status || "جاهز",
+          contact_whatsapp: foundProperty.contact_whatsapp,
+          isVerified: foundProperty.isVerified,
+        });
+        setSelectedAmenities(foundProperty.amenities);
+        setImageUrls(foundProperty.images);
+      }
+      setIsLoading(false);
+    };
     
-    if (foundProperty) {
-      setProperty(foundProperty);
-      setFormData({
-        title: foundProperty.title,
-        price: String(foundProperty.price),
-        type: foundProperty.type,
-        district: foundProperty.location.district,
-        address: foundProperty.location.address,
-        area_sqm: String(foundProperty.details.area_sqm),
-        bedrooms: String(foundProperty.details.bedrooms),
-        bathrooms: String(foundProperty.details.bathrooms),
-        level: foundProperty.details.level,
-        finishing: foundProperty.details.finishing,
-        status: foundProperty.status || "جاهز",
-        contact_whatsapp: foundProperty.contact_whatsapp,
-        isVerified: foundProperty.isVerified,
-      });
-      setSelectedAmenities(foundProperty.amenities);
-      setImageUrls(foundProperty.images);
-    }
-    setIsLoading(false);
+    loadProperty();
   }, [params.id]);
 
   const handleChange = (field: string, value: string | boolean) => {
@@ -182,7 +186,7 @@ export default function EditPropertyClient() {
     setIsSubmitting(true);
 
     try {
-      const updatedProperty = updateProperty(property.id, {
+      const result = await updatePropertyAsync(property.id, {
         title: formData.title,
         price: Number(formData.price),
         type: formData.type,
@@ -204,11 +208,11 @@ export default function EditPropertyClient() {
         isVerified: formData.isVerified,
       });
 
-      if (updatedProperty) {
+      if (result.success) {
         alert("تم تحديث العقار بنجاح!");
         router.push("/dashboard");
       } else {
-        alert("حدث خطأ أثناء تحديث العقار");
+        alert(result.error || "حدث خطأ أثناء تحديث العقار");
       }
     } catch (error) {
       console.error("Error updating property:", error);
