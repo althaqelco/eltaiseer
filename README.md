@@ -6,6 +6,16 @@
 
 This is a [Next.js](https://nextjs.org) project for **El Taiseer Real Estate** (التيسير للعقارات), a comprehensive real estate platform for New Damietta, Egypt.
 
+## Features
+
+- 🏠 **Property Management**: Full CRUD operations with Firebase integration
+- 🔐 **Admin Authentication**: Secure admin panel with Firestore security rules
+- 📱 **Responsive Design**: Modern UI with Tailwind CSS
+- 🔍 **Advanced Search**: Filter properties by type, district, and features
+- 💰 **Price Calculator**: Built-in installment calculator
+- 🖼️ **Image Gallery**: Multiple property images support
+- ⭐ **Favorites System**: Save and manage favorite properties
+
 ## Getting Started
 
 First, run the development server:
@@ -22,21 +32,33 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Development server
+- `npm run build` - Production build with SSR support
+- `npm run build:static` - Static export for hosting
+- `npm run start` - Production server
 
-## Learn More
+## Firebase Deployment
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Deploy Firestore rules
+firebase deploy --only firestore:rules
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Deploy to Firebase Hosting
+npm run build:static
+firebase deploy --only hosting
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Live Site
 
-## Deploy on Vercel
+🌐 **Website**: https://eltaiseer-properties.web.app
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework**: Next.js 14 with App Router
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **Database**: Firebase Firestore
+- **Authentication**: Firebase Auth
+- **Hosting**: Firebase Hosting
+- **Language**: TypeScript
