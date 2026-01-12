@@ -3,7 +3,11 @@
 const TIKTOK_PIXEL_ID = 'D5EFGBJC77UFB3QVPJFG';
 const TIKTOK_API_URL = 'https://business-api.tiktok.com/open_api/v1.3/event/track/';
 
-// Note: TIKTOK_ACCESS_TOKEN is now stored as environment secret
+// Facebook Conversions API Configuration
+const FB_PIXEL_ID = '932815542652706';
+const FB_API_URL = `https://graph.facebook.com/v18.0/${FB_PIXEL_ID}/events`;
+
+// Note: TIKTOK_ACCESS_TOKEN and FB_ACCESS_TOKEN are stored as environment secrets
 
 // Function to send event to TikTok Events API
 async function sendTikTokEvent(eventName, eventData, userInfo, request, accessToken) {
@@ -67,6 +71,65 @@ async function hashData(data) {
   const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Function to send event to Facebook Conversions API
+async function sendFacebookEvent(eventName, eventData, userInfo, request, accessToken) {
+  try {
+    const eventTime = Math.floor(Date.now() / 1000);
+    const eventId = `${eventName}_${eventTime}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Hash user data for Facebook
+    const hashedPhone = userInfo.phone ? await hashData(userInfo.phone.replace(/[^0-9]/g, '')) : undefined;
+    const hashedName = userInfo.name ? await hashData(userInfo.name) : undefined;
+    
+    // Get client IP and user agent
+    const clientIp = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '';
+    const userAgent = request.headers.get('user-agent') || '';
+    
+    const payload = {
+      data: [{
+        event_name: eventName,
+        event_time: eventTime,
+        event_id: eventId,
+        event_source_url: request.headers.get('referer') || 'https://led-d06.pages.dev/',
+        action_source: 'website',
+        user_data: {
+          ph: hashedPhone ? [hashedPhone] : undefined,
+          fn: hashedName ? [hashedName] : undefined,
+          client_ip_address: clientIp,
+          client_user_agent: userAgent,
+          country: [await hashData('eg')],
+          ct: userInfo.governorate ? [await hashData(userInfo.governorate)] : undefined
+        },
+        custom_data: {
+          content_name: 'LED Matrix Egypt',
+          content_category: 'LED Screen',
+          content_ids: ['led-matrix-001'],
+          content_type: 'product',
+          value: eventData.value || 0,
+          currency: 'EGP',
+          num_items: eventData.quantity || 1,
+          order_id: eventData.orderId || ''
+        }
+      }]
+    };
+
+    const response = await fetch(`${FB_API_URL}?access_token=${accessToken}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+    console.log('Facebook Event sent:', eventName, result);
+    return result;
+  } catch (error) {
+    console.error('Facebook Event error:', error);
+    return null;
+  }
 }
 
 export default {
@@ -193,6 +256,28 @@ export default {
         }, {
           phone: phone
         }, request, env.TIKTOK_ACCESS_TOKEN);
+
+        // Send Facebook Conversions API - Lead Event (server-side tracking)
+        await sendFacebookEvent('Lead', {
+          value: total,
+          quantity: parseInt(quantity) || 1,
+          orderId: orderNumber.toString()
+        }, {
+          phone: phone,
+          name: name,
+          governorate: governorate
+        }, request, env.FB_ACCESS_TOKEN);
+
+        // Also send Purchase event to Facebook
+        await sendFacebookEvent('Purchase', {
+          value: total,
+          quantity: parseInt(quantity) || 1,
+          orderId: orderNumber.toString()
+        }, {
+          phone: phone,
+          name: name,
+          governorate: governorate
+        }, request, env.FB_ACCESS_TOKEN);
 
         return new Response(JSON.stringify({ success: true, orderNumber }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
