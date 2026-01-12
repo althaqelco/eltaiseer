@@ -1,10 +1,7 @@
 import EditPropertyClient from "./EditPropertyClient";
 
-export function generateStaticParams() {
-  return Array.from({ length: 100 }, (_, i) => ({
-    id: `prop-${String(i + 1).padStart(3, "0")}`,
-  }));
-}
+// Force dynamic rendering to support Firestore-generated IDs
+export const dynamic = 'force-dynamic';
 
 export default function EditPropertyPage() {
   return <EditPropertyClient />;
