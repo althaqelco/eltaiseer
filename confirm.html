@@ -31,7 +31,7 @@
     <!-- Critical CSS -->
     <style>
         *{font-family:'Cairo',sans-serif;box-sizing:border-box}
-        body{background:#0a0f1a;color:#fff;margin:0}
+        body{background:#ffffff;color:#1e293b;margin:0}
     </style>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -58,9 +58,9 @@
                         'brand-pink': '#f806b8',
                         'brand-purple': '#4c1e81',
                         'brand-violet': '#7c16d6',
-                        'dark-bg': '#0a0f1a',
-                        'dark-card': '#111827',
-                        'dark-border': '#1f2937'
+                        'dark-bg': '#ffffff',
+                        'dark-card': '#f1f5f9',
+                        'dark-border': '#e2e8f0'
                     },
                     fontFamily: {
                         'cairo': ['Cairo', 'sans-serif']
@@ -83,8 +83,9 @@
         }
         
         .info-card {
-            background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(31, 41, 55, 0.8) 100%);
-            border: 1px solid #1f2937;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.9) 100%);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         .whatsapp-btn {
@@ -96,17 +97,17 @@
         }
     </style>
 </head>
-<body class="bg-dark-bg text-white min-h-screen" x-data="orderConfirmation()">
+<body class="bg-white text-slate-800 min-h-screen" x-data="orderConfirmation()">
     
     <!-- Header -->
-    <header class="bg-dark-card border-b border-dark-border py-4 sticky top-0 z-50">
+    <header class="bg-white border-b border-slate-200 py-4 sticky top-0 z-50 shadow-sm">
         <div class="container mx-auto px-4 flex items-center justify-between">
-            <a href="index.html" class="text-gray-400 hover:text-white transition-colors">
+            <a href="index.html" class="text-slate-500 hover:text-slate-800 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
             </a>
-            <h1 class="text-lg font-bold">تأكيد الطلب</h1>
+            <h1 class="text-lg font-bold text-slate-800">تأكيد الطلب</h1>
             <div class="w-6"></div>
         </div>
     </header>
@@ -120,43 +121,43 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
                 </svg>
             </div>
-            <h2 class="text-2xl font-black mb-2">تم الطلب بنجاح!</h2>
-            <p class="text-gray-400">رقم الطلب: #<span x-text="orderNumber"></span></p>
+            <h2 class="text-2xl font-black mb-2 text-slate-800">تم الطلب بنجاح!</h2>
+            <p class="text-slate-500">رقم الطلب: #<span x-text="orderNumber"></span></p>
         </div>
 
         <!-- Important Steps -->
         <div class="info-card rounded-2xl p-5 mb-6">
             <div class="flex items-center gap-2 mb-4">
                 <span class="text-yellow-500 text-xl">⚠️</span>
-                <span class="font-bold">هام: الخطوات القادمة (الدفع عند الاستلام)</span>
+                <span class="font-bold text-slate-800">هام: الخطوات القادمة (الدفع عند الاستلام)</span>
             </div>
             
             <div class="space-y-4">
                 <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 bg-dark-border rounded-full flex items-center justify-center flex-shrink-0">
+                    <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
                         <span class="text-xl">📱</span>
                     </div>
                     <div>
-                        <p class="font-semibold">1. انتظر رسالة واتساب للتأكيد</p>
-                        <p class="text-gray-400 text-sm">(ضرورية لإتمام الشحن)</p>
+                        <p class="font-semibold text-slate-800">1. انتظر رسالة واتساب للتأكيد</p>
+                        <p class="text-slate-500 text-sm">(ضرورية لإتمام الشحن)</p>
                     </div>
                 </div>
                 
                 <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 bg-dark-border rounded-full flex items-center justify-center flex-shrink-0">
+                    <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
                         <span class="text-xl">🚚</span>
                     </div>
                     <div>
-                        <p class="font-semibold">2. يتم الشحن بعد التأكيد</p>
+                        <p class="font-semibold text-slate-800">2. يتم الشحن بعد التأكيد</p>
                     </div>
                 </div>
                 
                 <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 bg-dark-border rounded-full flex items-center justify-center flex-shrink-0">
+                    <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
                         <span class="text-xl">💳</span>
                     </div>
                     <div>
-                        <p class="font-semibold">3. ادفع <span x-text="total.toLocaleString()"></span> ج.م عند الاستلام</p>
+                        <p class="font-semibold text-slate-800">3. ادفع <span x-text="total.toLocaleString()"></span> ج.م عند الاستلام</p>
                     </div>
                 </div>
             </div>
@@ -167,21 +168,21 @@
             <div class="flex items-center gap-4">
                 <img src="images/main-confirm.webp" 
                      alt="LED Screen" 
-                     class="w-20 h-20 object-cover rounded-xl bg-dark-border"
+                     class="w-20 h-20 object-cover rounded-xl bg-slate-100"
                      width="80" height="80" decoding="async">
                 <div class="flex-1">
                     <div class="flex items-center justify-between mb-1">
-                        <span class="text-gray-400 text-sm">x<span x-text="quantity"></span></span>
+                        <span class="text-slate-500 text-sm">x<span x-text="quantity"></span></span>
                     </div>
-                    <h3 class="font-bold mb-1">شاشة LED المرنة الذكية</h3>
+                    <h3 class="font-bold mb-1 text-slate-800">شاشة LED المرنة الذكية</h3>
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="text-gray-400 text-sm">السعر:</span>
-                            <span class="font-bold text-neon-orange mr-1" x-text="total.toLocaleString() + ' ج.م'"></span>
+                            <span class="text-slate-500 text-sm">السعر:</span>
+                            <span class="font-bold text-brand-pink mr-1" x-text="total.toLocaleString() + ' ج.م'"></span>
                         </div>
                     </div>
                     <div>
-                        <span class="text-gray-400 text-sm">الشحن:</span>
+                        <span class="text-slate-500 text-sm">الشحن:</span>
                         <span class="text-green-400 font-semibold mr-1">مجاني</span>
                     </div>
                 </div>
@@ -193,8 +194,8 @@
             <div class="flex items-start gap-3 mb-4">
                 <span class="text-yellow-500 text-2xl">⚠️</span>
                 <div>
-                    <p class="font-bold text-yellow-400">لتأكيد الطلب والشحن مباشرة برجاء تحويل 100 جنيه على الرقم</p>
-                    <p class="text-2xl font-black text-white mt-2 tracking-wide">01063374834</p>
+                    <p class="font-bold text-yellow-600">لتأكيد الطلب والشحن مباشرة برجاء تحويل 100 جنيه على الرقم</p>
+                    <p class="text-2xl font-black text-slate-800 mt-2 tracking-wide">01063374834</p>
                     <p class="text-green-400 text-sm mt-2">(تخصم من الفاتورة)</p>
                 </div>
             </div>
@@ -213,7 +214,7 @@
 
         <!-- Total Amount -->
         <div class="text-center mb-6">
-            <p class="text-neon-orange text-xl font-black">
+            <p class="text-brand-pink text-xl font-black">
                 المبلغ المستحق عند الاستلام: <span x-text="total.toLocaleString()"></span> ج.م
             </p>
         </div>
@@ -221,27 +222,27 @@
         <!-- Shipping Details -->
         <div class="info-card rounded-2xl p-5 mb-6">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-lg">بيانات الشحن</h3>
-                <a href="index.html#order-form" class="bg-dark-border hover:bg-dark-border/80 text-sm px-4 py-2 rounded-full transition-colors">
+                <h3 class="font-bold text-lg text-slate-800">بيانات الشحن</h3>
+                <a href="index.html#order-form" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm px-4 py-2 rounded-full transition-colors">
                     تعديل البيانات
                 </a>
             </div>
             
             <div class="space-y-3 text-sm">
                 <div class="flex justify-between">
-                    <span class="text-gray-400">الاسم:</span>
+                    <span class="text-slate-500">الاسم:</span>
                     <span x-text="name"></span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400">الهاتف:</span>
+                    <span class="text-slate-500">الهاتف:</span>
                     <span x-text="phone"></span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400">المحافظة:</span>
+                    <span class="text-slate-500">المحافظة:</span>
                     <span x-text="governorate"></span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400">العنوان:</span>
+                    <span class="text-slate-500">العنوان:</span>
                     <span x-text="address" class="text-left max-w-[200px]"></span>
                 </div>
             </div>
@@ -249,7 +250,7 @@
 
         <!-- WhatsApp Contact -->
         <div class="text-center">
-            <p class="text-gray-400 mb-4">هل لديك استفسار؟</p>
+            <p class="text-slate-500 mb-4">هل لديك استفسار؟</p>
             <a href="https://wa.me/201205234797" 
                target="_blank"
                class="whatsapp-btn inline-flex items-center gap-3 text-white font-bold px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-lg">
@@ -263,7 +264,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-6 text-center text-gray-500 text-sm border-t border-dark-border mt-8">
+    <footer class="py-6 text-center text-slate-500 text-sm border-t border-slate-200 mt-8">
         <p>© 2026 LED Matrix Egypt. جميع الحقوق محفوظة.</p>
     </footer>
 
