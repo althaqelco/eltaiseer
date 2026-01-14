@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/authContext";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -121,7 +122,7 @@ export default function RootLayout({
     description: "شركة التيسير للعقارات - أفضل عقارات دمياط الجديدة للبيع. شقق، فيلات، دوبلكس، محلات تجارية، أراضي بأسعار تنافسية.",
     url: "https://eltaiseer.com",
     logo: "https://eltaiseer.com/logo.png",
-    telephone: "+201000000000",
+    telephone: "+201558245974",
     address: {
       "@type": "PostalAddress",
       addressLocality: "دمياط الجديدة",
@@ -175,6 +176,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           {children}
+          <FloatingWhatsApp />
         </AuthProvider>
       </body>
     </html>

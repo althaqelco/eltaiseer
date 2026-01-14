@@ -37,6 +37,7 @@ import {
 import { PLACE_CATEGORIES, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/damiettaPlaces";
 import { getPropertyByIdAsync, updatePropertyAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
+import { enhanceTitle, enhanceDescription } from "@/lib/seoOptimizer";
 import { uploadImage, validateImageFile, compressImage } from "@/lib/imageUpload";
 
 const PROPERTY_TYPES = [
@@ -70,6 +71,7 @@ export default function EditPropertyClient() {
 
   const [formData, setFormData] = useState({
     title: "",
+    description: "",
     price: "",
     type: "",
     district: "",
@@ -82,17 +84,32 @@ export default function EditPropertyClient() {
     status: "جاهز" as "جاهز" | "تحت الإنشاء" | "تم البيع",
     contact_whatsapp: "",
     isVerified: false,
+    paymentType: "كاش" as "كاش" | "تقسيط" | "كاش أو تقسيط",
+    downPayment: "",
+    monthlyInstallment: "",
+    installmentYears: "",
   });
 
   useEffect(() => {
     const loadProperty = async () => {
-      const id = params.id as string;
+      // Extract ID from URL pathname instead of params (for static export compatibility)
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const idIndex = pathParts.indexOf('edit') + 1;
+      const id = pathParts[idIndex] || (params.id as string);
+      
+      // Skip placeholder ID
+      if (id === 'placeholder') {
+        setIsLoading(false);
+        return;
+      }
+      
       const foundProperty = await getPropertyByIdAsync(id);
       
       if (foundProperty) {
         setProperty(foundProperty);
         setFormData({
           title: foundProperty.title,
+          description: foundProperty.description || "",
           price: String(foundProperty.price),
           type: foundProperty.type,
           district: foundProperty.location.district,
@@ -105,6 +122,10 @@ export default function EditPropertyClient() {
           status: foundProperty.status || "جاهز",
           contact_whatsapp: foundProperty.contact_whatsapp,
           isVerified: foundProperty.isVerified,
+          paymentType: foundProperty.payment?.type || "كاش",
+          downPayment: foundProperty.payment?.downPayment ? String(foundProperty.payment.downPayment) : "",
+          monthlyInstallment: foundProperty.payment?.monthlyInstallment ? String(foundProperty.payment.monthlyInstallment) : "",
+          installmentYears: foundProperty.payment?.installmentYears ? String(foundProperty.payment.installmentYears) : "",
         });
         setSelectedAmenities(foundProperty.amenities);
         setImageUrls(foundProperty.images);
@@ -186,8 +207,27 @@ export default function EditPropertyClient() {
     setIsSubmitting(true);
 
     try {
+      // SEO optimization for title and description
+      const seoInput = {
+        type: formData.type,
+        district: formData.district,
+        area_sqm: Number(formData.area_sqm),
+        price: Number(formData.price),
+        bedrooms: Number(formData.bedrooms),
+        bathrooms: Number(formData.bathrooms),
+        level: formData.level,
+        finishing: formData.finishing,
+        amenities: selectedAmenities,
+        status: formData.status,
+        paymentType: formData.paymentType,
+      };
+      
+      const optimizedTitle = enhanceTitle(formData.title, seoInput);
+      const optimizedDescription = enhanceDescription(formData.description || "", seoInput);
+      
       const result = await updatePropertyAsync(property.id, {
-        title: formData.title,
+        title: optimizedTitle,
+        description: optimizedDescription,
         price: Number(formData.price),
         type: formData.type,
         location: {
@@ -200,6 +240,12 @@ export default function EditPropertyClient() {
           bathrooms: Number(formData.bathrooms),
           level: formData.level,
           finishing: formData.finishing,
+        },
+        payment: {
+          type: formData.paymentType,
+          downPayment: formData.downPayment ? Number(formData.downPayment) : undefined,
+          monthlyInstallment: formData.monthlyInstallment ? Number(formData.monthlyInstallment) : undefined,
+          installmentYears: formData.installmentYears ? Number(formData.installmentYears) : undefined,
         },
         status: formData.status as "جاهز" | "تحت الإنشاء" | "تم البيع",
         amenities: selectedAmenities,
@@ -293,6 +339,18 @@ export default function EditPropertyClient() {
                       placeholder="مثال: شقة 120 متر بالحي الأول"
                       value={formData.title}
                       onChange={(e) => handleChange("title", e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      وصف العقار
+                    </label>
+                    <textarea
+                      placeholder="أدخل وصف تفصيلي للعقار..."
+                      value={formData.description}
+                      onChange={(e) => handleChange("description", e.target.value)}
+                      className="w-full min-h-[100px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
                     />
                   </div>
 
@@ -543,6 +601,90 @@ export default function EditPropertyClient() {
                       ))}
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Payment Options */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <svg className="h-5 w-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    خيارات الدفع والتقسيط
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      طريقة الدفع
+                    </label>
+                    <Select
+                      value={formData.paymentType}
+                      onValueChange={(value) => handleChange("paymentType", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر طريقة الدفع" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="كاش">كاش (نقدي)</SelectItem>
+                        <SelectItem value="تقسيط">تقسيط فقط</SelectItem>
+                        <SelectItem value="كاش أو تقسيط">كاش أو تقسيط</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {formData.paymentType !== "كاش" && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-orange-50 rounded-lg">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          المقدم (جنيه)
+                        </label>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          value={formData.downPayment}
+                          onChange={(e) => handleChange("downPayment", e.target.value)}
+                          dir="ltr"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          القسط الشهري (جنيه)
+                        </label>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          value={formData.monthlyInstallment}
+                          onChange={(e) => handleChange("monthlyInstallment", e.target.value)}
+                          dir="ltr"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          مدة التقسيط (سنوات)
+                        </label>
+                        <Select
+                          value={formData.installmentYears}
+                          onValueChange={(value) => handleChange("installmentYears", value)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="اختر" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">سنة واحدة</SelectItem>
+                            <SelectItem value="2">سنتان</SelectItem>
+                            <SelectItem value="3">3 سنوات</SelectItem>
+                            <SelectItem value="5">5 سنوات</SelectItem>
+                            <SelectItem value="7">7 سنوات</SelectItem>
+                            <SelectItem value="10">10 سنوات</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 

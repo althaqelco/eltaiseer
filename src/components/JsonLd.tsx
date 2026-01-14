@@ -9,7 +9,7 @@ export function OrganizationJsonLd() {
     url: "https://eltaiseer.com",
     logo: "https://eltaiseer.com/logo.png",
     image: "https://eltaiseer.com/og-image.jpg",
-    telephone: "+201000000000",
+    telephone: "+201558245974",
     email: "info@eltaiseer.com",
     address: {
       "@type": "PostalAddress",
@@ -45,7 +45,7 @@ export function OrganizationJsonLd() {
     sameAs: [
       "https://www.facebook.com/eltaiseer",
       "https://www.instagram.com/eltaiseer",
-      "https://wa.me/201000000000",
+      "https://wa.me/201558245974",
     ],
   };
 
@@ -114,7 +114,7 @@ export function LocalBusinessJsonLd() {
     "@id": "https://eltaiseer.com/#localbusiness",
     name: "التيسير للعقارات",
     image: "https://eltaiseer.com/logo.png",
-    telephone: "+201000000000",
+    telephone: "+201558245974",
     address: {
       "@type": "PostalAddress",
       streetAddress: "دمياط الجديدة",

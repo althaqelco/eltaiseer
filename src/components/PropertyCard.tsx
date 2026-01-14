@@ -54,8 +54,9 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    const propertyUrl = `${window.location.origin}/property/${property.id}`;
     const message = encodeURIComponent(
-      `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}`
+      `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}\nرابط العقار: ${propertyUrl}`
     );
     window.open(
       `https://wa.me/2${property.contact_whatsapp}?text=${message}`,
@@ -160,8 +161,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
         {/* Location Badge */}
         <div className="flex items-center gap-2">
           <Badge
-            variant="secondary"
-            className={`${districtColor} text-white hover:opacity-90`}
+            className={`${districtColor} text-white hover:opacity-90 border-0`}
           >
             <MapPin className="h-3 w-3 ml-1" />
             {property.location.district}

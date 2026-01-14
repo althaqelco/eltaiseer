@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Property } from "@/lib/mockData";
-import { getPropertyById, getRelatedProperties } from "@/lib/propertyStore";
+import { getPropertyByIdAsync, getRelatedProperties } from "@/lib/propertyStore";
 
 import { getDistrictColor, getCategoryByDistrict } from "@/lib/damiettaPlaces";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
@@ -45,38 +45,53 @@ export default function PropertyDetailClient() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const id = params.id as string;
-    const found = getPropertyById(id);
-    setProperty(found || null);
-    if (found) {
-      setRelatedProperties(getRelatedProperties(found, 4));
-      setIsFav(isFavorite(found.id));
+    const loadProperty = async () => {
+      // Extract ID from URL pathname instead of params (for static export compatibility)
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const idIndex = pathParts.indexOf('property') + 1;
+      const id = pathParts[idIndex] || (params.id as string);
       
-      // Dynamic SEO - Update document title for new properties
-      const formatPrice = (price: number) => {
-        if (price >= 1000000) {
-          return `${(price / 1000000).toFixed(1)} مليون جنيه`;
+      // Skip if no valid ID
+      if (!id) {
+        setIsLoading(false);
+        return;
+      }
+      
+      // Fetch from Firestore (async)
+      const found = await getPropertyByIdAsync(id);
+      setProperty(found || null);
+      if (found) {
+        setRelatedProperties(getRelatedProperties(found, 4));
+        setIsFav(isFavorite(found.id));
+        
+        // Dynamic SEO - Update document title for new properties
+        const formatPrice = (price: number) => {
+          if (price >= 1000000) {
+            return `${(price / 1000000).toFixed(1)} مليون جنيه`;
+          }
+          return `${price.toLocaleString("ar-EG")} جنيه`;
+        };
+        
+        document.title = `${found.title} | ${found.type} للبيع في ${found.location.district} - التيسير للعقارات`;
+        
+        // Update meta description
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+          metaDesc.setAttribute("content", 
+            `${found.type} للبيع في ${found.location.district} - دمياط الجديدة. المساحة: ${found.details.area_sqm} م². السعر: ${formatPrice(found.price)}. ${found.details.bedrooms} غرف، ${found.details.bathrooms} حمام. تشطيب ${found.details.finishing}.`
+          );
         }
-        return `${price.toLocaleString("ar-EG")} جنيه`;
-      };
-      
-      document.title = `${found.title} | ${found.type} للبيع في ${found.location.district} - التيسير للعقارات`;
-      
-      // Update meta description
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute("content", 
-          `${found.type} للبيع في ${found.location.district} - دمياط الجديدة. المساحة: ${found.details.area_sqm} م². السعر: ${formatPrice(found.price)}. ${found.details.bedrooms} غرف، ${found.details.bathrooms} حمام. تشطيب ${found.details.finishing}.`
-        );
+        
+        // Update OG title
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) {
+          ogTitle.setAttribute("content", `${found.title} - ${formatPrice(found.price)}`);
+        }
       }
-      
-      // Update OG title
-      const ogTitle = document.querySelector('meta[property="og:title"]');
-      if (ogTitle) {
-        ogTitle.setAttribute("content", `${found.title} - ${formatPrice(found.price)}`);
-      }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    };
+    
+    loadProperty();
   }, [params.id]);
 
   if (isLoading) {

@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { PLACE_CATEGORIES, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/damiettaPlaces";
 import { addPropertyAsync } from "@/lib/propertyStore";
+import { enhanceTitle, enhanceDescription } from "@/lib/seoOptimizer";
 import { uploadImage, validateImageFile, compressImage } from "@/lib/imageUpload";
 
 const PROPERTY_TYPES = [
@@ -160,9 +161,27 @@ export default function AddPropertyPage() {
     setIsSubmitting(true);
 
     try {
+      // SEO optimization for title and description
+      const seoInput = {
+        type: formData.type,
+        district: formData.district,
+        area_sqm: Number(formData.area_sqm),
+        price: Number(formData.price),
+        bedrooms: Number(formData.bedrooms),
+        bathrooms: Number(formData.bathrooms),
+        level: formData.level,
+        finishing: formData.finishing,
+        amenities: selectedAmenities,
+        status: formData.status,
+        paymentType: formData.paymentType,
+      };
+      
+      const optimizedTitle = enhanceTitle(formData.title, seoInput);
+      const optimizedDescription = enhanceDescription(formData.description || "", seoInput);
+      
       const result = await addPropertyAsync({
-        title: formData.title,
-        description: formData.description || undefined,
+        title: optimizedTitle,
+        description: optimizedDescription,
         price: Number(formData.price),
         currency: "EGP",
         category: "بيع",

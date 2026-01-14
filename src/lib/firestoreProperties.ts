@@ -7,7 +7,7 @@ import {
   doc, 
   getDocs, 
   getDoc, 
-  addDoc, 
+  setDoc, 
   updateDoc, 
   deleteDoc,
   query,
@@ -44,6 +44,18 @@ function getErrorMessage(error: unknown): string {
 }
 
 const COLLECTION_NAME = "properties";
+
+// Generate short unique ID (8 characters)
+// Format: 2 chars from timestamp + 6 random alphanumeric
+function generateShortId(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed confusing chars: 0,O,1,I,L
+  const timestamp = Date.now().toString(36).slice(-2).toUpperCase(); // Last 2 chars of base36 timestamp
+  let randomPart = '';
+  for (let i = 0; i < 6; i++) {
+    randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return timestamp + randomPart;
+}
 
 // Remove undefined values from object recursively (Firestore doesn't accept undefined)
 function removeUndefined<T extends Record<string, unknown>>(obj: T): T {
@@ -130,12 +142,14 @@ export async function addPropertyToFirestore(
       };
     }
 
-    const docRef = await addDoc(collection(db, COLLECTION_NAME), propertyToDoc(property));
+    const customId = generateShortId();
+    const docRef = doc(db, COLLECTION_NAME, customId);
+    await setDoc(docRef, propertyToDoc(property));
     
     // Return the created property with ID
     const newProperty = {
       ...property,
-      id: docRef.id,
+      id: customId,
       createdAt: new Date(),
     } as Property;
     

@@ -8,6 +8,14 @@
     ],
     "rewrites": [
       {
+        "source": "/dashboard/edit/**",
+        "destination": "/dashboard/edit/placeholder/index.html"
+      },
+      {
+        "source": "/property/**",
+        "destination": "/property/prop-001/index.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

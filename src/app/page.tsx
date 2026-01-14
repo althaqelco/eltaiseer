@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { WhyUsSection } from "@/components/WhyUsSection";
-import { FeaturedDistricts } from "@/components/FeaturedDistricts";
 import { PropertyCard } from "@/components/PropertyCard";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Footer } from "@/components/Footer";
@@ -159,8 +158,6 @@ export default function Home() {
         totalDistricts={new Set(properties.map(p => p.location.district)).size}
       />
 
-      {/* Featured Districts */}
-      <FeaturedDistricts />
 
       {/* Properties Section */}
       <section id="properties" className="py-12 bg-gray-50">
