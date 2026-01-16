@@ -8,12 +8,16 @@
     ],
     "rewrites": [
       {
-        "source": "/dashboard/edit/**",
-        "destination": "/dashboard/edit/placeholder/index.html"
+        "source": "/new-damietta/**",
+        "destination": "/new-damietta/index.html"
+      },
+      {
+        "source": "/new-mansoura/**",
+        "destination": "/new-mansoura/index.html"
       },
       {
         "source": "/property/**",
-        "destination": "/property/prop-001/index.html"
+        "destination": "/properties/index.html"
       },
       {
         "source": "**",
