@@ -267,8 +267,8 @@ export default function PropertyDetailPage() {
                         key={idx}
                         onClick={() => setCurrentImageIndex(idx)}
                         className={`relative flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden transition-all ${idx === currentImageIndex
-                            ? `ring-2 ring-${themeColor}-500 ring-offset-2`
-                            : "opacity-70 hover:opacity-100"
+                          ? `ring-2 ring-${themeColor}-500 ring-offset-2`
+                          : "opacity-70 hover:opacity-100"
                           }`}
                       >
                         <Image
@@ -381,7 +381,7 @@ export default function PropertyDetailPage() {
               {/* Price Card - Property Finder Style */}
               <Card className={`shadow-xl border-0 overflow-hidden`}>
                 {/* Price Header */}
-                <div className={`bg-gradient-to-r from-${themeColor}-600 to-${themeColor}-700 text-white p-6`}>
+                <div className="bg-gradient-to-r from-green-800 to-green-900 text-white p-6">
                   <p className="text-sm text-white/95 mb-1">السعر الإجمالي</p>
                   <p className="text-3xl font-bold text-white">
                     {formatPrice(property.price)}
@@ -475,8 +475,8 @@ export default function PropertyDetailPage() {
                     <button
                       onClick={toggleFavorite}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${isFavorite
-                          ? 'bg-red-50 text-red-600'
-                          : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                        ? 'bg-red-50 text-red-600'
+                        : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       <Heart className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`} />
