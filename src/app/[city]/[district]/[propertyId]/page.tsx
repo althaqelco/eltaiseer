@@ -38,16 +38,16 @@ export default function PropertyDetailPage() {
   const citySlug = params.city as string;
   const districtSlug = params.district as string;
   const propertyId = params.propertyId as string;
-  
+
   // Validate city
   if (!VALID_CITIES.includes(citySlug)) {
     notFound();
   }
-  
+
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const isNM = citySlug === "new-mansoura";
-  
+
   const [property, setProperty] = useState<Property | null>(null);
   const [relatedProperties, setRelatedProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +61,7 @@ export default function PropertyDetailPage() {
       try {
         const prop = await getPropertyByIdAsync(propertyId);
         setProperty(prop);
-        
+
         // Load related properties with 90% similarity
         if (prop) {
           const related = await getRelatedPropertiesAsync(prop, 4);
@@ -72,7 +72,7 @@ export default function PropertyDetailPage() {
       }
       setIsLoading(false);
     };
-    
+
     loadProperty();
   }, [propertyId]);
 
@@ -165,13 +165,13 @@ export default function PropertyDetailPage() {
       <Header />
 
       {/* Breadcrumb */}
-      <Breadcrumb 
+      <Breadcrumb
         items={getPropertyBreadcrumb(
-          property.title, 
+          property.title,
           property.location.district,
           property.location.city || city?.nameAr,
           districtSlug
-        )} 
+        )}
       />
 
       <main className="container mx-auto px-4 py-8">
@@ -194,7 +194,7 @@ export default function PropertyDetailPage() {
                     <Building2 className="h-24 w-24 text-gray-300" />
                   </div>
                 )}
-                
+
                 {/* Image Counter */}
                 {property.images.length > 0 && (
                   <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -266,11 +266,10 @@ export default function PropertyDetailPage() {
                       <button
                         key={idx}
                         onClick={() => setCurrentImageIndex(idx)}
-                        className={`relative flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden transition-all ${
-                          idx === currentImageIndex 
-                            ? `ring-2 ring-${themeColor}-500 ring-offset-2` 
+                        className={`relative flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden transition-all ${idx === currentImageIndex
+                            ? `ring-2 ring-${themeColor}-500 ring-offset-2`
                             : "opacity-70 hover:opacity-100"
-                        }`}
+                          }`}
                       >
                         <Image
                           src={img}
@@ -382,17 +381,17 @@ export default function PropertyDetailPage() {
               {/* Price Card - Property Finder Style */}
               <Card className={`shadow-xl border-0 overflow-hidden`}>
                 {/* Price Header */}
-                <div className={`bg-gradient-to-r from-${themeColor}-500 to-${themeColor}-600 text-white p-6`}>
-                  <p className="text-sm opacity-90 mb-1">السعر الإجمالي</p>
-                  <p className="text-3xl font-bold">
+                <div className={`bg-gradient-to-r from-${themeColor}-600 to-${themeColor}-700 text-white p-6`}>
+                  <p className="text-sm text-white/95 mb-1">السعر الإجمالي</p>
+                  <p className="text-3xl font-bold text-white">
                     {formatPrice(property.price)}
                   </p>
-                  <div className="flex items-center gap-4 mt-3 text-sm opacity-90">
-                    <span className="bg-white/20 px-2 py-1 rounded">
+                  <div className="flex items-center gap-4 mt-3 text-sm text-white/95">
+                    <span className="bg-white/30 px-2 py-1 rounded text-white font-medium">
                       {Math.round(property.price / property.details.area_sqm).toLocaleString()} جنيه/م²
                     </span>
                     {property.isVerified && (
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1 text-white">
                         <CheckCircle2 className="h-4 w-4" />
                         موثق
                       </span>
@@ -404,7 +403,7 @@ export default function PropertyDetailPage() {
                   {/* Payment Details */}
                   <div className="space-y-4 mb-6">
                     <h4 className="font-bold text-gray-900">تفاصيل الدفع</h4>
-                    
+
                     <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-gray-600 flex items-center gap-2">
@@ -413,7 +412,7 @@ export default function PropertyDetailPage() {
                         </span>
                         <span className="font-bold text-gray-900">{property.payment.type}</span>
                       </div>
-                      
+
                       {property.payment.downPayment && (
                         <div className="flex items-center justify-between pt-2 border-t">
                           <span className="text-gray-600">المقدم</span>
@@ -422,7 +421,7 @@ export default function PropertyDetailPage() {
                           </span>
                         </div>
                       )}
-                      
+
                       {property.payment.monthlyInstallment && (
                         <div className="flex items-center justify-between pt-2 border-t">
                           <span className="text-gray-600">القسط الشهري</span>
@@ -431,7 +430,7 @@ export default function PropertyDetailPage() {
                           </span>
                         </div>
                       )}
-                      
+
                       {property.payment.installmentYears && (
                         <div className="flex items-center justify-between pt-2 border-t">
                           <span className="text-gray-600 flex items-center gap-2">
@@ -448,7 +447,7 @@ export default function PropertyDetailPage() {
 
                   {/* Contact Buttons */}
                   <div className="space-y-3">
-                    <Button 
+                    <Button
                       className={`w-full bg-green-500 hover:bg-green-600 h-12 text-base font-bold shadow-lg`}
                       size="lg"
                       onClick={handleWhatsApp}
@@ -456,8 +455,8 @@ export default function PropertyDetailPage() {
                       <Phone className="h-5 w-5 ml-2" />
                       تواصل عبر واتساب
                     </Button>
-                    
-                    <Button 
+
+                    <Button
                       variant="outline"
                       className={`w-full border-${themeColor}-500 text-${themeColor}-600 hover:bg-${themeColor}-50 h-11`}
                       onClick={handleShare}
@@ -473,21 +472,20 @@ export default function PropertyDetailPage() {
               <Card className="shadow-md">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
-                    <button 
+                    <button
                       onClick={toggleFavorite}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                        isFavorite 
-                          ? 'bg-red-50 text-red-600' 
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${isFavorite
+                          ? 'bg-red-50 text-red-600'
                           : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-                      }`}
+                        }`}
                     >
                       <Heart className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`} />
                       <span className="text-sm font-medium">
                         {isFavorite ? 'تمت الإضافة للمفضلة' : 'إضافة للمفضلة'}
                       </span>
                     </button>
-                    
-                    <Link 
+
+                    <Link
                       href={`/${citySlug}/${districtSlug}`}
                       className={`flex items-center gap-1 text-${themeColor}-600 hover:text-${themeColor}-700 text-sm font-medium`}
                     >
@@ -503,14 +501,14 @@ export default function PropertyDetailPage() {
           {/* Mobile Fixed Bottom Bar */}
           <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 z-50">
             <div className="flex items-center gap-3">
-              <Button 
+              <Button
                 className="flex-1 bg-green-500 hover:bg-green-600 h-12 text-base font-bold"
                 onClick={handleWhatsApp}
               >
                 <Phone className="h-5 w-5 ml-2" />
                 تواصل واتساب
               </Button>
-              <Button 
+              <Button
                 variant="outline"
                 size="icon"
                 className="h-12 w-12"
@@ -518,7 +516,7 @@ export default function PropertyDetailPage() {
               >
                 <Heart className={`h-5 w-5 ${isFavorite ? "fill-red-500 text-red-500" : ""}`} />
               </Button>
-              <Button 
+              <Button
                 variant="outline"
                 size="icon"
                 className="h-12 w-12"
@@ -538,7 +536,7 @@ export default function PropertyDetailPage() {
                 <h2 className="text-2xl font-bold text-gray-900">عقارات مشابهة</h2>
                 <p className="text-gray-500 text-sm mt-1">عقارات تناسب اهتماماتك بناءً على بحثك</p>
               </div>
-              <Link 
+              <Link
                 href={`/${citySlug}/${districtSlug}`}
                 className={`text-${themeColor}-600 hover:text-${themeColor}-700 text-sm font-medium flex items-center gap-1`}
               >
