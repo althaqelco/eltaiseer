@@ -10,9 +10,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Home, ChevronLeft, Umbrella, ChevronRight } from "lucide-react";
+import { Umbrella, ChevronLeft, ChevronRight } from "lucide-react";
+import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
 import { getAllProperties } from "@/lib/propertyStore";
-import { PLACE_CATEGORIES } from "@/lib/damiettaPlaces";
+import { PLACE_CATEGORIES } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 
 const ITEMS_PER_PAGE = 12;
@@ -40,17 +41,7 @@ export default function ChaletsPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-3">
-          <nav className="flex items-center gap-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-orange-600 flex items-center gap-1"><Home className="h-4 w-4" />الرئيسية</Link>
-            <ChevronLeft className="h-4 w-4" />
-            <Link href="/properties" className="hover:text-orange-600">جميع العقارات</Link>
-            <ChevronLeft className="h-4 w-4" />
-            <span className="text-orange-600 font-medium">شاليهات للبيع</span>
-          </nav>
-        </div>
-      </div>
+      <Breadcrumb items={breadcrumbPresets.chalets} />
 
       <div className="bg-gradient-to-l from-cyan-900 via-cyan-800 to-orange-900 py-12">
         <div className="container mx-auto px-4">

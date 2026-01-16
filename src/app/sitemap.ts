@@ -1,14 +1,10 @@
 import { MetadataRoute } from "next";
-import { MOCK_PROPERTIES } from "@/lib/mockData";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://eltaiseer.com";
   const currentDate = new Date().toISOString();
 
-  // Get property IDs excluding sold properties
-  const propertyIds = MOCK_PROPERTIES
-    .filter(property => property.status !== "تم البيع")
-    .map(property => property.id);
+  // العقارات يتم جلبها من Firebase - صفحات العقارات ديناميكية
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -144,16 +140,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Property detail pages
-  const propertyPages: MetadataRoute.Sitemap = propertyIds.map((id) => ({
-    url: `${baseUrl}/property/${id}`,
-    lastModified: currentDate,
-    changeFrequency: "weekly" as const,
-    priority: 0.8,
-  }));
+  // City pages - New URL structure
+  const cityPages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/new-damietta`,
+      lastModified: currentDate,
+      changeFrequency: "daily",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/new-mansoura`,
+      lastModified: currentDate,
+      changeFrequency: "daily",
+      priority: 0.95,
+    },
+  ];
 
-  // District pages with clean English URLs
-  const districtSlugs = [
+  // District pages - New Damietta
+  const ndDistrictSlugs = [
     "first-district",
     "second-district", 
     "third-district",
@@ -161,19 +165,52 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "fifth-district",
     "sixth-district",
     "janna-project",
-    "dar-misr",
-    "sakan-misr",
-    "beit-al-watan",
-    "central-area",
+    "dar-misr-1",
+    "dar-misr-2",
+    "sakan-misr-south",
+    "sakan-misr-west",
+    "beit-al-watan-east",
+    "beit-al-watan-west",
+    "beit-al-watan-beach",
+    "central-area-a",
+    "central-area-b",
+    "central-area-c",
     "chalets",
   ];
 
-  const districtPages: MetadataRoute.Sitemap = districtSlugs.map((slug) => ({
-    url: `${baseUrl}/properties/district/${slug}`,
+  // District pages - New Mansoura
+  const nmDistrictSlugs = [
+    // Residential
+    "r1", "r2", "r3", "r4", "r5", "r6", "r7",
+    "residential-1", "residential-2", "residential-3",
+    // National Projects
+    "sakan-kol-misryeen", "sakan-kol-misryeen-2", "sakan-kol-misryeen-3",
+    "dar-misr", "janna", "medium-housing", "social-housing",
+    // Villas
+    "villas-district", "villas-d", "golf-villas", "lake-villas",
+    // Commercial
+    "downtown", "central-mall", "cbd", "commercial-axis", "services-zone",
+    // Entertainment
+    "central-park", "corniche", "social-club", "touristic-zone",
+    // Coastal
+    "waterfront", "beach", "coastal-resorts",
+  ];
+
+  // New Damietta districts
+  const ndDistrictPages: MetadataRoute.Sitemap = ndDistrictSlugs.map((slug) => ({
+    url: `${baseUrl}/new-damietta/${slug}`,
     lastModified: currentDate,
     changeFrequency: "daily" as const,
     priority: 0.9,
   }));
 
-  return [...staticPages, ...categoryPages, ...districtPages, ...propertyPages];
+  // New Mansoura districts
+  const nmDistrictPages: MetadataRoute.Sitemap = nmDistrictSlugs.map((slug) => ({
+    url: `${baseUrl}/new-mansoura/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: "daily" as const,
+    priority: 0.9,
+  }));
+
+  return [...staticPages, ...cityPages, ...categoryPages, ...ndDistrictPages, ...nmDistrictPages];
 }

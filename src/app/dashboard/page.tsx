@@ -22,10 +22,70 @@ import {
 } from "lucide-react";
 import { getAllPropertiesAsync, deletePropertyAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
+import { CityId } from "@/lib/egyptPlaces";
+
+// Helper function to get property URL with new structure
+function getPropertyUrl(property: Property): string {
+  const citySlug = property.location.cityId || "new-damietta";
+  const districtSlug = getDistrictSlug(property.location.district);
+  return `/${citySlug}/${districtSlug}/${property.id}`;
+}
+
+function getDistrictSlug(districtName: string): string {
+  const slugMap: Record<string, string> = {
+    "الحي الأول": "first-district",
+    "الحي الثاني": "second-district",
+    "الحي الثالث": "third-district",
+    "الحي الرابع": "fourth-district",
+    "الحي الخامس": "fifth-district",
+    "الحي السادس (المتميز)": "sixth-district",
+    "مشروع جنة": "janna-project",
+    "دار مصر - موقع 1": "dar-misr-1",
+    "دار مصر - موقع 2": "dar-misr-2",
+    "سكن مصر - جنوب الحي الأول": "sakan-misr-south",
+    "سكن مصر - غرب الجامعات": "sakan-misr-west",
+    "بيت الوطن - شرق": "beit-al-watan-east",
+    "بيت الوطن - غرب": "beit-al-watan-west",
+    "بيت الوطن - امتداد الشاطئ": "beit-al-watan-beach",
+    "المنطقة المركزية (أ)": "central-area-a",
+    "المنطقة المركزية (ب)": "central-area-b",
+    "المنطقة المركزية (ج)": "central-area-c",
+    "منطقة الشاليهات": "chalets",
+    "R1": "r1", "R2": "r2", "R3": "r3", "R4": "r4", "R5": "r5", "R6": "r6", "R7": "r7",
+    "الحي السكني الأول": "residential-1",
+    "الحي السكني الثاني": "residential-2",
+    "الحي السكني الثالث": "residential-3",
+    "سكن لكل المصريين": "sakan-kol-misryeen",
+    "سكن لكل المصريين 2": "sakan-kol-misryeen-2",
+    "سكن لكل المصريين 3": "sakan-kol-misryeen-3",
+    "دار مصر": "dar-misr",
+    "جنة": "janna",
+    "الإسكان المتوسط": "medium-housing",
+    "الإسكان الاجتماعي": "social-housing",
+    "حي الفيلات": "villas-district",
+    "منطقة الفيلات D": "villas-d",
+    "فيلات الجولف": "golf-villas",
+    "فيلات البحيرات": "lake-villas",
+    "داون تاون": "downtown",
+    "المول التجاري المركزي": "central-mall",
+    "منطقة الأعمال المركزية CBD": "cbd",
+    "المحور التجاري": "commercial-axis",
+    "منطقة الخدمات": "services-zone",
+    "الحديقة المركزية": "central-park",
+    "منطقة الكورنيش": "corniche",
+    "النادي الاجتماعي": "social-club",
+    "المنطقة السياحية": "touristic-zone",
+    "الواجهة البحرية": "waterfront",
+    "شاطئ المنصورة الجديدة": "beach",
+    "منتجعات الساحل": "coastal-resorts",
+  };
+  return slugMap[districtName] || districtName.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "");
+}
 
 export default function DashboardPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -56,10 +116,18 @@ export default function DashboardPage() {
   };
 
   const filteredProperties = properties.filter(
-    (p) =>
-      p.title.includes(searchQuery) ||
-      p.location.district.includes(searchQuery) ||
-      p.type.includes(searchQuery)
+    (p) => {
+      // Filter by city - العقارات بدون cityId تعتبر من دمياط الجديدة
+      if (selectedCity !== "all") {
+        const propertyCityId = p.location.cityId || "new-damietta";
+        if (propertyCityId !== selectedCity) return false;
+      }
+      // Filter by search query
+      return p.title.includes(searchQuery) ||
+        p.location.district.includes(searchQuery) ||
+        p.type.includes(searchQuery) ||
+        (p.location.city && p.location.city.includes(searchQuery));
+    }
   );
 
   const stats = {
@@ -164,14 +232,44 @@ export default function DashboardPage() {
                 <Home className="h-5 w-5" />
                 العقارات ({filteredProperties.length})
               </CardTitle>
-              <div className="relative w-full md:w-80">
-                <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="بحث في العقارات..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pr-10"
-                />
+              <div className="flex flex-col md:flex-row gap-3">
+                {/* City Filter */}
+                <div className="flex gap-2">
+                  <Button
+                    variant={selectedCity === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCity("all")}
+                    className={selectedCity === "all" ? "bg-gray-700" : ""}
+                  >
+                    الكل
+                  </Button>
+                  <Button
+                    variant={selectedCity === "new-damietta" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCity("new-damietta")}
+                    className={selectedCity === "new-damietta" ? "bg-orange-500 hover:bg-orange-600" : ""}
+                  >
+                    دمياط الجديدة
+                  </Button>
+                  <Button
+                    variant={selectedCity === "new-mansoura" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCity("new-mansoura")}
+                    className={selectedCity === "new-mansoura" ? "bg-emerald-500 hover:bg-emerald-600" : ""}
+                  >
+                    المنصورة الجديدة
+                  </Button>
+                </div>
+                {/* Search */}
+                <div className="relative w-full md:w-80">
+                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    placeholder="بحث في العقارات..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pr-10"
+                  />
+                </div>
               </div>
             </div>
           </CardHeader>
@@ -182,6 +280,7 @@ export default function DashboardPage() {
                   <tr className="border-b text-gray-500 text-sm">
                     <th className="text-right py-4 px-2">العقار</th>
                     <th className="text-right py-4 px-2">النوع</th>
+                    <th className="text-right py-4 px-2">المدينة</th>
                     <th className="text-right py-4 px-2">المنطقة</th>
                     <th className="text-right py-4 px-2">السعر</th>
                     <th className="text-right py-4 px-2">الحالة</th>
@@ -217,6 +316,15 @@ export default function DashboardPage() {
                       <td className="py-4 px-2">
                         <Badge variant="outline">{property.type}</Badge>
                       </td>
+                      <td className="py-4 px-2">
+                        <Badge className={`${
+                          property.location.cityId === "new-damietta" 
+                            ? "bg-orange-100 text-orange-700 hover:bg-orange-200" 
+                            : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                        }`}>
+                          {property.location.city || "دمياط الجديدة"}
+                        </Badge>
+                      </td>
                       <td className="py-4 px-2 text-gray-600">
                         {property.location.district}
                       </td>
@@ -242,7 +350,7 @@ export default function DashboardPage() {
                             size="icon"
                             title="عرض"
                           >
-                            <Link href={`/property/${property.id}`}>
+                            <Link href={getPropertyUrl(property)}>
                               <Eye className="h-4 w-4" />
                             </Link>
                           </Button>

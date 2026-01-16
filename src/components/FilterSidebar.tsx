@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PLACE_CATEGORIES } from "@/lib/damiettaPlaces";
+import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -10,11 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Filter, X, MapPin, ChevronDown, ChevronUp } from "lucide-react";
 
 interface FilterSidebarProps {
+  selectedCity: CityId | "all";
   selectedDistricts: string[];
   selectedTypes: string[];
   selectedStatus: string;
   selectedPaymentMethod: string;
   priceRange: { min: number; max: number };
+  onCityChange: (city: CityId | "all") => void;
   onDistrictChange: (districts: string[]) => void;
   onTypeChange: (types: string[]) => void;
   onStatusChange: (status: string) => void;
@@ -45,11 +47,13 @@ const PROPERTY_STATUS = ["الكل", "جاهز", "تحت الإنشاء"];
 const PAYMENT_METHODS = ["الكل", "كاش", "تقسيط", "كاش أو تقسيط"];
 
 export function FilterSidebar({
+  selectedCity,
   selectedDistricts,
   selectedTypes,
   selectedStatus,
   selectedPaymentMethod,
   priceRange,
+  onCityChange,
   onDistrictChange,
   onTypeChange,
   onStatusChange,
@@ -58,8 +62,19 @@ export function FilterSidebar({
   onClearFilters,
   totalResults,
 }: FilterSidebarProps) {
+  // Get categories based on selected city
+  const getCategories = () => {
+    if (selectedCity === "all") {
+      return [
+        ...CITY_DATA["new-damietta"].categories,
+        ...CITY_DATA["new-mansoura"].categories,
+      ];
+    }
+    return CITY_DATA[selectedCity].categories;
+  };
+
   const [expandedCategories, setExpandedCategories] = useState<string[]>(
-    PLACE_CATEGORIES.map((c) => c.id)
+    getCategories().map((c) => c.id)
   );
 
   const toggleCategory = (categoryId: string) => {
@@ -87,6 +102,7 @@ export function FilterSidebar({
   };
 
   const hasActiveFilters =
+    selectedCity !== "all" ||
     selectedDistricts.length > 0 ||
     selectedTypes.length > 0 ||
     selectedStatus !== "الكل" ||
@@ -123,6 +139,42 @@ export function FilterSidebar({
       </div>
 
       <ScrollArea className="h-[calc(100vh-250px)]">
+        {/* City Filter */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-3 text-gray-700">المدينة</h4>
+          <div className="flex flex-wrap gap-2">
+            <Badge
+              variant={selectedCity === "all" ? "default" : "outline"}
+              className={`cursor-pointer transition-colors ${
+                selectedCity === "all"
+                  ? "bg-gray-700 hover:bg-gray-800 text-white"
+                  : "hover:bg-gray-100 border-gray-300 text-gray-700"
+              }`}
+              onClick={() => onCityChange("all")}
+            >
+              كل المدن
+            </Badge>
+            {Object.values(CITIES).map((city) => (
+              <Badge
+                key={city.id}
+                variant={selectedCity === city.id ? "default" : "outline"}
+                className={`cursor-pointer transition-colors ${
+                  selectedCity === city.id
+                    ? city.id === "new-damietta" 
+                      ? "bg-orange-500 hover:bg-orange-600 text-white"
+                      : "bg-emerald-500 hover:bg-emerald-600 text-white"
+                    : "hover:bg-gray-100 border-gray-300 text-gray-700"
+                }`}
+                onClick={() => onCityChange(city.id as CityId)}
+              >
+                {city.nameAr}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        <Separator className="my-4" />
+
         {/* Price Range */}
         <div className="mb-6">
           <h4 className="font-semibold mb-3 text-gray-700">نطاق السعر (جنيه)</h4>
@@ -250,7 +302,7 @@ export function FilterSidebar({
             المناطق
           </h4>
 
-          {PLACE_CATEGORIES.map((category) => (
+          {getCategories().map((category) => (
             <div key={category.id} className="mb-3">
               <button
                 onClick={() => toggleCategory(category.id)}

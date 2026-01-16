@@ -34,7 +34,7 @@ import {
   Loader2,
   Upload,
 } from "lucide-react";
-import { PLACE_CATEGORIES, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/damiettaPlaces";
+import { CITIES, CITY_DATA, CityId, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/egyptPlaces";
 import { getPropertyByIdAsync, updatePropertyAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
 import { enhanceTitle, enhanceDescription } from "@/lib/seoOptimizer";
@@ -74,6 +74,7 @@ export default function EditPropertyClient() {
     description: "",
     price: "",
     type: "",
+    city: "new-damietta" as CityId,
     district: "",
     address: "",
     area_sqm: "",
@@ -112,6 +113,7 @@ export default function EditPropertyClient() {
           description: foundProperty.description || "",
           price: String(foundProperty.price),
           type: foundProperty.type,
+          city: (foundProperty.location.cityId as CityId) || "new-damietta",
           district: foundProperty.location.district,
           address: foundProperty.location.address,
           area_sqm: String(foundProperty.details.area_sqm),
@@ -231,6 +233,8 @@ export default function EditPropertyClient() {
         price: Number(formData.price),
         type: formData.type,
         location: {
+          city: CITIES[formData.city].nameAr as "دمياط الجديدة" | "المنصورة الجديدة",
+          cityId: formData.city,
           district: formData.district,
           address: formData.address,
         },
@@ -402,6 +406,32 @@ export default function EditPropertyClient() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* City Selection */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      المدينة *
+                    </label>
+                    <Select
+                      value={formData.city}
+                      onValueChange={(value) => {
+                        handleChange("city", value);
+                        handleChange("district", "");
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر المدينة" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.values(CITIES).map((city) => (
+                          <SelectItem key={city.id} value={city.id}>
+                            {city.nameAr}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* District Selection */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       المنطقة *
@@ -414,9 +444,11 @@ export default function EditPropertyClient() {
                         <SelectValue placeholder="اختر المنطقة" />
                       </SelectTrigger>
                       <SelectContent className="max-h-80">
-                        {PLACE_CATEGORIES.map((category) => (
+                        {CITY_DATA[formData.city].categories.map((category) => (
                           <SelectGroup key={category.id}>
-                            <SelectLabel className="text-orange-600 font-bold">
+                            <SelectLabel className={`font-bold ${
+                              formData.city === "new-damietta" ? "text-orange-600" : "text-emerald-600"
+                            }`}>
                               {category.nameAr}
                             </SelectLabel>
                             {category.districts.map((district) => (

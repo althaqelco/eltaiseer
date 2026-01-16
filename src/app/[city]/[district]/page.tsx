@@ -2,23 +2,25 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PropertyCard } from "@/components/PropertyCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Breadcrumb, getDistrictBreadcrumb } from "@/components/Breadcrumb";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Home, ChevronLeft, MapPin, ChevronRight, Building2 } from "lucide-react";
-import { getAllProperties } from "@/lib/propertyStore";
-import { getCategoryByDistrict } from "@/lib/egyptPlaces";
+import { MapPin, ChevronRight, ChevronLeft, Building2 } from "lucide-react";
+import { getAllProperties, getAllPropertiesAsync } from "@/lib/propertyStore";
+import { getCategoryByDistrict, CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 
+const VALID_CITIES = ["new-damietta", "new-mansoura"];
 const ITEMS_PER_PAGE = 12;
 
-// Combined District slug mapping (English URLs) for both cities
+// District slug mapping
 const DISTRICT_SLUGS: Record<string, string> = {
   // New Damietta
   "first-district": "الحي الأول",
@@ -39,54 +41,63 @@ const DISTRICT_SLUGS: Record<string, string> = {
   "central-area-b": "المنطقة المركزية (ب)",
   "central-area-c": "المنطقة المركزية (ج)",
   "chalets": "منطقة الشاليهات",
-  // New Mansoura (nm- prefix)
-  "nm-r1": "R1",
-  "nm-r2": "R2",
-  "nm-r3": "R3",
-  "nm-r4": "R4",
-  "nm-r5": "R5",
-  "nm-r6": "R6",
-  "nm-r7": "R7",
-  "nm-residential-1": "الحي السكني الأول",
-  "nm-residential-2": "الحي السكني الثاني",
-  "nm-residential-3": "الحي السكني الثالث",
-  "nm-sakan-kol-misryeen": "سكن لكل المصريين",
-  "nm-sakan-kol-misryeen-2": "سكن لكل المصريين 2",
-  "nm-sakan-kol-misryeen-3": "سكن لكل المصريين 3",
-  "nm-dar-misr": "دار مصر",
-  "nm-janna": "جنة",
-  "nm-middle-housing": "الإسكان المتوسط",
-  "nm-social-housing": "الإسكان الاجتماعي",
-  "nm-villas-district": "حي الفيلات",
-  "nm-villas-d": "منطقة الفيلات D",
-  "nm-golf-villas": "فيلات الجولف",
-  "nm-lakes-villas": "فيلات البحيرات",
-  "nm-downtown": "داون تاون",
-  "nm-central-mall": "المول التجاري المركزي",
-  "nm-cbd": "منطقة الأعمال المركزية CBD",
-  "nm-commercial-axis": "المحور التجاري",
-  "nm-services-zone": "منطقة الخدمات",
-  "nm-central-park": "الحديقة المركزية",
-  "nm-corniche": "منطقة الكورنيش",
-  "nm-social-club": "النادي الاجتماعي",
-  "nm-touristic-zone": "المنطقة السياحية",
-  "nm-waterfront": "الواجهة البحرية",
-  "nm-beach": "شاطئ المنصورة الجديدة",
-  "nm-coastal-resorts": "منتجعات الساحل",
+  // New Mansoura - Residential
+  "r1": "R1",
+  "r2": "R2",
+  "r3": "R3",
+  "r4": "R4",
+  "r5": "R5",
+  "r6": "R6",
+  "r7": "R7",
+  "residential-1": "الحي السكني الأول",
+  "residential-2": "الحي السكني الثاني",
+  "residential-3": "الحي السكني الثالث",
+  // New Mansoura - National Projects
+  "sakan-kol-misryeen": "سكن لكل المصريين",
+  "sakan-kol-misryeen-2": "سكن لكل المصريين 2",
+  "sakan-kol-misryeen-3": "سكن لكل المصريين 3",
+  "dar-misr": "دار مصر",
+  "janna": "جنة",
+  "medium-housing": "الإسكان المتوسط",
+  "social-housing": "الإسكان الاجتماعي",
+  // New Mansoura - Villas
+  "villas-district": "حي الفيلات",
+  "villas-d": "منطقة الفيلات D",
+  "golf-villas": "فيلات الجولف",
+  "lake-villas": "فيلات البحيرات",
+  // New Mansoura - Commercial
+  "downtown": "داون تاون",
+  "central-mall": "المول التجاري المركزي",
+  "cbd": "منطقة الأعمال المركزية CBD",
+  "commercial-axis": "المحور التجاري",
+  "services-zone": "منطقة الخدمات",
+  // New Mansoura - Entertainment
+  "central-park": "الحديقة المركزية",
+  "corniche": "منطقة الكورنيش",
+  "social-club": "النادي الاجتماعي",
+  "touristic-zone": "المنطقة السياحية",
+  // New Mansoura - Coastal
+  "waterfront": "الواجهة البحرية",
+  "beach": "شاطئ المنصورة الجديدة",
+  "coastal-resorts": "منتجعات الساحل",
 };
 
-// Check if slug is for New Mansoura
-const isNewMansoura = (slug: string) => slug.startsWith("nm-");
-
-const PROPERTY_TYPES = ["الكل", "شقة", "فيلا منفصلة", "دوبلكس", "محل تجاري", "أرض"];
+const PROPERTY_TYPES = ["الكل", "شقة", "شقة فاخرة", "فيلا منفصلة", "دوبلكس", "محل تجاري", "أرض"];
 
 export default function DistrictPage() {
   const params = useParams();
-  const slug = params.slug as string;
-  const districtName = DISTRICT_SLUGS[slug] || decodeURIComponent(slug).replace(/-/g, " ");
-  const isNM = isNewMansoura(slug);
-  const cityName = isNM ? "المنصورة الجديدة" : "دمياط الجديدة";
-  const cityId = isNM ? "new-mansoura" : "new-damietta";
+  const citySlug = params.city as string;
+  const districtSlug = params.district as string;
+  
+  // Validate city
+  if (!VALID_CITIES.includes(citySlug)) {
+    notFound();
+  }
+  
+  const cityId = citySlug as CityId;
+  const city = CITIES[cityId];
+  const districtName = DISTRICT_SLUGS[districtSlug] || decodeURIComponent(districtSlug).replace(/-/g, " ");
+  const isNM = citySlug === "new-mansoura";
   
   const [properties, setProperties] = useState<Property[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -94,20 +105,57 @@ export default function DistrictPage() {
 
   const category = getCategoryByDistrict(districtName, cityId);
 
+  // Load properties
   useEffect(() => {
-    const allProperties = getAllProperties();
-    // Filter by district and city
-    const filtered = allProperties.filter(p => {
-      // First filter by city
-      if (p.location.cityId !== cityId) return false;
+    const loadProps = async () => {
+      let allProperties = getAllProperties();
       
-      // Then filter by district
-      if (category) {
-        return category.districts.some(d => p.location.district.includes(d.split(" ")[0]));
+      // Try to get from Firestore
+      try {
+        const firestoreProps = await getAllPropertiesAsync();
+        if (firestoreProps.length > 0) {
+          allProperties = firestoreProps;
+        }
+      } catch (e) {
+        console.error(e);
       }
-      return p.location.district.includes(districtName.split(" ")[0]);
-    });
-    setProperties(filtered);
+      
+      // Filter by city first
+      const cityFiltered = allProperties.filter(p => 
+        (p.location.cityId || "new-damietta") === cityId
+      );
+      
+      // Then filter by exact district name
+      const filtered = cityFiltered.filter(p => {
+        // Exact match or partial match for the specific district
+        const propertyDistrict = p.location.district;
+        
+        // Check exact match first
+        if (propertyDistrict === districtName) {
+          return true;
+        }
+        
+        // Check if property district contains the district name (for partial matches)
+        if (propertyDistrict.includes(districtName) || districtName.includes(propertyDistrict)) {
+          return true;
+        }
+        
+        // For districts like "الحي الأول", check if it starts with the same prefix
+        const districtPrefix = districtName.split(" ")[0];
+        if (districtPrefix && propertyDistrict.startsWith(districtPrefix) && 
+            districtName.startsWith(districtPrefix)) {
+          // Make sure it's the same district number
+          return propertyDistrict === districtName || 
+                 propertyDistrict.replace(/\s*\(.*\)/, "") === districtName.replace(/\s*\(.*\)/, "");
+        }
+        
+        return false;
+      });
+      
+      setProperties(filtered);
+    };
+    
+    loadProps();
   }, [districtName, category, cityId]);
 
   const filteredProperties = useMemo(() => {
@@ -123,38 +171,19 @@ export default function DistrictPage() {
 
   // Dynamic SEO
   useEffect(() => {
-    if (districtName) {
-      document.title = `عقارات ${districtName} - ${cityName} | شقق وفيلات للبيع - التيسير للعقارات`;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute("content", 
-          `اكتشف أفضل العقارات للبيع في ${districtName} - ${cityName}. شقق، فيلات، دوبلكس، محلات تجارية بأسعار تنافسية. ${filteredProperties.length} عقار متاح.`
-        );
-      }
+    if (districtName && city) {
+      document.title = `عقارات ${districtName} - ${city.nameAr} | شقق وفيلات للبيع - التيسير للعقارات`;
     }
-  }, [districtName, cityName, filteredProperties.length]);
+  }, [districtName, city]);
+
+  const themeColor = isNM ? "emerald" : "orange";
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-3">
-          <nav className="flex items-center gap-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-orange-600 flex items-center gap-1">
-              <Home className="h-4 w-4" />
-              الرئيسية
-            </Link>
-            <ChevronLeft className="h-4 w-4" />
-            <Link href="/properties" className="hover:text-orange-600">
-              العقارات
-            </Link>
-            <ChevronLeft className="h-4 w-4" />
-            <span className="text-orange-600 font-medium">{districtName}</span>
-          </nav>
-        </div>
-      </div>
+      <Breadcrumb items={getDistrictBreadcrumb(districtName, city?.nameAr)} />
 
       {/* Hero */}
       <div className={`bg-gradient-to-l from-slate-900 via-slate-800 ${isNM ? "to-emerald-900" : "to-orange-900"} py-12`}>
@@ -172,9 +201,18 @@ export default function DistrictPage() {
           </div>
           {category && (
             <p className="text-gray-400 text-sm">
-              {category.nameAr} - {cityName}
+              {category.nameAr} - {city?.nameAr}
             </p>
           )}
+          
+          {/* Back to city link */}
+          <Link 
+            href={`/${citySlug}`}
+            className={`inline-flex items-center gap-1 mt-4 text-sm ${isNM ? "text-emerald-300 hover:text-emerald-200" : "text-orange-300 hover:text-orange-200"}`}
+          >
+            <ChevronRight className="h-4 w-4" />
+            العودة إلى {city?.nameAr}
+          </Link>
         </div>
       </div>
 
@@ -211,8 +249,8 @@ export default function DistrictPage() {
           <div className="text-center py-16 bg-white rounded-xl">
             <Building2 className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <p className="text-gray-500 text-lg">لا توجد عقارات متاحة في {districtName}</p>
-            <Button asChild className="mt-4 bg-orange-500">
-              <Link href="/properties">تصفح جميع العقارات</Link>
+            <Button asChild className={`mt-4 bg-${themeColor}-500`}>
+              <Link href={`/${citySlug}`}>تصفح عقارات {city?.nameAr}</Link>
             </Button>
           </div>
         )}
@@ -220,15 +258,31 @@ export default function DistrictPage() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-8">
-            <Button variant="outline" size="icon" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))} 
+              disabled={currentPage === 1}
+            >
               <ChevronRight className="h-4 w-4" />
             </Button>
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map((page) => (
-              <Button key={page} variant={currentPage === page ? "default" : "outline"} size="icon" onClick={() => setCurrentPage(page)} className={currentPage === page ? "bg-orange-500" : ""}>
+              <Button 
+                key={page} 
+                variant={currentPage === page ? "default" : "outline"} 
+                size="icon" 
+                onClick={() => setCurrentPage(page)} 
+                className={currentPage === page ? `bg-${themeColor}-500` : ""}
+              >
                 {page}
               </Button>
             ))}
-            <Button variant="outline" size="icon" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} 
+              disabled={currentPage === totalPages}
+            >
               <ChevronLeft className="h-4 w-4" />
             </Button>
           </div>
@@ -237,11 +291,11 @@ export default function DistrictPage() {
         {/* SEO Content */}
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            عقارات للبيع في {districtName} - {cityName}
+            عقارات للبيع في {districtName} - {city?.nameAr}
           </h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
             <p>
-              اكتشف أفضل الفرص العقارية في {districtName} ب{cityName}. 
+              اكتشف أفضل الفرص العقارية في {districtName} ب{city?.nameAr}. 
               نوفر لك مجموعة متنوعة من العقارات تشمل الشقق السكنية والفيلات والدوبلكس 
               بأسعار تنافسية وخيارات دفع مرنة.
             </p>
@@ -249,7 +303,7 @@ export default function DistrictPage() {
               لماذا {districtName}؟
             </h3>
             <ul className="list-disc list-inside space-y-2">
-              <li>موقع استراتيجي في قلب {cityName}</li>
+              <li>موقع استراتيجي في قلب {city?.nameAr}</li>
               <li>قريب من الخدمات والمرافق الأساسية</li>
               <li>بنية تحتية متطورة وشوارع واسعة</li>
               <li>مجتمع آمن ومناسب للعائلات</li>

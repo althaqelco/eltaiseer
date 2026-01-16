@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PLACE_CATEGORIES } from "@/lib/damiettaPlaces";
+import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -12,10 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, Building, MapPin } from "lucide-react";
+import { Search, Building, MapPin, Building2 } from "lucide-react";
 
 interface HeroSectionProps {
   onSearch: (filters: {
+    city: CityId | "all";
     district: string;
     type: string;
   }) => void;
@@ -38,15 +39,33 @@ const PROPERTY_TYPE_OPTIONS = [
   { value: "روف", label: "روف" },
 ];
 
-export function HeroSection({ onSearch, totalProperties = 50, totalDistricts = 20 }: HeroSectionProps) {
+export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 40 }: HeroSectionProps) {
+  const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
   const [selectedDistrict, setSelectedDistrict] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
 
+  // Get categories based on selected city
+  const getCategories = () => {
+    if (selectedCity === "all") {
+      return [
+        { city: CITIES["new-damietta"], categories: CITY_DATA["new-damietta"].categories },
+        { city: CITIES["new-mansoura"], categories: CITY_DATA["new-mansoura"].categories },
+      ];
+    }
+    return [{ city: CITIES[selectedCity], categories: CITY_DATA[selectedCity].categories }];
+  };
+
   const handleSearch = () => {
     onSearch({
+      city: selectedCity,
       district: selectedDistrict,
       type: selectedType,
     });
+  };
+
+  const handleCityChange = (value: string) => {
+    setSelectedCity(value as CityId | "all");
+    setSelectedDistrict("all"); // Reset district when city changes
   };
 
   return (
@@ -73,8 +92,33 @@ export function HeroSection({ onSearch, totalProperties = 50, totalDistricts = 2
         </div>
 
         {/* Search Box */}
-        <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 border border-white/20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="max-w-5xl mx-auto bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 border border-white/20">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* City Select */}
+            <div className="space-y-1 md:space-y-2">
+              <label className="text-white text-xs md:text-sm flex items-center gap-1 md:gap-2">
+                <Building2 className="h-3 w-3 md:h-4 md:w-4" />
+                المدينة
+              </label>
+              <Select
+                value={selectedCity}
+                onValueChange={handleCityChange}
+                dir="rtl"
+              >
+                <SelectTrigger className="bg-white border-0 text-right">
+                  <SelectValue placeholder="اختر المدينة" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">كل المدن</SelectItem>
+                  {Object.values(CITIES).map((city) => (
+                    <SelectItem key={city.id} value={city.id}>
+                      {city.nameAr}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Location Select */}
             <div className="space-y-1 md:space-y-2">
               <label className="text-white text-xs md:text-sm flex items-center gap-1 md:gap-2">
@@ -91,15 +135,19 @@ export function HeroSection({ onSearch, totalProperties = 50, totalDistricts = 2
                 </SelectTrigger>
                 <SelectContent className="max-h-80">
                   <SelectItem value="all">جميع المناطق</SelectItem>
-                  {PLACE_CATEGORIES.map((category) => (
-                    <SelectGroup key={category.id}>
-                      <SelectLabel className="text-orange-600 font-bold">
-                        {category.nameAr}
+                  {getCategories().map(({ city, categories }) => (
+                    <SelectGroup key={city.id}>
+                      <SelectLabel className={`font-bold ${
+                        city.id === "new-damietta" ? "text-orange-600" : "text-emerald-600"
+                      }`}>
+                        {city.nameAr}
                       </SelectLabel>
-                      {category.districts.map((district) => (
-                        <SelectItem key={district} value={district}>
-                          {district}
-                        </SelectItem>
+                      {categories.map((category) => (
+                        category.districts.map((district) => (
+                          <SelectItem key={district} value={district}>
+                            {district}
+                          </SelectItem>
+                        ))
                       ))}
                     </SelectGroup>
                   ))}

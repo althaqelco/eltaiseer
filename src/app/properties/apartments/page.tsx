@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PropertyCard } from "@/components/PropertyCard";
@@ -17,14 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Home,
-  ChevronLeft,
-  Building2,
-  ChevronRight,
-} from "lucide-react";
+import { Building2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
 import { getAllProperties } from "@/lib/propertyStore";
-import { PLACE_CATEGORIES } from "@/lib/damiettaPlaces";
+import { PLACE_CATEGORIES } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 
 const ITEMS_PER_PAGE = 12;
@@ -57,22 +52,7 @@ export default function ApartmentsPage() {
       <Header />
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-3">
-          <nav className="flex items-center gap-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-orange-600 flex items-center gap-1">
-              <Home className="h-4 w-4" />
-              الرئيسية
-            </Link>
-            <ChevronLeft className="h-4 w-4" />
-            <Link href="/properties" className="hover:text-orange-600">
-              جميع العقارات
-            </Link>
-            <ChevronLeft className="h-4 w-4" />
-            <span className="text-orange-600 font-medium">شقق للبيع</span>
-          </nav>
-        </div>
-      </div>
+      <Breadcrumb items={breadcrumbPresets.apartments} />
 
       {/* Hero Section */}
       <div className="bg-gradient-to-l from-slate-900 via-slate-800 to-orange-900 py-12">

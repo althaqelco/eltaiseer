@@ -15,8 +15,8 @@ export function Footer() {
               <Logo className="h-20" variant="light" />
             </div>
             <p className="text-gray-400 leading-relaxed max-w-md">
-              منصتك الأولى للبحث عن العقارات في مدينة دمياط الجديدة. نقدم لك أفضل
-              الشقق، الفيلات، المحلات التجارية، والأراضي في جميع أحياء المدينة
+              منصتك الأولى للبحث عن العقارات في دمياط الجديدة والمنصورة الجديدة. نقدم لك أفضل
+              الشقق، الفيلات، المحلات التجارية، والأراضي في جميع أحياء المدن الجديدة
               مع التيسير للعقارات.
             </p>
           </div>
@@ -73,38 +73,38 @@ export function Footer() {
           </div>
         </div>
 
-        {/* SEO Keywords Section */}
+        {/* Cities Districts Section */}
         <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="mb-6">
-            <h4 className="font-bold mb-3 text-orange-400 text-sm">أقسام العقارات</h4>
-            <div className="flex flex-wrap gap-2 text-xs text-gray-500">
-              <Link href="/properties/apartments" className="hover:text-orange-400 transition-colors">شقق للبيع في دمياط الجديدة</Link>
-              <span>•</span>
-              <Link href="/properties/villas" className="hover:text-orange-400 transition-colors">فيلات دمياط الجديدة</Link>
-              <span>•</span>
-              <Link href="/properties/lands" className="hover:text-orange-400 transition-colors">أراضي للبيع دمياط</Link>
-              <span>•</span>
-              <Link href="/properties/shops" className="hover:text-orange-400 transition-colors">محلات تجارية</Link>
-              <span>•</span>
-              <Link href="/properties/clinics" className="hover:text-orange-400 transition-colors">عيادات للبيع</Link>
-              <span>•</span>
-              <Link href="/properties/chalets" className="hover:text-orange-400 transition-colors">شاليهات دمياط الجديدة</Link>
-            </div>
-          </div>
+          {/* دمياط الجديدة */}
           <div className="mb-6">
             <h4 className="font-bold mb-3 text-orange-400 text-sm">أحياء دمياط الجديدة</h4>
             <div className="flex flex-wrap gap-2 text-xs text-gray-500">
-              <Link href="/properties/district/first-district" className="hover:text-orange-400 transition-colors">عقارات الحي الأول</Link>
+              <Link href="/new-damietta" className="hover:text-orange-400 transition-colors">جميع عقارات دمياط الجديدة</Link>
               <span>•</span>
-              <Link href="/properties/district/second-district" className="hover:text-orange-400 transition-colors">عقارات الحي الثاني</Link>
+              <Link href="/new-damietta/first-district" className="hover:text-orange-400 transition-colors">الحي الأول</Link>
               <span>•</span>
-              <Link href="/properties/district/third-district" className="hover:text-orange-400 transition-colors">عقارات الحي الثالث</Link>
+              <Link href="/new-damietta/second-district" className="hover:text-orange-400 transition-colors">الحي الثاني</Link>
               <span>•</span>
-              <Link href="/properties/district/fourth-district" className="hover:text-orange-400 transition-colors">عقارات الحي الرابع</Link>
+              <Link href="/new-damietta/janna-project" className="hover:text-orange-400 transition-colors">مشروع جنة</Link>
               <span>•</span>
-              <Link href="/properties/district/fifth-district" className="hover:text-orange-400 transition-colors">عقارات الحي الخامس</Link>
+              <Link href="/new-damietta/chalets" className="hover:text-orange-400 transition-colors">الشاليهات</Link>
+            </div>
+          </div>
+          {/* المنصورة الجديدة */}
+          <div className="mb-6">
+            <h4 className="font-bold mb-3 text-emerald-400 text-sm">أحياء المنصورة الجديدة</h4>
+            <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+              <Link href="/new-mansoura" className="hover:text-emerald-400 transition-colors">جميع عقارات المنصورة الجديدة</Link>
               <span>•</span>
-              <Link href="/properties/district/janna-project" className="hover:text-orange-400 transition-colors">مشروع جنة</Link>
+              <Link href="/new-mansoura/r1" className="hover:text-emerald-400 transition-colors">R1</Link>
+              <span>•</span>
+              <Link href="/new-mansoura/r2" className="hover:text-emerald-400 transition-colors">R2</Link>
+              <span>•</span>
+              <Link href="/new-mansoura/villas-district" className="hover:text-emerald-400 transition-colors">حي الفيلات</Link>
+              <span>•</span>
+              <Link href="/new-mansoura/downtown" className="hover:text-emerald-400 transition-colors">داون تاون</Link>
+              <span>•</span>
+              <Link href="/new-mansoura/waterfront" className="hover:text-emerald-400 transition-colors">الواجهة البحرية</Link>
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@ export function Footer() {
             © {new Date().getFullYear()} التيسير للعقارات. جميع الحقوق محفوظة.
           </p>
           <p className="text-xs text-gray-600">
-            التيسير للعقارات - شريكك الموثوق في عقارات دمياط الجديدة | شقق للبيع | فيلات | دوبلكس | أراضي | محلات تجارية
+            التيسير للعقارات - شريكك الموثوق في عقارات دمياط الجديدة والمنصورة الجديدة | شقق للبيع | فيلات | دوبلكس | أراضي | محلات تجارية
           </p>
         </div>
       </div>

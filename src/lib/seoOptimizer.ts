@@ -22,6 +22,59 @@ interface PropertySEOInput {
   status: string;
   paymentType?: string;
   description?: string;
+  cityId?: string;
+}
+
+// Helper function to get district slug
+function getDistrictSlug(districtName: string): string {
+  const slugMap: Record<string, string> = {
+    "الحي الأول": "first-district",
+    "الحي الثاني": "second-district",
+    "الحي الثالث": "third-district",
+    "الحي الرابع": "fourth-district",
+    "الحي الخامس": "fifth-district",
+    "الحي السادس (المتميز)": "sixth-district",
+    "مشروع جنة": "janna-project",
+    "دار مصر - موقع 1": "dar-misr-1",
+    "دار مصر - موقع 2": "dar-misr-2",
+    "سكن مصر - جنوب الحي الأول": "sakan-misr-south",
+    "سكن مصر - غرب الجامعات": "sakan-misr-west",
+    "بيت الوطن - شرق": "beit-al-watan-east",
+    "بيت الوطن - غرب": "beit-al-watan-west",
+    "بيت الوطن - امتداد الشاطئ": "beit-al-watan-beach",
+    "المنطقة المركزية (أ)": "central-area-a",
+    "المنطقة المركزية (ب)": "central-area-b",
+    "المنطقة المركزية (ج)": "central-area-c",
+    "منطقة الشاليهات": "chalets",
+    "R1": "r1", "R2": "r2", "R3": "r3", "R4": "r4", "R5": "r5", "R6": "r6", "R7": "r7",
+    "الحي السكني الأول": "residential-1",
+    "الحي السكني الثاني": "residential-2",
+    "الحي السكني الثالث": "residential-3",
+    "سكن لكل المصريين": "sakan-kol-misryeen",
+    "سكن لكل المصريين 2": "sakan-kol-misryeen-2",
+    "سكن لكل المصريين 3": "sakan-kol-misryeen-3",
+    "دار مصر": "dar-misr",
+    "جنة": "janna",
+    "الإسكان المتوسط": "medium-housing",
+    "الإسكان الاجتماعي": "social-housing",
+    "حي الفيلات": "villas-district",
+    "منطقة الفيلات D": "villas-d",
+    "فيلات الجولف": "golf-villas",
+    "فيلات البحيرات": "lake-villas",
+    "داون تاون": "downtown",
+    "المول التجاري المركزي": "central-mall",
+    "منطقة الأعمال المركزية CBD": "cbd",
+    "المحور التجاري": "commercial-axis",
+    "منطقة الخدمات": "services-zone",
+    "الحديقة المركزية": "central-park",
+    "منطقة الكورنيش": "corniche",
+    "النادي الاجتماعي": "social-club",
+    "المنطقة السياحية": "touristic-zone",
+    "الواجهة البحرية": "waterfront",
+    "شاطئ المنصورة الجديدة": "beach",
+    "منتجعات الساحل": "coastal-resorts",
+  };
+  return slugMap[districtName] || districtName.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "");
 }
 
 // Primary SEO keywords for real estate in New Damietta
@@ -58,6 +111,7 @@ const DISTRICT_KEYWORDS: Record<string, string[]> = {
   "الحي المتميز": ["الحي المتميز", "فيلات", "راقي"],
   "مشروع جنة": ["جنة", "مشروع جنة", "إسكان اجتماعي"],
   "الإسكان الاجتماعي": ["إسكان اجتماعي", "دعم حكومي"],
+  "المنصورة الجديدة": ["المنصورة الجديدة", "سكن لكل المصريين", "دار مصر"],
 };
 
 /**
@@ -76,7 +130,7 @@ function formatPriceSEO(price: number): string {
 
 /**
  * Generate SEO-optimized title for property
- * Format: [نوع العقار] [المساحة] متر [الحي] - [السعر] | دمياط الجديدة
+ * Format: [نوع العقار] [المساحة] متر [الحي] - [السعر] | دمياط الجديدة / المنصورة الجديدة
  */
 export function generateSEOTitle(input: PropertySEOInput): string {
   const { type, district, area_sqm, price, bedrooms, level } = input;
@@ -109,7 +163,7 @@ export function generateSEOTitle(input: PropertySEOInput): string {
   }
   
   // Add price and location brand
-  title += ` - ${priceText} | دمياط الجديدة`;
+  title += ` - ${priceText} | ${district === "المنصورة الجديدة" ? "المنصورة الجديدة" : "دمياط الجديدة"}`;
   
   return title;
 }
@@ -137,7 +191,7 @@ export function generateSEODescription(input: PropertySEOInput): string {
   const priceText = formatPriceSEO(price);
   
   // Opening statement with primary keywords
-  let seoDescription = `${type} للبيع في ${district} - دمياط الجديدة. `;
+  let seoDescription = `${type} للبيع في ${district} - ${district === "المنصورة الجديدة" ? "المنصورة الجديدة" : "دمياط الجديدة"}. `;
   
   // Property details section
   seoDescription += `المساحة: ${area_sqm} متر مربع. `;
@@ -182,7 +236,7 @@ export function generateSEODescription(input: PropertySEOInput): string {
   }
   
   // Closing with brand and location keywords
-  seoDescription += `التيسير للعقارات - شريكك الموثوق في عقارات دمياط الجديدة.`;
+  seoDescription += `التيسير للعقارات - شريكك الموثوق في عقارات ${district === "المنصورة الجديدة" ? "المنصورة الجديدة" : "دمياط الجديدة"}.`;
   
   return seoDescription;
 }
@@ -249,15 +303,20 @@ export function generatePropertySchema(
     bathrooms,
     images,
     status,
+    cityId,
   } = input;
+
+  const citySlug = cityId || "new-damietta";
+  const districtSlug = getDistrictSlug(district);
+  const propertyUrl = `https://eltaiseer.com/${citySlug}/${districtSlug}/${id}`;
 
   return {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
-    "@id": `https://eltaiseer.com/property/${id}`,
+    "@id": propertyUrl,
     name: title,
     description: generateSEODescription(input),
-    url: `https://eltaiseer.com/property/${id}`,
+    url: propertyUrl,
     datePosted: new Date().toISOString(),
     
     // Property details

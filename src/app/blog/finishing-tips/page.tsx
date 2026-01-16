@@ -98,7 +98,7 @@ export default function FinishingTipsArticle() {
             
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">مقدمة: أهمية التخطيط للتشطيب</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              بعد شراء <Link href="/properties/apartments" className="text-orange-600 hover:underline font-semibold">شقتك في دمياط الجديدة</Link>، 
+              بعد شراء <Link href="/new-damietta" className="text-orange-600 hover:underline font-semibold">شقتك في دمياط الجديدة</Link>، 
               تبدأ مرحلة التشطيب التي قد تكون مرهقة ومكلفة إذا لم تُخطط لها جيداً. الكثير من الملاك 
               يقعون في أخطاء تكلفهم آلاف الجنيهات الإضافية، أو ينتهي بهم الأمر بتشطيب لا يرضيهم.
             </p>
@@ -350,7 +350,7 @@ export default function FinishingTipsArticle() {
             </p>
             <p className="text-gray-700 leading-relaxed mb-6">
               إذا كنت تبحث عن شقة جاهزة بتشطيب كامل، تصفح 
-              <Link href="/properties/apartments" className="text-orange-600 hover:underline font-semibold"> الشقق المتاحة في دمياط الجديدة</Link>. 
+              <Link href="/new-damietta" className="text-orange-600 hover:underline font-semibold"> الشقق المتاحة في دمياط الجديدة</Link>. 
               وإذا كنت تريد تقييم شقتك الحالية، استخدم 
               <Link href="/valuation" className="text-orange-600 hover:underline font-semibold"> خدمة التقييم المجانية</Link> من 
               <Link href="/" className="text-orange-600 hover:underline font-semibold"> التيسير للعقارات</Link>.
@@ -380,7 +380,7 @@ export default function FinishingTipsArticle() {
             <h3 className="text-2xl font-bold mb-4">تبحث عن شقة جاهزة للسكن؟</h3>
             <p className="text-orange-100 mb-6">تصفح الشقق المشطبة والجاهزة للاستلام الفوري</p>
             <Button asChild variant="secondary" size="lg">
-              <Link href="/properties/apartments">تصفح الشقق</Link>
+              <Link href="/properties">تصفح الشقق</Link>
             </Button>
           </div>
 

@@ -123,7 +123,7 @@ export default function BestDistrictsArticle() {
             </div>
 
             <p className="text-gray-700 leading-relaxed mb-6">
-              يعتبر <Link href="/properties/district/first-district" className="text-orange-600 hover:underline font-semibold">الحي الأول</Link> 
+              يعتبر <Link href="/new-damietta/first-district" className="text-orange-600 hover:underline font-semibold">الحي الأول</Link> 
               من أقدم وأعرق أحياء دمياط الجديدة. يتميز بموقعه المركزي الذي يجعله قريباً من معظم الخدمات والمرافق الحيوية. 
               الحي مكتمل الخدمات بنسبة كبيرة، مما يجعله خياراً مثالياً للعائلات التي تبحث عن الاستقرار الفوري.
             </p>
@@ -141,7 +141,7 @@ export default function BestDistrictsArticle() {
             <p className="text-gray-700 leading-relaxed mb-6">
               تتراوح أسعار الشقق في الحي الأول بين 1,200,000 و 3,000,000 جنيه حسب المساحة ومستوى التشطيب. 
               الشقق بمساحة 120 متر مربع تبدأ من حوالي 1,500,000 جنيه للتشطيب الكامل.
-              يمكنك الاطلاع على <Link href="/properties/district/first-district" className="text-orange-600 hover:underline">عقارات الحي الأول</Link> المتاحة حالياً.
+              يمكنك الاطلاع على <Link href="/new-damietta/first-district" className="text-orange-600 hover:underline">عقارات الحي الأول</Link> المتاحة حالياً.
             </p>
 
             {/* Image Break */}
@@ -159,7 +159,7 @@ export default function BestDistrictsArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الحي الثاني: التوازن المثالي</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يمثل <Link href="/properties/district/second-district" className="text-orange-600 hover:underline font-semibold">الحي الثاني</Link> 
+              يمثل <Link href="/new-damietta/second-district" className="text-orange-600 hover:underline font-semibold">الحي الثاني</Link> 
               الخيار الأمثل لمن يبحث عن توازن بين الموقع الجيد والسعر المعقول. يتميز بقربه من الحي الأول 
               مع أسعار أقل نسبياً، مما يجعله وجهة مفضلة للعائلات الشابة والمستثمرين.
             </p>
@@ -176,8 +176,8 @@ export default function BestDistrictsArticle() {
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الحي الثالث والرابع: الهدوء والخصوصية</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
               إذا كنت تبحث عن الهدوء والخصوصية بعيداً عن صخب المناطق المركزية، 
-              فإن <Link href="/properties/district/third-district" className="text-orange-600 hover:underline font-semibold">الحي الثالث</Link> و
-              <Link href="/properties/district/fourth-district" className="text-orange-600 hover:underline font-semibold">الحي الرابع</Link> 
+              فإن <Link href="/new-damietta/third-district" className="text-orange-600 hover:underline font-semibold">الحي الثالث</Link> و
+              <Link href="/new-damietta/fourth-district" className="text-orange-600 hover:underline font-semibold">الحي الرابع</Link> 
               يوفران بيئة سكنية هادئة مع أسعار تنافسية للغاية.
             </p>
 
@@ -191,7 +191,7 @@ export default function BestDistrictsArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الحي الخامس والسادس: مستقبل المدينة</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يشهد <Link href="/properties/district/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link> 
+              يشهد <Link href="/new-damietta/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link> 
               والحي السادس (المتميز) تطوراً سريعاً مع مشاريع بنية تحتية ضخمة. 
               هذه المناطق تمثل فرصة استثمارية ممتازة لمن يستطيع الانتظار لاكتمال الخدمات.
             </p>
@@ -225,7 +225,7 @@ export default function BestDistrictsArticle() {
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">مشروع جنة</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يعتبر <Link href="/properties/district/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link> 
+              يعتبر <Link href="/new-damietta/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link> 
               من أرقى مشاريع الإسكان القومي. يتميز بتشطيبات فاخرة ومساحات خضراء واسعة وخدمات متكاملة. 
               الوحدات تأتي بتشطيب سوبر لوكس كامل، مما يوفر على المشتري تكاليف التشطيب.
             </p>
@@ -239,8 +239,8 @@ export default function BestDistrictsArticle() {
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">دار مصر وسكن مصر</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يوفر <Link href="/properties/district/dar-misr" className="text-orange-600 hover:underline font-semibold">مشروع دار مصر</Link> و
-              <Link href="/properties/district/sakan-misr" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link> 
+              يوفر <Link href="/new-damietta/dar-misr" className="text-orange-600 hover:underline font-semibold">مشروع دار مصر</Link> و
+              <Link href="/new-damietta/sakan-misr" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link> 
               خيارات سكنية متنوعة بأسعار تناسب الطبقة المتوسطة. المشاريع تتميز بالتصميم العصري والتخطيط الجيد.
             </p>
 

@@ -9,12 +9,14 @@ import { FilterSidebar } from "@/components/FilterSidebar";
 import { Footer } from "@/components/Footer";
 import { Property } from "@/lib/mockData";
 import { getAllProperties, getAllPropertiesAsync } from "@/lib/propertyStore";
+import { CityId } from "@/lib/egyptPlaces";
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, List, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
   const [properties, setProperties] = useState<Property[]>([]);
+  const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<string>("الكل");
@@ -41,6 +43,14 @@ export default function Home() {
 
   const filteredProperties = useMemo(() => {
     return properties.filter((property) => {
+      // Filter by city - العقارات بدون cityId تعتبر من دمياط الجديدة
+      if (selectedCity !== "all") {
+        const propertyCityId = property.location.cityId || "new-damietta";
+        if (propertyCityId !== selectedCity) {
+          return false;
+        }
+      }
+
       // Filter by district
       if (
         selectedDistricts.length > 0 &&
@@ -74,7 +84,7 @@ export default function Home() {
 
       return true;
     });
-  }, [properties, selectedDistricts, selectedTypes, priceRange, selectedStatus, selectedPaymentMethod]);
+  }, [properties, selectedCity, selectedDistricts, selectedTypes, priceRange, selectedStatus, selectedPaymentMethod]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
@@ -89,7 +99,7 @@ export default function Home() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedDistricts, selectedTypes, priceRange, selectedStatus, selectedPaymentMethod]);
+  }, [selectedCity, selectedDistricts, selectedTypes, priceRange, selectedStatus, selectedPaymentMethod]);
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -119,9 +129,13 @@ export default function Home() {
   };
 
   const handleHeroSearch = (filters: {
+    city: CityId | "all";
     district: string;
     type: string;
   }) => {
+    // Set city
+    setSelectedCity(filters.city);
+
     // Set districts
     if (filters.district !== "all") {
       setSelectedDistricts([filters.district]);
@@ -141,6 +155,7 @@ export default function Home() {
   };
 
   const clearFilters = () => {
+    setSelectedCity("all");
     setSelectedDistricts([]);
     setSelectedTypes([]);
     setSelectedStatus("الكل");
@@ -210,11 +225,13 @@ export default function Home() {
             {/* Desktop Sidebar - Right side for RTL */}
             <aside className="hidden md:block w-80 flex-shrink-0 order-first">
               <FilterSidebar
+                selectedCity={selectedCity}
                 selectedDistricts={selectedDistricts}
                 selectedTypes={selectedTypes}
                 selectedStatus={selectedStatus}
                 selectedPaymentMethod={selectedPaymentMethod}
                 priceRange={priceRange}
+                onCityChange={setSelectedCity}
                 onDistrictChange={setSelectedDistricts}
                 onTypeChange={setSelectedTypes}
                 onStatusChange={setSelectedStatus}
@@ -245,11 +262,13 @@ export default function Home() {
                   </div>
                   <div className="p-4">
                     <FilterSidebar
+                      selectedCity={selectedCity}
                       selectedDistricts={selectedDistricts}
                       selectedTypes={selectedTypes}
                       selectedStatus={selectedStatus}
                       selectedPaymentMethod={selectedPaymentMethod}
                       priceRange={priceRange}
+                      onCityChange={setSelectedCity}
                       onDistrictChange={setSelectedDistricts}
                       onTypeChange={setSelectedTypes}
                       onStatusChange={setSelectedStatus}

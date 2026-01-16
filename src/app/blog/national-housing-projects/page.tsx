@@ -124,7 +124,7 @@ export default function NationalHousingArticle() {
             </div>
 
             <p className="text-gray-700 leading-relaxed mb-6">
-              يعتبر <Link href="/properties/district/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link> 
+              يعتبر <Link href="/new-damietta/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link> 
               من أرقى مشاريع الإسكان القومية في مصر. يتميز بتصميمه المعماري الفريد والتشطيبات الفاخرة 
               التي تنافس أفضل المشاريع الخاصة. المشروع موجه للطبقة فوق المتوسطة ويقدم مستوى معيشة راقي.
             </p>
@@ -164,7 +164,7 @@ export default function NationalHousingArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">مشروع دار مصر: التوازن بين الجودة والسعر</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يمثل <Link href="/properties/district/dar-misr" className="text-orange-600 hover:underline font-semibold">مشروع دار مصر</Link> 
+              يمثل <Link href="/new-damietta/dar-misr" className="text-orange-600 hover:underline font-semibold">مشروع دار مصر</Link> 
               الخيار الأمثل للباحثين عن شقق بتشطيبات جيدة وأسعار معقولة. المشروع موجه للطبقة المتوسطة 
               ويقدم وحدات بمواصفات ممتازة تناسب العائلات.
             </p>
@@ -210,7 +210,7 @@ export default function NationalHousingArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">مشروع سكن مصر: الحل الاقتصادي</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يقدم <Link href="/properties/district/sakan-misr" className="text-orange-600 hover:underline font-semibold">مشروع سكن مصر</Link> 
+              يقدم <Link href="/new-damietta/sakan-misr" className="text-orange-600 hover:underline font-semibold">مشروع سكن مصر</Link> 
               وحدات سكنية بأسعار اقتصادية مناسبة للشباب والأسر محدودة الدخل. رغم الأسعار المنخفضة، 
               يحافظ المشروع على مستوى جودة مقبول في البناء والتشطيب.
             </p>
@@ -249,7 +249,7 @@ export default function NationalHousingArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">بيت الوطن: للمصريين بالخارج</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يستهدف مشروع <Link href="/properties/district/beit-al-watan" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link> 
+              يستهدف مشروع <Link href="/new-damietta/beit-al-watan" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link> 
               المصريين المقيمين بالخارج، حيث يتم السداد بالدولار الأمريكي. يوفر المشروع قطع أراضي 
               ووحدات سكنية بمواقع متميزة في دمياط الجديدة.
             </p>

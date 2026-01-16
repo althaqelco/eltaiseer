@@ -34,10 +34,69 @@ import {
   Upload,
   Loader2,
 } from "lucide-react";
-import { PLACE_CATEGORIES, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/damiettaPlaces";
+import { CITIES, CITY_DATA, CityId, FINISHING_TYPES, FLOOR_LEVELS, AMENITIES } from "@/lib/egyptPlaces";
 import { addPropertyAsync } from "@/lib/propertyStore";
+import { Property } from "@/lib/mockData";
 import { enhanceTitle, enhanceDescription } from "@/lib/seoOptimizer";
 import { uploadImage, validateImageFile, compressImage } from "@/lib/imageUpload";
+
+// Helper function to get property URL with new structure
+function getPropertyUrl(property: Property): string {
+  const citySlug = property.location.cityId || "new-damietta";
+  const districtSlug = getDistrictSlug(property.location.district);
+  return `/${citySlug}/${districtSlug}/${property.id}`;
+}
+
+function getDistrictSlug(districtName: string): string {
+  const slugMap: Record<string, string> = {
+    "الحي الأول": "first-district",
+    "الحي الثاني": "second-district",
+    "الحي الثالث": "third-district",
+    "الحي الرابع": "fourth-district",
+    "الحي الخامس": "fifth-district",
+    "الحي السادس (المتميز)": "sixth-district",
+    "مشروع جنة": "janna-project",
+    "دار مصر - موقع 1": "dar-misr-1",
+    "دار مصر - موقع 2": "dar-misr-2",
+    "سكن مصر - جنوب الحي الأول": "sakan-misr-south",
+    "سكن مصر - غرب الجامعات": "sakan-misr-west",
+    "بيت الوطن - شرق": "beit-al-watan-east",
+    "بيت الوطن - غرب": "beit-al-watan-west",
+    "بيت الوطن - امتداد الشاطئ": "beit-al-watan-beach",
+    "المنطقة المركزية (أ)": "central-area-a",
+    "المنطقة المركزية (ب)": "central-area-b",
+    "المنطقة المركزية (ج)": "central-area-c",
+    "منطقة الشاليهات": "chalets",
+    "R1": "r1", "R2": "r2", "R3": "r3", "R4": "r4", "R5": "r5", "R6": "r6", "R7": "r7",
+    "الحي السكني الأول": "residential-1",
+    "الحي السكني الثاني": "residential-2",
+    "الحي السكني الثالث": "residential-3",
+    "سكن لكل المصريين": "sakan-kol-misryeen",
+    "سكن لكل المصريين 2": "sakan-kol-misryeen-2",
+    "سكن لكل المصريين 3": "sakan-kol-misryeen-3",
+    "دار مصر": "dar-misr",
+    "جنة": "janna",
+    "الإسكان المتوسط": "medium-housing",
+    "الإسكان الاجتماعي": "social-housing",
+    "حي الفيلات": "villas-district",
+    "منطقة الفيلات D": "villas-d",
+    "فيلات الجولف": "golf-villas",
+    "فيلات البحيرات": "lake-villas",
+    "داون تاون": "downtown",
+    "المول التجاري المركزي": "central-mall",
+    "منطقة الأعمال المركزية CBD": "cbd",
+    "المحور التجاري": "commercial-axis",
+    "منطقة الخدمات": "services-zone",
+    "الحديقة المركزية": "central-park",
+    "منطقة الكورنيش": "corniche",
+    "النادي الاجتماعي": "social-club",
+    "المنطقة السياحية": "touristic-zone",
+    "الواجهة البحرية": "waterfront",
+    "شاطئ المنصورة الجديدة": "beach",
+    "منتجعات الساحل": "coastal-resorts",
+  };
+  return slugMap[districtName] || districtName.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "");
+}
 
 const PROPERTY_TYPES = [
   "شقة",
@@ -72,6 +131,7 @@ export default function AddPropertyPage() {
     description: "",
     price: "",
     type: "",
+    city: "new-damietta" as CityId,
     district: "",
     address: "",
     area_sqm: "",
@@ -187,6 +247,8 @@ export default function AddPropertyPage() {
         category: "بيع",
         type: formData.type,
         location: {
+          city: CITIES[formData.city].nameAr as "دمياط الجديدة" | "المنصورة الجديدة",
+          cityId: formData.city,
           district: formData.district,
           address: formData.address,
         },
@@ -214,7 +276,7 @@ export default function AddPropertyPage() {
 
       if (result.success && result.property) {
         alert("تم إضافة العقار بنجاح!");
-        router.push(`/property/${result.property.id}`);
+        router.push(getPropertyUrl(result.property));
       } else {
         alert(result.error || "حدث خطأ أثناء إضافة العقار");
       }
@@ -329,6 +391,32 @@ export default function AddPropertyPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* City Selection */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      المدينة *
+                    </label>
+                    <Select
+                      value={formData.city}
+                      onValueChange={(value) => {
+                        handleChange("city", value);
+                        handleChange("district", ""); // Reset district when city changes
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر المدينة" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.values(CITIES).map((city) => (
+                          <SelectItem key={city.id} value={city.id}>
+                            {city.nameAr}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* District Selection */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       المنطقة *
@@ -341,9 +429,11 @@ export default function AddPropertyPage() {
                         <SelectValue placeholder="اختر المنطقة" />
                       </SelectTrigger>
                       <SelectContent className="max-h-80">
-                        {PLACE_CATEGORIES.map((category) => (
+                        {CITY_DATA[formData.city].categories.map((category) => (
                           <SelectGroup key={category.id}>
-                            <SelectLabel className="text-orange-600 font-bold">
+                            <SelectLabel className={`font-bold ${
+                              formData.city === "new-damietta" ? "text-orange-600" : "text-emerald-600"
+                            }`}>
                               {category.nameAr}
                             </SelectLabel>
                             {category.districts.map((district) => (

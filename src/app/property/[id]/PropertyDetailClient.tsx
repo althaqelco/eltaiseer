@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Property } from "@/lib/mockData";
 import { getPropertyByIdAsync, getRelatedProperties } from "@/lib/propertyStore";
 
-import { getDistrictColor, getCategoryByDistrict } from "@/lib/damiettaPlaces";
+import { getDistrictColor, getCategoryByDistrict } from "@/lib/egyptPlaces";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
 import { PropertyCard } from "@/components/PropertyCard";
 import { Header } from "@/components/Header";
@@ -72,13 +72,14 @@ export default function PropertyDetailClient() {
           return `${price.toLocaleString("ar-EG")} جنيه`;
         };
         
-        document.title = `${found.title} | ${found.type} للبيع في ${found.location.district} - التيسير للعقارات`;
+        const cityName = found.location.city || "دمياط الجديدة";
+        document.title = `${found.title} | ${found.type} للبيع في ${found.location.district} - ${cityName} - التيسير للعقارات`;
         
         // Update meta description
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) {
           metaDesc.setAttribute("content", 
-            `${found.type} للبيع في ${found.location.district} - دمياط الجديدة. المساحة: ${found.details.area_sqm} م². السعر: ${formatPrice(found.price)}. ${found.details.bedrooms} غرف، ${found.details.bathrooms} حمام. تشطيب ${found.details.finishing}.`
+            `${found.type} للبيع في ${found.location.district} - ${cityName}. المساحة: ${found.details.area_sqm} م². السعر: ${formatPrice(found.price)}. ${found.details.bedrooms} غرف، ${found.details.bathrooms} حمام. تشطيب ${found.details.finishing}.`
           );
         }
         

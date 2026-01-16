@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { PLACE_CATEGORIES } from "@/lib/damiettaPlaces";
+import { PLACE_CATEGORIES } from "@/lib/egyptPlaces";
 
 const propertyTypes = ["شقة", "فيلا", "دوبلكس", "أرض", "محل تجاري", "عيادة", "شاليه"];
 const finishingTypes = ["بدون تشطيب", "نصف تشطيب", "تشطيب كامل", "سوبر لوكس"];

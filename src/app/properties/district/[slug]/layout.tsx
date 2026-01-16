@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getCategoryByDistrict } from "@/lib/damiettaPlaces";
+import { getCategoryByDistrict } from "@/lib/egyptPlaces";
 
 // District slug to name mapping (English URLs)
 const DISTRICT_SLUGS: Record<string, string> = {
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     openGraph: {
       title: `عقارات ${districtName} للبيع | التيسير للعقارات`,
       description,
-      url: `https://eltaiseer.com/properties/district/${params.slug}`,
+      url: `https://eltaiseer.com/new-damietta/${params.slug}`,
       type: "website",
       locale: "ar_EG",
     },
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       description: `شقق وفيلات للبيع في ${districtName} - دمياط الجديدة`,
     },
     alternates: {
-      canonical: `https://eltaiseer.com/properties/district/${params.slug}`,
+      canonical: `https://eltaiseer.com/new-damietta/${params.slug}`,
     },
   };
 }

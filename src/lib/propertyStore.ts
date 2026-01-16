@@ -3,7 +3,6 @@
 // Uses Firestore for cloud persistence + localStorage as cache
 
 import { Property } from "./mockData";
-import { MOCK_PROPERTIES } from "./mockData";
 import {
   getPropertiesFromFirestore,
   getPropertyFromFirestore,
@@ -61,10 +60,10 @@ export function clearPropertiesCache(): void {
   localStorage.removeItem(CACHE_TIMESTAMP_KEY);
 }
 
-// Get all properties (sync version for SSR - returns mock data)
+// Get all properties (sync version - returns cached or empty)
 export function getAllProperties(): Property[] {
   if (typeof window === "undefined") {
-    return [...MOCK_PROPERTIES];
+    return [];
   }
   
   // Try to get from cache first
@@ -73,8 +72,8 @@ export function getAllProperties(): Property[] {
     return cached;
   }
   
-  // Return mock data as fallback (async fetch will update)
-  return [...MOCK_PROPERTIES];
+  // Return empty array - async fetch will update
+  return [];
 }
 
 // Get all properties from Firestore (async version)
@@ -88,8 +87,8 @@ export async function getAllPropertiesAsync(): Promise<Property[]> {
       return properties;
     }
     
-    // Fallback to mock data
-    return [...MOCK_PROPERTIES];
+    // No fallback - return empty if no data
+    return [];
   } catch (error) {
     console.error("Error fetching properties:", error);
     
@@ -97,8 +96,8 @@ export async function getAllPropertiesAsync(): Promise<Property[]> {
     const cached = getCachedProperties();
     if (cached) return cached;
     
-    // Final fallback
-    return [...MOCK_PROPERTIES];
+    // Final fallback - return empty or cached
+    return cached || [];
   }
 }
 

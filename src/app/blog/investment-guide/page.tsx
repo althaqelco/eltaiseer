@@ -126,13 +126,13 @@ export default function InvestmentGuideArticle() {
             
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">1. الشراء للإيجار (Buy-to-Let)</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
-              شراء <Link href="/properties/apartments" className="text-orange-600 hover:underline font-semibold">شقة للإيجار</Link> 
+              شراء <Link href="/new-damietta" className="text-orange-600 hover:underline font-semibold">شقة للإيجار</Link> 
               هو أحد أكثر أنواع الاستثمار شيوعاً. يمكنك تحقيق دخل شهري ثابت مع الاستفادة من ارتفاع 
               قيمة العقار على المدى الطويل.
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
               <li><strong>العائد المتوقع:</strong> 8-12% سنوياً من قيمة العقار</li>
-              <li><strong>أفضل المناطق:</strong> <Link href="/properties/district/first-district" className="text-orange-600 hover:underline">الحي الأول</Link> و<Link href="/properties/district/second-district" className="text-orange-600 hover:underline">الثاني</Link> (طلب إيجار عالي)</li>
+              <li><strong>أفضل المناطق:</strong> <Link href="/new-damietta/first-district" className="text-orange-600 hover:underline">الحي الأول</Link> و<Link href="/new-damietta/second-district" className="text-orange-600 hover:underline">الثاني</Link> (طلب إيجار عالي)</li>
               <li><strong>المساحات المفضلة:</strong> 90-120 متر (الأكثر طلباً)</li>
               <li><strong>نوع المستأجرين:</strong> موظفين، طلاب جامعة، عائلات صغيرة</li>
             </ul>
@@ -144,26 +144,26 @@ export default function InvestmentGuideArticle() {
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
               <li><strong>الربح المتوقع:</strong> 20-40% خلال 2-3 سنوات</li>
-              <li><strong>أفضل الفرص:</strong> الأحياء الجديدة (<Link href="/properties/district/fifth-district" className="text-orange-600 hover:underline">الخامس</Link> والسادس)</li>
+              <li><strong>أفضل الفرص:</strong> الأحياء الجديدة (<Link href="/new-damietta/fifth-district" className="text-orange-600 hover:underline">الخامس</Link> والسادس)</li>
               <li><strong>نصيحة:</strong> اشترِ بدون تشطيب، أضف قيمة بالتشطيب، ثم بِع</li>
             </ul>
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">3. الاستثمار في الأراضي</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
-              شراء <Link href="/properties/lands" className="text-orange-600 hover:underline font-semibold">أراضي في دمياط الجديدة</Link> 
+              شراء <Link href="/new-damietta" className="text-orange-600 hover:underline font-semibold">أراضي في دمياط الجديدة</Link> 
               يعتبر استثماراً طويل المدى بعوائد ممتازة. الأراضي في المناطق النامية ترتفع قيمتها 
               بشكل كبير مع اكتمال البنية التحتية.
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
               <li><strong>العائد المتوقع:</strong> 30-50% خلال 3-5 سنوات</li>
-              <li><strong>المناطق الواعدة:</strong> <Link href="/properties/district/beit-al-watan" className="text-orange-600 hover:underline">بيت الوطن</Link>، امتدادات الأحياء</li>
+              <li><strong>المناطق الواعدة:</strong> <Link href="/new-damietta/beit-al-watan" className="text-orange-600 hover:underline">بيت الوطن</Link>، امتدادات الأحياء</li>
               <li><strong>ميزة:</strong> لا تحتاج صيانة أو إدارة</li>
             </ul>
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">4. الاستثمار التجاري</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
-              شراء <Link href="/properties/shops" className="text-orange-600 hover:underline font-semibold">محلات تجارية</Link> أو 
-              <Link href="/properties/clinics" className="text-orange-600 hover:underline font-semibold"> عيادات</Link> 
+              شراء <Link href="/properties" className="text-orange-600 hover:underline font-semibold">محلات تجارية</Link> أو 
+              <Link href="/properties" className="text-orange-600 hover:underline font-semibold"> عيادات</Link> 
               يحقق عوائد إيجارية أعلى من السكني، مع عقود إيجار طويلة المدى.
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
@@ -192,9 +192,9 @@ export default function InvestmentGuideArticle() {
               إذا كان هدفك الدخل الإيجاري، فإن هذه المناطق توفر أعلى معدلات الإشغال:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li><Link href="/properties/district/first-district" className="text-orange-600 hover:underline font-semibold">الحي الأول</Link>: أعلى طلب إيجاري، خدمات متكاملة</li>
-              <li><Link href="/properties/district/second-district" className="text-orange-600 hover:underline font-semibold">الحي الثاني</Link>: توازن بين السعر والعائد</li>
-              <li><Link href="/properties/district/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link>: إيجارات فاخرة للمستأجرين المميزين</li>
+              <li><Link href="/new-damietta/first-district" className="text-orange-600 hover:underline font-semibold">الحي الأول</Link>: أعلى طلب إيجاري، خدمات متكاملة</li>
+              <li><Link href="/new-damietta/second-district" className="text-orange-600 hover:underline font-semibold">الحي الثاني</Link>: توازن بين السعر والعائد</li>
+              <li><Link href="/new-damietta/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link>: إيجارات فاخرة للمستأجرين المميزين</li>
             </ul>
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">المناطق ذات أعلى معدل نمو</h3>
@@ -202,9 +202,9 @@ export default function InvestmentGuideArticle() {
               إذا كنت تستثمر للمدى الطويل، هذه المناطق ستشهد أكبر ارتفاع في الأسعار:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li><Link href="/properties/district/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link>: مشاريع تطوير ضخمة قادمة</li>
+              <li><Link href="/new-damietta/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link>: مشاريع تطوير ضخمة قادمة</li>
               <li>الحي السادس (المتميز): أسعار دخول منخفضة مع توقعات نمو عالية</li>
-              <li><Link href="/properties/district/beit-al-watan" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link>: موقع استراتيجي بالقرب من الشاطئ</li>
+              <li><Link href="/new-damietta/beit-al-watan" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link>: موقع استراتيجي بالقرب من الشاطئ</li>
             </ul>
 
             <div className="bg-yellow-50 rounded-xl p-6 mb-6">

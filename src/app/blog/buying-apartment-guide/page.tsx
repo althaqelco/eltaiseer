@@ -121,7 +121,7 @@ export default function BuyingGuideArticle() {
               <li><strong>المناطق المتميزة:</strong> قد تصل إلى 4,000,000 جنيه للوحدات الفاخرة</li>
             </ul>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يمكنك استعراض <Link href="/properties/apartments" className="text-orange-600 hover:underline font-semibold">شقق للبيع في دمياط الجديدة</Link> 
+              يمكنك استعراض <Link href="/new-damietta" className="text-orange-600 hover:underline font-semibold">شقق للبيع في دمياط الجديدة</Link> 
               على موقعنا للاطلاع على الأسعار الحالية في السوق.
             </p>
 
@@ -136,23 +136,23 @@ export default function BuyingGuideArticle() {
             </p>
             <ul className="list-disc list-inside space-y-3 text-gray-700 mb-6">
               <li>
-                <Link href="/properties/district/first-district" className="text-orange-600 hover:underline font-semibold">الحي الأول</Link>: 
+                <Link href="/new-damietta/first-district" className="text-orange-600 hover:underline font-semibold">الحي الأول</Link>: 
                 من أقدم وأرقى الأحياء، يتميز بالخدمات المكتملة والموقع المركزي
               </li>
               <li>
-                <Link href="/properties/district/second-district" className="text-orange-600 hover:underline font-semibold">الحي الثاني</Link>: 
+                <Link href="/new-damietta/second-district" className="text-orange-600 hover:underline font-semibold">الحي الثاني</Link>: 
                 يوفر توازناً جيداً بين السعر والموقع، مثالي للعائلات
               </li>
               <li>
-                <Link href="/properties/district/third-district" className="text-orange-600 hover:underline font-semibold">الحي الثالث</Link>: 
+                <Link href="/new-damietta/third-district" className="text-orange-600 hover:underline font-semibold">الحي الثالث</Link>: 
                 أسعار معقولة مع توفر الخدمات الأساسية
               </li>
               <li>
-                <Link href="/properties/district/fourth-district" className="text-orange-600 hover:underline font-semibold">الحي الرابع</Link>: 
+                <Link href="/new-damietta/fourth-district" className="text-orange-600 hover:underline font-semibold">الحي الرابع</Link>: 
                 منطقة هادئة مناسبة للباحثين عن الخصوصية
               </li>
               <li>
-                <Link href="/properties/district/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link>: 
+                <Link href="/new-damietta/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link>: 
                 يشهد تطوراً سريعاً مع فرص استثمارية جيدة
               </li>
             </ul>
@@ -163,15 +163,15 @@ export default function BuyingGuideArticle() {
             </p>
             <ul className="list-disc list-inside space-y-3 text-gray-700 mb-6">
               <li>
-                <Link href="/properties/district/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link>: 
+                <Link href="/new-damietta/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link>: 
                 وحدات فاخرة بتشطيبات عالية الجودة
               </li>
               <li>
-                <Link href="/properties/district/dar-misr" className="text-orange-600 hover:underline font-semibold">دار مصر</Link>: 
+                <Link href="/new-damietta/dar-misr" className="text-orange-600 hover:underline font-semibold">دار مصر</Link>: 
                 تشطيب سوبر لوكس بأسعار تنافسية
               </li>
               <li>
-                <Link href="/properties/district/sakan-misr" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link>: 
+                <Link href="/new-damietta/sakan-misr" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link>: 
                 خيار اقتصادي مع مستوى تشطيب جيد
               </li>
             </ul>
@@ -301,7 +301,7 @@ export default function BuyingGuideArticle() {
               بأفضل سعر وبدون مشاكل قانونية.
             </p>
             <p className="text-gray-700 leading-relaxed mb-6">
-              لا تتردد في <Link href="/properties/apartments" className="text-orange-600 hover:underline font-semibold">تصفح شققنا المتاحة</Link> أو 
+              لا تتردد في <Link href="/properties" className="text-orange-600 hover:underline font-semibold">تصفح شققنا المتاحة</Link> أو 
               التواصل معنا للحصول على استشارة مجانية. نحن هنا لمساعدتك في العثور على منزل أحلامك.
             </p>
 
@@ -358,7 +358,7 @@ export default function BuyingGuideArticle() {
             <h3 className="text-2xl font-bold mb-4">هل أنت مستعد لشراء شقتك؟</h3>
             <p className="text-orange-100 mb-6">تصفح مئات الشقق المتاحة في دمياط الجديدة الآن</p>
             <Button asChild variant="secondary" size="lg">
-              <Link href="/properties/apartments">تصفح الشقق المتاحة</Link>
+              <Link href="/properties">تصفح الشقق المتاحة</Link>
             </Button>
           </div>
 

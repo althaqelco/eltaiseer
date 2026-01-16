@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Property } from "@/lib/mockData";
-import { getDistrictColor } from "@/lib/damiettaPlaces";
+import { getDistrictColor, CityId } from "@/lib/egyptPlaces";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -26,9 +26,69 @@ interface PropertyCardProps {
   onFavoriteChange?: () => void;
 }
 
+// Helper function to get district slug
+function getDistrictSlug(districtName: string): string {
+  const slugMap: Record<string, string> = {
+    "الحي الأول": "first-district",
+    "الحي الثاني": "second-district",
+    "الحي الثالث": "third-district",
+    "الحي الرابع": "fourth-district",
+    "الحي الخامس": "fifth-district",
+    "الحي السادس (المتميز)": "sixth-district",
+    "مشروع جنة": "janna-project",
+    "دار مصر - موقع 1": "dar-misr-1",
+    "دار مصر - موقع 2": "dar-misr-2",
+    "سكن مصر - جنوب الحي الأول": "sakan-misr-south",
+    "سكن مصر - غرب الجامعات": "sakan-misr-west",
+    "بيت الوطن - شرق": "beit-al-watan-east",
+    "بيت الوطن - غرب": "beit-al-watan-west",
+    "بيت الوطن - امتداد الشاطئ": "beit-al-watan-beach",
+    "المنطقة المركزية (أ)": "central-area-a",
+    "المنطقة المركزية (ب)": "central-area-b",
+    "المنطقة المركزية (ج)": "central-area-c",
+    "منطقة الشاليهات": "chalets",
+    "R1": "r1", "R2": "r2", "R3": "r3", "R4": "r4", "R5": "r5", "R6": "r6", "R7": "r7",
+    "الحي السكني الأول": "residential-1",
+    "الحي السكني الثاني": "residential-2",
+    "الحي السكني الثالث": "residential-3",
+    "سكن لكل المصريين": "sakan-kol-misryeen",
+    "سكن لكل المصريين 2": "sakan-kol-misryeen-2",
+    "سكن لكل المصريين 3": "sakan-kol-misryeen-3",
+    "دار مصر": "dar-misr",
+    "جنة": "janna",
+    "الإسكان المتوسط": "medium-housing",
+    "الإسكان الاجتماعي": "social-housing",
+    "حي الفيلات": "villas-district",
+    "منطقة الفيلات D": "villas-d",
+    "فيلات الجولف": "golf-villas",
+    "فيلات البحيرات": "lake-villas",
+    "داون تاون": "downtown",
+    "المول التجاري المركزي": "central-mall",
+    "منطقة الأعمال المركزية CBD": "cbd",
+    "المحور التجاري": "commercial-axis",
+    "منطقة الخدمات": "services-zone",
+    "الحديقة المركزية": "central-park",
+    "منطقة الكورنيش": "corniche",
+    "النادي الاجتماعي": "social-club",
+    "المنطقة السياحية": "touristic-zone",
+    "الواجهة البحرية": "waterfront",
+    "شاطئ المنصورة الجديدة": "beach",
+    "منتجعات الساحل": "coastal-resorts",
+  };
+  return slugMap[districtName] || districtName.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "");
+}
+
+// Get property URL with new structure
+function getPropertyUrl(property: Property): string {
+  const citySlug = (property.location.cityId || "new-damietta") as CityId;
+  const districtSlug = getDistrictSlug(property.location.district);
+  return `/${citySlug}/${districtSlug}/${property.id}`;
+}
+
 export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) {
   const districtColor = getDistrictColor(property.location.district);
   const [isFav, setIsFav] = useState(false);
+  const propertyUrl = getPropertyUrl(property);
 
   useEffect(() => {
     setIsFav(isFavorite(property.id));
@@ -54,9 +114,9 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const propertyUrl = `${window.location.origin}/property/${property.id}`;
+    const propertyFullUrl = `${window.location.origin}${propertyUrl}`;
     const message = encodeURIComponent(
-      `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}\nرابط العقار: ${propertyUrl}`
+      `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}\nرابط العقار: ${propertyFullUrl}`
     );
     window.open(
       `https://wa.me/2${property.contact_whatsapp}?text=${message}`,
@@ -73,7 +133,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
   return (
     <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-0 bg-white rounded-xl">
       {/* Image Container */}
-      <Link href={`/property/${property.id}`} className="block">
+      <Link href={propertyUrl} className="block">
         <div className="relative h-40 sm:h-48 overflow-hidden cursor-pointer">
           <Image
             src={property.images[0]}
@@ -152,14 +212,25 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
 
       <CardContent className="p-3 sm:p-4 space-y-2 sm:space-y-3">
         {/* Title - Clickable */}
-        <Link href={`/property/${property.id}`} className="block hover:text-orange-500 transition-colors">
+        <Link href={propertyUrl} className="block hover:text-orange-500 transition-colors">
         <h3 className="font-semibold text-base sm:text-lg line-clamp-2 text-gray-800 leading-relaxed">
             {property.title}
           </h3>
         </Link>
 
         {/* Location Badge */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* City Badge */}
+          <Badge
+            className={`${
+              property.location.cityId === "new-mansoura" 
+                ? "bg-emerald-500 hover:bg-emerald-600" 
+                : "bg-orange-500 hover:bg-orange-600"
+            } text-white border-0 text-xs`}
+          >
+            {property.location.city || "دمياط الجديدة"}
+          </Badge>
+          {/* District Badge */}
           <Badge
             className={`${districtColor} text-white hover:opacity-90 border-0`}
           >
@@ -217,7 +288,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
           variant="outline"
           className="flex-1 gap-1 sm:gap-2 text-xs sm:text-sm h-9 sm:h-10"
         >
-          <Link href={`/property/${property.id}`}>
+          <Link href={propertyUrl}>
             <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
             التفاصيل
           </Link>
