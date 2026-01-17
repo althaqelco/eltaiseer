@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "المدونة | نصائح ومقالات عقارية",
-  description: "مقالات ونصائح عقارية من خبراء التيسير للعقارات - كل ما تحتاج معرفته عن سوق العقارات في دمياط الجديدة",
+  description: "مقالات ونصائح عقارية من خبراء التيسير للعقارات - كل ما تحتاج معرفته عن سوق العقارات في دمياط الجديدة والمنصورة الجديدة",
   alternates: {
     canonical: "https://eltaiseer.com/blog",
   },
@@ -24,52 +24,79 @@ const blogPosts = [
     excerpt: "كل ما تحتاج معرفته قبل شراء شقتك في دمياط الجديدة، من اختيار المنطقة المناسبة إلى التفاوض على السعر والإجراءات القانونية.",
     image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
     category: "نصائح الشراء",
+    categoryColor: "bg-orange-500",
     date: "15 يناير 2025",
     readTime: "12 دقيقة",
   },
   {
     id: 2,
+    slug: "new-mansoura-districts",
+    title: "أفضل المناطق للسكن في المنصورة الجديدة 2025",
+    excerpt: "دليل شامل لأحياء المنصورة الجديدة من R1 إلى R7، حي الفيلات، داون تاون، والواجهة البحرية. الأسعار والمميزات لكل منطقة.",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
+    category: "المنصورة الجديدة",
+    categoryColor: "bg-emerald-500",
+    date: "17 يناير 2025",
+    readTime: "18 دقيقة",
+  },
+  {
+    id: 3,
+    slug: "new-mansoura-investment",
+    title: "الاستثمار العقاري في المنصورة الجديدة: دليل المستثمر الذكي",
+    excerpt: "فرص الاستثمار الذهبية في المنصورة الجديدة. عوائد تصل إلى 40% خلال 3 سنوات، أفضل المناطق للشراء، ونصائح الخبراء.",
+    image: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=800",
+    category: "استثمار",
+    categoryColor: "bg-emerald-600",
+    date: "17 يناير 2025",
+    readTime: "20 دقيقة",
+  },
+  {
+    id: 4,
     slug: "best-districts",
     title: "أفضل الأحياء للسكن في دمياط الجديدة 2025",
     excerpt: "مقارنة شاملة بين أحياء دمياط الجديدة من حيث الخدمات والأسعار والموقع. دليلك لاختيار المنطقة المناسبة.",
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
     category: "المناطق",
+    categoryColor: "bg-orange-500",
     date: "10 يناير 2025",
     readTime: "15 دقيقة",
   },
   {
-    id: 3,
+    id: 5,
     slug: "national-housing-projects",
     title: "مشاريع الإسكان القومية في دمياط الجديدة",
     excerpt: "دليل شامل لمشاريع جنة ودار مصر وسكن مصر وبيت الوطن. الأسعار والمميزات وطرق الحجز.",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
     category: "المشاريع",
+    categoryColor: "bg-orange-500",
     date: "5 يناير 2025",
     readTime: "14 دقيقة",
   },
   {
-    id: 4,
+    id: 6,
     slug: "investment-guide",
     title: "الاستثمار العقاري في دمياط الجديدة: دليل المستثمر",
     excerpt: "فرص الاستثمار العقاري والعائد المتوقع. كيف تحقق أرباحاً من العقارات في دمياط الجديدة.",
     image: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=800",
     category: "الاستثمار",
+    categoryColor: "bg-orange-500",
     date: "1 يناير 2025",
     readTime: "15 دقيقة",
   },
   {
-    id: 5,
+    id: 7,
     slug: "finishing-tips",
     title: "نصائح التشطيب الذكي بأقل تكلفة وأعلى جودة",
     excerpt: "دليل شامل لتشطيب الشقق. كيف تشطب شقتك بجودة عالية وتكلفة معقولة مع تجنب الأخطاء الشائعة.",
     image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800",
     category: "التشطيب",
+    categoryColor: "bg-orange-500",
     date: "28 ديسمبر 2024",
     readTime: "18 دقيقة",
   },
 ];
 
-const categories = ["الكل", "نصائح الشراء", "المناطق", "تقييم العقارات", "المشاريع", "التشطيب", "الاستثمار"];
+const categories = ["الكل", "نصائح الشراء", "المناطق", "المنصورة الجديدة", "المشاريع", "التشطيب", "استثمار"];
 
 export default function BlogPage() {
   return (
@@ -102,18 +129,17 @@ export default function BlogPage() {
       </div>
 
       <main className="container mx-auto px-4 py-12">
-        
+
         {/* Categories */}
         <div className="flex flex-wrap gap-3 justify-center mb-10">
           {categories.map((category) => (
             <Badge
               key={category}
               variant={category === "الكل" ? "default" : "outline"}
-              className={`cursor-pointer text-sm px-4 py-2 ${
-                category === "الكل" 
-                  ? "bg-orange-500 hover:bg-orange-600" 
-                  : "hover:bg-gray-100 border-gray-300 text-gray-700"
-              }`}
+              className={`cursor-pointer text-sm px-4 py-2 ${category === "الكل"
+                ? "bg-orange-500 hover:bg-orange-600"
+                : "hover:bg-gray-100 border-gray-300 text-gray-700"
+                }`}
             >
               {category}
             </Badge>
@@ -132,7 +158,7 @@ export default function BlogPage() {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <Badge className="absolute top-4 right-4 bg-orange-500">
+                  <Badge className={`absolute top-4 right-4 ${post.categoryColor || "bg-orange-500"}`}>
                     {post.category}
                   </Badge>
                 </div>
