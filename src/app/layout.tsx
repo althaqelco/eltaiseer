@@ -108,7 +108,13 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_CODE",
+    google: "google-site-verification-code",
+    yandex: "yandex-verification-code",
+  },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "format-detection": "telephone=yes",
   },
   category: "real estate",
   classification: "Business",
@@ -158,6 +164,80 @@ export default function RootLayout({
     },
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "ما هي أسعار الشقق في دمياط الجديدة 2026؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "تتراوح أسعار الشقق في دمياط الجديدة من 500,000 جنيه للشقق الصغيرة حتى 5 مليون جنيه للدوبلكس والبنتهاوس. الأسعار تختلف حسب الحي والمساحة ومستوى التشطيب."
+        }
+      },
+      {
+        "@type": "Question",
+        name: "ما هي أفضل الأحياء للسكن في دمياط الجديدة؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "أفضل الأحياء تشمل الحي الأول والثاني والثالث للموقع المتميز، ومشروع جنة ودار مصر وسكن مصر للمشاريع القومية بأسعار مدعومة."
+        }
+      },
+      {
+        "@type": "Question",
+        name: "هل يوجد تقسيط للشقق في دمياط الجديدة؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "نعم، توجد خيارات تقسيط تصل حتى 10 سنوات مع مقدمات تبدأ من 10%. التيسير للعقارات يوفر خيارات دفع مرنة تناسب جميع الميزانيات."
+        }
+      },
+      {
+        "@type": "Question",
+        name: "ما هي أسعار الشقق في المنصورة الجديدة 2026؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "تبدأ أسعار الشقق في المنصورة الجديدة من 600,000 جنيه في مشاريع سكن لكل المصريين، وتصل إلى 8 مليون جنيه للفيلات في حي الفيلات والداون تاون."
+        }
+      },
+      {
+        "@type": "Question",
+        name: "ما الفرق بين دمياط الجديدة والمنصورة الجديدة؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "دمياط الجديدة مدينة مكتملة بها جميع الخدمات، بينما المنصورة الجديدة مدينة الجيل الرابع قيد التطوير مع إمكانيات استثمارية عالية وتخطيط عالمي."
+        }
+      }
+    ]
+  };
+
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://eltaiseer.com/#localbusiness",
+    name: "التيسير للعقارات",
+    image: "https://eltaiseer.com/logo.png",
+    telephone: "+201558245974",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "دمياط الجديدة",
+      addressLocality: "دمياط الجديدة",
+      addressRegion: "دمياط",
+      postalCode: "34511",
+      addressCountry: "EG"
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 31.4175,
+      longitude: 31.8144
+    },
+    url: "https://eltaiseer.com",
+    openingHours: "Mo-Sa 09:00-21:00",
+    priceRange: "$$",
+    paymentAccepted: "Cash, Bank Transfer",
+    currenciesAccepted: "EGP"
+  };
+
   return (
     <html lang="ar" dir="rtl">
       <head>
@@ -178,6 +258,14 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
       </head>
       <body
