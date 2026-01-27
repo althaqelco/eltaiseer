@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, Menu, Home, Heart, MapPin, ChevronDown, Building2, Landmark, Waves, X, TreePine, Building, Palmtree } from "lucide-react";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { trackEvent } from "@/components/MetaPixel";
 
 // دمياط الجديدة
 const ND_DISTRICT_MENU = [
@@ -159,7 +160,7 @@ export function Header() {
               <Home className="h-4 w-4" />
               الرئيسية
             </Link>
-            
+
             <Link
               href="/properties"
               className="text-gray-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-lg hover:bg-orange-50"
@@ -187,11 +188,10 @@ export function Header() {
                       <button
                         key={city.id}
                         onClick={() => setSelectedCity(city)}
-                        className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                          selectedCity.id === city.id
-                            ? `${city.bgColor} text-white`
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                        }`}
+                        className={`px-4 py-2 rounded-lg font-semibold transition-colors ${selectedCity.id === city.id
+                          ? `${city.bgColor} text-white`
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          }`}
                       >
                         {city.name}
                       </button>
@@ -253,12 +253,17 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
-            <Link href="tel:+201558245974">
-              <Button className="bg-orange-500 hover:bg-orange-600 gap-2">
-                <Phone className="h-4 w-4" />
-                تواصل معنا
-              </Button>
-            </Link>
+            <div className="hidden md:flex items-center gap-4">
+              <Link
+                href="tel:+201558245974"
+                onClick={() => trackEvent.phoneCall("general", "Header Contact Button")}
+              >
+                <Button className="bg-orange-500 hover:bg-orange-600 gap-2">
+                  <Phone className="h-4 w-4" />
+                  تواصل معنا
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -284,7 +289,7 @@ export function Header() {
                 <Home className="h-4 w-4" />
                 الرئيسية
               </Link>
-              
+
               <Link
                 href="/properties"
                 onClick={() => setMobileMenuOpen(false)}
@@ -314,11 +319,10 @@ export function Header() {
                         <button
                           key={city.id}
                           onClick={() => setSelectedCity(city)}
-                          className={`flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                            selectedCity.id === city.id
-                              ? `${city.bgColor} text-white`
-                              : "bg-gray-100 text-gray-600"
-                          }`}
+                          className={`flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${selectedCity.id === city.id
+                            ? `${city.bgColor} text-white`
+                            : "bg-gray-100 text-gray-600"
+                            }`}
                         >
                           {city.name}
                         </button>
@@ -366,7 +370,13 @@ export function Header() {
                 المدونة
               </Link>
 
-              <Link href="tel:+201558245974" onClick={() => setMobileMenuOpen(false)}>
+              <Link
+                href="tel:+201558245974"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  trackEvent.phoneCall("general", "Mobile Menu Contact Button");
+                }}
+              >
                 <Button className="bg-orange-500 hover:bg-orange-600 gap-2 w-full mt-2">
                   <Phone className="h-4 w-4" />
                   تواصل معنا

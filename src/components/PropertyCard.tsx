@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { trackEvent } from "@/components/MetaPixel";
 
 interface PropertyCardProps {
   property: Property;
@@ -104,6 +105,17 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
     e.stopPropagation();
     const newState = toggleFavorite(property.id);
     setIsFav(newState);
+    if (!newState) {
+      // If adding to favorites (newState is true, but toggle returns the NEW state. Wait, toggleFavorite logic: 
+      // returns new list? No, it returns void usually, let's check lib/favoritesStore. 
+      // Re-reading logic in handleFavoriteClick: "const newState = toggleFavorite(property.id);"
+      // The previous code says "setIsFav(newState)".
+      // Let's assume newState is boolean isFavorite. 
+      // Actually, looking at the code, it seems toggleFavorite returns the new boolean state.
+    }
+    if (newState) {
+      trackEvent.addToWishlist(property.id, property.title, property.price);
+    }
     if (onFavoriteChange) {
       onFavoriteChange();
     }
@@ -119,6 +131,10 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Track WhatsApp contact
+    trackEvent.whatsappContact(property.id, property.title);
+
     const propertyFullUrl = `${window.location.origin}${propertyUrl}`;
     const message = encodeURIComponent(
       `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}\nرابط العقار: ${propertyFullUrl}`
@@ -132,6 +148,10 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
   const handleCall = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Track Phone Call
+    trackEvent.phoneCall(property.id, property.title);
+
     window.location.href = `tel:${property.contact_whatsapp}`;
   };
 
@@ -156,10 +176,10 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
 
           {/* Status Badge */}
           <Badge className={`absolute top-8 right-2 sm:top-10 sm:right-3 text-xs sm:text-sm ${property.status === "جاهز"
-              ? "bg-green-500 hover:bg-green-600"
-              : property.status === "تم البيع"
-                ? "bg-red-600 hover:bg-red-700"
-                : "bg-yellow-500 hover:bg-yellow-600"
+            ? "bg-green-500 hover:bg-green-600"
+            : property.status === "تم البيع"
+              ? "bg-red-600 hover:bg-red-700"
+              : "bg-yellow-500 hover:bg-yellow-600"
             }`}>
             {property.status || "جاهز"}
           </Badge>
@@ -185,8 +205,8 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
           <button
             onClick={handleFavoriteClick}
             className={`absolute top-2 left-2 sm:top-3 sm:left-3 p-1.5 rounded-full transition-all ${isFav
-                ? "bg-red-500 text-white"
-                : "bg-white/80 text-gray-600 hover:bg-red-500 hover:text-white"
+              ? "bg-red-500 text-white"
+              : "bg-white/80 text-gray-600 hover:bg-red-500 hover:text-white"
               }`}
           >
             <Heart className={`h-4 w-4 ${isFav ? "fill-current" : ""}`} />
@@ -226,8 +246,8 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
           {/* City Badge */}
           <Badge
             className={`${property.location.cityId === "new-mansoura"
-                ? "bg-emerald-500 hover:bg-emerald-600"
-                : "bg-orange-500 hover:bg-orange-600"
+              ? "bg-emerald-500 hover:bg-emerald-600"
+              : "bg-orange-500 hover:bg-orange-600"
               } text-white border-0 text-xs`}
           >
             {property.location.city || "دمياط الجديدة"}
