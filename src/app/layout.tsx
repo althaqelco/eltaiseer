@@ -3,6 +3,8 @@ import { Cairo } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/authContext";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { MetaPixel } from "@/components/MetaPixel";
+import { Suspense } from "react";
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -271,6 +273,9 @@ export default function RootLayout({
       <body
         className={`${cairo.variable} font-sans antialiased bg-gray-50`}
       >
+        <Suspense fallback={null}>
+          <MetaPixel />
+        </Suspense>
         <AuthProvider>
           {children}
           <FloatingWhatsApp />

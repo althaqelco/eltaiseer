@@ -30,6 +30,7 @@ import { getPropertyByIdAsync, getRelatedPropertiesAsync } from "@/lib/propertyS
 import { CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { PropertyCard } from "@/components/PropertyCard";
+import { trackEvent } from "@/components/MetaPixel";
 
 const VALID_CITIES = ["new-damietta", "new-mansoura"];
 
@@ -93,6 +94,8 @@ export default function PropertyDetailPage() {
     } else {
       favorites.push(property.id);
       localStorage.setItem("favorites", JSON.stringify(favorites));
+      // Track add to wishlist via Meta Pixel
+      trackEvent.addToWishlist(property.id, property.title, property.price);
     }
     setIsFavorite(!isFavorite);
   };
@@ -104,11 +107,17 @@ export default function PropertyDetailPage() {
         text: `${property.type} للبيع في ${property.location.district}`,
         url: window.location.href,
       });
+      // Track share via Meta Pixel
+      trackEvent.share(property.id, "native_share");
     }
   };
 
   const handleWhatsApp = () => {
     if (!property) return;
+    // Track WhatsApp contact via Meta Pixel
+    trackEvent.whatsappContact(property.id, property.title);
+    trackEvent.inquiry(property.id, property.title, "WhatsApp");
+
     const message = encodeURIComponent(
       `مرحباً، أريد الاستفسار عن هذا العقار:\n${property.title}\n${property.type} في ${property.location.district}\nالسعر: ${formatPrice(property.price)}\nالرابط: ${window.location.href}`
     );
@@ -122,12 +131,19 @@ export default function PropertyDetailPage() {
     return `${price.toLocaleString("ar-EG")} جنيه`;
   };
 
-  // Dynamic SEO
+  // Dynamic SEO and Property View Tracking
   useEffect(() => {
     if (property) {
       document.title = `${property.title} | ${property.type} للبيع في ${property.location.district} - التيسير للعقارات`;
+      // Track property view via Meta Pixel
+      trackEvent.propertyView(
+        property.id,
+        property.title,
+        property.price,
+        property.location.city || city?.nameAr
+      );
     }
-  }, [property]);
+  }, [property, city?.nameAr]);
 
   const themeColor = isNM ? "emerald" : "orange";
 
