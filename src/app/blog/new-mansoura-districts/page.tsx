@@ -5,9 +5,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, MapPin, CheckCircle, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ArticleSchema } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
-    title: "أفضل المناطق للسكن في المنصورة الجديدة 2025 | دليل شامل",
+    title: "أفضل المناطق للسكن في المنصورة الجديدة 2026 | دليل شامل",
     description: "دليل تفصيلي لأفضل المناطق السكنية في المنصورة الجديدة. مقارنة شاملة بين أحياء R1 وR2 وR3 والفيلات وداون تاون من حيث الأسعار والخدمات والموقع.",
     keywords: [
         "أحياء المنصورة الجديدة",
@@ -20,10 +21,10 @@ export const metadata: Metadata = {
         "فيلات المنصورة الجديدة",
     ],
     openGraph: {
-        title: "أفضل المناطق للسكن في المنصورة الجديدة 2025",
+        title: "أفضل المناطق للسكن في المنصورة الجديدة 2026",
         description: "دليل شامل لأحياء ومناطق المنصورة الجديدة - اكتشف المنطقة المناسبة لك",
         type: "article",
-        publishedTime: "2025-01-17",
+        publishedTime: "2026-01-17",
         images: [
             {
                 url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200",
@@ -41,6 +42,13 @@ export const metadata: Metadata = {
 export default function NewMansouraDistrictsArticle() {
     return (
         <div className="min-h-screen bg-gray-50">
+            <ArticleSchema
+                title="أفضل المناطق للسكن في المنصورة الجديدة 2026 | دليل شامل"
+                description="دليل تفصيلي لأفضل المناطق السكنية في المنصورة الجديدة. مقارنة بين أحياء R1 وR2 وR3 والفيلات وداون تاون."
+                url="https://eltaiseer.com/blog/new-mansoura-districts"
+                image="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200"
+                datePublished="2026-01-17"
+            />
             <Header />
 
             {/* Breadcrumb */}

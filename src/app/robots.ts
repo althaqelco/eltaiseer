@@ -56,6 +56,36 @@ export default function robots(): MetadataRoute.Robots {
         allow: ["/"],
         disallow: ["/dashboard/", "/api/"],
       },
+      {
+        userAgent: "Google-Extended",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "Bytespider",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "CCBot",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "Applebot-Extended",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "cohere-ai",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "Meta-ExternalAgent",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   };

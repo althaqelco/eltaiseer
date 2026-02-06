@@ -109,6 +109,51 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function DistrictLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+export default async function DistrictLayout({ children, params }: { children: React.ReactNode; params: Promise<{ city: string; district: string }> }) {
+  const { city, district } = await params;
+  const districtName = DISTRICT_NAMES[district] || district.replace(/-/g, " ");
+  const isNM = city === "new-mansoura";
+  const cityName = isNM ? "المنصورة الجديدة" : "دمياط الجديدة";
+  const citySlug = isNM ? "new-mansoura" : "new-damietta";
+
+  const neighborhoodSchema = {
+    "@context": "https://schema.org",
+    "@type": "Place",
+    additionalType: "https://schema.org/Neighborhood",
+    name: districtName,
+    url: `https://eltaiseer.com/${citySlug}/${district}`,
+    description: `${districtName} - منطقة سكنية في ${cityName}. تصفح شقق وفيلات وأراضي للبيع في ${districtName} بأسعار تنافسية.`,
+    containedInPlace: {
+      "@type": "City",
+      name: cityName,
+      containedInPlace: {
+        "@type": "Country",
+        name: "مصر",
+      },
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "الرئيسية", item: "https://eltaiseer.com" },
+      { "@type": "ListItem", position: 2, name: cityName, item: `https://eltaiseer.com/${citySlug}` },
+      { "@type": "ListItem", position: 3, name: districtName, item: `https://eltaiseer.com/${citySlug}/${district}` },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(neighborhoodSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      {children}
+    </>
+  );
 }

@@ -8,6 +8,8 @@ export const metadata: Metadata = {
     "شاليه على البحر دمياط",
     "شاليهات دمياط الجديدة",
     "شاليه بحمام سباحة",
+    "شاليهات المنصورة الجديدة",
+    "شاليه الواجهة البحرية المنصورة الجديدة",
   ],
   openGraph: {
     title: "شاليهات للبيع في دمياط الجديدة",
@@ -18,5 +20,22 @@ export const metadata: Metadata = {
 };
 
 export default function ChaletsLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة",
+    description: "شاليهات فاخرة بإطلالات بحرية مباشرة",
+    url: "https://eltaiseer.com/properties/chalets",
+    itemListOrder: "https://schema.org/ItemListUnordered",
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      {children}
+    </>
+  );
 }

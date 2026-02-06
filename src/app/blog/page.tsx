@@ -20,23 +20,23 @@ const blogPosts = [
   {
     id: 1,
     slug: "buying-apartment-guide",
-    title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2025",
+    title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026",
     excerpt: "كل ما تحتاج معرفته قبل شراء شقتك في دمياط الجديدة، من اختيار المنطقة المناسبة إلى التفاوض على السعر والإجراءات القانونية.",
     image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
     category: "نصائح الشراء",
     categoryColor: "bg-orange-500",
-    date: "15 يناير 2025",
+    date: "15 يناير 2026",
     readTime: "12 دقيقة",
   },
   {
     id: 2,
     slug: "new-mansoura-districts",
-    title: "أفضل المناطق للسكن في المنصورة الجديدة 2025",
+    title: "أفضل المناطق للسكن في المنصورة الجديدة 2026",
     excerpt: "دليل شامل لأحياء المنصورة الجديدة من R1 إلى R7، حي الفيلات، داون تاون، والواجهة البحرية. الأسعار والمميزات لكل منطقة.",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
     category: "المنصورة الجديدة",
     categoryColor: "bg-emerald-500",
-    date: "17 يناير 2025",
+    date: "17 يناير 2026",
     readTime: "18 دقيقة",
   },
   {
@@ -47,18 +47,18 @@ const blogPosts = [
     image: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=800",
     category: "استثمار",
     categoryColor: "bg-emerald-600",
-    date: "17 يناير 2025",
+    date: "17 يناير 2026",
     readTime: "20 دقيقة",
   },
   {
     id: 4,
     slug: "best-districts",
-    title: "أفضل الأحياء للسكن في دمياط الجديدة 2025",
+    title: "أفضل الأحياء للسكن في دمياط الجديدة 2026",
     excerpt: "مقارنة شاملة بين أحياء دمياط الجديدة من حيث الخدمات والأسعار والموقع. دليلك لاختيار المنطقة المناسبة.",
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
     category: "المناطق",
     categoryColor: "bg-orange-500",
-    date: "10 يناير 2025",
+    date: "10 يناير 2026",
     readTime: "15 دقيقة",
   },
   {
@@ -69,7 +69,7 @@ const blogPosts = [
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
     category: "المشاريع",
     categoryColor: "bg-orange-500",
-    date: "5 يناير 2025",
+    date: "5 يناير 2026",
     readTime: "14 دقيقة",
   },
   {
@@ -80,7 +80,7 @@ const blogPosts = [
     image: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=800",
     category: "الاستثمار",
     categoryColor: "bg-orange-500",
-    date: "1 يناير 2025",
+    date: "1 يناير 2026",
     readTime: "15 دقيقة",
   },
   {
@@ -91,7 +91,7 @@ const blogPosts = [
     image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800",
     category: "التشطيب",
     categoryColor: "bg-orange-500",
-    date: "28 ديسمبر 2024",
+    date: "28 يناير 2026",
     readTime: "18 دقيقة",
   },
 ];
@@ -99,8 +99,31 @@ const blogPosts = [
 const categories = ["الكل", "نصائح الشراء", "المناطق", "المنصورة الجديدة", "المشاريع", "التشطيب", "استثمار"];
 
 export default function BlogPage() {
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "المدونة العقارية | التيسير للعقارات",
+    description: "مقالات ونصائح عقارية من خبراء التيسير للعقارات عن سوق العقارات في دمياط الجديدة والمنصورة الجديدة",
+    url: "https://eltaiseer.com/blog",
+    isPartOf: { "@type": "WebSite", "@id": "https://eltaiseer.com/#website" },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: blogPosts.length,
+      itemListElement: blogPosts.map((post, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `https://eltaiseer.com/blog/${post.slug}`,
+        name: post.title,
+      })),
+    },
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
       <Header />
 
       {/* Breadcrumb */}

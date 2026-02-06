@@ -147,7 +147,13 @@ export default function RootLayout({
       { "@type": "City", name: "دمياط الجديدة" },
       { "@type": "City", name: "المنصورة الجديدة" }
     ],
+    sameAs: [
+      "https://wa.me/201558245974",
+    ],
     priceRange: "$$",
+    foundingDate: "2024",
+    numberOfEmployees: { "@type": "QuantitativeValue", value: "5-10" },
+    knowsAbout: ["عقارات دمياط الجديدة", "عقارات المنصورة الجديدة", "بيع شقق", "بيع فيلات", "بيع أراضي"],
   };
 
   const websiteSchema = {
@@ -237,7 +243,8 @@ export default function RootLayout({
     openingHours: "Mo-Sa 09:00-21:00",
     priceRange: "$$",
     paymentAccepted: "Cash, Bank Transfer",
-    currenciesAccepted: "EGP"
+    currenciesAccepted: "EGP",
+    hasMap: "https://maps.google.com/?q=31.4175,31.8144",
   };
 
   return (

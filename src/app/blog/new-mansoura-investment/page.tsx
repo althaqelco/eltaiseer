@@ -5,9 +5,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, TrendingUp, Building2, DollarSign, CheckCircle, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ArticleSchema } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
-    title: "الاستثمار العقاري في المنصورة الجديدة 2025 | دليل المستثمر الذكي",
+    title: "الاستثمار العقاري في المنصورة الجديدة 2026 | دليل المستثمر الذكي",
     description: "دليل شامل للاستثمار العقاري في المنصورة الجديدة. فرص الاستثمار، العوائد المتوقعة، أفضل المناطق للشراء، ونصائح الخبراء لتحقيق أرباح مضاعفة.",
     keywords: [
         "استثمار عقاري المنصورة الجديدة",
@@ -19,10 +20,10 @@ export const metadata: Metadata = {
         "عقارات للاستثمار",
     ],
     openGraph: {
-        title: "الاستثمار العقاري في المنصورة الجديدة 2025 - دليل المستثمر",
+        title: "الاستثمار العقاري في المنصورة الجديدة 2026 - دليل المستثمر",
         description: "اكتشف فرص الاستثمار الذهبية في المنصورة الجديدة - عوائد تصل إلى 40% خلال 3 سنوات",
         type: "article",
-        publishedTime: "2025-01-17",
+        publishedTime: "2026-01-17",
         images: [
             {
                 url: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200",
@@ -40,6 +41,13 @@ export const metadata: Metadata = {
 export default function NewMansouraInvestmentArticle() {
     return (
         <div className="min-h-screen bg-gray-50">
+            <ArticleSchema
+                title="الاستثمار العقاري في المنصورة الجديدة 2026 | دليل المستثمر الذكي"
+                description="دليل شامل للاستثمار العقاري في المنصورة الجديدة. فرص الاستثمار، العوائد المتوقعة، وأفضل المناطق للشراء."
+                url="https://eltaiseer.com/blog/new-mansoura-investment"
+                image="https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200"
+                datePublished="2026-01-17"
+            />
             <Header />
 
             {/* Breadcrumb */}

@@ -5,9 +5,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, TrendingUp, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ArticleSchema } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
-  title: "الاستثمار العقاري في دمياط الجديدة 2025 | دليل المستثمر الذكي",
+  title: "الاستثمار العقاري في دمياط الجديدة 2026 | دليل المستثمر الذكي",
   description: "دليل شامل للاستثمار العقاري في دمياط الجديدة. تعرف على أفضل المناطق للاستثمار، العائد المتوقع، نصائح الخبراء، وكيفية تحقيق أرباح من العقارات.",
   keywords: [
     "استثمار عقاري دمياط الجديدة",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     title: "الاستثمار العقاري في دمياط الجديدة 2025",
     description: "دليل شامل لتحقيق أرباح من الاستثمار العقاري في دمياط الجديدة",
     type: "article",
-    publishedTime: "2025-01-01",
+    publishedTime: "2026-01-01",
     images: [
       {
         url: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200",
@@ -39,6 +40,13 @@ export const metadata: Metadata = {
 export default function InvestmentGuideArticle() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <ArticleSchema
+        title="الاستثمار العقاري في دمياط الجديدة 2026 | دليل المستثمر الذكي"
+        description="دليل شامل للاستثمار العقاري في دمياط الجديدة. أفضل المناطق للاستثمار، العائد المتوقع، ونصائح الخبراء."
+        url="https://eltaiseer.com/blog/investment-guide"
+        image="https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200"
+        datePublished="2026-01-01"
+      />
       <Header />
 
       {/* Breadcrumb */}

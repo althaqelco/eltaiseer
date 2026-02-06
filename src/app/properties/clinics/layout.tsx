@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     "مجمع طبي دمياط الجديدة",
     "عيادة أسنان للبيع",
     "عقارات طبية دمياط",
+    "عيادات للبيع المنصورة الجديدة",
+    "مجمع طبي المنصورة الجديدة",
   ],
   openGraph: {
     title: "عيادات للبيع في دمياط الجديدة",
@@ -19,5 +21,22 @@ export const metadata: Metadata = {
 };
 
 export default function ClinicsLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "عيادات للبيع في دمياط الجديدة والمنصورة الجديدة",
+    description: "عيادات طبية جاهزة بتراخيص في مجمعات طبية",
+    url: "https://eltaiseer.com/properties/clinics",
+    itemListOrder: "https://schema.org/ItemListUnordered",
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      {children}
+    </>
+  );
 }

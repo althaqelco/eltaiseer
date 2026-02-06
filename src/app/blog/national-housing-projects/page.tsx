@@ -5,9 +5,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, Building2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ArticleSchema } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
-  title: "مشاريع الإسكان القومية في دمياط الجديدة 2025 | جنة - دار مصر - سكن مصر",
+  title: "مشاريع الإسكان القومية في دمياط الجديدة 2026 | جنة - دار مصر - سكن مصر",
   description: "دليل شامل لمشاريع الإسكان القومية في دمياط الجديدة: مشروع جنة، دار مصر، سكن مصر. تعرف على الأسعار، المساحات، طرق الحجز، والمميزات.",
   keywords: [
     "مشروع جنة دمياط الجديدة",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     title: "مشاريع الإسكان القومية في دمياط الجديدة 2025",
     description: "كل ما تحتاج معرفته عن مشاريع جنة ودار مصر وسكن مصر",
     type: "article",
-    publishedTime: "2025-01-05",
+    publishedTime: "2026-01-05",
     images: [
       {
         url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200",
@@ -39,6 +40,13 @@ export const metadata: Metadata = {
 export default function NationalHousingArticle() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <ArticleSchema
+        title="مشاريع الإسكان القومية في دمياط الجديدة 2026 | جنة - دار مصر - سكن مصر"
+        description="دليل شامل لمشاريع الإسكان القومية في دمياط الجديدة: مشروع جنة، دار مصر، سكن مصر. الأسعار، المساحات، طرق الحجز."
+        url="https://eltaiseer.com/blog/national-housing-projects"
+        image="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200"
+        datePublished="2026-01-05"
+      />
       <Header />
 
       {/* Breadcrumb */}

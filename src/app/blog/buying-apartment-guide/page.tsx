@@ -5,9 +5,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ArticleSchema } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
-  title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2025 | نصائح الخبراء",
+  title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026 | نصائح الخبراء",
   description: "دليل شامل ومفصل لشراء شقة في دمياط الجديدة. تعرف على أفضل المناطق، الأسعار، نصائح التفاوض، والإجراءات القانونية. كل ما تحتاج معرفته قبل شراء شقتك.",
   keywords: [
     "شراء شقة دمياط الجديدة",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2025",
     description: "كل ما تحتاج معرفته قبل شراء شقتك في دمياط الجديدة - نصائح الخبراء",
     type: "article",
-    publishedTime: "2025-01-15",
+    publishedTime: "2026-01-15",
     authors: ["التيسير للعقارات"],
     images: [
       {
@@ -40,6 +41,21 @@ export const metadata: Metadata = {
 export default function BuyingGuideArticle() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <ArticleSchema
+        title="دليلك الشامل لشراء شقة في دمياط الجديدة 2026 | نصائح الخبراء"
+        description="دليل شامل ومفصل لشراء شقة في دمياط الجديدة. تعرف على أفضل المناطق، الأسعار، نصائح التفاوض، والإجراءات القانونية."
+        url="https://eltaiseer.com/blog/buying-apartment-guide"
+        image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200"
+        datePublished="2026-01-15"
+        isHowTo={true}
+        howToSteps={[
+          { name: "تحديد الميزانية", text: "حدد ميزانيتك الكاملة بما يشمل سعر الشقة وتكاليف التشطيب والنقل والرسوم القانونية." },
+          { name: "اختيار المنطقة", text: "قارن بين أحياء دمياط الجديدة من حيث الخدمات والأسعار والموقع واختر الأنسب." },
+          { name: "معاينة العقارات", text: "قم بزيارة عدة شقق ومعاينتها شخصياً. تحقق من التشطيبات والمرافق والإطلالة." },
+          { name: "التفاوض على السعر", text: "تفاوض بذكاء بناءً على أسعار السوق الحالية ومقارنة مع شقق مماثلة في نفس المنطقة." },
+          { name: "الإجراءات القانونية", text: "تأكد من صحة الأوراق والملكية، واستعن بمحامي لمراجعة العقد قبل التوقيع." },
+        ]}
+      />
       <Header />
 
       {/* Breadcrumb */}

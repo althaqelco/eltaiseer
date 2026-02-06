@@ -5,9 +5,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, MapPin, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ArticleSchema } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
-  title: "أفضل الأحياء للسكن في دمياط الجديدة 2025 | مقارنة شاملة",
+  title: "أفضل الأحياء للسكن في دمياط الجديدة 2026 | مقارنة شاملة",
   description: "دليل شامل لأفضل الأحياء السكنية في دمياط الجديدة. مقارنة تفصيلية بين الحي الأول والثاني والثالث ومشاريع الإسكان القومي من حيث الأسعار والخدمات والموقع.",
   keywords: [
     "أحياء دمياط الجديدة",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     title: "أفضل الأحياء للسكن في دمياط الجديدة 2025",
     description: "مقارنة شاملة بين أحياء دمياط الجديدة - اكتشف المنطقة المناسبة لك",
     type: "article",
-    publishedTime: "2025-01-10",
+    publishedTime: "2026-01-10",
     images: [
       {
         url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200",
@@ -39,6 +40,13 @@ export const metadata: Metadata = {
 export default function BestDistrictsArticle() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <ArticleSchema
+        title="أفضل الأحياء للسكن في دمياط الجديدة 2026 | مقارنة شاملة"
+        description="دليل شامل لأفضل الأحياء السكنية في دمياط الجديدة. مقارنة تفصيلية بين الحي الأول والثاني والثالث ومشاريع الإسكان القومي."
+        url="https://eltaiseer.com/blog/best-districts"
+        image="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200"
+        datePublished="2026-01-10"
+      />
       <Header />
 
       {/* Breadcrumb */}

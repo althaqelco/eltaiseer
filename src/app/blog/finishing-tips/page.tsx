@@ -5,9 +5,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, Paintbrush, CheckCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ArticleSchema } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
-  title: "نصائح التشطيب الذكي 2025 | كيف تشطب شقتك بأقل تكلفة وأعلى جودة",
+  title: "نصائح التشطيب الذكي 2026 | كيف تشطب شقتك بأقل تكلفة وأعلى جودة",
   description: "دليل شامل لتشطيب الشقق في دمياط الجديدة. نصائح الخبراء لتوفير المال، اختيار المواد، تجنب الأخطاء الشائعة، ومراحل التشطيب خطوة بخطوة.",
   keywords: [
     "تشطيب شقق دمياط الجديدة",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     title: "نصائح التشطيب الذكي - كيف تشطب شقتك بأقل تكلفة",
     description: "دليل شامل لتشطيب الشقق بجودة عالية وتكلفة معقولة",
     type: "article",
-    publishedTime: "2024-12-28",
+    publishedTime: "2026-01-28",
     images: [
       {
         url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200",
@@ -39,6 +40,21 @@ export const metadata: Metadata = {
 export default function FinishingTipsArticle() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <ArticleSchema
+        title="نصائح التشطيب الذكي 2026 | كيف تشطب شقتك بأقل تكلفة وأعلى جودة"
+        description="دليل شامل لتشطيب الشقق في دمياط الجديدة. نصائح الخبراء لتوفير المال، اختيار المواد، تجنب الأخطاء الشائعة."
+        url="https://eltaiseer.com/blog/finishing-tips"
+        image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200"
+        datePublished="2026-01-28"
+        isHowTo={true}
+        howToSteps={[
+          { name: "التخطيط والتصميم", text: "ضع خطة تشطيب واضحة تشمل التصميم الداخلي وتوزيع المساحات واختيار الألوان والمواد." },
+          { name: "اختيار المقاول", text: "اختر مقاول موثوق بسمعة جيدة واطلب عرض أسعار تفصيلي وعقد مكتوب." },
+          { name: "تجهيز البنية التحتية", text: "ابدأ بالسباكة والكهرباء والعزل قبل التشطيبات النهائية." },
+          { name: "التشطيبات النهائية", text: "ركب الأرضيات والحوائط والأسقف والحمامات والمطبخ بالترتيب الصحيح." },
+          { name: "المراجعة والتسليم", text: "راجع كل التفاصيل قبل التسليم وتأكد من جودة العمل ومطابقته للمواصفات." },
+        ]}
+      />
       <Header />
 
       {/* Breadcrumb */}

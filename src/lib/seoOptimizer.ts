@@ -168,7 +168,8 @@ export function generateSEOTitle(input: PropertySEOInput): string {
   }
 
   // Add price and location brand
-  title += ` - ${priceText} | ${district === "المنصورة الجديدة" ? "المنصورة الجديدة" : "دمياط الجديدة"}`;
+  const cityLabel = input.cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
+  title += ` - ${priceText} | ${cityLabel}`;
 
   return title;
 }
@@ -191,12 +192,15 @@ export function generateSEODescription(input: PropertySEOInput): string {
     status,
     paymentType,
     description,
+    cityId,
   } = input;
 
   const priceText = formatPriceSEO(price);
 
+  const cityName = cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
+
   // Opening statement with primary keywords
-  let seoDescription = `${type} للبيع في ${district} - ${district === "المنصورة الجديدة" ? "المنصورة الجديدة" : "دمياط الجديدة"}. `;
+  let seoDescription = `${type} للبيع في ${district} - ${cityName}. `;
 
   // Property details section
   seoDescription += `المساحة: ${area_sqm} متر مربع. `;
@@ -241,7 +245,7 @@ export function generateSEODescription(input: PropertySEOInput): string {
   }
 
   // Closing with brand and location keywords
-  seoDescription += `التيسير للعقارات - شريكك الموثوق في عقارات ${district === "المنصورة الجديدة" ? "المنصورة الجديدة" : "دمياط الجديدة"}.`;
+  seoDescription += `التيسير للعقارات - شريكك الموثوق في عقارات ${cityName}.`;
 
   return seoDescription;
 }
@@ -252,14 +256,17 @@ export function generateSEODescription(input: PropertySEOInput): string {
 export function generateMetaKeywords(input: PropertySEOInput): string[] {
   const { type, district, area_sqm, finishing, amenities } = input;
 
+  const cityName = input.cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
+
   const keywords: string[] = [
     ...PRIMARY_KEYWORDS,
     type,
     `${type} للبيع`,
     `${type} ${district}`,
-    `${type} دمياط الجديدة`,
+    `${type} ${cityName}`,
     district,
     `عقارات ${district}`,
+    `عقارات ${cityName}`,
     `${area_sqm} متر`,
   ];
 
@@ -338,7 +345,7 @@ export function generatePropertySchema(
       address: {
         "@type": "PostalAddress",
         addressLocality: district,
-        addressRegion: "دمياط الجديدة",
+        addressRegion: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",
         addressCountry: "EG",
       },
     },
@@ -367,11 +374,11 @@ export function generatePropertySchema(
     // Location
     contentLocation: {
       "@type": "Place",
-      name: `${district}، دمياط الجديدة`,
+      name: `${district}، ${cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة"}`,
       address: {
         "@type": "PostalAddress",
         addressLocality: district,
-        addressRegion: "دمياط الجديدة",
+        addressRegion: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",
         addressCountry: "مصر",
       },
     },

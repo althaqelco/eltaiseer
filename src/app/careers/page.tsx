@@ -42,8 +42,41 @@ const openPositions = [
 ];
 
 export default function CareersPage() {
+  const jobPostingSchemas = openPositions.map((position) => ({
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: position.title,
+    description: position.description,
+    employmentType: position.type === "دوام كامل" ? "FULL_TIME" : "PART_TIME",
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "دمياط الجديدة",
+        addressRegion: "دمياط",
+        addressCountry: "EG",
+      },
+    },
+    hiringOrganization: {
+      "@type": "Organization",
+      name: "التيسير للعقارات",
+      sameAs: "https://eltaiseer.com",
+      logo: "https://eltaiseer.com/logo.png",
+    },
+    datePosted: "2026-01-01",
+    validThrough: "2026-12-31",
+    jobLocationType: position.location.includes("عن بعد") ? "TELECOMMUTE" : undefined,
+  }));
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {jobPostingSchemas.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
       <Header />
 
       {/* Breadcrumb */}
