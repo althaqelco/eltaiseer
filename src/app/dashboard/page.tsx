@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
@@ -9,6 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Plus,
   Building2,
@@ -19,16 +26,50 @@ import {
   Home,
   TrendingUp,
   CheckCircle2,
+  Hammer,
+  Tag,
+  AlertTriangle,
+  Download,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import { getAllPropertiesAsync, deletePropertyAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
 import { CityId } from "@/lib/egyptPlaces";
-import { getPropertyUrl } from "@/lib/districtSlugs";
+import { getPropertyUrl, DISTRICT_TO_SLUG } from "@/lib/districtSlugs";
+
+const ITEMS_PER_PAGE = 20;
+
+type StatusFilter = "all" | "جاهز" | "تحت الإنشاء" | "تم البيع";
+type SortMode = "newest" | "price-desc" | "price-asc";
+
+// مشاكل جودة البيانات التي تكسر الروابط أو تضعف صفحة العقار
+function getDataIssues(p: Property): string[] {
+  const issues: string[] = [];
+  if (!p.location.district || !p.location.district.trim()) {
+    issues.push("بدون منطقة — رابط العقار غير سليم");
+  } else if (!DISTRICT_TO_SLUG[p.location.district.trim()]) {
+    issues.push("منطقة غير معروفة في خريطة الروابط");
+  }
+  if (!p.images || p.images.length === 0) {
+    issues.push("بدون صور");
+  } else if (p.images[0]?.includes("unsplash.com")) {
+    issues.push("صورة افتراضية (Unsplash)");
+  }
+  if (!p.description || p.description.trim().length < 30) {
+    issues.push("وصف قصير جداً");
+  }
+  return issues;
+}
 
 export default function DashboardPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [sortMode, setSortMode] = useState<SortMode>("newest");
+  const [showIssuesOnly, setShowIssuesOnly] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -58,35 +99,104 @@ export default function DashboardPage() {
     }
   };
 
-  const filteredProperties = properties.filter(
-    (p) => {
-      // Filter by city - العقارات بدون cityId تعتبر من دمياط الجديدة
+  const filteredProperties = useMemo(() => {
+    const filtered = properties.filter((p) => {
       if (selectedCity !== "all") {
         const propertyCityId = p.location.cityId || "new-damietta";
         if (propertyCityId !== selectedCity) return false;
       }
-      // Filter by search query
-      return p.title.includes(searchQuery) ||
+      if (statusFilter !== "all" && (p.status || "جاهز") !== statusFilter) {
+        return false;
+      }
+      if (showIssuesOnly && getDataIssues(p).length === 0) {
+        return false;
+      }
+      return (
+        p.title.includes(searchQuery) ||
         p.location.district.includes(searchQuery) ||
         p.type.includes(searchQuery) ||
-        (p.location.city && p.location.city.includes(searchQuery));
-    }
+        p.id.includes(searchQuery) ||
+        (p.location.city && p.location.city.includes(searchQuery))
+      );
+    });
+
+    const sorted = [...filtered];
+    if (sortMode === "price-desc") sorted.sort((a, b) => b.price - a.price);
+    else if (sortMode === "price-asc") sorted.sort((a, b) => a.price - b.price);
+    else
+      sorted.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    return sorted;
+  }, [properties, selectedCity, statusFilter, showIssuesOnly, searchQuery, sortMode]);
+
+  // إعادة الترقيم لأول صفحة عند تغيير أي فلتر
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCity, statusFilter, showIssuesOnly, searchQuery, sortMode]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredProperties.length / ITEMS_PER_PAGE));
+  const paginatedProperties = filteredProperties.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
-  const stats = {
-    total: properties.length,
-    verified: properties.filter((p) => p.isVerified).length,
-    totalValue: properties.reduce((sum, p) => sum + p.price, 0),
-  };
+  const stats = useMemo(() => {
+    const available = properties.filter((p) => (p.status || "جاهز") === "جاهز");
+    const construction = properties.filter((p) => p.status === "تحت الإنشاء");
+    const sold = properties.filter((p) => p.status === "تم البيع");
+    const withIssues = properties.filter((p) => getDataIssues(p).length > 0);
+    return {
+      total: properties.length,
+      available: available.length,
+      construction: construction.length,
+      sold: sold.length,
+      withIssues: withIssues.length,
+      // القيمة السوقية للمعروض فعلاً (المباع لا يُحسب)
+      activeValue: properties
+        .filter((p) => p.status !== "تم البيع")
+        .reduce((sum, p) => sum + p.price, 0),
+      damietta: properties.filter(
+        (p) => (p.location.cityId || "new-damietta") === "new-damietta"
+      ).length,
+      mansoura: properties.filter((p) => p.location.cityId === "new-mansoura").length,
+    };
+  }, [properties]);
 
   const formatPrice = (price: number) => {
     if (price >= 1000000000) {
-      return `${(price / 1000000000).toFixed(1)} مليار`;
+      return `${(price / 1000000000).toFixed(2)} مليار`;
     }
     if (price >= 1000000) {
       return `${(price / 1000000).toFixed(1)} مليون`;
     }
     return price.toLocaleString("ar-EG");
+  };
+
+  // تصدير القائمة المفلترة الحالية إلى CSV (يفتح في Excel)
+  const exportCsv = () => {
+    const header = ["ID", "العنوان", "النوع", "المدينة", "المنطقة", "السعر", "المساحة", "الحالة", "الدفع", "تاريخ الإضافة", "الرابط"];
+    const rows = filteredProperties.map((p) => [
+      p.id,
+      `"${p.title.replace(/"/g, '""')}"`,
+      p.type,
+      p.location.city || "دمياط الجديدة",
+      p.location.district,
+      p.price,
+      p.details.area_sqm,
+      p.status || "جاهز",
+      p.payment?.type || "كاش",
+      new Date(p.createdAt).toLocaleDateString("ar-EG"),
+      `https://eltaiseer.com${getPropertyUrl(p)}/`,
+    ]);
+    const csv = "﻿" + [header, ...rows].map((r) => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `eltaiseer-properties-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   if (isLoading) {
@@ -106,76 +216,127 @@ export default function DashboardPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">لوحة التحكم</h1>
-            <p className="text-gray-600 mt-1">إدارة العقارات والإعلانات</p>
+            <p className="text-gray-600 mt-1">
+              إدارة العقارات — {stats.damietta} دمياط الجديدة · {stats.mansoura} المنصورة الجديدة
+            </p>
           </div>
-          <Button asChild className="bg-orange-500 hover:bg-orange-600 gap-2">
-            <Link href="/dashboard/add">
-              <Plus className="h-5 w-5" />
-              إضافة عقار جديد
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={exportCsv} className="gap-2">
+              <Download className="h-4 w-4" />
+              تصدير CSV
+            </Button>
+            <Button asChild className="bg-orange-500 hover:bg-orange-600 gap-2">
+              <Link href="/dashboard/add">
+                <Plus className="h-5 w-5" />
+                إضافة عقار جديد
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-orange-100 rounded-xl">
-                  <Building2 className="h-8 w-8 text-orange-600" />
+            <CardContent className="p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-orange-100 rounded-xl">
+                  <Building2 className="h-6 w-6 text-orange-600" />
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">إجمالي العقارات</p>
-                  <p className="text-3xl font-bold text-gray-800">
-                    {stats.total}
-                  </p>
+                  <p className="text-gray-500 text-xs">إجمالي العقارات</p>
+                  <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-100 rounded-xl">
-                  <CheckCircle2 className="h-8 w-8 text-blue-600" />
+            <CardContent className="p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-green-100 rounded-xl">
+                  <CheckCircle2 className="h-6 w-6 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">العقارات الموثقة</p>
-                  <p className="text-3xl font-bold text-gray-800">
-                    {stats.verified}
-                  </p>
+                  <p className="text-gray-500 text-xs">جاهز للبيع</p>
+                  <p className="text-2xl font-bold text-gray-800">{stats.available}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-amber-100 rounded-xl">
-                  <TrendingUp className="h-8 w-8 text-amber-600" />
+            <CardContent className="p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-yellow-100 rounded-xl">
+                  <Hammer className="h-6 w-6 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">إجمالي القيمة</p>
-                  <p className="text-2xl font-bold text-gray-800">
-                    {formatPrice(stats.totalValue)} ج.م
+                  <p className="text-gray-500 text-xs">تحت الإنشاء</p>
+                  <p className="text-2xl font-bold text-gray-800">{stats.construction}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-red-100 rounded-xl">
+                  <Tag className="h-6 w-6 text-red-600" />
+                </div>
+                <div>
+                  <p className="text-gray-500 text-xs">تم البيع</p>
+                  <p className="text-2xl font-bold text-gray-800">{stats.sold}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-amber-100 rounded-xl">
+                  <TrendingUp className="h-6 w-6 text-amber-600" />
+                </div>
+                <div>
+                  <p className="text-gray-500 text-xs">قيمة المعروض</p>
+                  <p className="text-xl font-bold text-gray-800">
+                    {formatPrice(stats.activeValue)} ج
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
+
+        {/* Data quality alert */}
+        {stats.withIssues > 0 && (
+          <button
+            onClick={() => setShowIssuesOnly(!showIssuesOnly)}
+            className={`w-full text-right mb-6 rounded-xl border p-4 flex items-center gap-3 transition-colors ${
+              showIssuesOnly
+                ? "bg-amber-100 border-amber-400"
+                : "bg-amber-50 border-amber-200 hover:bg-amber-100"
+            }`}
+          >
+            <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0" />
+            <span className="text-sm text-amber-800">
+              <b>{stats.withIssues} عقاراً</b> به ملاحظات جودة بيانات (منطقة ناقصة، صور
+              افتراضية، وصف قصير) تؤثر على ظهوره في البحث —{" "}
+              {showIssuesOnly ? "اضغط لعرض الكل" : "اضغط لعرضها فقط"}
+            </span>
+          </button>
+        )}
 
         {/* Properties Table */}
         <Card>
           <CardHeader>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <CardTitle className="flex items-center gap-2">
                 <Home className="h-5 w-5" />
                 العقارات ({filteredProperties.length})
               </CardTitle>
-              <div className="flex flex-col md:flex-row gap-3">
+              <div className="flex flex-col md:flex-row gap-3 flex-wrap">
                 {/* City Filter */}
                 <div className="flex gap-2">
                   <Button
@@ -203,14 +364,40 @@ export default function DashboardPage() {
                     المنصورة الجديدة
                   </Button>
                 </div>
+
+                {/* Status Filter */}
+                <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilter)}>
+                  <SelectTrigger className="w-[140px] h-9">
+                    <SelectValue placeholder="الحالة" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">كل الحالات</SelectItem>
+                    <SelectItem value="جاهز">جاهز</SelectItem>
+                    <SelectItem value="تحت الإنشاء">تحت الإنشاء</SelectItem>
+                    <SelectItem value="تم البيع">تم البيع</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {/* Sort */}
+                <Select value={sortMode} onValueChange={(v) => setSortMode(v as SortMode)}>
+                  <SelectTrigger className="w-[150px] h-9">
+                    <SelectValue placeholder="الترتيب" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">الأحدث أولاً</SelectItem>
+                    <SelectItem value="price-desc">السعر: الأعلى</SelectItem>
+                    <SelectItem value="price-asc">السعر: الأقل</SelectItem>
+                  </SelectContent>
+                </Select>
+
                 {/* Search */}
-                <div className="relative w-full md:w-80">
+                <div className="relative w-full md:w-64">
                   <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="بحث في العقارات..."
+                    placeholder="بحث بالعنوان أو الرقم..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pr-10"
+                    className="pr-10 h-9"
                   />
                 </div>
               </div>
@@ -231,99 +418,137 @@ export default function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProperties.slice(0, 20).map((property) => (
-                    <tr
-                      key={property.id}
-                      className="border-b hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="py-4 px-2">
-                        <div className="flex items-center gap-3">
-                          <div className="relative w-16 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                            <Image
-                              src={property.images[0]}
-                              alt={property.title}
-                              fill
-                              className="object-cover"
-                            />
+                  {paginatedProperties.map((property) => {
+                    const issues = getDataIssues(property);
+                    return (
+                      <tr
+                        key={property.id}
+                        className="border-b hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="py-4 px-2">
+                          <div className="flex items-center gap-3">
+                            <div className="relative w-16 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                              {property.images[0] && (
+                                <Image
+                                  src={property.images[0]}
+                                  alt={property.title}
+                                  fill
+                                  className="object-cover"
+                                />
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-semibold text-gray-800 line-clamp-1 max-w-[200px]">
+                                {property.title}
+                              </p>
+                              <p className="text-xs text-gray-500">{property.id}</p>
+                              {issues.length > 0 && (
+                                <p
+                                  className="text-xs text-amber-600 flex items-center gap-1 mt-0.5"
+                                  title={issues.join(" • ")}
+                                >
+                                  <AlertTriangle className="h-3 w-3" />
+                                  {issues[0]}
+                                  {issues.length > 1 && ` +${issues.length - 1}`}
+                                </p>
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-semibold text-gray-800 line-clamp-1 max-w-[200px]">
-                              {property.title}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {property.id}
-                            </p>
+                        </td>
+                        <td className="py-4 px-2">
+                          <Badge variant="outline">{property.type}</Badge>
+                        </td>
+                        <td className="py-4 px-2">
+                          <Badge
+                            className={`${
+                              (property.location.cityId || "new-damietta") === "new-damietta"
+                                ? "bg-orange-100 text-orange-700 hover:bg-orange-200"
+                                : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                            }`}
+                          >
+                            {property.location.city || "دمياط الجديدة"}
+                          </Badge>
+                        </td>
+                        <td className="py-4 px-2 text-gray-600">
+                          {property.location.district || (
+                            <span className="text-amber-600">— غير محددة</span>
+                          )}
+                        </td>
+                        <td className="py-4 px-2 font-semibold text-orange-600">
+                          {formatPrice(property.price)} ج.م
+                        </td>
+                        <td className="py-4 px-2">
+                          <Badge
+                            className={`${
+                              property.status === "جاهز"
+                                ? "bg-green-500 hover:bg-green-600"
+                                : property.status === "تم البيع"
+                                  ? "bg-red-600 hover:bg-red-700"
+                                  : "bg-yellow-500 hover:bg-yellow-600"
+                            }`}
+                          >
+                            {property.status || "جاهز"}
+                          </Badge>
+                        </td>
+                        <td className="py-4 px-2">
+                          <div className="flex items-center justify-center gap-2">
+                            <Button asChild variant="ghost" size="icon" title="عرض">
+                              <Link href={getPropertyUrl(property)}>
+                                <Eye className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                            <Button asChild variant="ghost" size="icon" title="تعديل">
+                              <Link href={`/dashboard/edit/${property.id}`}>
+                                <Edit className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              title="حذف"
+                              onClick={() => handleDelete(property.id)}
+                              className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-2">
-                        <Badge variant="outline">{property.type}</Badge>
-                      </td>
-                      <td className="py-4 px-2">
-                        <Badge className={`${property.location.cityId === "new-damietta"
-                            ? "bg-orange-100 text-orange-700 hover:bg-orange-200"
-                            : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                          }`}>
-                          {property.location.city || "دمياط الجديدة"}
-                        </Badge>
-                      </td>
-                      <td className="py-4 px-2 text-gray-600">
-                        {property.location.district}
-                      </td>
-                      <td className="py-4 px-2 font-semibold text-orange-600">
-                        {formatPrice(property.price)} ج.م
-                      </td>
-                      <td className="py-4 px-2">
-                        <Badge className={`${property.status === "جاهز"
-                            ? "bg-green-500 hover:bg-green-600"
-                            : property.status === "تم البيع"
-                              ? "bg-red-600 hover:bg-red-700"
-                              : "bg-yellow-500 hover:bg-yellow-600"
-                          }`}>
-                          {property.status || "جاهز"}
-                        </Badge>
-                      </td>
-                      <td className="py-4 px-2">
-                        <div className="flex items-center justify-center gap-2">
-                          <Button
-                            asChild
-                            variant="ghost"
-                            size="icon"
-                            title="عرض"
-                          >
-                            <Link href={getPropertyUrl(property)}>
-                              <Eye className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                          <Button
-                            asChild
-                            variant="ghost"
-                            size="icon"
-                            title="تعديل"
-                          >
-                            <Link href={`/dashboard/edit/${property.id}`}>
-                              <Edit className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            title="حذف"
-                            onClick={() => handleDelete(property.id)}
-                            className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
 
               {filteredProperties.length === 0 && (
                 <div className="text-center py-12 text-gray-500">
                   لا توجد عقارات مطابقة للبحث
+                </div>
+              )}
+
+              {/* Pagination — كانت الصفحة تعرض أول 20 فقط وتُخفي الباقي */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-3 mt-6">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => p - 1)}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                    السابق
+                  </Button>
+                  <span className="text-sm text-gray-600">
+                    صفحة {currentPage} من {totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((p) => p + 1)}
+                  >
+                    التالي
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
                 </div>
               )}
             </div>

@@ -52,6 +52,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
+                  اتصل بنا
+                </Link>
+              </li>
+              <li>
                 <Link href="/careers" className="text-gray-400 hover:text-white transition-colors">
                   وظائف
                 </Link>

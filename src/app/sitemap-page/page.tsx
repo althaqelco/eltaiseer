@@ -77,6 +77,7 @@ const siteLinks = {
   ],
   blog: [
     { name: "المدونة", href: "/blog" },
+    { name: "اتصل بنا", href: "/contact" },
     { name: "دليل شراء الشقق", href: "/blog/buying-apartment-guide" },
     { name: "أفضل الأحياء", href: "/blog/best-districts" },
     { name: "نصائح التشطيب", href: "/blog/finishing-tips" },
