@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "وظائف | انضم لفريق التيسير للعقارات",
   description: "انضم لفريق التيسير للعقارات - فرص عمل متميزة في مجال العقارات بدمياط الجديدة",
   alternates: {
-    canonical: "https://eltaiseer.com/careers",
+    canonical: "https://eltaiseer.com/careers/",
   },
 };
 

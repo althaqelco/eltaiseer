@@ -1,25 +1,10 @@
 import { Metadata } from "next";
-import { getCategoryByDistrict } from "@/lib/egyptPlaces";
+import { getCategoryByDistrict, getCityByDistrict } from "@/lib/egyptPlaces";
+import { SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
 
-// District slug to name mapping (English URLs)
-const DISTRICT_SLUGS: Record<string, string> = {
-  "first-district": "الحي الأول",
-  "second-district": "الحي الثاني",
-  "third-district": "الحي الثالث",
-  "fourth-district": "الحي الرابع",
-  "fifth-district": "الحي الخامس",
-  "sixth-district": "الحي السادس (المتميز)",
-  "janna-project": "مشروع جنة",
-  "dar-misr": "دار مصر - موقع 1",
-  "sakan-misr": "سكن مصر - جنوب الحي الأول",
-  "beit-al-watan": "بيت الوطن - شرق",
-  "central-area": "المنطقة المركزية (أ)",
-  "chalets": "منطقة الشاليهات",
-};
-
-// Generate static params for all districts
+// مسار قديم — النسخة الأساسية هي /{city}/{district} والـ canonical يشير إليها دائماً
 export function generateStaticParams() {
-  return Object.keys(DISTRICT_SLUGS).map((slug) => ({ slug }));
+  return Object.keys(SLUG_TO_DISTRICT).map((slug) => ({ slug }));
 }
 
 type Props = {
@@ -28,11 +13,23 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const districtName = DISTRICT_SLUGS[params.slug] || params.slug.replace(/-/g, " ");
+  const districtName = SLUG_TO_DISTRICT[params.slug];
+
+  if (!districtName) {
+    return {
+      title: "المنطقة غير موجودة",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  // تحديد المدينة الصحيحة من اسم الحي — أحياء المنصورة كانت توجه خطأً لدمياط
+  const city = getCityByDistrict(districtName);
+  const citySlug = city?.id || "new-damietta";
+  const cityName = city?.nameAr || "دمياط الجديدة";
   const category = getCategoryByDistrict(districtName);
-  
-  const title = `عقارات ${districtName} | شقق وفيلات للبيع في دمياط الجديدة`;
-  const description = `اكتشف أفضل العقارات للبيع في ${districtName} - دمياط الجديدة. شقق سكنية، فيلات، دوبلكس بأسعار تنافسية. تشطيبات متنوعة وخيارات تقسيط مريحة.`;
+
+  const title = `عقارات ${districtName} | شقق وفيلات للبيع في ${cityName}`;
+  const description = `اكتشف أفضل العقارات للبيع في ${districtName} - ${cityName}. شقق سكنية، فيلات، دوبلكس بأسعار تنافسية. تشطيبات متنوعة وخيارات تقسيط مريحة.`;
 
   return {
     title,
@@ -41,24 +38,24 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       `عقارات ${districtName}`,
       `شقق للبيع ${districtName}`,
       `فيلات ${districtName}`,
-      `${districtName} دمياط الجديدة`,
+      `${districtName} ${cityName}`,
       `أسعار الشقق ${districtName}`,
-      category?.nameAr || "عقارات دمياط الجديدة",
+      category?.nameAr || `عقارات ${cityName}`,
     ],
     openGraph: {
       title: `عقارات ${districtName} للبيع | التيسير للعقارات`,
       description,
-      url: `https://eltaiseer.com/new-damietta/${params.slug}`,
+      url: `https://eltaiseer.com/${citySlug}/${params.slug}/`,
       type: "website",
       locale: "ar_EG",
     },
     twitter: {
       card: "summary_large_image",
       title: `عقارات ${districtName} للبيع`,
-      description: `شقق وفيلات للبيع في ${districtName} - دمياط الجديدة`,
+      description: `شقق وفيلات للبيع في ${districtName} - ${cityName}`,
     },
     alternates: {
-      canonical: `https://eltaiseer.com/new-damietta/${params.slug}`,
+      canonical: `https://eltaiseer.com/${citySlug}/${params.slug}/`,
     },
   };
 }

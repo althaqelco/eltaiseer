@@ -8,7 +8,7 @@ type Props = {
 const cityMetadata: Record<string, { title: string; description: string; keywords: string[] }> = {
   "new-damietta": {
     title: "عقارات دمياط الجديدة للبيع | شقق وفيلات وأراضي 2026",
-    description: "أفضل عقارات دمياط الجديدة للبيع 2026. شقق تمليك، فيلات، دوبلكس، أراضي، محلات تجارية في جميع الأحياء. الحي الأول، الثاني، الثالث، مشروع جنة، دار مصر، سكن مصر. أسعار تبدأ من 500,000 جنيه. التيسير للعقارات.",
+    description: "شقق وفيلات وأراضي للبيع في جميع أحياء دمياط الجديدة — الحي الأول للسادس ومشاريع جنة ودار مصر وسكن مصر. أسعار تبدأ من 500,000 جنيه وتقسيط مريح.",
     keywords: [
       "عقارات دمياط الجديدة",
       "شقق للبيع في دمياط الجديدة",
@@ -30,7 +30,7 @@ const cityMetadata: Record<string, { title: string; description: string; keyword
   },
   "new-mansoura": {
     title: "عقارات المنصورة الجديدة للبيع | شقق وفيلات 2026",
-    description: "أفضل عقارات المنصورة الجديدة للبيع 2026. شقق في R1-R7، فيلات، داون تاون، سكن لكل المصريين، دار مصر، جنة. مدينة الجيل الرابع بتخطيط عالمي. أسعار استثمارية مميزة. التيسير للعقارات.",
+    description: "شقق وفيلات للبيع في المنصورة الجديدة — R1 حتى R7 وحي الفيلات وداون تاون وسكن لكل المصريين. مدينة الجيل الرابع بأسعار استثمارية وتقسيط مريح.",
     keywords: [
       "عقارات المنصورة الجديدة",
       "شقق للبيع في المنصورة الجديدة",
@@ -54,9 +54,15 @@ const cityMetadata: Record<string, { title: string; description: string; keyword
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { city } = await params;
-  const meta = cityMetadata[city] || cityMetadata["new-damietta"];
+
+  // مدينة غير معروفة = 404 — لا نمنحها metadata قابلة للفهرسة
+  if (!cityMetadata[city]) {
+    return { title: "الصفحة غير موجودة", robots: { index: false, follow: false } };
+  }
+
+  const meta = cityMetadata[city];
   const citySlug = city === "new-mansoura" ? "new-mansoura" : "new-damietta";
-  
+
   return {
     title: meta.title,
     description: meta.description,
@@ -64,18 +70,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: meta.title,
       description: meta.description,
-      url: `https://eltaiseer.com/${citySlug}`,
+      url: `https://eltaiseer.com/${citySlug}/`,
       type: "website",
       locale: "ar_EG",
       siteName: "التيسير للعقارات",
+      images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: meta.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: meta.title,
       description: meta.description,
+      images: ["/og-image.jpg"],
     },
     alternates: {
-      canonical: `https://eltaiseer.com/${citySlug}`,
+      canonical: `https://eltaiseer.com/${citySlug}/`,
     },
     robots: {
       index: true,
@@ -84,46 +92,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const cityFaqData: Record<string, Array<{ q: string; a: string }>> = {
-  "new-damietta": [
-    { q: "كم عدد الأحياء في دمياط الجديدة؟", a: "تضم دمياط الجديدة 18 منطقة سكنية تشمل 6 أحياء رئيسية (الأول للسادس) ومشاريع إسكان قومي مثل جنة ودار مصر وسكن مصر وبيت الوطن، بالإضافة للمناطق المركزية ومنطقة الشاليهات." },
-    { q: "ما هو متوسط سعر الشقة في دمياط الجديدة 2026؟", a: "يتراوح سعر الشقة في دمياط الجديدة 2026 بين 500,000 جنيه للشقق الصغيرة في المناطق الجديدة وحتى 5 مليون جنيه للدوبلكس والبنتهاوس في الأحياء الراقية. سعر المتر يتراوح بين 5,000 و 20,000 جنيه." },
-    { q: "هل دمياط الجديدة مدينة مكتملة الخدمات؟", a: "نعم، دمياط الجديدة مدينة مكتملة البنية التحتية والخدمات. تتوفر بها مدارس، جامعات، مستشفيات، مراكز تسوق، حدائق، ومرافق رياضية. كما أنها تقع على ساحل البحر المتوسط مما يمنحها ميزة فريدة." },
-    { q: "ما هي أفضل مناطق الاستثمار في دمياط الجديدة؟", a: "أفضل مناطق الاستثمار في دمياط الجديدة تشمل: الحي الأول والثاني (عوائد إيجارية عالية)، مشروع جنة (أسعار مدعومة مع ارتفاع مستمر)، والمنطقة المركزية (عقارات تجارية ذات عائد مرتفع). الأراضي في الأحياء الجديدة توفر أيضاً فرص استثمارية ممتازة." },
-    { q: "هل يوجد شقق بالتقسيط في دمياط الجديدة؟", a: "نعم، تتوفر شقق بالتقسيط في دمياط الجديدة بمقدم يبدأ من 10% وأقساط حتى 10 سنوات. التيسير للعقارات يوفر خيارات دفع مرنة تشمل التقسيط المباشر مع المالك أو التمويل العقاري البنكي." },
-  ],
-  "new-mansoura": [
-    { q: "ما هي مناطق R1 إلى R7 في المنصورة الجديدة؟", a: "مناطق R1 إلى R7 هي الأحياء السكنية الرئيسية في المنصورة الجديدة. تم تصميمها بمعايير عالمية وتضم وحدات سكنية متنوعة من شقق وبنتهاوس. R1 وR2 وR3 من أكثر المناطق طلباً. الأسعار تبدأ من 600,000 جنيه وتختلف حسب المنطقة والمساحة." },
-    { q: "متى يتم تسليم شقق المنصورة الجديدة؟", a: "يتم تسليم الشقق في المنصورة الجديدة على مراحل. بعض المناطق تم تسليمها بالفعل مثل أجزاء من R1 وR2 وR3 وسكن لكل المصريين. باقي المناطق يتم تسليمها تباعاً مع اكتمال البنية التحتية والمرافق." },
-    { q: "هل المنصورة الجديدة تستحق الاستثمار؟", a: "نعم، المنصورة الجديدة من أفضل فرص الاستثمار العقاري في مصر حالياً. كمدينة جيل رابع قيد التطوير، تشهد ارتفاعاً مستمراً في الأسعار مع اكتمال البنية التحتية. العوائد المتوقعة تصل إلى 30-40% خلال 3-5 سنوات." },
-    { q: "ما هي أسعار سكن لكل المصريين في المنصورة الجديدة 2026؟", a: "تبدأ أسعار شقق سكن لكل المصريين في المنصورة الجديدة من 600,000 جنيه للوحدات الصغيرة وتصل إلى 1.5 مليون جنيه للوحدات الأكبر. المشروع يقدم خيارات تقسيط مريحة بمقدم بسيط وأقساط شهرية." },
-    { q: "كم تبعد المنصورة الجديدة عن المنصورة القديمة؟", a: "تبعد المنصورة الجديدة حوالي 30 كم عن مدينة المنصورة القديمة، وتقع على ساحل البحر المتوسط بالقرب من جمصة. يمكن الوصول إليها عبر الطريق الساحلي الدولي خلال 30-40 دقيقة بالسيارة." },
-  ],
-};
-
 export default async function CityLayout({ children, params }: { children: React.ReactNode; params: Promise<{ city: string }> }) {
   const { city } = await params;
-  const faqs = cityFaqData[city] || cityFaqData["new-damietta"];
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.a,
-      },
-    })),
-  };
 
   const cityName = city === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
   const placeSchema = {
     "@context": "https://schema.org",
     "@type": "City",
     name: cityName,
-    url: `https://eltaiseer.com/${city === "new-mansoura" ? "new-mansoura" : "new-damietta"}`,
+    url: `https://eltaiseer.com/${city === "new-mansoura" ? "new-mansoura" : "new-damietta"}/`,
+    // ربط الكيان بمصادر موثوقة — يساعد محركات البحث ووكلاء AI على تمييز المدينة
+    sameAs:
+      city === "new-mansoura"
+        ? [
+            "https://ar.wikipedia.org/wiki/المنصورة_الجديدة",
+            "https://en.wikipedia.org/wiki/New_Mansoura",
+          ]
+        : [
+            "https://ar.wikipedia.org/wiki/دمياط_الجديدة",
+            "https://en.wikipedia.org/wiki/New_Damietta",
+          ],
     containedInPlace: {
       "@type": "Country",
       name: "مصر",
@@ -132,10 +120,6 @@ export default async function CityLayout({ children, params }: { children: React
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(placeSchema) }}

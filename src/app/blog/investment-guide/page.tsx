@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "فرص استثمارية دمياط",
   ],
   openGraph: {
-    title: "الاستثمار العقاري في دمياط الجديدة 2025",
+    title: "الاستثمار العقاري في دمياط الجديدة 2026",
     description: "دليل شامل لتحقيق أرباح من الاستثمار العقاري في دمياط الجديدة",
     type: "article",
     publishedTime: "2026-01-01",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://eltaiseer.com/blog/investment-guide",
+    canonical: "https://eltaiseer.com/blog/investment-guide/",
   },
 };
 
@@ -74,7 +74,7 @@ export default function InvestmentGuideArticle() {
               <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">الاستثمار</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                1 يناير 2025
+                1 يناير 2026
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -164,7 +164,7 @@ export default function InvestmentGuideArticle() {
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
               <li><strong>العائد المتوقع:</strong> 30-50% خلال 3-5 سنوات</li>
-              <li><strong>المناطق الواعدة:</strong> <Link href="/new-damietta/beit-al-watan" className="text-orange-600 hover:underline">بيت الوطن</Link>، امتدادات الأحياء</li>
+              <li><strong>المناطق الواعدة:</strong> <Link href="/new-damietta/beit-al-watan-east" className="text-orange-600 hover:underline">بيت الوطن</Link>، امتدادات الأحياء</li>
               <li><strong>ميزة:</strong> لا تحتاج صيانة أو إدارة</li>
             </ul>
 
@@ -193,7 +193,7 @@ export default function InvestmentGuideArticle() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">أفضل المناطق للاستثمار في 2025</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">أفضل المناطق للاستثمار في 2026</h2>
             
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">المناطق ذات العائد الإيجاري العالي</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
@@ -212,7 +212,7 @@ export default function InvestmentGuideArticle() {
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
               <li><Link href="/new-damietta/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link>: مشاريع تطوير ضخمة قادمة</li>
               <li>الحي السادس (المتميز): أسعار دخول منخفضة مع توقعات نمو عالية</li>
-              <li><Link href="/new-damietta/beit-al-watan" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link>: موقع استراتيجي بالقرب من الشاطئ</li>
+              <li><Link href="/new-damietta/beit-al-watan-east" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link>: موقع استراتيجي بالقرب من الشاطئ</li>
             </ul>
 
             <div className="bg-yellow-50 rounded-xl p-6 mb-6">

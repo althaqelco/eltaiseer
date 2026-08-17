@@ -7,7 +7,8 @@ const nextConfig = {
     : {}),
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    // تحسين الصور مفعّل في وضع SSR؛ التصدير الثابت لا يدعم محسّن الصور فيتعطل تلقائياً
+    unoptimized: process.env.STATIC_EXPORT === 'true',
     remotePatterns: [
       {
         protocol: 'https',

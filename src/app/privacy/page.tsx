@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "سياسة الخصوصية",
   description: "سياسة الخصوصية الخاصة بموقع التيسير للعقارات - كيف نجمع ونستخدم ونحمي بياناتك",
   alternates: {
-    canonical: "https://eltaiseer.com/privacy",
+    canonical: "https://eltaiseer.com/privacy/",
   },
 };
 

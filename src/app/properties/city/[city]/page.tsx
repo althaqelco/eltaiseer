@@ -109,7 +109,6 @@ export default function CityPage() {
   // Dynamic SEO
   useEffect(() => {
     if (city) {
-      document.title = `عقارات ${city.nameAr} | شقق وفيلات للبيع - التيسير للعقارات`;
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
         metaDesc.setAttribute("content", 

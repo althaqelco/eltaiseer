@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "مناطق سكنية دمياط",
   ],
   openGraph: {
-    title: "أفضل الأحياء للسكن في دمياط الجديدة 2025",
+    title: "أفضل الأحياء للسكن في دمياط الجديدة 2026",
     description: "مقارنة شاملة بين أحياء دمياط الجديدة - اكتشف المنطقة المناسبة لك",
     type: "article",
     publishedTime: "2026-01-10",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://eltaiseer.com/blog/best-districts",
+    canonical: "https://eltaiseer.com/blog/best-districts/",
   },
 };
 
@@ -74,7 +74,7 @@ export default function BestDistrictsArticle() {
               <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">المناطق</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                10 يناير 2025
+                10 يناير 2026
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -82,7 +82,7 @@ export default function BestDistrictsArticle() {
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-              أفضل الأحياء للسكن في دمياط الجديدة 2025: دليلك الشامل
+              أفضل الأحياء للسكن في دمياط الجديدة 2026: دليلك الشامل
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
               اختيار الحي المناسب هو أهم قرار عند شراء عقار. في هذا الدليل المفصل، نقارن بين جميع أحياء دمياط الجديدة 
@@ -247,8 +247,8 @@ export default function BestDistrictsArticle() {
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">دار مصر وسكن مصر</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يوفر <Link href="/new-damietta/dar-misr" className="text-orange-600 hover:underline font-semibold">مشروع دار مصر</Link> و
-              <Link href="/new-damietta/sakan-misr" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link> 
+              يوفر <Link href="/new-damietta/dar-misr-1" className="text-orange-600 hover:underline font-semibold">مشروع دار مصر</Link> و
+              <Link href="/new-damietta/sakan-misr-south" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link> 
               خيارات سكنية متنوعة بأسعار تناسب الطبقة المتوسطة. المشاريع تتميز بالتصميم العصري والتخطيط الجيد.
             </p>
 

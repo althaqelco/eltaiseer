@@ -13,8 +13,6 @@ export default function robots(): MetadataRoute.Robots {
           "/login/",
           "/add-property/",
           "/api/",
-          "/_next/",
-          "/_error/",
         ],
       },
       {
@@ -83,6 +81,46 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: "Meta-ExternalAgent",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "OAI-SearchBot",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "Perplexity-User",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "Claude-SearchBot",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "Claude-User",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "DuckAssistBot",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "Amazonbot",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "MistralAI-User",
+        allow: ["/"],
+        disallow: ["/dashboard/", "/api/"],
+      },
+      {
+        userAgent: "GoogleOther",
         allow: ["/"],
         disallow: ["/dashboard/", "/api/"],
       },

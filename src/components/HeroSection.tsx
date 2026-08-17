@@ -86,7 +86,7 @@ export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 
           <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-4">
             التيسير <span className="text-orange-400">للعقارات</span>
           </h1>
-          <p className="text-sm sm:text-base md:text-xl text-gray-300 max-w-3xl mx-auto px-2">
+          <p className="hero-description text-sm sm:text-base md:text-xl text-gray-300 max-w-3xl mx-auto px-2">
             منصتك الأولى للبحث عن عقارات للبيع في{" "}
             <span className="text-orange-400 font-semibold">دمياط الجديدة</span>
             {" "}و{" "}

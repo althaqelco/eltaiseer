@@ -35,7 +35,7 @@ export const metadata: Metadata = {
         ],
     },
     alternates: {
-        canonical: "https://eltaiseer.com/blog/new-mansoura-districts",
+        canonical: "https://eltaiseer.com/blog/new-mansoura-districts/",
     },
 };
 
@@ -76,7 +76,7 @@ export default function NewMansouraDistrictsArticle() {
                             <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">المنصورة الجديدة</span>
                             <span className="flex items-center gap-1">
                                 <Calendar className="h-4 w-4" />
-                                17 يناير 2025
+                                17 يناير 2026
                             </span>
                             <span className="flex items-center gap-1">
                                 <Clock className="h-4 w-4" />
@@ -84,7 +84,7 @@ export default function NewMansouraDistrictsArticle() {
                             </span>
                         </div>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-                            أفضل المناطق للسكن في المنصورة الجديدة 2025: دليلك الشامل
+                            أفضل المناطق للسكن في المنصورة الجديدة 2026: دليلك الشامل
                         </h1>
                         <p className="text-xl text-gray-600 leading-relaxed">
                             المنصورة الجديدة هي مدينة المستقبل في الدلتا. في هذا الدليل المفصل، نستعرض جميع المناطق والأحياء
@@ -258,25 +258,25 @@ export default function NewMansouraDistrictsArticle() {
                                 <tbody>
                                     <tr className="border-b">
                                         <td className="p-4 font-semibold">R1</td>
-                                        <td className="p-4">18,000 - 25,000 ج</td>
+                                        <td className="p-4">8,000 - 15,000 ج</td>
                                         <td className="p-4">شقق فاخرة</td>
                                         <td className="p-4">العائلات الراقية</td>
                                     </tr>
                                     <tr className="border-b bg-gray-50">
                                         <td className="p-4 font-semibold">R2 - R3</td>
-                                        <td className="p-4">14,000 - 20,000 ج</td>
+                                        <td className="p-4">8,000 - 14,000 ج</td>
                                         <td className="p-4">شقق متنوعة</td>
                                         <td className="p-4">العائلات الشابة</td>
                                     </tr>
                                     <tr className="border-b">
                                         <td className="p-4 font-semibold">حي الفيلات</td>
-                                        <td className="p-4">20,000 - 35,000 ج</td>
+                                        <td className="p-4">15,000 - 35,000 ج</td>
                                         <td className="p-4">فيلات وتوين هاوس</td>
                                         <td className="p-4">الباحثين عن الفخامة</td>
                                     </tr>
                                     <tr className="border-b bg-gray-50">
                                         <td className="p-4 font-semibold">داون تاون</td>
-                                        <td className="p-4">25,000 - 40,000 ج</td>
+                                        <td className="p-4">20,000 - 40,000 ج</td>
                                         <td className="p-4">تجاري وإداري</td>
                                         <td className="p-4">المستثمرين</td>
                                     </tr>

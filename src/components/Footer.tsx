@@ -47,6 +47,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
+                  من نحن
+                </Link>
+              </li>
+              <li>
                 <Link href="/careers" className="text-gray-400 hover:text-white transition-colors">
                   وظائف
                 </Link>
@@ -122,8 +127,24 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Cities Districts Section */}
+        {/* Property Categories Section */}
         <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="mb-6">
+            <h4 className="font-bold mb-3 text-orange-400 text-sm">تصفح حسب نوع العقار</h4>
+            <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+              <Link href="/properties/apartments" className="hover:text-orange-400 transition-colors">شقق للبيع</Link>
+              <span>•</span>
+              <Link href="/properties/villas" className="hover:text-orange-400 transition-colors">فيلات للبيع</Link>
+              <span>•</span>
+              <Link href="/properties/lands" className="hover:text-orange-400 transition-colors">أراضي للبيع</Link>
+              <span>•</span>
+              <Link href="/properties/shops" className="hover:text-orange-400 transition-colors">محلات تجارية</Link>
+              <span>•</span>
+              <Link href="/properties/clinics" className="hover:text-orange-400 transition-colors">عيادات</Link>
+              <span>•</span>
+              <Link href="/properties/chalets" className="hover:text-orange-400 transition-colors">شاليهات</Link>
+            </div>
+          </div>
           {/* دمياط الجديدة */}
           <div className="mb-6">
             <h4 className="font-bold mb-3 text-orange-400 text-sm">أحياء دمياط الجديدة</h4>

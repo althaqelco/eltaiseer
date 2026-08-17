@@ -64,7 +64,6 @@ export default function PropertyDetailClient() {
         setRelatedProperties(getRelatedProperties(found, 4));
         setIsFav(isFavorite(found.id));
         
-        // Dynamic SEO - Update document title for new properties
         const formatPrice = (price: number) => {
           if (price >= 1000000) {
             return `${(price / 1000000).toFixed(1)} مليون جنيه`;
@@ -73,7 +72,6 @@ export default function PropertyDetailClient() {
         };
         
         const cityName = found.location.city || "دمياط الجديدة";
-        document.title = `${found.title} | ${found.type} للبيع في ${found.location.district} - ${cityName} - التيسير للعقارات`;
         
         // Update meta description
         const metaDesc = document.querySelector('meta[name="description"]');

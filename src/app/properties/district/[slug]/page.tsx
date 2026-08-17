@@ -15,66 +15,11 @@ import { Home, ChevronLeft, MapPin, ChevronRight, Building2 } from "lucide-react
 import { getAllProperties } from "@/lib/propertyStore";
 import { getCategoryByDistrict } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
+import { SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
 
 const ITEMS_PER_PAGE = 12;
 
 // Combined District slug mapping (English URLs) for both cities
-const DISTRICT_SLUGS: Record<string, string> = {
-  // New Damietta
-  "first-district": "الحي الأول",
-  "second-district": "الحي الثاني",
-  "third-district": "الحي الثالث",
-  "fourth-district": "الحي الرابع",
-  "fifth-district": "الحي الخامس",
-  "sixth-district": "الحي السادس (المتميز)",
-  "janna-project": "مشروع جنة",
-  "dar-misr-1": "دار مصر - موقع 1",
-  "dar-misr-2": "دار مصر - موقع 2",
-  "sakan-misr-south": "سكن مصر - جنوب الحي الأول",
-  "sakan-misr-west": "سكن مصر - غرب الجامعات",
-  "beit-al-watan-east": "بيت الوطن - شرق",
-  "beit-al-watan-west": "بيت الوطن - غرب",
-  "beit-al-watan-beach": "بيت الوطن - امتداد الشاطئ",
-  "central-area-a": "المنطقة المركزية (أ)",
-  "central-area-b": "المنطقة المركزية (ب)",
-  "central-area-c": "المنطقة المركزية (ج)",
-  "chalets": "منطقة الشاليهات",
-  // New Mansoura (nm- prefix)
-  "nm-r1": "R1",
-  "nm-r2": "R2",
-  "nm-r3": "R3",
-  "nm-r4": "R4",
-  "nm-r5": "R5",
-  "nm-r6": "R6",
-  "nm-r7": "R7",
-  "nm-residential-1": "الحي السكني الأول",
-  "nm-residential-2": "الحي السكني الثاني",
-  "nm-residential-3": "الحي السكني الثالث",
-  "nm-sakan-kol-misryeen": "سكن لكل المصريين",
-  "nm-sakan-kol-misryeen-2": "سكن لكل المصريين 2",
-  "nm-sakan-kol-misryeen-3": "سكن لكل المصريين 3",
-  "nm-dar-misr": "دار مصر",
-  "nm-janna": "جنة",
-  "nm-middle-housing": "الإسكان المتوسط",
-  "nm-social-housing": "الإسكان الاجتماعي",
-  "nm-villas-district": "حي الفيلات",
-  "nm-villas-d": "منطقة الفيلات D",
-  "nm-golf-villas": "فيلات الجولف",
-  "nm-lakes-villas": "فيلات البحيرات",
-  "nm-downtown": "داون تاون",
-  "nm-central-mall": "المول التجاري المركزي",
-  "nm-cbd": "منطقة الأعمال المركزية CBD",
-  "nm-commercial-axis": "المحور التجاري",
-  "nm-services-zone": "منطقة الخدمات",
-  "nm-central-park": "الحديقة المركزية",
-  "nm-corniche": "منطقة الكورنيش",
-  "nm-social-club": "النادي الاجتماعي",
-  "nm-touristic-zone": "المنطقة السياحية",
-  "nm-waterfront": "الواجهة البحرية",
-  "nm-beach": "شاطئ المنصورة الجديدة",
-  "nm-coastal-resorts": "منتجعات الساحل",
-};
-
 // Check if slug is for New Mansoura
 const isNewMansoura = (slug: string) => slug.startsWith("nm-");
 
@@ -83,7 +28,7 @@ const PROPERTY_TYPES = ["الكل", "شقة", "فيلا منفصلة", "دوبل
 export default function DistrictPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const districtName = DISTRICT_SLUGS[slug] || decodeURIComponent(slug).replace(/-/g, " ");
+  const districtName = SLUG_TO_DISTRICT[slug] || decodeURIComponent(slug).replace(/-/g, " ");
   const isNM = isNewMansoura(slug);
   const cityName = isNM ? "المنصورة الجديدة" : "دمياط الجديدة";
   const cityId = isNM ? "new-mansoura" : "new-damietta";
@@ -124,7 +69,6 @@ export default function DistrictPage() {
   // Dynamic SEO
   useEffect(() => {
     if (districtName) {
-      document.title = `عقارات ${districtName} - ${cityName} | شقق وفيلات للبيع - التيسير للعقارات`;
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
         metaDesc.setAttribute("content", 

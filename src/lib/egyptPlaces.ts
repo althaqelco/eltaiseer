@@ -351,89 +351,6 @@ export const ALL_PLACE_CATEGORIES = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DISTRICT SLUG MAPPINGS
-// ═══════════════════════════════════════════════════════════════════════════════
-
-// New Damietta District Slugs
-export const ND_DISTRICT_SLUGS: Record<string, string> = {
-  "first-district": "الحي الأول",
-  "second-district": "الحي الثاني",
-  "third-district": "الحي الثالث",
-  "fourth-district": "الحي الرابع",
-  "fifth-district": "الحي الخامس",
-  "sixth-district": "الحي السادس (المتميز)",
-  "janna-project": "مشروع جنة",
-  "dar-misr-1": "دار مصر - موقع 1",
-  "dar-misr-2": "دار مصر - موقع 2",
-  "sakan-misr-south": "سكن مصر - جنوب الحي الأول",
-  "sakan-misr-west": "سكن مصر - غرب الجامعات",
-  "beit-al-watan-east": "بيت الوطن - شرق",
-  "beit-al-watan-west": "بيت الوطن - غرب",
-  "beit-al-watan-beach": "بيت الوطن - امتداد الشاطئ",
-  "central-area-a": "المنطقة المركزية (أ)",
-  "central-area-b": "المنطقة المركزية (ب)",
-  "central-area-c": "المنطقة المركزية (ج)",
-  "north-university": "شمال الجامعة",
-  "industrial-zone": "المنطقة الصناعية",
-  "chalets": "منطقة الشاليهات",
-};
-
-// New Mansoura District Slugs
-export const NM_DISTRICT_SLUGS: Record<string, string> = {
-  "r1": "R1",
-  "r2": "R2",
-  "r3": "R3",
-  "r4": "R4",
-  "r5": "R5",
-  "r6": "R6",
-  "r7": "R7",
-  "residential-1": "الحي السكني الأول",
-  "residential-2": "الحي السكني الثاني",
-  "residential-3": "الحي السكني الثالث",
-  "sakan-kol-misryeen": "سكن لكل المصريين",
-  "sakan-kol-misryeen-2": "سكن لكل المصريين 2",
-  "sakan-kol-misryeen-3": "سكن لكل المصريين 3",
-  "dar-misr": "دار مصر",
-  "janna": "جنة",
-  "middle-housing": "الإسكان المتوسط",
-  "social-housing": "الإسكان الاجتماعي",
-  "villas-district": "حي الفيلات",
-  "villas-d": "منطقة الفيلات D",
-  "golf-villas": "فيلات الجولف",
-  "lakes-villas": "فيلات البحيرات",
-  "downtown": "داون تاون",
-  "central-mall": "المول التجاري المركزي",
-  "cbd": "منطقة الأعمال المركزية CBD",
-  "commercial-axis": "المحور التجاري",
-  "services-zone": "منطقة الخدمات",
-  "central-park": "الحديقة المركزية",
-  "corniche": "منطقة الكورنيش",
-  "social-club": "النادي الاجتماعي",
-  "touristic-zone": "المنطقة السياحية",
-  "waterfront": "الواجهة البحرية",
-  "beach": "شاطئ المنصورة الجديدة",
-  "coastal-resorts": "منتجعات الساحل",
-};
-
-// Combined slugs for all cities
-export const ALL_DISTRICT_SLUGS: Record<string, { district: string; cityId: CityId }> = {
-  // New Damietta
-  ...Object.fromEntries(
-    Object.entries(ND_DISTRICT_SLUGS).map(([slug, district]) => [
-      slug,
-      { district, cityId: "new-damietta" as CityId },
-    ])
-  ),
-  // New Mansoura (with nm- prefix to avoid conflicts)
-  ...Object.fromEntries(
-    Object.entries(NM_DISTRICT_SLUGS).map(([slug, district]) => [
-      `nm-${slug}`,
-      { district, cityId: "new-mansoura" as CityId },
-    ])
-  ),
-};
-
-// ═══════════════════════════════════════════════════════════════════════════════
 // COMMON DATA (Shared between cities)
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -598,35 +515,6 @@ export function getPriceMultiplier(district: string, cityId?: CityId): number {
   }
   // Check both cities
   return ND_PRICE_MULTIPLIERS[district] || NM_PRICE_MULTIPLIERS[district] || 1;
-}
-
-/**
- * Get district from slug
- */
-export function getDistrictFromSlug(slug: string, cityId?: CityId): string | undefined {
-  if (cityId === "new-damietta") {
-    return ND_DISTRICT_SLUGS[slug];
-  }
-  if (cityId === "new-mansoura") {
-    return NM_DISTRICT_SLUGS[slug];
-  }
-  // Check both
-  return ND_DISTRICT_SLUGS[slug] || NM_DISTRICT_SLUGS[slug.replace("nm-", "")];
-}
-
-/**
- * Get slug from district name
- */
-export function getSlugFromDistrict(district: string): string | undefined {
-  // Check New Damietta
-  const ndEntry = Object.entries(ND_DISTRICT_SLUGS).find(([, d]) => d === district);
-  if (ndEntry) return ndEntry[0];
-  
-  // Check New Mansoura
-  const nmEntry = Object.entries(NM_DISTRICT_SLUGS).find(([, d]) => d === district);
-  if (nmEntry) return `nm-${nmEntry[0]}`;
-  
-  return undefined;
 }
 
 /**

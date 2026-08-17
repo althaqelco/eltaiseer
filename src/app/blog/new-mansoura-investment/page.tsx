@@ -34,7 +34,7 @@ export const metadata: Metadata = {
         ],
     },
     alternates: {
-        canonical: "https://eltaiseer.com/blog/new-mansoura-investment",
+        canonical: "https://eltaiseer.com/blog/new-mansoura-investment/",
     },
 };
 
@@ -75,7 +75,7 @@ export default function NewMansouraInvestmentArticle() {
                             <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">استثمار عقاري</span>
                             <span className="flex items-center gap-1">
                                 <Calendar className="h-4 w-4" />
-                                17 يناير 2025
+                                17 يناير 2026
                             </span>
                             <span className="flex items-center gap-1">
                                 <Clock className="h-4 w-4" />
@@ -83,7 +83,7 @@ export default function NewMansouraInvestmentArticle() {
                             </span>
                         </div>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-                            الاستثمار العقاري في المنصورة الجديدة 2025: دليل المستثمر الذكي
+                            الاستثمار العقاري في المنصورة الجديدة 2026: دليل المستثمر الذكي
                         </h1>
                         <p className="text-xl text-gray-600 leading-relaxed">
                             المنصورة الجديدة تمثل فرصة استثمارية ذهبية لا تتكرر. في هذا الدليل المفصل، نكشف لك

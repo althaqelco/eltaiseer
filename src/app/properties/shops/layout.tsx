@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "محلات تجارية للبيع في دمياط الجديدة | مقرات إدارية ومكاتب",
-  description: "أفضل المحلات التجارية والمقرات الإدارية للبيع في دمياط الجديدة. مواقع استراتيجية على الشوارع الرئيسية. مساحات متنوعة تناسب جميع الأنشطة.",
+  title: "محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة | مقرات إدارية ومكاتب",
+  description: "أفضل المحلات التجارية والمقرات الإدارية للبيع في دمياط الجديدة والمنصورة الجديدة. مواقع استراتيجية على الشوارع الرئيسية. مساحات متنوعة تناسب جميع الأنشطة.",
   keywords: [
-    "محلات للبيع في دمياط الجديدة",
+    "محلات للبيع في دمياط الجديدة والمنصورة الجديدة",
     "محل تجاري دمياط",
     "مقر إداري دمياط الجديدة",
     "مكتب للبيع دمياط",
@@ -15,20 +15,20 @@ export const metadata: Metadata = {
     "محلات تجارية المنصورة الجديدة",
   ],
   openGraph: {
-    title: "محلات تجارية للبيع في دمياط الجديدة",
+    title: "محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة",
     description: "محلات ومقرات إدارية بمواقع استراتيجية",
-    url: "https://eltaiseer.com/properties/shops",
+    url: "https://eltaiseer.com/properties/shops/",
   },
-  alternates: { canonical: "https://eltaiseer.com/properties/shops" },
+  alternates: { canonical: "https://eltaiseer.com/properties/shops/" },
 };
 
 export default function ShopsLayout({ children }: { children: React.ReactNode }) {
   const itemListSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة",
+    name: "محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة",
     description: "محلات ومقرات إدارية بمواقع استراتيجية",
-    url: "https://eltaiseer.com/properties/shops",
+    url: "https://eltaiseer.com/properties/shops/",
     itemListOrder: "https://schema.org/ItemListUnordered",
   };
 

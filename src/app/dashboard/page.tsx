@@ -23,69 +23,7 @@ import {
 import { getAllPropertiesAsync, deletePropertyAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
 import { CityId } from "@/lib/egyptPlaces";
-
-// Helper function to get property URL with new structure
-function getPropertyUrl(property: Property): string {
-  const citySlug = property.location.cityId || "new-damietta";
-  const districtSlug = getDistrictSlug(property.location.district);
-  return `/${citySlug}/${districtSlug}/${property.id}`;
-}
-
-function getDistrictSlug(districtName: string): string {
-  // Handle empty or undefined district
-  if (!districtName || districtName.trim() === "") {
-    return "unknown-district";
-  }
-
-  const slugMap: Record<string, string> = {
-    "الحي الأول": "first-district",
-    "الحي الثاني": "second-district",
-    "الحي الثالث": "third-district",
-    "الحي الرابع": "fourth-district",
-    "الحي الخامس": "fifth-district",
-    "الحي السادس (المتميز)": "sixth-district",
-    "مشروع جنة": "janna-project",
-    "دار مصر - موقع 1": "dar-misr-1",
-    "دار مصر - موقع 2": "dar-misr-2",
-    "سكن مصر - جنوب الحي الأول": "sakan-misr-south",
-    "سكن مصر - غرب الجامعات": "sakan-misr-west",
-    "بيت الوطن - شرق": "beit-al-watan-east",
-    "بيت الوطن - غرب": "beit-al-watan-west",
-    "بيت الوطن - امتداد الشاطئ": "beit-al-watan-beach",
-    "المنطقة المركزية (أ)": "central-area-a",
-    "المنطقة المركزية (ب)": "central-area-b",
-    "المنطقة المركزية (ج)": "central-area-c",
-    "منطقة الشاليهات": "chalets",
-    "R1": "r1", "R2": "r2", "R3": "r3", "R4": "r4", "R5": "r5", "R6": "r6", "R7": "r7",
-    "الحي السكني الأول": "residential-1",
-    "الحي السكني الثاني": "residential-2",
-    "الحي السكني الثالث": "residential-3",
-    "سكن لكل المصريين": "sakan-kol-misryeen",
-    "سكن لكل المصريين 2": "sakan-kol-misryeen-2",
-    "سكن لكل المصريين 3": "sakan-kol-misryeen-3",
-    "دار مصر": "dar-misr",
-    "جنة": "janna",
-    "الإسكان المتوسط": "medium-housing",
-    "الإسكان الاجتماعي": "social-housing",
-    "حي الفيلات": "villas-district",
-    "منطقة الفيلات D": "villas-d",
-    "فيلات الجولف": "golf-villas",
-    "فيلات البحيرات": "lake-villas",
-    "داون تاون": "downtown",
-    "المول التجاري المركزي": "central-mall",
-    "منطقة الأعمال المركزية CBD": "cbd",
-    "المحور التجاري": "commercial-axis",
-    "منطقة الخدمات": "services-zone",
-    "الحديقة المركزية": "central-park",
-    "منطقة الكورنيش": "corniche",
-    "النادي الاجتماعي": "social-club",
-    "المنطقة السياحية": "touristic-zone",
-    "الواجهة البحرية": "waterfront",
-    "شاطئ المنصورة الجديدة": "beach",
-    "منتجعات الساحل": "coastal-resorts",
-  };
-  return slugMap[districtName] || districtName.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "");
-}
+import { getPropertyUrl } from "@/lib/districtSlugs";
 
 export default function DashboardPage() {
   const [properties, setProperties] = useState<Property[]>([]);

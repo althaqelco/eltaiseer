@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "المدونة | نصائح ومقالات عقارية",
   description: "مقالات ونصائح عقارية من خبراء التيسير للعقارات - كل ما تحتاج معرفته عن سوق العقارات في دمياط الجديدة والمنصورة الجديدة",
   alternates: {
-    canonical: "https://eltaiseer.com/blog",
+    canonical: "https://eltaiseer.com/blog/",
   },
 };
 
@@ -104,7 +104,7 @@ export default function BlogPage() {
     "@type": "CollectionPage",
     name: "المدونة العقارية | التيسير للعقارات",
     description: "مقالات ونصائح عقارية من خبراء التيسير للعقارات عن سوق العقارات في دمياط الجديدة والمنصورة الجديدة",
-    url: "https://eltaiseer.com/blog",
+    url: "https://eltaiseer.com/blog/",
     isPartOf: { "@type": "WebSite", "@id": "https://eltaiseer.com/#website" },
     mainEntity: {
       "@type": "ItemList",
@@ -112,7 +112,7 @@ export default function BlogPage() {
       itemListElement: blogPosts.map((post, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: `https://eltaiseer.com/blog/${post.slug}`,
+        url: `https://eltaiseer.com/blog/${post.slug}/`,
         name: post.title,
       })),
     },

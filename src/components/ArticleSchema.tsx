@@ -37,7 +37,7 @@ export function ArticleSchema({
       name: "التيسير للعقارات",
       logo: {
         "@type": "ImageObject",
-        url: "https://eltaiseer.com/logo.png",
+        url: "https://eltaiseer.com/logo.png/",
       },
     },
     mainEntityOfPage: {

@@ -1,9 +1,20 @@
 import { Metadata } from "next";
 import HomeClient from "./HomeClient";
+import { HOME_FAQ, buildFaqSchema } from "@/lib/homeFaq";
+import {
+  getPropertiesServer,
+  serializeProperties,
+  buildItemListSchema,
+} from "@/lib/serverProperties";
+
+// ISR كل 5 دقائق — عقارات الرئيسية تظهر في HTML الخادم
+export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة 2026",
-  description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع 2026 - شقق، فيلات، دوبلكس، محلات تجارية، أراضي. أسعار تنافسية وتقسيط مريح. تصفح أكثر من 100 عقار في جميع أحياء المدن الجديدة. التيسير للعقارات - شريكك الموثوق.",
+  title: {
+    absolute: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة 2026",
+  },
+  description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع 2026 — شقق وفيلات وأراضي بأسعار تنافسية وتقسيط حتى 10 سنوات. أكثر من 100 عقار في جميع الأحياء.",
   keywords: [
     "عقارات دمياط الجديدة",
     "شقق للبيع في دمياط الجديدة",
@@ -27,12 +38,12 @@ export const metadata: Metadata = {
     "apartments for sale new mansoura",
   ],
   alternates: {
-    canonical: "https://eltaiseer.com",
+    canonical: "https://eltaiseer.com/",
   },
   openGraph: {
     title: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة 2026",
     description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع 2026 - شقق، فيلات، دوبلكس، محلات تجارية، أراضي. أسعار تنافسية وتقسيط مريح.",
-    url: "https://eltaiseer.com",
+    url: "https://eltaiseer.com/",
     type: "website",
     locale: "ar_EG",
     siteName: "التيسير للعقارات",
@@ -53,77 +64,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
-  const homepageFaqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "ما هي أسعار الشقق في دمياط الجديدة 2026؟",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "تتراوح أسعار الشقق في دمياط الجديدة في 2026 من 500,000 جنيه للشقق الصغيرة حتى 5 مليون جنيه للدوبلكس والبنتهاوس. الأسعار تختلف حسب الحي والمساحة ومستوى التشطيب. الحي الأول والثاني من أعلى الأحياء سعراً، بينما مشاريع الإسكان القومي مثل جنة ودار مصر تقدم أسعاراً مدعومة."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "كم سعر المتر في دمياط الجديدة 2026؟",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "يتراوح سعر المتر في دمياط الجديدة 2026 بين 5,000 و 20,000 جنيه حسب الحي ومستوى التشطيب. الحي الأول والمتميز من أعلى المناطق سعراً للمتر، بينما الأحياء الجديدة مثل الحي الخامس والسادس تقدم أسعاراً أقل."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "ما هي أفضل الأحياء للسكن في دمياط الجديدة؟",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "أفضل أحياء دمياط الجديدة للسكن تشمل: الحي الأول والثاني (خدمات متكاملة وموقع مركزي)، الحي الثالث (هادئ وقريب من الخدمات)، مشروع جنة (تشطيبات فاخرة بأسعار مدعومة)، ودار مصر وسكن مصر (مشاريع حكومية بتصميمات حديثة). الاختيار يعتمد على الميزانية والأولويات."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "هل يوجد تقسيط للشقق في دمياط الجديدة؟",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "نعم، تتوفر خيارات تقسيط متعددة للشقق في دمياط الجديدة تصل حتى 10 سنوات مع مقدمات تبدأ من 10%. التيسير للعقارات يوفر خيارات دفع مرنة تشمل الكاش والتقسيط المباشر مع المالك أو عبر التمويل العقاري البنكي."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "ما هي أسعار الشقق في المنصورة الجديدة 2026؟",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "تبدأ أسعار الشقق في المنصورة الجديدة 2026 من 600,000 جنيه في مشاريع سكن لكل المصريين، وتصل إلى 8 مليون جنيه للفيلات في حي الفيلات والداون تاون. المنصورة الجديدة مدينة الجيل الرابع بتخطيط عالمي وفرص استثمارية واعدة."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "ما الفرق بين دمياط الجديدة والمنصورة الجديدة؟",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "دمياط الجديدة مدينة مكتملة البنية التحتية بها جميع الخدمات والمرافق وقريبة من البحر. المنصورة الجديدة مدينة الجيل الرابع قيد التطوير بتخطيط عالمي وبنية تحتية ذكية، مع إمكانيات استثمارية عالية وأسعار متنامية. كلا المدينتين يضمان مشاريع إسكان قومية."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "كم سعر المتر في المنصورة الجديدة 2026؟",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "يتراوح سعر المتر في المنصورة الجديدة 2026 بين 6,000 و 25,000 جنيه. مناطق R1 وR2 وR3 السكنية تتراوح بين 8,000 و 15,000 جنيه للمتر، بينما حي الفيلات وداون تاون من أعلى المناطق سعراً."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "هل الاستثمار في المنصورة الجديدة مربح؟",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "نعم، الاستثمار في المنصورة الجديدة يعد فرصة واعدة. كمدينة جيل رابع قيد التطوير، تشهد أسعار العقارات ارتفاعاً مستمراً مع اكتمال البنية التحتية. العوائد المتوقعة تصل إلى 30-40% خلال 3-5 سنوات. أفضل مناطق الاستثمار: R1-R3 للشقق، حي الفيلات للفيلات، وداون تاون للمحلات التجارية."
-        }
-      },
-    ]
-  };
+export default async function Home() {
+  const homepageFaqSchema = buildFaqSchema(HOME_FAQ);
+  const allProperties = await getPropertiesServer();
+  const itemListSchema = buildItemListSchema(
+    allProperties.filter((p) => p.status !== "تم البيع"),
+    "أحدث عقارات دمياط الجديدة والمنصورة الجديدة"
+  );
 
   const speakableSchema = {
     "@context": "https://schema.org",
@@ -133,7 +80,7 @@ export default function Home() {
       "@type": "SpeakableSpecification",
       "cssSelector": ["h1", "h2", ".hero-description"]
     },
-    "url": "https://eltaiseer.com"
+    "url": "https://eltaiseer.com/"
   };
 
   return (
@@ -146,7 +93,13 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
       />
-      <HomeClient />
+      {allProperties.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        />
+      )}
+      <HomeClient initialProperties={serializeProperties(allProperties)} />
     </>
   );
 }

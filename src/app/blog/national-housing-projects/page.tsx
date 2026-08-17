@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "بيت الوطن دمياط",
   ],
   openGraph: {
-    title: "مشاريع الإسكان القومية في دمياط الجديدة 2025",
+    title: "مشاريع الإسكان القومية في دمياط الجديدة 2026",
     description: "كل ما تحتاج معرفته عن مشاريع جنة ودار مصر وسكن مصر",
     type: "article",
     publishedTime: "2026-01-05",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://eltaiseer.com/blog/national-housing-projects",
+    canonical: "https://eltaiseer.com/blog/national-housing-projects/",
   },
 };
 
@@ -74,7 +74,7 @@ export default function NationalHousingArticle() {
               <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">المشاريع</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                5 يناير 2025
+                5 يناير 2026
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -82,7 +82,7 @@ export default function NationalHousingArticle() {
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-              مشاريع الإسكان القومية في دمياط الجديدة: دليلك الشامل 2025
+              مشاريع الإسكان القومية في دمياط الجديدة: دليلك الشامل 2026
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
               تعرف على جميع مشاريع الإسكان القومية في دمياط الجديدة، من مشروع جنة الفاخر إلى سكن مصر الاقتصادي. 
@@ -146,7 +146,7 @@ export default function NationalHousingArticle() {
               <li><strong>الموقع:</strong> مواقع متميزة بالقرب من الخدمات الرئيسية</li>
             </ul>
 
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">أسعار مشروع جنة 2025</h3>
+            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">أسعار مشروع جنة 2026</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
               تتراوح أسعار الوحدات في مشروع جنة حسب المساحة والموقع:
             </p>
@@ -172,7 +172,7 @@ export default function NationalHousingArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">مشروع دار مصر: التوازن بين الجودة والسعر</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يمثل <Link href="/new-damietta/dar-misr" className="text-orange-600 hover:underline font-semibold">مشروع دار مصر</Link> 
+              يمثل <Link href="/new-damietta/dar-misr-1" className="text-orange-600 hover:underline font-semibold">مشروع دار مصر</Link> 
               الخيار الأمثل للباحثين عن شقق بتشطيبات جيدة وأسعار معقولة. المشروع موجه للطبقة المتوسطة 
               ويقدم وحدات بمواصفات ممتازة تناسب العائلات.
             </p>
@@ -186,7 +186,7 @@ export default function NationalHousingArticle() {
               <li><strong>أنظمة السداد:</strong> تقسيط على 5-7 سنوات</li>
             </ul>
 
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">أسعار دار مصر 2025</h3>
+            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">أسعار دار مصر 2026</h3>
             <div className="overflow-x-auto mb-8">
               <table className="w-full border-collapse bg-white rounded-xl overflow-hidden shadow">
                 <thead className="bg-blue-500 text-white">
@@ -218,7 +218,7 @@ export default function NationalHousingArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">مشروع سكن مصر: الحل الاقتصادي</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يقدم <Link href="/new-damietta/sakan-misr" className="text-orange-600 hover:underline font-semibold">مشروع سكن مصر</Link> 
+              يقدم <Link href="/new-damietta/sakan-misr-south" className="text-orange-600 hover:underline font-semibold">مشروع سكن مصر</Link> 
               وحدات سكنية بأسعار اقتصادية مناسبة للشباب والأسر محدودة الدخل. رغم الأسعار المنخفضة، 
               يحافظ المشروع على مستوى جودة مقبول في البناء والتشطيب.
             </p>
@@ -257,7 +257,7 @@ export default function NationalHousingArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">بيت الوطن: للمصريين بالخارج</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يستهدف مشروع <Link href="/new-damietta/beit-al-watan" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link> 
+              يستهدف مشروع <Link href="/new-damietta/beit-al-watan-east" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link> 
               المصريين المقيمين بالخارج، حيث يتم السداد بالدولار الأمريكي. يوفر المشروع قطع أراضي 
               ووحدات سكنية بمواقع متميزة في دمياط الجديدة.
             </p>

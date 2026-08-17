@@ -4,18 +4,21 @@ import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { WhyUsSection } from "@/components/WhyUsSection";
+import { HomeFaqSection } from "@/components/HomeFaqSection";
 import { PropertyCard } from "@/components/PropertyCard";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Footer } from "@/components/Footer";
 import { Property } from "@/lib/mockData";
-import { getAllProperties, getAllPropertiesAsync } from "@/lib/propertyStore";
+import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { CityId } from "@/lib/egyptPlaces";
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, List, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export default function HomeClient() {
-  const [properties, setProperties] = useState<Property[]>([]);
+export default function HomeClient({ initialProperties = [] }: { initialProperties?: Property[] }) {
+  const [properties, setProperties] = useState<Property[]>(
+    () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
+  );
   const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -28,15 +31,10 @@ export default function HomeClient() {
   const ITEMS_PER_PAGE = 20;
 
   useEffect(() => {
-    // Initial load from cache/mock
-    const cachedProperties = getAllProperties();
-    setProperties(cachedProperties);
-    
-    // Then fetch from Firestore
+    // البيانات الأولية من الخادم؛ تحديث حي من Firestore بعد التحميل
     getAllPropertiesAsync().then((firestoreProperties) => {
       if (firestoreProperties.length > 0) {
         setProperties(firestoreProperties);
-        console.log(`🏠 تم تحميل ${firestoreProperties.length} عقار من Firestore`);
       }
     }).catch(console.error);
   }, []);
@@ -380,6 +378,9 @@ export default function HomeClient() {
 
       {/* Why Us Section - Before Footer */}
       <WhyUsSection />
+
+      {/* FAQ - visible content matching the FAQPage schema */}
+      <HomeFaqSection />
 
       <Footer />
     </div>

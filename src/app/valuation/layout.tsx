@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "تقييم العقارات مجاناً | التيسير للعقارات",
     description: "احصل على تقييم مجاني لعقارك في دمياط الجديدة أو المنصورة الجديدة من خبراء التيسير للعقارات",
-    url: "https://eltaiseer.com/valuation",
+    url: "https://eltaiseer.com/valuation/",
     type: "website",
     locale: "ar_EG",
     siteName: "التيسير للعقارات",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     description: "تقييم عقاري مجاني ودقيق في دمياط الجديدة والمنصورة الجديدة",
   },
   alternates: {
-    canonical: "https://eltaiseer.com/valuation",
+    canonical: "https://eltaiseer.com/valuation/",
   },
   robots: {
     index: true,
@@ -61,7 +61,7 @@ export default function ValuationLayout({
       priceCurrency: "EGP",
       description: "تقييم عقاري مجاني بالكامل",
     },
-    url: "https://eltaiseer.com/valuation",
+    url: "https://eltaiseer.com/valuation/",
   };
 
   return (

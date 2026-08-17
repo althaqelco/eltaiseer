@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Home, ChevronLeft } from "lucide-react";
 
@@ -41,23 +39,13 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
         className={`bg-white border-b ${className}`}
       >
         <div className="container mx-auto px-4 py-3">
-          <ol 
-            className="flex items-center flex-wrap gap-1 sm:gap-2 text-sm"
-            itemScope
-            itemType="https://schema.org/BreadcrumbList"
-          >
+          <ol className="flex items-center flex-wrap gap-1 sm:gap-2 text-sm">
             {items.map((item, index) => {
               const isLast = index === items.length - 1;
               const isFirst = index === 0;
               
               return (
-                <li 
-                  key={index}
-                  className="flex items-center"
-                  itemProp="itemListElement"
-                  itemScope
-                  itemType="https://schema.org/ListItem"
-                >
+                <li key={index} className="flex items-center">
                   {/* Separator */}
                   {!isFirst && (
                     <ChevronLeft className="h-4 w-4 text-gray-400 mx-1 flex-shrink-0" />
@@ -68,10 +56,9 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
                     <Link
                       href={item.href}
                       className="flex items-center gap-1 text-gray-600 hover:text-orange-600 transition-colors"
-                      itemProp="item"
                     >
                       {item.icon || (isFirst && <Home className="h-4 w-4" />)}
-                      <span itemProp="name">{item.label}</span>
+                      <span>{item.label}</span>
                     </Link>
                   ) : (
                     <span 
@@ -80,14 +67,12 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
                           ? "text-orange-600 font-medium" 
                           : "text-gray-600"
                       }`}
-                      itemProp="name"
                     >
                       {item.icon}
                       {item.label}
                     </span>
                   )}
                   
-                  <meta itemProp="position" content={String(index + 1)} />
                 </li>
               );
             })}

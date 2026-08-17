@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import PropertyDetailClient from "./PropertyDetailClient";
 import { getPropertyFromFirestore } from "@/lib/firestoreProperties";
+import { getPropertyUrl } from "@/lib/districtSlugs";
 
 // صفحات العقارات ديناميكية بالكامل - يتم جلبها من Firebase
 export const dynamic = "force-dynamic";
@@ -58,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         openGraph: {
           title,
           description,
-          url: `https://eltaiseer.com/property/${id}`,
+          url: `https://eltaiseer.com${getPropertyUrl(property)}/`,
           type: "website",
           locale: "ar_EG",
           siteName: "التيسير للعقارات",
@@ -70,8 +71,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           description,
           images: property.images && property.images.length > 0 ? [property.images[0]] : ["/og-image.jpg"],
         },
+        // الرابط الأساسي هو /{city}/{district}/{id} — هذه الصفحة نسخة بديلة تشير إليه
         alternates: {
-          canonical: `https://eltaiseer.com/property/${id}`,
+          canonical: `https://eltaiseer.com${getPropertyUrl(property)}/`,
         },
         robots: {
           index: true,
@@ -83,14 +85,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     console.error("Error generating metadata for property:", error);
   }
 
-  // Fallback metadata
+  // Fallback metadata (العقار غير موجود — لا تتم فهرسته)
   return {
     title: "عقار للبيع في دمياط الجديدة والمنصورة الجديدة | التيسير للعقارات",
     description: "عقار للبيع في دمياط الجديدة والمنصورة الجديدة. شقق، فيلات، دوبلكس، أراضي، محلات تجارية بأسعار تنافسية. التيسير للعقارات - شريكك الموثوق.",
-    keywords: ["عقارات دمياط الجديدة", "عقارات المنصورة الجديدة", "شقق للبيع", "فيلات للبيع", "أراضي للبيع"],
-    alternates: {
-      canonical: `https://eltaiseer.com/property/${id}`,
-    },
+    robots: { index: false, follow: true },
   };
 }
 

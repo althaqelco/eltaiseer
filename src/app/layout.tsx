@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/lib/authContext";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { MetaPixel } from "@/components/MetaPixel";
 import { Suspense } from "react";
@@ -27,7 +26,7 @@ export const metadata: Metadata = {
     default: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة",
     template: "%s | التيسير للعقارات",
   },
-  description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع - شقق، فيلات، دوبلكس، محلات تجارية، أراضي. أسعار تنافسية وتقسيط مريح. تصفح أكثر من 100 عقار في جميع أحياء المدن الجديدة. التيسير للعقارات - شريكك الموثوق.",
+  description: "شقق وفيلات وأراضي ومحلات للبيع في دمياط الجديدة والمنصورة الجديدة بأسعار تنافسية وتقسيط حتى 10 سنوات. تصفح أكثر من 100 عقار مع التيسير للعقارات.",
   keywords: [
     "عقارات دمياط الجديدة",
     "شقق للبيع في دمياط الجديدة",
@@ -67,16 +66,10 @@ export const metadata: Metadata = {
     address: true,
     telephone: true,
   },
-  alternates: {
-    canonical: "https://eltaiseer.com",
-    languages: {
-      "ar-EG": "https://eltaiseer.com",
-    },
-  },
   openGraph: {
     type: "website",
     locale: "ar_EG",
-    url: "https://eltaiseer.com",
+    url: "https://eltaiseer.com/",
     siteName: "التيسير للعقارات",
     title: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة",
     description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع - شقق، فيلات، دوبلكس، محلات تجارية، أراضي. أسعار تنافسية وتقسيط مريح.",
@@ -109,10 +102,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "google-site-verification-code",
-    yandex: "yandex-verification-code",
-  },
   other: {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
@@ -127,6 +116,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // كيان واحد موحّد: RealEstateAgent هو نوع فرعي من LocalBusiness — لا داعي لكيانين منفصلين
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
@@ -134,23 +124,45 @@ export default function RootLayout({
     name: "التيسير للعقارات",
     alternateName: "El Taiseer Real Estate",
     description: "شركة التيسير للعقارات - أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع. شقق، فيلات، دوبلكس، محلات تجارية، أراضي بأسعار تنافسية.",
-    url: "https://eltaiseer.com",
+    url: "https://eltaiseer.com/",
     logo: "https://eltaiseer.com/logo.png",
+    image: "https://eltaiseer.com/logo.png",
     telephone: "+201558245974",
     address: {
       "@type": "PostalAddress",
       addressLocality: "دمياط الجديدة",
       addressRegion: "دمياط",
+      postalCode: "34511",
       addressCountry: "EG",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 31.4175,
+      longitude: 31.8144,
+    },
+    hasMap: "https://maps.google.com/?q=31.4175,31.8144",
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      opens: "09:00",
+      closes: "21:00",
     },
     areaServed: [
       { "@type": "City", name: "دمياط الجديدة" },
       { "@type": "City", name: "المنصورة الجديدة" }
     ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+201558245974",
+      contactType: "sales",
+      availableLanguage: ["Arabic"],
+    },
     sameAs: [
       "https://wa.me/201558245974",
     ],
     priceRange: "$$",
+    paymentAccepted: "Cash, Bank Transfer",
+    currenciesAccepted: "EGP",
     foundingDate: "2024",
     numberOfEmployees: { "@type": "QuantitativeValue", value: "5-10" },
     knowsAbout: ["عقارات دمياط الجديدة", "عقارات المنصورة الجديدة", "بيع شقق", "بيع فيلات", "بيع أراضي"],
@@ -160,7 +172,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": "https://eltaiseer.com/#website",
-    url: "https://eltaiseer.com",
+    url: "https://eltaiseer.com/",
     name: "التيسير للعقارات",
     description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع",
     publisher: { "@id": "https://eltaiseer.com/#organization" },
@@ -172,81 +184,6 @@ export default function RootLayout({
     },
   };
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "ما هي أسعار الشقق في دمياط الجديدة 2026؟",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "تتراوح أسعار الشقق في دمياط الجديدة من 500,000 جنيه للشقق الصغيرة حتى 5 مليون جنيه للدوبلكس والبنتهاوس. الأسعار تختلف حسب الحي والمساحة ومستوى التشطيب."
-        }
-      },
-      {
-        "@type": "Question",
-        name: "ما هي أفضل الأحياء للسكن في دمياط الجديدة؟",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "أفضل الأحياء تشمل الحي الأول والثاني والثالث للموقع المتميز، ومشروع جنة ودار مصر وسكن مصر للمشاريع القومية بأسعار مدعومة."
-        }
-      },
-      {
-        "@type": "Question",
-        name: "هل يوجد تقسيط للشقق في دمياط الجديدة؟",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "نعم، توجد خيارات تقسيط تصل حتى 10 سنوات مع مقدمات تبدأ من 10%. التيسير للعقارات يوفر خيارات دفع مرنة تناسب جميع الميزانيات."
-        }
-      },
-      {
-        "@type": "Question",
-        name: "ما هي أسعار الشقق في المنصورة الجديدة 2026؟",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "تبدأ أسعار الشقق في المنصورة الجديدة من 600,000 جنيه في مشاريع سكن لكل المصريين، وتصل إلى 8 مليون جنيه للفيلات في حي الفيلات والداون تاون."
-        }
-      },
-      {
-        "@type": "Question",
-        name: "ما الفرق بين دمياط الجديدة والمنصورة الجديدة؟",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "دمياط الجديدة مدينة مكتملة بها جميع الخدمات، بينما المنصورة الجديدة مدينة الجيل الرابع قيد التطوير مع إمكانيات استثمارية عالية وتخطيط عالمي."
-        }
-      }
-    ]
-  };
-
-  const localBusinessSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": "https://eltaiseer.com/#localbusiness",
-    name: "التيسير للعقارات",
-    image: "https://eltaiseer.com/logo.png",
-    telephone: "+201558245974",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "دمياط الجديدة",
-      addressLocality: "دمياط الجديدة",
-      addressRegion: "دمياط",
-      postalCode: "34511",
-      addressCountry: "EG"
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 31.4175,
-      longitude: 31.8144
-    },
-    url: "https://eltaiseer.com",
-    openingHours: "Mo-Sa 09:00-21:00",
-    priceRange: "$$",
-    paymentAccepted: "Cash, Bank Transfer",
-    currenciesAccepted: "EGP",
-    hasMap: "https://maps.google.com/?q=31.4175,31.8144",
-  };
-
   return (
     <html lang="ar" dir="rtl">
       <head>
@@ -254,8 +191,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com" />
         <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
-        <link rel="canonical" href="https://eltaiseer.com" />
-        <link rel="alternate" hrefLang="ar-EG" href="https://eltaiseer.com" />
         <meta name="geo.region" content="EG-DK" />
         <meta name="geo.placename" content="دمياط الجديدة" />
         <meta name="geo.position" content="31.4175;31.8144" />
@@ -268,14 +203,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-        />
       </head>
       <body
         className={`${cairo.variable} font-sans antialiased bg-gray-50`}
@@ -283,10 +210,8 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <MetaPixel />
         </Suspense>
-        <AuthProvider>
-          {children}
-          <FloatingWhatsApp />
-        </AuthProvider>
+        {children}
+        <FloatingWhatsApp />
       </body>
     </html>
   );

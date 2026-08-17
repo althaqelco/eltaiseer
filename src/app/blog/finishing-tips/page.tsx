@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://eltaiseer.com/blog/finishing-tips",
+    canonical: "https://eltaiseer.com/blog/finishing-tips/",
   },
 };
 
@@ -127,7 +127,7 @@ export default function FinishingTipsArticle() {
             <div className="bg-amber-50 rounded-xl p-6 mb-6">
               <div className="flex items-center gap-2 mb-3">
                 <Paintbrush className="h-5 w-5 text-amber-600" />
-                <h3 className="text-lg font-bold text-gray-900">تكلفة التشطيب في دمياط الجديدة 2025</h3>
+                <h3 className="text-lg font-bold text-gray-900">تكلفة التشطيب في دمياط الجديدة 2026</h3>
               </div>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                 <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> نصف تشطيب: 800-1,200 ج/م²</li>

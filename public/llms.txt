@@ -1,5 +1,5 @@
 # التيسير للعقارات - El Taiseer Real Estate
-> أكبر منصة عقارية في دمياط الجديدة والمنصورة الجديدة، مصر. نوفر شقق، فيلات، أراضي، محلات تجارية، عيادات، وشاليهات للبيع بأسعار تنافسية وتقسيط مريح.
+> منصة عقارية متخصصة في دمياط الجديدة والمنصورة الجديدة، مصر. نوفر شقق، فيلات، أراضي، محلات تجارية، عيادات، وشاليهات للبيع بأسعار تنافسية وتقسيط مريح.
 
 ## About
 التيسير للعقارات هي شركة عقارية متخصصة في بيع العقارات في دمياط الجديدة والمنصورة الجديدة بمحافظتي دمياط والدقهلية في مصر. تأسست الشركة لتكون الشريك الموثوق للباحثين عن عقارات في المدن الجديدة. نقدم أكثر من 100 عقار متنوع في جميع أحياء المدينتين مع خيارات دفع مرنة تشمل الكاش والتقسيط.
@@ -67,11 +67,14 @@
 - Working Hours: السبت - الخميس، 9 صباحاً - 9 مساءً
 
 ## Useful Links
-- All Properties: https://eltaiseer.com/properties
-- Apartments: https://eltaiseer.com/properties/apartments
-- Villas: https://eltaiseer.com/properties/villas
-- Lands: https://eltaiseer.com/properties/lands
-- New Damietta: https://eltaiseer.com/new-damietta
-- New Mansoura: https://eltaiseer.com/new-mansoura
-- Blog: https://eltaiseer.com/blog
-- Free Valuation: https://eltaiseer.com/valuation
+- All Properties: https://eltaiseer.com/properties/
+- Apartments: https://eltaiseer.com/properties/apartments/
+- Villas: https://eltaiseer.com/properties/villas/
+- Lands: https://eltaiseer.com/properties/lands/
+- New Damietta: https://eltaiseer.com/new-damietta/
+- New Mansoura: https://eltaiseer.com/new-mansoura/
+- Blog: https://eltaiseer.com/blog/
+- Free Valuation: https://eltaiseer.com/valuation/
+
+---
+آخر تحديث: أغسطس 2026 | Last updated: August 2026

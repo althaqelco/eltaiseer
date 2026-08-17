@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { Property } from "@/lib/mockData";
-import { getDistrictColor, CityId } from "@/lib/egyptPlaces";
+import { getDistrictColor } from "@/lib/egyptPlaces";
+import { getPropertyUrl } from "@/lib/districtSlugs";
+import { getWhatsAppUrl } from "@/lib/format";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -27,70 +29,6 @@ interface PropertyCardProps {
   onFavoriteChange?: () => void;
 }
 
-// Helper function to get district slug
-function getDistrictSlug(districtName: string): string {
-  // Handle empty or undefined district
-  if (!districtName || districtName.trim() === "") {
-    return "unknown-district";
-  }
-
-  const slugMap: Record<string, string> = {
-    "الحي الأول": "first-district",
-    "الحي الثاني": "second-district",
-    "الحي الثالث": "third-district",
-    "الحي الرابع": "fourth-district",
-    "الحي الخامس": "fifth-district",
-    "الحي السادس (المتميز)": "sixth-district",
-    "مشروع جنة": "janna-project",
-    "دار مصر - موقع 1": "dar-misr-1",
-    "دار مصر - موقع 2": "dar-misr-2",
-    "سكن مصر - جنوب الحي الأول": "sakan-misr-south",
-    "سكن مصر - غرب الجامعات": "sakan-misr-west",
-    "بيت الوطن - شرق": "beit-al-watan-east",
-    "بيت الوطن - غرب": "beit-al-watan-west",
-    "بيت الوطن - امتداد الشاطئ": "beit-al-watan-beach",
-    "المنطقة المركزية (أ)": "central-area-a",
-    "المنطقة المركزية (ب)": "central-area-b",
-    "المنطقة المركزية (ج)": "central-area-c",
-    "منطقة الشاليهات": "chalets",
-    "R1": "r1", "R2": "r2", "R3": "r3", "R4": "r4", "R5": "r5", "R6": "r6", "R7": "r7",
-    "الحي السكني الأول": "residential-1",
-    "الحي السكني الثاني": "residential-2",
-    "الحي السكني الثالث": "residential-3",
-    "سكن لكل المصريين": "sakan-kol-misryeen",
-    "سكن لكل المصريين 2": "sakan-kol-misryeen-2",
-    "سكن لكل المصريين 3": "sakan-kol-misryeen-3",
-    "دار مصر": "dar-misr",
-    "جنة": "janna",
-    "الإسكان المتوسط": "medium-housing",
-    "الإسكان الاجتماعي": "social-housing",
-    "حي الفيلات": "villas-district",
-    "منطقة الفيلات D": "villas-d",
-    "فيلات الجولف": "golf-villas",
-    "فيلات البحيرات": "lake-villas",
-    "داون تاون": "downtown",
-    "المول التجاري المركزي": "central-mall",
-    "منطقة الأعمال المركزية CBD": "cbd",
-    "المحور التجاري": "commercial-axis",
-    "منطقة الخدمات": "services-zone",
-    "الحديقة المركزية": "central-park",
-    "منطقة الكورنيش": "corniche",
-    "النادي الاجتماعي": "social-club",
-    "المنطقة السياحية": "touristic-zone",
-    "الواجهة البحرية": "waterfront",
-    "شاطئ المنصورة الجديدة": "beach",
-    "منتجعات الساحل": "coastal-resorts",
-  };
-  return slugMap[districtName] || districtName.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "");
-}
-
-// Get property URL with new structure
-function getPropertyUrl(property: Property): string {
-  const citySlug = (property.location.cityId || "new-damietta") as CityId;
-  const districtSlug = getDistrictSlug(property.location.district);
-  return `/${citySlug}/${districtSlug}/${property.id}`;
-}
-
 export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) {
   const districtColor = getDistrictColor(property.location.district);
   const [isFav, setIsFav] = useState(false);
@@ -105,14 +43,6 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
     e.stopPropagation();
     const newState = toggleFavorite(property.id);
     setIsFav(newState);
-    if (!newState) {
-      // If adding to favorites (newState is true, but toggle returns the NEW state. Wait, toggleFavorite logic: 
-      // returns new list? No, it returns void usually, let's check lib/favoritesStore. 
-      // Re-reading logic in handleFavoriteClick: "const newState = toggleFavorite(property.id);"
-      // The previous code says "setIsFav(newState)".
-      // Let's assume newState is boolean isFavorite. 
-      // Actually, looking at the code, it seems toggleFavorite returns the new boolean state.
-    }
     if (newState) {
       trackEvent.addToWishlist(property.id, property.title, property.price);
     }
@@ -136,13 +66,8 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
     trackEvent.whatsappContact(property.id, property.title);
 
     const propertyFullUrl = `${window.location.origin}${propertyUrl}`;
-    const message = encodeURIComponent(
-      `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}\nرابط العقار: ${propertyFullUrl}`
-    );
-    window.open(
-      `https://wa.me/2${property.contact_whatsapp}?text=${message}`,
-      "_blank"
-    );
+    const message = `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}\nرابط العقار: ${propertyFullUrl}`;
+    window.open(getWhatsAppUrl(property.contact_whatsapp, message), "_blank");
   };
 
   const handleCall = (e: React.MouseEvent) => {

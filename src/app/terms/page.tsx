@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "الشروط والأحكام",
   description: "الشروط والأحكام الخاصة باستخدام موقع التيسير للعقارات - دمياط الجديدة",
   alternates: {
-    canonical: "https://eltaiseer.com/terms",
+    canonical: "https://eltaiseer.com/terms/",
   },
 };
 

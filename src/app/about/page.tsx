@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "عن التيسير للعقارات | شريكك الموثوق",
     description: "شركة عقارية متخصصة في دمياط الجديدة والمنصورة الجديدة - خبرة وثقة واحترافية",
-    url: "https://eltaiseer.com/about",
+    url: "https://eltaiseer.com/about/",
     type: "website",
     locale: "ar_EG",
     siteName: "التيسير للعقارات",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     description: "شركة عقارية متخصصة في دمياط الجديدة والمنصورة الجديدة",
   },
   alternates: {
-    canonical: "https://eltaiseer.com/about",
+    canonical: "https://eltaiseer.com/about/",
   },
 };
 
@@ -83,7 +83,7 @@ export default function AboutPage() {
     "@type": "AboutPage",
     name: "عن التيسير للعقارات",
     description: "التيسير للعقارات - شركة عقارية متخصصة في بيع العقارات في دمياط الجديدة والمنصورة الجديدة",
-    url: "https://eltaiseer.com/about",
+    url: "https://eltaiseer.com/about/",
     mainEntity: {
       "@type": "RealEstateAgent",
       "@id": "https://eltaiseer.com/#organization",

@@ -1,234 +1,109 @@
 import { MetadataRoute } from "next";
+import { getPropertiesFromFirestore } from "@/lib/firestoreProperties";
+import { getCityDistrictSlugs, getDistrictSlug } from "@/lib/districtSlugs";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://eltaiseer.com";
-  const currentDate = new Date().toISOString();
+const BASE_URL = "https://eltaiseer.com";
 
-  // العقارات يتم جلبها من Firebase - صفحات العقارات ديناميكية
+// trailingSlash:true في next.config — كل الروابط يجب أن تنتهي بـ / لتطابق canonical بدون تحويلات 301
+function url(path: string): string {
+  if (path === "") return `${BASE_URL}/`;
+  return `${BASE_URL}/${path.replace(/^\/|\/$/g, "")}/`;
+}
+
+// تواريخ ثابتة للمحتوى الثابت — lastModified وهمي "الآن" لكل الصفحات يفقد مصداقية الـ sitemap
+const BLOG_PUBLISHED = new Date("2026-01-18");
+const LEGAL_UPDATED = new Date("2026-01-12");
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const listingsDate = new Date();
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/properties`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/favorites`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/blog/buying-apartment-guide`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog/best-districts`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog/national-housing-projects`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog/investment-guide`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog/finishing-tips`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog/new-mansoura-districts`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog/new-mansoura-investment`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/valuation`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/careers`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/terms`,
-      lastModified: currentDate,
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/privacy`,
-      lastModified: currentDate,
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/cookies`,
-      lastModified: currentDate,
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/sitemap-page`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
+    { url: url(""), lastModified: listingsDate, changeFrequency: "daily", priority: 1.0 },
+    { url: url("properties"), lastModified: listingsDate, changeFrequency: "daily", priority: 0.9 },
+    { url: url("blog"), lastModified: BLOG_PUBLISHED, changeFrequency: "weekly", priority: 0.8 },
+    { url: url("valuation"), lastModified: LEGAL_UPDATED, changeFrequency: "monthly", priority: 0.8 },
+    { url: url("about"), lastModified: LEGAL_UPDATED, changeFrequency: "monthly", priority: 0.7 },
+    { url: url("careers"), lastModified: LEGAL_UPDATED, changeFrequency: "monthly", priority: 0.6 },
+    { url: url("terms"), lastModified: LEGAL_UPDATED, changeFrequency: "yearly", priority: 0.3 },
+    { url: url("privacy"), lastModified: LEGAL_UPDATED, changeFrequency: "yearly", priority: 0.3 },
+    { url: url("cookies"), lastModified: LEGAL_UPDATED, changeFrequency: "yearly", priority: 0.3 },
+    { url: url("sitemap-page"), lastModified: LEGAL_UPDATED, changeFrequency: "monthly", priority: 0.5 },
   ];
 
-  // Category pages - High priority for SEO
-  const categoryPages: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/properties/apartments`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/properties/villas`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/properties/lands`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/properties/shops`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/properties/clinics`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/properties/chalets`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
+  // Blog posts
+  const blogSlugs = [
+    "buying-apartment-guide",
+    "best-districts",
+    "national-housing-projects",
+    "investment-guide",
+    "finishing-tips",
+    "new-mansoura-districts",
+    "new-mansoura-investment",
   ];
+  const blogPages: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
+    url: url(`blog/${slug}`),
+    lastModified: BLOG_PUBLISHED,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
 
-  // City pages - New URL structure
+  // Category pages
+  const categorySlugs = ["apartments", "villas", "lands", "shops", "clinics", "chalets"];
+  const categoryPages: MetadataRoute.Sitemap = categorySlugs.map((slug) => ({
+    url: url(`properties/${slug}`),
+    lastModified: listingsDate,
+    changeFrequency: "daily",
+    priority: 0.9,
+  }));
+
+  // City pages
   const cityPages: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/new-damietta`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/new-mansoura`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.95,
-    },
+    { url: url("new-damietta"), lastModified: listingsDate, changeFrequency: "daily", priority: 0.95 },
+    { url: url("new-mansoura"), lastModified: listingsDate, changeFrequency: "daily", priority: 0.95 },
   ];
 
-  // District pages - New Damietta
-  const ndDistrictSlugs = [
-    "first-district",
-    "second-district", 
-    "third-district",
-    "fourth-district",
-    "fifth-district",
-    "sixth-district",
-    "janna-project",
-    "dar-misr-1",
-    "dar-misr-2",
-    "sakan-misr-south",
-    "sakan-misr-west",
-    "beit-al-watan-east",
-    "beit-al-watan-west",
-    "beit-al-watan-beach",
-    "central-area-a",
-    "central-area-b",
-    "central-area-c",
-    "chalets",
+  // District pages — مشتقة من نفس مصدر البيانات المستخدم في المسارات (لا قوائم يدوية)
+  const districtPages: MetadataRoute.Sitemap = (
+    [
+      ["new-damietta", getCityDistrictSlugs("new-damietta")],
+      ["new-mansoura", getCityDistrictSlugs("new-mansoura")],
+    ] as const
+  ).flatMap(([city, slugs]) =>
+    slugs.map((slug) => ({
+      url: url(`${city}/${slug}`),
+      lastModified: listingsDate,
+      changeFrequency: "daily" as const,
+      priority: 0.85,
+    }))
+  );
+
+  // Property detail pages — صفحات المال الحقيقية، تُجلب من Firestore
+  let propertyPages: MetadataRoute.Sitemap = [];
+  try {
+    const properties = await getPropertiesFromFirestore();
+    propertyPages = properties
+      .filter((p) => p.status !== "تم البيع")
+      .map((p) => {
+        const citySlug = p.location.cityId || "new-damietta";
+        const districtSlug = getDistrictSlug(p.location.district);
+        return {
+          url: url(`${citySlug}/${districtSlug}/${p.id}`),
+          lastModified: p.createdAt ? new Date(p.createdAt) : listingsDate,
+          changeFrequency: "weekly" as const,
+          priority: 0.8,
+        };
+      });
+  } catch {
+    // فشل الاتصال بـ Firestore وقت البناء لا يجب أن يكسر بقية الـ sitemap
+  }
+
+  return [
+    ...staticPages,
+    ...cityPages,
+    ...categoryPages,
+    ...districtPages,
+    ...blogPages,
+    ...propertyPages,
   ];
-
-  // District pages - New Mansoura
-  const nmDistrictSlugs = [
-    // Residential
-    "r1", "r2", "r3", "r4", "r5", "r6", "r7",
-    "residential-1", "residential-2", "residential-3",
-    // National Projects
-    "sakan-kol-misryeen", "sakan-kol-misryeen-2", "sakan-kol-misryeen-3",
-    "dar-misr", "janna", "medium-housing", "social-housing",
-    // Villas
-    "villas-district", "villas-d", "golf-villas", "lake-villas",
-    // Commercial
-    "downtown", "central-mall", "cbd", "commercial-axis", "services-zone",
-    // Entertainment
-    "central-park", "corniche", "social-club", "touristic-zone",
-    // Coastal
-    "waterfront", "beach", "coastal-resorts",
-  ];
-
-  // New Damietta districts
-  const ndDistrictPages: MetadataRoute.Sitemap = ndDistrictSlugs.map((slug) => ({
-    url: `${baseUrl}/new-damietta/${slug}`,
-    lastModified: currentDate,
-    changeFrequency: "daily" as const,
-    priority: 0.9,
-  }));
-
-  // New Mansoura districts
-  const nmDistrictPages: MetadataRoute.Sitemap = nmDistrictSlugs.map((slug) => ({
-    url: `${baseUrl}/new-mansoura/${slug}`,
-    lastModified: currentDate,
-    changeFrequency: "daily" as const,
-    priority: 0.9,
-  }));
-
-  return [...staticPages, ...cityPages, ...categoryPages, ...ndDistrictPages, ...nmDistrictPages];
 }

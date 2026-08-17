@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "شقق تمليك دمياط",
   ],
   openGraph: {
-    title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2025",
+    title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026",
     description: "كل ما تحتاج معرفته قبل شراء شقتك في دمياط الجديدة - نصائح الخبراء",
     type: "article",
     publishedTime: "2026-01-15",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://eltaiseer.com/blog/buying-apartment-guide",
+    canonical: "https://eltaiseer.com/blog/buying-apartment-guide/",
   },
 };
 
@@ -83,7 +83,7 @@ export default function BuyingGuideArticle() {
               <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full">نصائح الشراء</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                15 يناير 2025
+                15 يناير 2026
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -91,7 +91,7 @@ export default function BuyingGuideArticle() {
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-              دليلك الشامل لشراء شقة في دمياط الجديدة 2025
+              دليلك الشامل لشراء شقة في دمياط الجديدة 2026
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
               هل تفكر في شراء شقة في دمياط الجديدة؟ في هذا الدليل الشامل، نقدم لك كل ما تحتاج معرفته 
@@ -183,11 +183,11 @@ export default function BuyingGuideArticle() {
                 وحدات فاخرة بتشطيبات عالية الجودة
               </li>
               <li>
-                <Link href="/new-damietta/dar-misr" className="text-orange-600 hover:underline font-semibold">دار مصر</Link>: 
+                <Link href="/new-damietta/dar-misr-1" className="text-orange-600 hover:underline font-semibold">دار مصر</Link>: 
                 تشطيب سوبر لوكس بأسعار تنافسية
               </li>
               <li>
-                <Link href="/new-damietta/sakan-misr" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link>: 
+                <Link href="/new-damietta/sakan-misr-south" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link>: 
                 خيار اقتصادي مع مستوى تشطيب جيد
               </li>
             </ul>

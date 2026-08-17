@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "شاليهات للبيع في دمياط الجديدة | شاليهات على البحر",
-  description: "شاليهات فاخرة للبيع في دمياط الجديدة بإطلالات بحرية مباشرة. شاليهات بحمامات سباحة ومرافق متكاملة. أسعار تنافسية وتقسيط مريح.",
+  title: "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة | شاليهات على البحر",
+  description: "شاليهات فاخرة للبيع في دمياط الجديدة والمنصورة الجديدة بإطلالات بحرية مباشرة. شاليهات بحمامات سباحة ومرافق متكاملة. أسعار تنافسية وتقسيط مريح.",
   keywords: [
-    "شاليهات للبيع في دمياط الجديدة",
+    "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة",
     "شاليه على البحر دمياط",
     "شاليهات دمياط الجديدة",
     "شاليه بحمام سباحة",
@@ -12,20 +12,20 @@ export const metadata: Metadata = {
     "شاليه الواجهة البحرية المنصورة الجديدة",
   ],
   openGraph: {
-    title: "شاليهات للبيع في دمياط الجديدة",
+    title: "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة",
     description: "شاليهات فاخرة بإطلالات بحرية مباشرة",
-    url: "https://eltaiseer.com/properties/chalets",
+    url: "https://eltaiseer.com/properties/chalets/",
   },
-  alternates: { canonical: "https://eltaiseer.com/properties/chalets" },
+  alternates: { canonical: "https://eltaiseer.com/properties/chalets/" },
 };
 
 export default function ChaletsLayout({ children }: { children: React.ReactNode }) {
   const itemListSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة",
+    name: "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة",
     description: "شاليهات فاخرة بإطلالات بحرية مباشرة",
-    url: "https://eltaiseer.com/properties/chalets",
+    url: "https://eltaiseer.com/properties/chalets/",
     itemListOrder: "https://schema.org/ItemListUnordered",
   };
 

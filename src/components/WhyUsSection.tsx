@@ -1,5 +1,3 @@
-"use client";
-
 import { Shield, Users, Clock, Award, Headphones, CheckCircle, Sparkles, Target, ThumbsUp } from "lucide-react";
 
 const features = [

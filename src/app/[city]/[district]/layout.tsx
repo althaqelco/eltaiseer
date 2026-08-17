@@ -1,67 +1,25 @@
 import { Metadata } from "next";
+import { SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
 
 type Props = {
   params: Promise<{ city: string; district: string }>;
   children: React.ReactNode;
 };
 
-const DISTRICT_NAMES: Record<string, string> = {
-  "first-district": "الحي الأول",
-  "second-district": "الحي الثاني",
-  "third-district": "الحي الثالث",
-  "fourth-district": "الحي الرابع",
-  "fifth-district": "الحي الخامس",
-  "sixth-district": "الحي السادس المتميز",
-  "janna-project": "مشروع جنة",
-  "dar-misr-1": "دار مصر موقع 1",
-  "dar-misr-2": "دار مصر موقع 2",
-  "sakan-misr-south": "سكن مصر جنوب",
-  "sakan-misr-west": "سكن مصر غرب",
-  "beit-al-watan-east": "بيت الوطن شرق",
-  "beit-al-watan-west": "بيت الوطن غرب",
-  "beit-al-watan-beach": "بيت الوطن الشاطئ",
-  "central-area-a": "المنطقة المركزية أ",
-  "central-area-b": "المنطقة المركزية ب",
-  "central-area-c": "المنطقة المركزية ج",
-  "chalets": "منطقة الشاليهات",
-  "r1": "R1",
-  "r2": "R2",
-  "r3": "R3",
-  "r4": "R4",
-  "r5": "R5",
-  "r6": "R6",
-  "r7": "R7",
-  "residential-1": "الحي السكني الأول",
-  "residential-2": "الحي السكني الثاني",
-  "residential-3": "الحي السكني الثالث",
-  "sakan-kol-misryeen": "سكن لكل المصريين",
-  "sakan-kol-misryeen-2": "سكن لكل المصريين 2",
-  "sakan-kol-misryeen-3": "سكن لكل المصريين 3",
-  "dar-misr": "دار مصر",
-  "janna": "جنة",
-  "medium-housing": "الإسكان المتوسط",
-  "social-housing": "الإسكان الاجتماعي",
-  "villas-district": "حي الفيلات",
-  "villas-d": "منطقة الفيلات D",
-  "golf-villas": "فيلات الجولف",
-  "lake-villas": "فيلات البحيرات",
-  "downtown": "داون تاون",
-  "central-mall": "المول المركزي",
-  "cbd": "منطقة الأعمال CBD",
-  "commercial-axis": "المحور التجاري",
-  "services-zone": "منطقة الخدمات",
-  "central-park": "الحديقة المركزية",
-  "corniche": "الكورنيش",
-  "social-club": "النادي الاجتماعي",
-  "touristic-zone": "المنطقة السياحية",
-  "waterfront": "الواجهة البحرية",
-  "beach": "الشاطئ",
-  "coastal-resorts": "منتجعات الساحل",
-};
+const VALID_CITIES = ["new-damietta", "new-mansoura"];
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { city, district } = await params;
-  const districtName = DISTRICT_NAMES[district] || district.replace(/-/g, " ");
+
+  // slug غير معروف = صفحة غير موجودة — يمنع فهرسة عدد لا نهائي من الروابط الوهمية
+  const districtName = SLUG_TO_DISTRICT[district];
+  if (!VALID_CITIES.includes(city) || !districtName) {
+    return {
+      title: "الصفحة غير موجودة",
+      robots: { index: false, follow: false },
+    };
+  }
+
   const isNM = city === "new-mansoura";
   const cityName = isNM ? "المنصورة الجديدة" : "دمياط الجديدة";
   const citySlug = isNM ? "new-mansoura" : "new-damietta";
@@ -89,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `https://eltaiseer.com/${citySlug}/${district}`,
+      url: `https://eltaiseer.com/${citySlug}/${district}/`,
       type: "website",
       locale: "ar_EG",
       siteName: "التيسير للعقارات",
@@ -100,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
     },
     alternates: {
-      canonical: `https://eltaiseer.com/${citySlug}/${district}`,
+      canonical: `https://eltaiseer.com/${citySlug}/${district}/`,
     },
     robots: {
       index: true,
@@ -111,7 +69,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DistrictLayout({ children, params }: { children: React.ReactNode; params: Promise<{ city: string; district: string }> }) {
   const { city, district } = await params;
-  const districtName = DISTRICT_NAMES[district] || district.replace(/-/g, " ");
+  const districtName = SLUG_TO_DISTRICT[district];
+
+  // التحقق من صحة الحي يتم في صفحة الحي نفسها (notFound هناك) وليس هنا —
+  // لأن هذا الـ layout يغلف أيضاً صفحات العقارات، وعقار بحي غير مُعرّف
+  // (مثل حي فارغ في البيانات) يجب أن يظل قابلاً للوصول عبر رابطه
+  if (!VALID_CITIES.includes(city) || !districtName) {
+    return children;
+  }
+
   const isNM = city === "new-mansoura";
   const cityName = isNM ? "المنصورة الجديدة" : "دمياط الجديدة";
   const citySlug = isNM ? "new-mansoura" : "new-damietta";
@@ -121,7 +87,7 @@ export default async function DistrictLayout({ children, params }: { children: R
     "@type": "Place",
     additionalType: "https://schema.org/Neighborhood",
     name: districtName,
-    url: `https://eltaiseer.com/${citySlug}/${district}`,
+    url: `https://eltaiseer.com/${citySlug}/${district}/`,
     description: `${districtName} - منطقة سكنية في ${cityName}. تصفح شقق وفيلات وأراضي للبيع في ${districtName} بأسعار تنافسية.`,
     containedInPlace: {
       "@type": "City",
@@ -133,25 +99,13 @@ export default async function DistrictLayout({ children, params }: { children: R
     },
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "الرئيسية", item: "https://eltaiseer.com" },
-      { "@type": "ListItem", position: 2, name: cityName, item: `https://eltaiseer.com/${citySlug}` },
-      { "@type": "ListItem", position: 3, name: districtName, item: `https://eltaiseer.com/${citySlug}/${district}` },
-    ],
-  };
+
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(neighborhoodSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       {children}
     </>

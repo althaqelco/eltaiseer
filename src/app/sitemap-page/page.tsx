@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "خريطة الموقع",
   description: "خريطة موقع التيسير للعقارات - جميع صفحات الموقع والأقسام والعقارات",
   alternates: {
-    canonical: "https://eltaiseer.com/sitemap-page",
+    canonical: "https://eltaiseer.com/sitemap-page/",
   },
 };
 
@@ -17,7 +17,6 @@ const siteLinks = {
     { name: "الرئيسية", href: "/" },
     { name: "جميع العقارات", href: "/properties" },
     { name: "المفضلة", href: "/favorites" },
-    { name: "لوحة التحكم", href: "/dashboard" },
   ],
   ndDistricts: [
     { name: "جميع عقارات دمياط الجديدة", href: "/new-damietta" },
@@ -86,7 +85,6 @@ const siteLinks = {
   ],
   services: [
     { name: "تقييم العقارات", href: "/valuation" },
-    { name: "إضافة عقار", href: "/add-property" },
   ],
   legal: [
     { name: "الشروط والأحكام", href: "/terms" },

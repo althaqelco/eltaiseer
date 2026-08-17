@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "سياسة ملفات تعريف الارتباط",
   description: "سياسة ملفات تعريف الارتباط (الكوكيز) الخاصة بموقع التيسير للعقارات",
   alternates: {
-    canonical: "https://eltaiseer.com/cookies",
+    canonical: "https://eltaiseer.com/cookies/",
   },
 };
 
