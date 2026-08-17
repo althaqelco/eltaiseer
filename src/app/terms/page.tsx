@@ -109,7 +109,7 @@ export default function TermsPage() {
               </p>
               <ul className="list-disc list-inside space-y-2 mt-3">
                 <li>البريد الإلكتروني: info@eltaiseer.com</li>
-                <li>الهاتف: 01000000000</li>
+                <li>الهاتف: 01500775974</li>
               </ul>
             </section>
 

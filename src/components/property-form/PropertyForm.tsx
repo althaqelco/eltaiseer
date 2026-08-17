@@ -623,7 +623,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                 </label>
                 <Input
                   required
-                  placeholder="01001234567"
+                  placeholder="01500775974"
                   value={formData.contact_whatsapp}
                   onChange={(e) => handleChange("contact_whatsapp", e.target.value)}
                   dir="ltr"

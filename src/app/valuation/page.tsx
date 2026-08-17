@@ -114,9 +114,11 @@ export default function ValuationPage() {
             <div className="mt-8 bg-orange-50 rounded-2xl p-6">
               <h3 className="font-bold text-gray-800 mb-3">تواصل مباشرة</h3>
               <p className="text-gray-600 mb-4">للاستفسارات السريعة، تواصل معنا مباشرة</p>
-              <Button className="bg-orange-500 hover:bg-orange-600 gap-2">
-                <Phone className="h-4 w-4" />
-                01000000000
+              <Button asChild className="bg-orange-500 hover:bg-orange-600 gap-2">
+                <a href="tel:+201500775974" dir="ltr">
+                  <Phone className="h-4 w-4" />
+                  01500775974
+                </a>
               </Button>
             </div>
           </div>

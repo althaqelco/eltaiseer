@@ -22,7 +22,7 @@ export function formatPriceFull(price: number): string {
   return `${price.toLocaleString("ar-EG")} جنيه`;
 }
 
-// تطبيع رقم مصري لصيغة wa.me الدولية: "01001234567" → "201001234567"
+// تطبيع رقم مصري لصيغة wa.me الدولية: "01500775974" → "201500775974"
 export function normalizeEgyptPhone(contact: string): string {
   const digits = (contact || "").replace(/\D/g, "");
   if (digits.startsWith("20")) return digits;

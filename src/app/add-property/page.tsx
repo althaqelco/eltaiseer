@@ -263,7 +263,7 @@ ${formData.notes || "لا يوجد"}
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="مثال: 01012345678"
+                      placeholder="مثال: 01500775974"
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     />
                   </div>
