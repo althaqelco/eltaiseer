@@ -30,7 +30,7 @@ import { CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { PropertyCard } from "@/components/PropertyCard";
 import { trackEvent } from "@/components/MetaPixel";
-import { getWhatsAppUrl } from "@/lib/format";
+import { getWhatsAppUrl, formatPriceFull as formatPrice } from "@/lib/format";
 import { isFavorite as checkIsFavorite, toggleFavorite as toggleFavoriteStore } from "@/lib/favoritesStore";
 
 interface PropertyPageClientProps {
@@ -118,12 +118,6 @@ export default function PropertyPageClient({
     window.open(getWhatsAppUrl(property.contact_whatsapp, message), "_blank");
   };
 
-  const formatPrice = (price: number) => {
-    if (price >= 1000000) {
-      return `${(price / 1000000).toFixed(1)} مليون جنيه`;
-    }
-    return `${price.toLocaleString("ar-EG")} جنيه`;
-  };
 
   // Property View Tracking (title/description are set server-side in page.tsx)
   useEffect(() => {

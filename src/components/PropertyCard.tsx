@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";
 import { getPropertyUrl } from "@/lib/districtSlugs";
-import { getWhatsAppUrl } from "@/lib/format";
+import { getWhatsAppUrl, formatPriceShort as formatPrice } from "@/lib/format";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -51,12 +51,6 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
     }
   };
 
-  const formatPrice = (price: number) => {
-    if (price >= 1000000) {
-      return `${(price / 1000000).toFixed(1)} مليون`;
-    }
-    return price.toLocaleString("ar-EG");
-  };
 
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.preventDefault();

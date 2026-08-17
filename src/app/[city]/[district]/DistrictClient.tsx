@@ -22,13 +22,22 @@ const ITEMS_PER_PAGE = 12;
 // District slug mapping
 const PROPERTY_TYPES = ["الكل", "شقة", "شقة فاخرة", "فيلا منفصلة", "دوبلكس", "محل تجاري", "أرض"];
 
+export interface DistrictStats {
+  count: number;
+  minPrice: number;
+  maxPrice: number;
+  avgPerSqm: number | null;
+  types: string[];
+}
+
 interface DistrictClientProps {
   citySlug: string;
   districtSlug: string;
   initialProperties: Property[];
+  districtStats?: DistrictStats | null;
 }
 
-export default function DistrictClient({ citySlug, districtSlug, initialProperties }: DistrictClientProps) {
+export default function DistrictClient({ citySlug, districtSlug, initialProperties, districtStats }: DistrictClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const districtName = SLUG_TO_DISTRICT[districtSlug] || decodeURIComponent(districtSlug).replace(/-/g, " ");
@@ -193,6 +202,35 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
               نوفر لك مجموعة متنوعة من العقارات تشمل الشقق السكنية والفيلات والدوبلكس 
               بأسعار تنافسية وخيارات دفع مرنة.
             </p>
+            {districtStats && (
+              <div className="not-prose grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
+                <div className="bg-gray-50 rounded-lg p-4 text-center">
+                  <p className={`text-2xl font-bold text-${themeColor}-600`}>{districtStats.count}</p>
+                  <p className="text-sm text-gray-500">عقار متاح الآن</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4 text-center">
+                  <p className={`text-2xl font-bold text-${themeColor}-600`} dir="ltr">
+                    {(districtStats.minPrice / 1000000).toFixed(1)}م - {(districtStats.maxPrice / 1000000).toFixed(1)}م
+                  </p>
+                  <p className="text-sm text-gray-500">نطاق الأسعار (جنيه)</p>
+                </div>
+                {districtStats.avgPerSqm && (
+                  <div className="bg-gray-50 rounded-lg p-4 text-center">
+                    <p className={`text-2xl font-bold text-${themeColor}-600`}>
+                      {districtStats.avgPerSqm.toLocaleString("ar-EG")}
+                    </p>
+                    <p className="text-sm text-gray-500">متوسط سعر المتر (جنيه)</p>
+                  </div>
+                )}
+                <div className="bg-gray-50 rounded-lg p-4 text-center">
+                  <p className="text-base font-bold text-gray-700 leading-relaxed">
+                    {districtStats.types.slice(0, 3).join("، ")}
+                  </p>
+                  <p className="text-sm text-gray-500">الأنواع المتاحة</p>
+                </div>
+              </div>
+            )}
+
             <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">
               لماذا {districtName}؟
             </h3>

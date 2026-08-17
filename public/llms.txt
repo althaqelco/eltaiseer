@@ -67,14 +67,15 @@
 - Working Hours: السبت - الخميس، 9 صباحاً - 9 مساءً
 
 ## Useful Links
-- All Properties: https://eltaiseer.com/properties/
-- Apartments: https://eltaiseer.com/properties/apartments/
-- Villas: https://eltaiseer.com/properties/villas/
-- Lands: https://eltaiseer.com/properties/lands/
-- New Damietta: https://eltaiseer.com/new-damietta/
-- New Mansoura: https://eltaiseer.com/new-mansoura/
-- Blog: https://eltaiseer.com/blog/
-- Free Valuation: https://eltaiseer.com/valuation/
+- [جميع العقارات](https://eltaiseer.com/properties/): كل العقارات المتاحة للبيع في المدينتين مع فلاتر بحث
+- [شقق للبيع](https://eltaiseer.com/properties/apartments/): شقق تمليك ودوبلكس وبنتهاوس وروف
+- [فيلات للبيع](https://eltaiseer.com/properties/villas/): فيلات مستقلة وتاون هاوس وتوين هاوس
+- [أراضي للبيع](https://eltaiseer.com/properties/lands/): أراضي سكنية وتجارية
+- [عقارات دمياط الجديدة](https://eltaiseer.com/new-damietta/): كل عقارات وأحياء دمياط الجديدة
+- [عقارات المنصورة الجديدة](https://eltaiseer.com/new-mansoura/): كل عقارات وأحياء مدينة الجيل الرابع
+- [المدونة](https://eltaiseer.com/blog/): أدلة شراء واستثمار ومقارنات الأحياء
+- [تقييم عقاري مجاني](https://eltaiseer.com/valuation/): احسب القيمة السوقية لعقارك
+- [llms-full.txt](https://eltaiseer.com/llms-full.txt): النسخة الموسعة بكل تفاصيل الأحياء والأسعار
 
 ---
 آخر تحديث: أغسطس 2026 | Last updated: August 2026

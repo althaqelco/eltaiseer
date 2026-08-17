@@ -43,6 +43,7 @@ import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";
 import { getPropertyUrl } from "@/lib/districtSlugs";
+import { formatPriceShort as formatPrice, getWhatsAppUrl } from "@/lib/format";
 
 const PROPERTY_TYPES = [
   "شقة",
@@ -122,18 +123,11 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
     currentPage * ITEMS_PER_PAGE
   );
 
-  const formatPrice = (price: number) => {
-    if (price >= 1000000) {
-      return `${(price / 1000000).toFixed(1)} مليون`;
-    }
-    return price.toLocaleString("ar-EG");
-  };
 
   const handleWhatsApp = (property: Property) => {
-    const message = encodeURIComponent(
-      `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}`
-    );
-    window.open(`https://wa.me/2${property.contact_whatsapp}?text=${message}`, "_blank");
+    const message =
+      `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}`;
+    window.open(getWhatsAppUrl(property.contact_whatsapp, message), "_blank");
   };
 
   const clearFilters = () => {
