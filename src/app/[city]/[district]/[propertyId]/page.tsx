@@ -134,7 +134,7 @@ export default async function PropertyDetailPage({ params }: Props) {
 
   // تحويل createdAt إلى نص لأن Server Components لا تمرر كائنات Date للعميل
   const serializedProperty = property
-    ? (JSON.parse(JSON.stringify(property)) as Property)
+    ? ({ ...(JSON.parse(JSON.stringify(property)) as Property), contact_whatsapp: "" })
     : null;
 
   return (

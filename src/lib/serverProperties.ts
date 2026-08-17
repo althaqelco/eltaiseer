@@ -19,8 +19,12 @@ export const getPropertiesServer = cache(async (): Promise<Property[]> => {
 });
 
 // تحويل لكائنات قابلة للتمرير من Server Component إلى Client Component
+// أرقام التواصل المخزنة مع العقارات لا تُرسل للمتصفح — كل الأزرار تستخدم رقم الشركة الموحد
 export function serializeProperties(properties: Property[]): Property[] {
-  return JSON.parse(JSON.stringify(properties)) as Property[];
+  return (JSON.parse(JSON.stringify(properties)) as Property[]).map((p) => ({
+    ...p,
+    contact_whatsapp: "",
+  }));
 }
 
 export function filterByCity(properties: Property[], cityId: string): Property[] {
