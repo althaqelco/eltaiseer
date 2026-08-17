@@ -191,6 +191,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com" />
         <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
+        <link rel="alternate" type="application/rss+xml" title="مدونة التيسير للعقارات" href="/feed.xml" />
         <meta name="geo.region" content="EG-DK" />
         <meta name="geo.placename" content="دمياط الجديدة" />
         <meta name="geo.position" content="31.4175;31.8144" />

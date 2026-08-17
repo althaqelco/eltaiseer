@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import PropertyPageClient from "./PropertyPageClient";
 import { getPropertyFromFirestore } from "@/lib/firestoreProperties";
+import { getPropertiesServer, serializeProperties } from "@/lib/serverProperties";
+import { calculateSimilarity } from "@/lib/propertyStore";
 import { generatePropertySchema } from "@/lib/seoOptimizer";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
 import { Property } from "@/lib/mockData";
@@ -132,6 +134,22 @@ export default async function PropertyDetailPage({ params }: Props) {
     );
   }
 
+  // العقارات المشابهة تُحسب وتُعرض من الخادم — روابط داخلية بين صفحات العقارات يراها الزاحف
+  let relatedProperties: Property[] = [];
+  if (property) {
+    try {
+      const all = await getPropertiesServer();
+      relatedProperties = all
+        .filter((p) => p.id !== property.id && p.status !== "تم البيع")
+        .map((p) => ({ p, score: calculateSimilarity(property, p) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4)
+        .map((x) => x.p);
+    } catch {
+      // فشل جلب المشابهة لا يمنع عرض العقار — العميل سيحاول مجدداً
+    }
+  }
+
   // تحويل createdAt إلى نص لأن Server Components لا تمرر كائنات Date للعميل
   const serializedProperty = property
     ? ({ ...(JSON.parse(JSON.stringify(property)) as Property), contact_whatsapp: "" })
@@ -148,6 +166,7 @@ export default async function PropertyDetailPage({ params }: Props) {
       ))}
       <PropertyPageClient
         initialProperty={serializedProperty}
+        initialRelated={serializeProperties(relatedProperties)}
         citySlug={city}
         districtSlug={district}
         propertyId={propertyId}

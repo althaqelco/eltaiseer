@@ -35,6 +35,7 @@ import { isFavorite as checkIsFavorite, toggleFavorite as toggleFavoriteStore } 
 
 interface PropertyPageClientProps {
   initialProperty: Property | null;
+  initialRelated?: Property[];
   citySlug: string;
   districtSlug: string;
   propertyId: string;
@@ -42,6 +43,7 @@ interface PropertyPageClientProps {
 
 export default function PropertyPageClient({
   initialProperty,
+  initialRelated = [],
   citySlug,
   districtSlug,
   propertyId,
@@ -51,7 +53,9 @@ export default function PropertyPageClient({
   const isNM = citySlug === "new-mansoura";
 
   const [property, setProperty] = useState<Property | null>(initialProperty);
-  const [relatedProperties, setRelatedProperties] = useState<Property[]>([]);
+  const [relatedProperties, setRelatedProperties] = useState<Property[]>(
+    () => initialRelated.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
+  );
   const [isLoading, setIsLoading] = useState(!initialProperty);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -66,7 +70,7 @@ export default function PropertyPageClient({
           prop = await getPropertyByIdAsync(propertyId);
           setProperty(prop);
         }
-        if (prop) {
+        if (prop && initialRelated.length === 0) {
           const related = await getRelatedPropertiesAsync(prop, 4);
           setRelatedProperties(related);
         }

@@ -79,6 +79,7 @@
 - [مقارنة دمياط الجديدة والمنصورة الجديدة](https://eltaiseer.com/blog/damietta-vs-mansoura/): أيهما أفضل للسكن وأيهما للاستثمار — بالأرقام
 - [تقييم عقاري مجاني](https://eltaiseer.com/valuation/): احسب القيمة السوقية لعقارك
 - [llms-full.txt](https://eltaiseer.com/llms-full.txt): النسخة الموسعة بكل تفاصيل الأحياء والأسعار
+- [خلاصة RSS](https://eltaiseer.com/feed.xml): آخر مقالات المدونة
 
 ---
 آخر تحديث: أغسطس 2026 | Last updated: August 2026
