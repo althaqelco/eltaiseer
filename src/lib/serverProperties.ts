@@ -19,11 +19,15 @@ export const getPropertiesServer = cache(async (): Promise<Property[]> => {
 });
 
 // تحويل لكائنات قابلة للتمرير من Server Component إلى Client Component
-// أرقام التواصل المخزنة مع العقارات لا تُرسل للمتصفح — كل الأزرار تستخدم رقم الشركة الموحد
+// - أرقام التواصل لا تُرسل (كل الأزرار تستخدم رقم الشركة الموحد)
+// - الوصف الطويل لا يُرسل لصفحات القوائم (البطاقات لا تعرضه) — يوفر عشرات KB من الـ HTML
 export function serializeProperties(properties: Property[]): Property[] {
   return (JSON.parse(JSON.stringify(properties)) as Property[]).map((p) => ({
     ...p,
     contact_whatsapp: "",
+    description: "",
+    // البطاقات تعرض الصورة الأولى فقط — التحديث الحي من المتصفح يجلب الباقي عند الحاجة
+    images: p.images.slice(0, 1),
   }));
 }
 

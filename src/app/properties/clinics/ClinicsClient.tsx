@@ -52,7 +52,7 @@ export default function ClinicsClient({ initialProperties }: { initialProperties
           <div className="flex items-center gap-3 mb-4">
             <Stethoscope className="h-10 w-10 text-orange-400" />
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white">عيادات للبيع في دمياط الجديدة</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white">عيادات للبيع في دمياط الجديدة والمنصورة الجديدة</h1>
               <p className="text-gray-300 mt-2">{filteredProperties.length} عيادة متاحة للبيع</p>
             </div>
           </div>
@@ -106,7 +106,7 @@ export default function ClinicsClient({ initialProperties }: { initialProperties
         )}
 
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">عيادات طبية للبيع في دمياط الجديدة</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">عيادات طبية للبيع في دمياط الجديدة والمنصورة الجديدة</h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
             <p>ابدأ ممارستك الطبية في دمياط الجديدة مع أفضل العيادات المتاحة للبيع. عيادات جاهزة بتراخيص وتجهيزات.</p>
             <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">مميزات العيادات</h3>

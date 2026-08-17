@@ -38,7 +38,7 @@ export default function TermsPage() {
             <FileText className="h-10 w-10 text-orange-400" />
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-white">الشروط والأحكام</h1>
-              <p className="text-gray-300 mt-2">آخر تحديث: يناير 2025</p>
+              <p className="text-gray-300 mt-2">آخر تحديث: أغسطس 2026</p>
             </div>
           </div>
         </div>

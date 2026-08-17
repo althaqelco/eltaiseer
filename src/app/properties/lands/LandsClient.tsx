@@ -52,12 +52,12 @@ export default function LandsClient({ initialProperties }: { initialProperties: 
           <div className="flex items-center gap-3 mb-4">
             <MapPin className="h-10 w-10 text-orange-400" />
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white">أراضي للبيع في دمياط الجديدة</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white">أراضي للبيع في دمياط الجديدة والمنصورة الجديدة</h1>
               <p className="text-gray-300 mt-2">{filteredProperties.length} قطعة أرض متاحة للبيع</p>
             </div>
           </div>
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفضل الأراضي للبيع في دمياط الجديدة. أراضي سكنية وتجارية بمواقع مميزة. 
+            اكتشف أفضل الأراضي للبيع في دمياط الجديدة والمنصورة الجديدة. أراضي سكنية وتجارية بمواقع مميزة. 
             مساحات متنوعة من 150 متر حتى 5000 متر. أسعار تنافسية وإمكانية التقسيط.
           </p>
         </div>
@@ -106,9 +106,9 @@ export default function LandsClient({ initialProperties }: { initialProperties: 
         )}
 
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">أراضي للبيع في دمياط الجديدة 2025</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">أراضي للبيع في دمياط الجديدة والمنصورة الجديدة 2026</h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            <p>استثمر في أفضل الأراضي للبيع في دمياط الجديدة. نوفر أراضي سكنية وتجارية وصناعية بمواقع استراتيجية.</p>
+            <p>استثمر في أفضل الأراضي للبيع في دمياط الجديدة والمنصورة الجديدة. نوفر أراضي سكنية وتجارية وصناعية بمواقع استراتيجية.</p>
             <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">أنواع الأراضي المتوفرة</h3>
             <ul className="list-disc list-inside space-y-2">
               <li><strong>أراضي سكنية:</strong> لبناء منازل وفيلات</li>

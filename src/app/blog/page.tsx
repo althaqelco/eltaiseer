@@ -18,6 +18,17 @@ export const metadata: Metadata = {
 
 const blogPosts = [
   {
+    id: 0,
+    slug: "damietta-vs-mansoura",
+    title: "دمياط الجديدة أم المنصورة الجديدة؟ مقارنة شاملة بالأرقام 2026",
+    excerpt: "أكثر سؤال يصلنا من عملائنا — مقارنة تفصيلية بالأرقام: الأسعار، الخدمات، التسليم، وفرص الاستثمار، مع إجابة عملية مباشرة حسب هدفك.",
+    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+    category: "مقارنات",
+    categoryColor: "bg-slate-700",
+    date: "17 أغسطس 2026",
+    readTime: "8 دقائق",
+  },
+  {
     id: 1,
     slug: "buying-apartment-guide",
     title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026",

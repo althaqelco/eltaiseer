@@ -53,12 +53,12 @@ export default function ShopsClient({ initialProperties }: { initialProperties: 
           <div className="flex items-center gap-3 mb-4">
             <Store className="h-10 w-10 text-orange-400" />
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white">محلات تجارية للبيع في دمياط الجديدة</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white">محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة</h1>
               <p className="text-gray-300 mt-2">{filteredProperties.length} محل تجاري ومقر إداري متاح للبيع</p>
             </div>
           </div>
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفضل المحلات التجارية والمقرات الإدارية للبيع في دمياط الجديدة. مواقع استراتيجية على الشوارع الرئيسية.
+            اكتشف أفضل المحلات التجارية والمقرات الإدارية للبيع في دمياط الجديدة والمنصورة الجديدة. مواقع استراتيجية على الشوارع الرئيسية.
             مساحات متنوعة تناسب جميع الأنشطة التجارية.
           </p>
         </div>

@@ -52,12 +52,12 @@ export default function ChaletsClient({ initialProperties }: { initialProperties
           <div className="flex items-center gap-3 mb-4">
             <Umbrella className="h-10 w-10 text-orange-400" />
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white">شاليهات للبيع في دمياط الجديدة</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white">شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة</h1>
               <p className="text-gray-300 mt-2">{filteredProperties.length} شاليه متاح للبيع</p>
             </div>
           </div>
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            استمتع بالإجازات على شاطئ البحر مع أفضل الشاليهات للبيع في دمياط الجديدة. 
+            استمتع بالإجازات على شاطئ البحر مع أفضل الشاليهات للبيع في دمياط الجديدة والمنصورة الجديدة. 
             شاليهات بإطلالات بحرية مباشرة ومرافق متكاملة.
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function ChaletsClient({ initialProperties }: { initialProperties
         )}
 
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">شاليهات للبيع في دمياط الجديدة</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة</h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
             <p>امتلك شاليهك الخاص على شاطئ البحر المتوسط في دمياط الجديدة. شاليهات فاخرة بإطلالات بحرية ساحرة.</p>
             <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">مميزات الشاليهات</h3>

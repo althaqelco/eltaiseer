@@ -65,7 +65,7 @@ export default function ApartmentsClient({ initialProperties }: { initialPropert
             <Building2 className="h-10 w-10 text-orange-400" />
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-white">
-                شقق للبيع في دمياط الجديدة
+                شقق للبيع في دمياط الجديدة والمنصورة الجديدة
               </h1>
               <p className="text-gray-300 mt-2">
                 {filteredProperties.length} شقة متاحة للبيع - شقق تمليك، دوبلكس، بنتهاوس، روف
@@ -75,7 +75,7 @@ export default function ApartmentsClient({ initialProperties }: { initialPropert
           
           {/* SEO Content */}
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفضل الشقق للبيع في دمياط الجديدة. نوفر شقق تمليك بمساحات متنوعة من 80 متر حتى 300 متر، 
+            اكتشف أفضل الشقق للبيع في دمياط الجديدة والمنصورة الجديدة. نوفر شقق تمليك بمساحات متنوعة من 80 متر حتى 300 متر، 
             شقق نصف تشطيب وتشطيب كامل سوبر لوكس. أسعار تبدأ من 500,000 جنيه مع إمكانية التقسيط حتى 10 سنوات.
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function ApartmentsClient({ initialProperties }: { initialPropert
 
         {/* SEO Content Section */}
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">شقق للبيع في دمياط الجديدة 2025</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">شقق للبيع في دمياط الجديدة والمنصورة الجديدة 2026</h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
             <p>
               تعتبر دمياط الجديدة من أفضل المدن السكنية في مصر، حيث تتميز بالتخطيط العمراني الحديث 

@@ -74,6 +74,7 @@
 - [عقارات دمياط الجديدة](https://eltaiseer.com/new-damietta/): كل عقارات وأحياء دمياط الجديدة
 - [عقارات المنصورة الجديدة](https://eltaiseer.com/new-mansoura/): كل عقارات وأحياء مدينة الجيل الرابع
 - [المدونة](https://eltaiseer.com/blog/): أدلة شراء واستثمار ومقارنات الأحياء
+- [مقارنة دمياط الجديدة والمنصورة الجديدة](https://eltaiseer.com/blog/damietta-vs-mansoura/): أيهما أفضل للسكن وأيهما للاستثمار — بالأرقام
 - [تقييم عقاري مجاني](https://eltaiseer.com/valuation/): احسب القيمة السوقية لعقارك
 - [llms-full.txt](https://eltaiseer.com/llms-full.txt): النسخة الموسعة بكل تفاصيل الأحياء والأسعار
 

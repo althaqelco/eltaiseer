@@ -65,7 +65,7 @@ export default function VillasClient({ initialProperties }: { initialProperties:
             <Castle className="h-10 w-10 text-orange-400" />
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-white">
-                فيلات للبيع في دمياط الجديدة
+                فيلات للبيع في دمياط الجديدة والمنصورة الجديدة
               </h1>
               <p className="text-gray-300 mt-2">
                 {filteredProperties.length} فيلا متاحة للبيع - فيلات مستقلة، تاون هاوس، توين هاوس
@@ -74,7 +74,7 @@ export default function VillasClient({ initialProperties }: { initialProperties:
           </div>
           
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفخم الفيلات للبيع في دمياط الجديدة. فيلات مستقلة بحدائق خاصة، تاون هاوس، 
+            اكتشف أفخم الفيلات للبيع في دمياط الجديدة والمنصورة الجديدة. فيلات مستقلة بحدائق خاصة، تاون هاوس، 
             توين هاوس بمساحات من 200 متر حتى 1000 متر. تشطيبات فاخرة وحمامات سباحة خاصة.
           </p>
         </div>
@@ -144,10 +144,10 @@ export default function VillasClient({ initialProperties }: { initialProperties:
 
         {/* SEO Content */}
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">فيلات فاخرة للبيع في دمياط الجديدة</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">فيلات فاخرة للبيع في دمياط الجديدة والمنصورة الجديدة</h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
             <p>
-              استمتع بالفخامة والخصوصية مع أفضل الفيلات للبيع في دمياط الجديدة. نقدم لكم فيلات 
+              استمتع بالفخامة والخصوصية مع أفضل الفيلات للبيع في دمياط الجديدة والمنصورة الجديدة. نقدم لكم فيلات 
               مستقلة بحدائق خاصة ومسابح، تاون هاوس بتصميمات عصرية، وتوين هاوس بأسعار مميزة.
             </p>
             <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">مميزات الفيلات</h3>
