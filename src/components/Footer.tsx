@@ -66,12 +66,12 @@ export function Footer() {
               <li className="flex items-center gap-2 text-gray-400">
                 <Phone className="h-4 w-4 text-orange-500" />
                 <a
-                  href="tel:+201500917300"
+                  href="tel:+201500775974"
                   dir="ltr"
                   className="hover:text-white transition-colors"
                   onClick={() => trackEvent.phoneCall("general", "Footer Phone Link")}
                 >
-                  +20 150 091 7300
+                  +20 150 077 5974
                 </a>
               </li>
               <li className="flex items-center gap-2 text-gray-400">

@@ -255,7 +255,7 @@ export function Header() {
           <div className="hidden md:flex items-center gap-4">
             <div className="hidden md:flex items-center gap-4">
               <Link
-                href="tel:+201500917300"
+                href="tel:+201500775974"
                 onClick={() => trackEvent.phoneCall("general", "Header Contact Button")}
               >
                 <Button className="bg-orange-500 hover:bg-orange-600 gap-2">
@@ -371,7 +371,7 @@ export function Header() {
               </Link>
 
               <Link
-                href="tel:+201500917300"
+                href="tel:+201500775974"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   trackEvent.phoneCall("general", "Mobile Menu Contact Button");

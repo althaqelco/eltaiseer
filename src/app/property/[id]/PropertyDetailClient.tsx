@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Property } from "@/lib/mockData";
 import { getPropertyByIdAsync, getRelatedProperties } from "@/lib/propertyStore";
+import { COMPANY_WHATSAPP, COMPANY_TEL } from "@/lib/format";
 
 import { getDistrictColor, getCategoryByDistrict } from "@/lib/egyptPlaces";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
@@ -137,7 +138,7 @@ export default function PropertyDetailClient() {
       `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}\nرابط العقار: ${window.location.href}`
     );
     window.open(
-      `https://wa.me/2${property.contact_whatsapp}?text=${message}`,
+      `https://wa.me/${COMPANY_WHATSAPP}?text=${message}`,
       "_blank"
     );
   };
@@ -543,7 +544,7 @@ export default function PropertyDetailClient() {
                     variant="outline"
                     className="flex-1 h-12 gap-2 border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-semibold"
                     onClick={() => {
-                      window.location.href = `tel:${property.contact_whatsapp}`;
+                      window.location.href = `tel:${COMPANY_TEL}`;
                     }}
                   >
                     <Phone className="h-5 w-5" />

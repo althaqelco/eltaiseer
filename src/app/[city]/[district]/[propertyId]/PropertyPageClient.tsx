@@ -30,7 +30,7 @@ import { CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { PropertyCard } from "@/components/PropertyCard";
 import { trackEvent } from "@/components/MetaPixel";
-import { getWhatsAppUrl, formatPriceFull as formatPrice } from "@/lib/format";
+import { getWhatsAppUrl, formatPriceFull as formatPrice, COMPANY_WHATSAPP } from "@/lib/format";
 import { isFavorite as checkIsFavorite, toggleFavorite as toggleFavoriteStore } from "@/lib/favoritesStore";
 
 interface PropertyPageClientProps {
@@ -115,7 +115,7 @@ export default function PropertyPageClient({
     trackEvent.inquiry(property.id, property.title, "WhatsApp");
 
     const message = `مرحباً، أريد الاستفسار عن هذا العقار:\n${property.title}\n${property.type} في ${property.location.district}\nالسعر: ${formatPrice(property.price)}\nالرابط: ${window.location.href}`;
-    window.open(getWhatsAppUrl(property.contact_whatsapp, message), "_blank");
+    window.open(getWhatsAppUrl(COMPANY_WHATSAPP, message), "_blank");
   };
 
 

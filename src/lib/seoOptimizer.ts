@@ -314,7 +314,7 @@ export function generatePropertySchema(
     seller: {
       "@type": "RealEstateAgent",
       name: "التيسير للعقارات",
-      telephone: "+201500917300",
+      telephone: "+201500775974",
       url: "https://eltaiseer.com",
     },
 

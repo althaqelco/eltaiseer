@@ -4,7 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { trackEvent } from "./MetaPixel";
 
 export function FloatingWhatsApp() {
-  const phoneNumber = "201500917300";
+  const phoneNumber = "201500775974";
   const message = encodeURIComponent("مرحباً، أريد الاستفسار عن العقارات المتاحة");
 
   const handleClick = () => {

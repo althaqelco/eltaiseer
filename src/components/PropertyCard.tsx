@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";
 import { getPropertyUrl } from "@/lib/districtSlugs";
-import { getWhatsAppUrl, formatPriceShort as formatPrice } from "@/lib/format";
+import { getWhatsAppUrl, formatPriceShort as formatPrice, COMPANY_WHATSAPP, COMPANY_TEL } from "@/lib/format";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -61,7 +61,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
 
     const propertyFullUrl = `${window.location.origin}${propertyUrl}`;
     const message = `مرحباً، أنا مهتم بـ: ${property.title}\nالسعر: ${formatPrice(property.price)} جنيه\nالموقع: ${property.location.district}\nرابط العقار: ${propertyFullUrl}`;
-    window.open(getWhatsAppUrl(property.contact_whatsapp, message), "_blank");
+    window.open(getWhatsAppUrl(COMPANY_WHATSAPP, message), "_blank");
   };
 
   const handleCall = (e: React.MouseEvent) => {
@@ -71,7 +71,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
     // Track Phone Call
     trackEvent.phoneCall(property.id, property.title);
 
-    window.location.href = `tel:${property.contact_whatsapp}`;
+    window.location.href = `tel:${COMPANY_TEL}`;
   };
 
   return (
