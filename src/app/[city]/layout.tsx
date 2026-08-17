@@ -62,6 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const meta = cityMetadata[city];
   const citySlug = city === "new-mansoura" ? "new-mansoura" : "new-damietta";
+  const ogImage = `/og-${citySlug}.jpg`;
 
   return {
     title: meta.title,
@@ -74,13 +75,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "website",
       locale: "ar_EG",
       siteName: "التيسير للعقارات",
-      images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: meta.title }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: meta.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: meta.title,
       description: meta.description,
-      images: ["/og-image.jpg"],
+      images: [ogImage],
     },
     alternates: {
       canonical: `https://eltaiseer.com/${citySlug}/`,

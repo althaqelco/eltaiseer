@@ -18,6 +18,17 @@ export const metadata: Metadata = {
 
 const blogPosts = [
   {
+    id: -1,
+    slug: "buying-steps-legal",
+    title: "خطوات شراء عقار في دمياط الجديدة والمنصورة الجديدة: الأوراق والإجراءات",
+    excerpt: "من فحص أوراق الملكية حتى التسجيل في الشهر العقاري — الخطوات السبع بالترتيب، والأخطاء الشائعة التي تكلف المشترين، ولماذا الشراء في المدن الجديدة أأمن.",
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800",
+    category: "إجراءات وقانون",
+    categoryColor: "bg-blue-600",
+    date: "17 أغسطس 2026",
+    readTime: "10 دقائق",
+  },
+  {
     id: 0,
     slug: "damietta-vs-mansoura",
     title: "دمياط الجديدة أم المنصورة الجديدة؟ مقارنة شاملة بالأرقام 2026",

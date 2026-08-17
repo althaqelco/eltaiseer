@@ -36,6 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Blog posts
   const blogSlugs = [
+    "buying-steps-legal",
     "damietta-vs-mansoura",
     "buying-apartment-guide",
     "best-districts",

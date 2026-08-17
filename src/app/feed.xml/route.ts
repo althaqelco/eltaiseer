@@ -4,6 +4,12 @@ const BASE_URL = "https://eltaiseer.com";
 
 const POSTS = [
   {
+    slug: "buying-steps-legal",
+    title: "خطوات شراء عقار في دمياط الجديدة والمنصورة الجديدة: الأوراق والإجراءات",
+    description: "الخطوات السبع بالترتيب من فحص الأوراق حتى التسجيل، والأخطاء الشائعة التي تكلف المشترين.",
+    date: "2026-08-17",
+  },
+  {
     slug: "damietta-vs-mansoura",
     title: "دمياط الجديدة أم المنصورة الجديدة؟ مقارنة شاملة بالأرقام 2026",
     description:
