@@ -8,6 +8,7 @@ import {
   buildItemListSchema,
 } from "@/lib/serverProperties";
 import { SLUG_TO_DISTRICT, getCityDistrictSlugs } from "@/lib/districtSlugs";
+import { getDistrictEditorial } from "@/lib/districtContent";
 
 // ISR كل 5 دقائق — العقارات تظهر في HTML الخادم مع بقاء البيانات حديثة
 export const revalidate = 300;
@@ -71,6 +72,7 @@ export default async function DistrictPage({
         districtSlug={district}
         initialProperties={serializeProperties(districtProperties)}
         districtStats={districtStats}
+        editorial={getDistrictEditorial(district)}
       />
     </>
   );

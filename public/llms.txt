@@ -71,6 +71,8 @@
 - [شقق للبيع](https://eltaiseer.com/properties/apartments/): شقق تمليك ودوبلكس وبنتهاوس وروف
 - [فيلات للبيع](https://eltaiseer.com/properties/villas/): فيلات مستقلة وتاون هاوس وتوين هاوس
 - [أراضي للبيع](https://eltaiseer.com/properties/lands/): أراضي سكنية وتجارية
+- [عقارات بالتقسيط](https://eltaiseer.com/properties/installments/): كل الوحدات المتاحة بالتقسيط بمقدماتها وأقساطها الفعلية
+- [أسعار العقارات اليوم](https://eltaiseer.com/prices/): متوسط سعر المتر لكل حي محسوب من المعروض الحالي
 - [عقارات دمياط الجديدة](https://eltaiseer.com/new-damietta/): كل عقارات وأحياء دمياط الجديدة
 - [عقارات المنصورة الجديدة](https://eltaiseer.com/new-mansoura/): كل عقارات وأحياء مدينة الجيل الرابع
 - [المدونة](https://eltaiseer.com/blog/): أدلة شراء واستثمار ومقارنات الأحياء

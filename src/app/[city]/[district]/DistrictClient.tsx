@@ -16,6 +16,7 @@ import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { getCategoryByDistrict, CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
+import type { DistrictEditorial } from "@/lib/districtContent";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -35,9 +36,10 @@ interface DistrictClientProps {
   districtSlug: string;
   initialProperties: Property[];
   districtStats?: DistrictStats | null;
+  editorial?: DistrictEditorial | null;
 }
 
-export default function DistrictClient({ citySlug, districtSlug, initialProperties, districtStats }: DistrictClientProps) {
+export default function DistrictClient({ citySlug, districtSlug, initialProperties, districtStats, editorial }: DistrictClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const districtName = SLUG_TO_DISTRICT[districtSlug] || decodeURIComponent(districtSlug).replace(/-/g, " ");
@@ -197,11 +199,34 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
             عقارات للبيع في {districtName} - {city?.nameAr}
           </h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            <p>
-              اكتشف أفضل الفرص العقارية في {districtName} ب{city?.nameAr}. 
-              نوفر لك مجموعة متنوعة من العقارات تشمل الشقق السكنية والفيلات والدوبلكس 
-              بأسعار تنافسية وخيارات دفع مرنة.
-            </p>
+            {editorial ? (
+              <>
+                <p className="text-base leading-loose">{editorial.intro}</p>
+                <div className="not-prose flex flex-wrap gap-2 my-4">
+                  {editorial.bestFor.map((tag) => (
+                    <span
+                      key={tag}
+                      className={`text-sm px-3 py-1.5 rounded-full ${
+                        isNM ? "bg-emerald-50 text-emerald-700" : "bg-orange-50 text-orange-700"
+                      }`}
+                    >
+                      ✓ {tag}
+                    </span>
+                  ))}
+                  {editorial.pricePerSqm && (
+                    <span className="text-sm px-3 py-1.5 rounded-full bg-gray-100 text-gray-700">
+                      سعر المتر: {editorial.pricePerSqm}
+                    </span>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p>
+                اكتشف أفضل الفرص العقارية في {districtName} ب{city?.nameAr}. 
+                نوفر لك مجموعة متنوعة من العقارات تشمل الشقق السكنية والفيلات والدوبلكس 
+                بأسعار تنافسية وخيارات دفع مرنة.
+              </p>
+            )}
             {districtStats && (
               <div className="not-prose grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
                 <div className="bg-gray-50 rounded-lg p-4 text-center">

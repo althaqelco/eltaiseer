@@ -37,6 +37,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/prices" className="text-gray-400 hover:text-white transition-colors">
+                  أسعار العقارات
+                </Link>
+              </li>
+              <li>
                 <Link href="/valuation" className="text-gray-400 hover:text-white transition-colors">
                   تقييم العقارات
                 </Link>
@@ -148,6 +153,8 @@ export function Footer() {
               <Link href="/properties/clinics" className="hover:text-orange-400 transition-colors">عيادات</Link>
               <span>•</span>
               <Link href="/properties/chalets" className="hover:text-orange-400 transition-colors">شاليهات</Link>
+              <span>•</span>
+              <Link href="/properties/installments" className="hover:text-orange-400 transition-colors font-semibold">عقارات بالتقسيط</Link>
             </div>
           </div>
           {/* دمياط الجديدة */}
