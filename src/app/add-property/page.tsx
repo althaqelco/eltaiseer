@@ -84,7 +84,7 @@ ${formData.notes || "لا يوجد"}
 
   const handleWhatsAppSubmit = () => {
     const message = generateWhatsAppMessage();
-    window.open(`https://wa.me/201558245974?text=${message}`, "_blank");
+    window.open(`https://wa.me/201500917300?text=${message}`, "_blank");
   };
 
   return (
@@ -336,7 +336,7 @@ ${formData.notes || "لا يوجد"}
                   variant="outline"
                   className="w-full border-orange-500 text-orange-600 hover:bg-orange-100"
                 >
-                  <a href="https://wa.me/201558245974" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <a href="https://wa.me/201500917300" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                     <MessageCircle className="h-4 w-4" />
                     تواصل معنا
                   </a>

@@ -2,7 +2,7 @@
 // تنسيق الأسعار وروابط الواتساب — كانت مكررة في 7 ملفات بصيغ متضاربة
 // (إحداها بدون كود الدولة فكانت تفتح واتساب برقم غير صالح)
 
-export const COMPANY_WHATSAPP = "201558245974";
+export const COMPANY_WHATSAPP = "201500917300";
 
 // "1.5 مليون" أو "850,000" — للبطاقات والقوائم
 export function formatPriceShort(price: number): string {

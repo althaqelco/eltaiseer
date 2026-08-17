@@ -127,7 +127,7 @@ export default function RootLayout({
     url: "https://eltaiseer.com/",
     logo: "https://eltaiseer.com/logo.png",
     image: "https://eltaiseer.com/logo.png",
-    telephone: "+201558245974",
+    telephone: "+201500917300",
     address: {
       "@type": "PostalAddress",
       addressLocality: "دمياط الجديدة",
@@ -153,12 +153,12 @@ export default function RootLayout({
     ],
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+201558245974",
+      telephone: "+201500917300",
       contactType: "sales",
       availableLanguage: ["Arabic"],
     },
     sameAs: [
-      "https://wa.me/201558245974",
+      "https://wa.me/201500917300",
     ],
     priceRange: "$$",
     paymentAccepted: "Cash, Bank Transfer",

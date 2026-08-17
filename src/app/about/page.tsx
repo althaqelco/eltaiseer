@@ -91,7 +91,7 @@ export default function AboutPage() {
       alternateName: "El Taiseer Real Estate",
       description: "شركة التيسير للعقارات متخصصة في بيع الشقق والفيلات والأراضي والمحلات التجارية في دمياط الجديدة والمنصورة الجديدة. نقدم أكثر من 100 عقار في 48+ منطقة مع خيارات دفع مرنة تشمل الكاش والتقسيط حتى 10 سنوات.",
       url: "https://eltaiseer.com",
-      telephone: "+201558245974",
+      telephone: "+201500917300",
       areaServed: [
         { "@type": "City", name: "دمياط الجديدة", containedInPlace: { "@type": "State", name: "دمياط" } },
         { "@type": "City", name: "المنصورة الجديدة", containedInPlace: { "@type": "State", name: "الدقهلية" } },
@@ -258,7 +258,7 @@ export default function AboutPage() {
               <Link href="/properties">تصفح العقارات</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-orange-600">
-              <a href="https://wa.me/201558245974" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+              <a href="https://wa.me/201500917300" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                 <Phone className="h-5 w-5" />
                 تواصل عبر الواتساب
               </a>
