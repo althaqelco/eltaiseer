@@ -1,0 +1,71 @@
+{
+  "domain": "eltaiseer.com",
+  "nameservers": [
+    "dns1.registrar-servers.com",
+    "dns2.registrar-servers.com"
+  ],
+  "dnssec": false,
+  "records": [
+    {
+      "type": "A",
+      "name": "eltaiseer.com",
+      "content": "35.219.200.207"
+    },
+    {
+      "type": "CNAME",
+      "name": "_acme-challenge_tx7s6llhmpmbz2si.eltaiseer.com",
+      "content": "ace5132e-48ce-448b-b4a0-a144997c0a41.12.authorize.certificatemanager.goog."
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com",
+      "content": "fah-claim=023-02-684d8372-ea94-4c47-9a75-ac08c1a63f76"
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com",
+      "content": "hosting-site=eltaiseer-properties"
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com",
+      "content": "v=spf1 include:spf.efwd.registrar-servers.com ~all"
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com.eltaiseer.com",
+      "content": "google-site-verification=I2eaHclpDvXrfS-KlFxYgBHj-PG-g-I35MitiT-eXNI"
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward1.registrar-servers.com.",
+      "priority": 10
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward2.registrar-servers.com.",
+      "priority": 10
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward3.registrar-servers.com.",
+      "priority": 10
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward4.registrar-servers.com.",
+      "priority": 15
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward5.registrar-servers.com.",
+      "priority": 20
+    }
+  ],
+  "evidence": "Namecheap Advanced DNS UI and public DNS queries; TTL Automatic"
+}

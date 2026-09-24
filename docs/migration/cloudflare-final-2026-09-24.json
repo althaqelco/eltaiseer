@@ -1,0 +1,106 @@
+{
+  "domain": "eltaiseer.com",
+  "nameservers": [
+    "brit.ns.cloudflare.com",
+    "doug.ns.cloudflare.com"
+  ],
+  "dnssec": false,
+  "records": [
+    {
+      "type": "A",
+      "name": "eltaiseer.com",
+      "content": "35.219.200.207",
+      "proxied": true
+    },
+    {
+      "type": "CNAME",
+      "name": "_acme-challenge_tx7s6llhmpmbz2si.eltaiseer.com",
+      "content": "ace5132e-48ce-448b-b4a0-a144997c0a41.12.authorize.certificatemanager.goog.",
+      "proxied": false
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com",
+      "content": "fah-claim=023-02-684d8372-ea94-4c47-9a75-ac08c1a63f76",
+      "proxied": false
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com",
+      "content": "hosting-site=eltaiseer-properties",
+      "proxied": false
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com",
+      "content": "v=spf1 include:spf.efwd.registrar-servers.com ~all",
+      "proxied": false
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com.eltaiseer.com",
+      "content": "google-site-verification=I2eaHclpDvXrfS-KlFxYgBHj-PG-g-I35MitiT-eXNI",
+      "proxied": false
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward1.registrar-servers.com.",
+      "priority": 10,
+      "proxied": false
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward2.registrar-servers.com.",
+      "priority": 10,
+      "proxied": false
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward3.registrar-servers.com.",
+      "priority": 10,
+      "proxied": false
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward4.registrar-servers.com.",
+      "priority": 15,
+      "proxied": false
+    },
+    {
+      "type": "MX",
+      "name": "eltaiseer.com",
+      "content": "eforward5.registrar-servers.com.",
+      "priority": 20,
+      "proxied": false
+    },
+    {
+      "type": "TXT",
+      "name": "eltaiseer.com",
+      "content": "google-site-verification=I2eaHclpDvXrfS-KlFxYgBHj-PG-g-I35MitiT-eXNI",
+      "proxied": false
+    },
+    {
+      "type": "CNAME",
+      "name": "www.eltaiseer.com",
+      "content": "eltaiseer.com",
+      "proxied": true
+    }
+  ],
+  "evidence": "Cloudflare DNS UI, authoritative DNS and live HTTP verification",
+  "cloudflare_plan": "Free",
+  "ssl_mode": "Full (strict)",
+  "always_use_https": true,
+  "browser_cache_ttl": "Respect Existing Headers",
+  "redirects": [
+    {
+      "match": "http.host eq \"www.eltaiseer.com\"",
+      "target": "https://eltaiseer.com + original path",
+      "status": 301,
+      "preserve_query_string": true
+    }
+  ]
+}
