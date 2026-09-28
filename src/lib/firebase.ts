@@ -1,9 +1,11 @@
 // lib/firebase.ts
 // Firebase Configuration for El Taiseer Real Estate
+//
+// هذا الملف يهيّئ التطبيق وFirestore فقط. Auth وStorage في ملفين منفصلين
+// (firebaseAuth.ts وfirebaseStorage.ts) حتى لا تُحمَّل حزمهما (ومعها iframe
+// من apis.google.com) في كل صفحة عامة — لا يحتاجهما إلا تسجيل الدخول ولوحة التحكم.
 
 import { initializeApp, getApps } from "firebase/app";
-import { getStorage } from "firebase/storage";
-import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -19,13 +21,8 @@ const firebaseConfig = {
 // Initialize Firebase only once
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-// Initialize Storage
-export const storage = getStorage(app);
-
-// Initialize Auth
-export const auth = getAuth(app);
-
 // Initialize Firestore
+// (Firestore يلتقط Auth تلقائيًا متى هُيِّئ لاحقًا، فالكتابة من لوحة التحكم تبقى بصلاحية المسؤول)
 export const db = getFirestore(app);
 
 // Admin UID - only this user can access dashboard

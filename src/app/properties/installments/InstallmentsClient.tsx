@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/select";
 import { CreditCard, Building2 } from "lucide-react";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
 import type { FaqItem } from "@/lib/homeFaq";
 import { ListingPagination } from "@/components/ListingPagination";
@@ -30,7 +29,7 @@ interface InstallmentsClientProps {
 }
 
 export default function InstallmentsClient({ initialProperties, faq, page = 1 }: InstallmentsClientProps) {
-  const [properties, setProperties] = useState<Property[]>(
+  const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   const [selectedCity, setSelectedCity] = useState("all");
@@ -38,15 +37,8 @@ export default function InstallmentsClient({ initialProperties, faq, page = 1 }:
   // صفحة الترقيم المحلي عند تفعيل فلتر؛ بدونه الصفحة تأتي من الرابط (?page=N)
   const [filterPage, setFilterPage] = useState(1);
 
-  useEffect(() => {
-    // البيانات الأولية من الخادم؛ تحديث حي من Firestore بعد التحميل
-    getAllPropertiesAsync().then((all) => {
-      const filtered = all.filter(
-        (p) => p.payment?.type !== "كاش" && p.status !== "تم البيع"
-      );
-      if (filtered.length > 0) setProperties(filtered);
-    }).catch(console.error);
-  }, []);
+  // البيانات تأتي من الخادم (ISR يحدّثها كل 300 ث)، فلا نعيد جلبها من Firestore في المتصفح:
+  // إعادة الجلب كانت تحمّل Firebase SDK وتقرأ المجموعة كاملة في كل زيارة لبيانات موجودة في HTML.
 
   const filteredProperties = useMemo(() => {
     return properties.filter((p) => {

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import CityClient from "./CityClient";
 import {
-  getPropertiesServer,
+  getPropertiesForIsr,
   serializeProperties,
   filterByCity,
   buildItemListSchema,
@@ -17,7 +17,7 @@ export default async function CityListing({ city, page }: { city: string; page: 
     notFound();
   }
 
-  const all = await getPropertiesServer();
+  const all = await getPropertiesForIsr();
   const cityProperties = filterByCity(all, city);
   // رقم صفحة أبعد من آخر صفحة = 404 (الصفحة الأولى تبقى دائماً حتى بلا عقارات)
   if (page > totalPages(cityProperties.length, CITY_PAGE_SIZE)) {

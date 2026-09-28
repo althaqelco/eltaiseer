@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PropertyCard } from "@/components/PropertyCard";
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/select";
 import { Building2 } from "lucide-react";
 import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { PLACE_CATEGORIES } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { ListingPagination } from "@/components/ListingPagination";
@@ -27,20 +26,15 @@ const ITEMS_PER_PAGE = CATEGORY_PAGE_SIZE;
 const APARTMENT_TYPES = ["شقة", "شقة فاخرة", "دوبلكس", "بنتهاوس", "روف"];
 
 export default function ApartmentsClient({ initialProperties, page = 1 }: { initialProperties: Property[]; page?: number }) {
-  const [properties, setProperties] = useState<Property[]>(
+  const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   // صفحة الترقيم المحلي عند تفعيل فلتر الحي؛ بدونه الصفحة تأتي من الرابط (?page=N)
   const [filterPage, setFilterPage] = useState(1);
   const [selectedDistrict, setSelectedDistrict] = useState("all");
 
-  useEffect(() => {
-    // البيانات الأولية من الخادم؛ تحديث حي من Firestore بعد التحميل
-    getAllPropertiesAsync().then((allProperties) => {
-      const apartments = allProperties.filter(p => APARTMENT_TYPES.includes(p.type));
-      if (apartments.length > 0) setProperties(apartments);
-    }).catch(console.error);
-  }, []);
+  // البيانات تأتي من الخادم (ISR يحدّثها كل 300 ث)، فلا نعيد جلبها من Firestore في المتصفح:
+  // إعادة الجلب كانت تحمّل Firebase SDK وتقرأ المجموعة كاملة في كل زيارة لبيانات موجودة في HTML.
 
   const filteredProperties = useMemo(() => {
     if (selectedDistrict === "all") return properties;

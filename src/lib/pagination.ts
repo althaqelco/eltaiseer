@@ -45,3 +45,24 @@ export function pageWindow(current: number, total: number): (number | "gap")[] {
   pages.push(total);
   return pages;
 }
+
+// الصفحة N ترث title وog من الصفحة الأولى؛ نضيف «صفحة N» ونجعل og:url ذاتيًا حتى لا تتكرر العناوين
+// ولا تشير المشاركة للصفحة الأولى (الـ canonical ذاتي أصلًا)
+export async function pagedMetadata(
+  parent: import("next").ResolvingMetadata,
+  canonical: string,
+  page: number
+): Promise<import("next").Metadata> {
+  const prev = await parent;
+  const base = prev.title?.absolute || "";
+  const title = base ? `${base} - صفحة ${page}` : undefined;
+  return {
+    ...(title ? { title: { absolute: title } } : {}),
+    alternates: { canonical },
+    openGraph: {
+      ...(prev.openGraph || {}),
+      url: canonical,
+      ...(title ? { title } : {}),
+    } as import("next").Metadata["openGraph"],
+  };
+}

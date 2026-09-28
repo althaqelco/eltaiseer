@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, LineChart } from "lucide-react";
-import { getPropertiesServer } from "@/lib/serverProperties";
+import { getPropertiesForIsr } from "@/lib/serverProperties";
 import { getDistrictSlug } from "@/lib/districtSlugs";
 import { buildFaqSchema } from "@/lib/homeFaq";
 import type { Property } from "@/lib/mockData";
@@ -146,7 +146,7 @@ function CityPriceTable({
 }
 
 export default async function PricesPage() {
-  const all = await getPropertiesServer();
+  const all = await getPropertiesForIsr();
   const ndRows = computeCityRows(all, "new-damietta");
   const nmRows = computeCityRows(all, "new-mansoura");
   const faqSchema = buildFaqSchema(PRICES_FAQ);

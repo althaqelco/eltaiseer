@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import InstallmentsClient from "./InstallmentsClient";
 import {
-  getPropertiesServer,
+  getPropertiesForIsr,
   serializeProperties,
   buildItemListSchema,
 } from "@/lib/serverProperties";
@@ -30,7 +30,7 @@ const INSTALLMENT_FAQ = [
 
 // صفحة التقسيط (الأساسية أو ?page=N) — شريحة الصفحة وروابط الترقيم في HTML الخادم
 export default async function InstallmentsListing({ page }: { page: number }) {
-  const all = await getPropertiesServer();
+  const all = await getPropertiesForIsr();
   // كل عقار يقبل التقسيط (تقسيط فقط أو كاش/تقسيط) وغير مباع
   const installmentProperties = categoryProperties(all, "installments");
   if (page > totalPages(installmentProperties.length, CATEGORY_PAGE_SIZE)) {

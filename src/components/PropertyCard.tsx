@@ -77,7 +77,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
   return (
     <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-0 bg-white rounded-xl">
       {/* Image Container */}
-      <Link href={propertyUrl} className="block">
+      <Link href={propertyUrl} prefetch={false} className="block">
         <div className="relative h-40 sm:h-48 overflow-hidden cursor-pointer">
           <Image
             src={property.images[0]}
@@ -154,7 +154,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
 
       <CardContent className="p-3 sm:p-4 space-y-2 sm:space-y-3">
         {/* Title - Clickable */}
-        <Link href={propertyUrl} className="block hover:text-orange-500 transition-colors">
+        <Link href={propertyUrl} prefetch={false} className="block hover:text-orange-500 transition-colors">
           <h3 className="font-semibold text-base sm:text-lg line-clamp-2 text-gray-800 leading-relaxed">
             {property.title}
           </h3>
@@ -229,7 +229,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
           variant="outline"
           className="flex-1 gap-1 sm:gap-2 text-xs sm:text-sm h-9 sm:h-10"
         >
-          <Link href={propertyUrl}>
+          <Link href={propertyUrl} prefetch={false}>
             <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
             التفاصيل
           </Link>

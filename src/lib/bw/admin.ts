@@ -11,7 +11,8 @@ import {
   writeBatch,
   type Timestamp,
 } from "firebase/firestore";
-import { auth, ADMIN_UID, db } from "../firebase";
+import { ADMIN_UID, db } from "../firebase";
+import { auth } from "../firebaseAuth";
 import { BW_CITIES, suggestDistrictSlug } from "./cities";
 import { MIN_POINTS } from "./types";
 import { plotKey, publicView } from "./publish";

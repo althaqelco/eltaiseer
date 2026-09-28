@@ -1,3 +1,4 @@
+import type { ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import CategoryListing, { pagedCanonicalMetadata } from "../../../CategoryListing";
 import VillasClient from "../../VillasClient";
@@ -13,8 +14,8 @@ export function generateStaticParams() {
 
 type Props = { params: { n: string } };
 
-export async function generateMetadata({ params }: Props) {
-  return pagedCanonicalMetadata("/properties/villas/", params.n);
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata) {
+  return pagedCanonicalMetadata("/properties/villas/", params.n, parent);
 }
 
 export default async function PagedPage({ params }: Props) {

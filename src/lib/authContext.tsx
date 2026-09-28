@@ -7,7 +7,8 @@ import {
   signInWithEmailAndPassword, 
   signOut as firebaseSignOut 
 } from "firebase/auth";
-import { auth, ADMIN_UID } from "./firebase";
+import { ADMIN_UID } from "./firebase";
+import { auth } from "./firebaseAuth";
 
 interface AuthContextType {
   user: User | null;

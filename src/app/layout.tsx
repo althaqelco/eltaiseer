@@ -5,11 +5,15 @@ import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { MetaPixel } from "@/components/MetaPixel";
 import { Suspense } from "react";
 
+// display "optional": لا تبديل للخط بعد أول رسم، فلا إزاحة تخطيط (CLS كان 0.224 في صفحات الأحياء
+// و0.141 في الرئيسية عند وصول Cairo). إن لم يصل الخط خلال ~100ms في الزيارة الأولى تبقى الصفحة
+// بخط النظام، ويظهر Cairo من الكاش عند التحميل الكامل التالي.
+// "latin" مع "arabic": المسافة والأرقام 0–9 في نطاق latin وتظهر في كل صفحة، فتُحمَّل مسبقًا أيضًا.
 const cairo = Cairo({
-  subsets: ["arabic"],
+  subsets: ["arabic", "latin"],
   variable: "--font-cairo",
   weight: ["400", "600", "700"],
-  display: "swap",
+  display: "optional",
   preload: true,
 });
 
@@ -187,10 +191,6 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com" />
-        <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
         <link rel="alternate" type="application/rss+xml" title="مدونة التيسير للعقارات" href="/feed.xml" />
         <meta name="geo.region" content="EG-DK" />
         <meta name="geo.placename" content="دمياط الجديدة" />

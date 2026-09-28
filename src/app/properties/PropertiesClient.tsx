@@ -35,7 +35,6 @@ import {
   Building2,
 } from "lucide-react";
 import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";
@@ -88,7 +87,7 @@ interface PropertiesClientProps {
 }
 
 export default function PropertiesClient({ initialProperties, page = 1 }: PropertiesClientProps) {
-  const [properties, setProperties] = useState<Property[]>(
+  const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
@@ -102,15 +101,8 @@ export default function PropertiesClient({ initialProperties, page = 1 }: Proper
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("all");
   const [priceRange, setPriceRange] = useState(DEFAULT_PRICE_RANGE);
 
-  useEffect(() => {
-    // البيانات الأولية من الخادم؛ تحديث حي من Firestore بعد التحميل
-    getAllPropertiesAsync().then((firestoreProperties) => {
-      if (firestoreProperties.length > 0) {
-        setProperties(firestoreProperties);
-      }
-    }).catch(console.error);
-  }, []);
-
+  // البيانات تأتي من الخادم (ISR يحدّثها كل 300 ث)، فلا نعيد جلبها من Firestore في المتصفح:
+  // إعادة الجلب كانت تحمّل Firebase SDK وتقرأ المجموعة كاملة في كل زيارة لبيانات موجودة في HTML.
   // Check URL params (يدعم search الذي يستخدمه SearchAction schema)
   const applyUrlFilters = useCallback(
     ({ district, type, search }: { district: string | null; type: string | null; search: string | null }) => {
@@ -413,12 +405,14 @@ export default function PropertiesClient({ initialProperties, page = 1 }: Proper
                   {/* Image */}
                   <Link
                     href={getPropertyUrl(property)}
+                    prefetch={false}
                     className="relative w-full md:w-80 h-48 md:h-auto flex-shrink-0"
                   >
                     <Image
                       src={property.images[0]}
                       alt={property.title}
                       fill
+                      sizes="(max-width: 767px) 100vw, 320px"
                       className="object-cover"
                     />
                     <Badge className="absolute top-3 right-3 bg-orange-500">
@@ -440,6 +434,7 @@ export default function PropertiesClient({ initialProperties, page = 1 }: Proper
                         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 mb-3">
                           <Link
                             href={getPropertyUrl(property)}
+                            prefetch={false}
                             className="hover:text-orange-600 transition-colors"
                           >
                             <h3 className="text-xl font-bold text-gray-800">
@@ -516,7 +511,7 @@ export default function PropertiesClient({ initialProperties, page = 1 }: Proper
                           واتساب
                         </Button>
                         <Button asChild variant="outline" className="gap-2">
-                          <Link href={getPropertyUrl(property)}>
+                          <Link href={getPropertyUrl(property)} prefetch={false}>
                             <Eye className="h-4 w-4" />
                             عرض التفاصيل
                           </Link>

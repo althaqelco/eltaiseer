@@ -31,6 +31,8 @@ export function generateStaticParams() {
 // نفس البيانات التي تعرضها الصفحة — العدّ هنا هو ما يراه الزائر
 async function loadDistrict(city: string, district: string) {
   const { ok, properties: all } = await getPropertiesServerResult();
+  // فشل الجلب في صفحة مخزنة (ISR): نرمي ليبقي Next آخر نسخة سليمة بدل تخزين قائمة فارغة (انظر getPropertiesForIsr)
+  if (!ok && process.env.NEXT_PHASE !== "phase-production-build") throw new Error("Firestore unavailable: keeping the last good page");
   const districtName = SLUG_TO_DISTRICT[district];
   const districtProperties = filterByDistrict(filterByCity(all, city), districtName);
   const available = districtProperties.filter(isAvailable);

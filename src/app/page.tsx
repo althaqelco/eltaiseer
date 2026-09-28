@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import HomeClient from "./HomeClient";
 import { HOME_FAQ, buildFaqSchema } from "@/lib/homeFaq";
 import {
-  getPropertiesServer,
+  getPropertiesForIsr,
   serializeProperties,
   buildItemListSchema,
 } from "@/lib/serverProperties";
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const homepageFaqSchema = buildFaqSchema(HOME_FAQ);
-  const allProperties = await getPropertiesServer();
+  const allProperties = await getPropertiesForIsr();
   const itemListSchema = buildItemListSchema(
     allProperties.filter((p) => p.status !== "تم البيع"),
     "أحدث عقارات دمياط الجديدة والمنصورة الجديدة"

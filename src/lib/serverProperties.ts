@@ -22,10 +22,21 @@ export const getPropertiesServerResult = cache(
   }
 );
 
-// نفس السلوك السابق: قائمة فارغة عند الفشل
+// نفس السلوك السابق: قائمة فارغة عند الفشل (للأجزاء الثانوية في صفحات ديناميكية، مثل «عقارات مشابهة»)
 export const getPropertiesServer = cache(
   async (): Promise<Property[]> => (await getPropertiesServerResult()).properties
 );
+
+// لصفحات القوائم المخزنة (ISR): الفشل يُرمى بدل قائمة فارغة، فيُبقي Next آخر نسخة سليمة ويعيد المحاولة لاحقًا —
+// القائمة الفارغة كانت تُخزَّن 300 ث أو أكثر للزوار وجوجل (وبعد إزالة إعادة الجلب من المتصفح لا شيء يصلحها).
+// أثناء البناء فقط نقبل الفارغ حتى لا يفشل النشر بسبب انقطاع مؤقت (تُعاد الصفحة بعد 300 ث).
+export const getPropertiesForIsr = cache(async (): Promise<Property[]> => {
+  const r = await getPropertiesServerResult();
+  if (!r.ok && process.env.NEXT_PHASE !== "phase-production-build") {
+    throw new Error("Firestore unavailable: keeping the last good page");
+  }
+  return r.properties;
+});
 
 // معرفات Firestore في هذا المشروع: 8 أحرف مخصصة أو 20 تلقائية — أي شيء آخر ليس عقاراً
 const PROPERTY_ID_RE = /^[A-Za-z0-9_-]{1,64}$/;

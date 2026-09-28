@@ -55,6 +55,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
                   {item.href && !isLast ? (
                     <Link
                       href={item.href}
+                      prefetch={false}
                       className="flex items-center gap-1 text-gray-600 hover:text-orange-600 transition-colors"
                     >
                       {item.icon || (isFirst && <Home className="h-4 w-4" />)}

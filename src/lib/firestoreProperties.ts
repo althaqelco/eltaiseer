@@ -1,7 +1,7 @@
 // lib/firestoreProperties.ts
 // Firestore service for properties - real database storage
 
-import { db, auth, ADMIN_UID } from "./firebase";
+import { db, ADMIN_UID } from "./firebase";
 import { 
   collection, 
   doc, 
@@ -19,7 +19,10 @@ import {
 import { Property } from "./mockData";
 
 // Check if user is authenticated as admin
-function isAdminAuthenticated(): boolean {
+// Auth يُحمَّل عند الحاجة فقط (دوال الكتابة تُستدعى من لوحة التحكم حيث هيّأه AuthProvider مسبقًا)،
+// حتى لا تجرّ قراءة العقارات في الصفحات العامة حزمة firebase/auth معها.
+async function isAdminAuthenticated(): Promise<boolean> {
+  const { auth } = await import("./firebaseAuth");
   const user = auth.currentUser;
   return user !== null && user.uid === ADMIN_UID;
 }
@@ -160,7 +163,7 @@ export async function addPropertyToFirestore(
 ): Promise<{ success: boolean; property?: Property; error?: string }> {
   try {
     // Check admin authentication
-    if (!isAdminAuthenticated()) {
+    if (!(await isAdminAuthenticated())) {
       return { 
         success: false, 
         error: 'يجب تسجيل الدخول كمسؤول لإضافة عقار جديد' 
@@ -192,7 +195,7 @@ export async function updatePropertyInFirestore(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     // Check admin authentication
-    if (!isAdminAuthenticated()) {
+    if (!(await isAdminAuthenticated())) {
       return { 
         success: false, 
         error: 'يجب تسجيل الدخول كمسؤول لتعديل العقار' 
@@ -221,7 +224,7 @@ export async function updatePropertyInFirestore(
 export async function deletePropertyFromFirestore(id: string): Promise<{ success: boolean; error?: string }> {
   try {
     // Check admin authentication
-    if (!isAdminAuthenticated()) {
+    if (!(await isAdminAuthenticated())) {
       return { 
         success: false, 
         error: 'يجب تسجيل الدخول كمسؤول لحذف العقار' 
