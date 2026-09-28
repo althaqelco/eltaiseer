@@ -155,6 +155,8 @@ export function Footer() {
               <Link href="/properties/chalets" className="hover:text-orange-400 transition-colors">شاليهات</Link>
               <span>•</span>
               <Link href="/properties/installments" className="hover:text-orange-400 transition-colors font-semibold">عقارات بالتقسيط</Link>
+              <span>•</span>
+              <Link href="/beit-al-watan-for-sale" className="hover:text-orange-400 transition-colors font-semibold">أراضي بيت الوطن للبيع</Link>
             </div>
           </div>
           {/* دمياط الجديدة */}

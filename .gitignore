@@ -52,3 +52,7 @@ credentials.json
 
 # Local Netlify folder
 .netlify
+
+# اختبارات قسم بيت الوطن (مخرجات مؤقتة)
+.bw-test/
+firestore-debug.log

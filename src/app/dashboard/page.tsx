@@ -220,7 +220,10 @@ export default function DashboardPage() {
               إدارة العقارات — {stats.damietta} دمياط الجديدة · {stats.mansoura} المنصورة الجديدة
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" className="gap-2 border-emerald-300 text-emerald-700">
+              <Link href="/dashboard/resale">بيت الوطن: البيع والشراء</Link>
+            </Button>
             <Button variant="outline" onClick={exportCsv} className="gap-2">
               <Download className="h-4 w-4" />
               تصدير CSV

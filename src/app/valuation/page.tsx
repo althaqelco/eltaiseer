@@ -13,6 +13,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { PLACE_CATEGORIES } from "@/lib/egyptPlaces";
+import { COMPANY_WHATSAPP } from "@/lib/format";
 
 const propertyTypes = ["شقة", "فيلا", "دوبلكس", "أرض", "محل تجاري", "عيادة", "شاليه"];
 const finishingTypes = ["بدون تشطيب", "نصف تشطيب", "تشطيب كامل", "سوبر لوكس"];
@@ -27,9 +28,23 @@ export default function ValuationPage() {
     finishing: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [waUrl, setWaUrl] = useState("");
 
+  // الطلب يصل فعلًا: رسالة واتساب جاهزة لرقم الشركة (نفس قناة «أضف عقارك») — كان النموذج يعرض «تم» ويُسقط الاسم والهاتف
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const lines = [
+      "طلب تقييم عقار من موقع التيسير",
+      `الاسم: ${formData.name}`,
+      `الهاتف: ${formData.phone}`,
+      formData.propertyType && `نوع العقار: ${formData.propertyType}`,
+      formData.district && `المنطقة: ${formData.district}`,
+      formData.area && `المساحة: ${formData.area} م²`,
+      formData.finishing && `التشطيب: ${formData.finishing}`,
+    ].filter(Boolean);
+    const url = `https://wa.me/${COMPANY_WHATSAPP}?text=${encodeURIComponent(lines.join("\n"))}`;
+    setWaUrl(url);
+    window.open(url, "_blank", "noopener,noreferrer");
     setSubmitted(true);
   };
 
@@ -132,8 +147,13 @@ export default function ValuationPage() {
                     <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
                       <CheckCircle className="h-10 w-10 text-green-600" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-800 mb-2">تم إرسال طلبك بنجاح!</h3>
-                    <p className="text-gray-600 mb-6">سنتواصل معك خلال 24 ساعة</p>
+                    {/* الطلب لا يصلنا إلا بعد الضغط على «إرسال» داخل واتساب؛ لا نعلن نجاحًا لم يحدث */}
+                    <h3 className="text-2xl font-bold text-gray-800 mb-2">أكمل الإرسال في واتساب</h3>
+                    <p className="text-gray-600 mb-4">جهّزنا رسالة الطلب في واتساب؛ اضغط «إرسال» هناك، وسنتواصل معك خلال 24 ساعة.</p>
+                    <a href={waUrl} target="_blank" rel="noopener noreferrer" className="inline-block mb-4">
+                      <Button className="bg-green-600 hover:bg-green-700">فتح واتساب</Button>
+                    </a>
+                    <br />
                     <Button onClick={() => setSubmitted(false)} variant="outline">
                       إرسال طلب آخر
                     </Button>
