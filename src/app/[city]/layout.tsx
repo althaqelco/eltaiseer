@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{ city: string }>;
@@ -95,6 +96,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CityLayout({ children, params }: { children: React.ReactNode; params: Promise<{ city: string }> }) {
   const { city } = await params;
+
+  // [city] يلتقط أي مسار من مقطع واحد (/does-not-exist/) — الرفض هنا فوق loading.tsx صفحة العقار
+  // فيخرج 404 حقيقي لكل ما تحت مدينة غير معروفة، بما فيه /x/y/id
+  if (!cityMetadata[city]) notFound();
 
   const cityName = city === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
   const placeSchema = {
