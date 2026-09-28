@@ -1,19 +1,18 @@
 import { Metadata } from "next";
-import { SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
+import { SLUG_TO_DISTRICT, isCityDistrictSlug } from "@/lib/districtSlugs";
 
 type Props = {
   params: Promise<{ city: string; district: string }>;
   children: React.ReactNode;
 };
 
-const VALID_CITIES = ["new-damietta", "new-mansoura"];
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { city, district } = await params;
 
-  // slug غير معروف = صفحة غير موجودة — يمنع فهرسة عدد لا نهائي من الروابط الوهمية
+  // slug غير معروف أو حي من المدينة الأخرى = صفحة غير موجودة — يمنع فهرسة عدد لا نهائي من الروابط الوهمية
   const districtName = SLUG_TO_DISTRICT[district];
-  if (!VALID_CITIES.includes(city) || !districtName) {
+  if (!districtName || !isCityDistrictSlug(city, district)) {
     return {
       title: "الصفحة غير موجودة",
       robots: { index: false, follow: false },
@@ -74,7 +73,7 @@ export default async function DistrictLayout({ children, params }: { children: R
   // التحقق من صحة الحي يتم في صفحة الحي نفسها (notFound هناك) وليس هنا —
   // لأن هذا الـ layout يغلف أيضاً صفحات العقارات، وعقار بحي غير مُعرّف
   // (مثل حي فارغ في البيانات) يجب أن يظل قابلاً للوصول عبر رابطه
-  if (!VALID_CITIES.includes(city) || !districtName) {
+  if (!districtName || !isCityDistrictSlug(city, district)) {
     return children;
   }
 

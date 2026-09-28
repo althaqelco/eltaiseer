@@ -3,19 +3,37 @@
 // ووكلاء الذكاء الاصطناعي العقارات في HTML مباشرة بدل صفحات فارغة
 
 import { cache } from "react";
-import { getPropertiesFromFirestore } from "./firestoreProperties";
+import { fetchAllPropertiesStrict, fetchPropertyStrict } from "./firestoreProperties";
 import { getPropertyUrl } from "./districtSlugs";
 import type { Property } from "./mockData";
 
 const BASE_URL = "https://eltaiseer.com";
 
 // cache() يوحّد الجلب داخل الطلب الواحد (metadata + الصفحة + الـ schema)
-export const getPropertiesServer = cache(async (): Promise<Property[]> => {
-  try {
-    return await getPropertiesFromFirestore();
-  } catch {
-    return [];
+// ok=false يعني فشل الجلب (لا "صفر عقارات") — قواعد noindex وsitemap لا تُطبق عليه
+export const getPropertiesServerResult = cache(
+  async (): Promise<{ ok: boolean; properties: Property[] }> => {
+    try {
+      return { ok: true, properties: await fetchAllPropertiesStrict() };
+    } catch (error) {
+      console.error("Error fetching properties from Firestore:", error);
+      return { ok: false, properties: [] };
+    }
   }
+);
+
+// نفس السلوك السابق: قائمة فارغة عند الفشل
+export const getPropertiesServer = cache(
+  async (): Promise<Property[]> => (await getPropertiesServerResult()).properties
+);
+
+// معرفات Firestore في هذا المشروع: 8 أحرف مخصصة أو 20 تلقائية — أي شيء آخر ليس عقاراً
+const PROPERTY_ID_RE = /^[A-Za-z0-9_-]{1,64}$/;
+
+// عقار واحد لصفحته: null = غير موجود (404)، وخطأ الاتصال يُرمى (500 يعيد الزاحف المحاولة لاحقاً)
+export const getPropertyServer = cache(async (id: string): Promise<Property | null> => {
+  if (!PROPERTY_ID_RE.test(id)) return null;
+  return fetchPropertyStrict(id);
 });
 
 // تحويل لكائنات قابلة للتمرير من Server Component إلى Client Component

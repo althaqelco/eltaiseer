@@ -13,6 +13,7 @@ import {
   query,
   orderBy,
   Timestamp,
+  serverTimestamp,
   DocumentData
 } from "firebase/firestore";
 import { Property } from "./mockData";
@@ -76,12 +77,22 @@ function removeUndefined<T extends Record<string, unknown>>(obj: T): T {
   return result as T;
 }
 
+// Timestamp أو نص تاريخ → Date، وأي قيمة غير صالحة → undefined
+function toOptionalDate(value: unknown): Date | undefined {
+  if (!value) return undefined;
+  const maybeTs = value as { toDate?: () => Date };
+  if (typeof maybeTs.toDate === "function") return maybeTs.toDate();
+  const d = new Date(value as string);
+  return isNaN(d.getTime()) ? undefined : d;
+}
+
 // Convert Firestore document to Property
 function docToProperty(docData: DocumentData, id: string): Property {
   return {
     ...docData,
     id,
     createdAt: docData.createdAt?.toDate?.() || new Date(docData.createdAt),
+    updatedAt: toOptionalDate(docData.updatedAt),
   } as Property;
 }
 
@@ -92,25 +103,39 @@ function propertyToDoc(property: Omit<Property, "id" | "createdAt">) {
   return {
     ...cleanedProperty,
     createdAt: Timestamp.now(),
+    updatedAt: serverTimestamp(),
   };
+}
+
+// كل العقارات مع رمي الخطأ عند فشل الاتصال — للخادم الذي يحتاج التمييز بين "لا عقارات" و"فشل الجلب"
+// (قاعدة noindex للقوائم الفارغة وsitemap.xml لا تُطبق على نتيجة جلب فاشل)
+export async function fetchAllPropertiesStrict(): Promise<Property[]> {
+  const q = query(collection(db, COLLECTION_NAME), orderBy("createdAt", "desc"));
+  const querySnapshot = await getDocs(q);
+
+  const properties: Property[] = [];
+  querySnapshot.forEach((doc) => {
+    properties.push(docToProperty(doc.data(), doc.id));
+  });
+
+  return properties;
 }
 
 // Get all properties from Firestore
 export async function getPropertiesFromFirestore(): Promise<Property[]> {
   try {
-    const q = query(collection(db, COLLECTION_NAME), orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
-    
-    const properties: Property[] = [];
-    querySnapshot.forEach((doc) => {
-      properties.push(docToProperty(doc.data(), doc.id));
-    });
-    
-    return properties;
+    return await fetchAllPropertiesStrict();
   } catch (error) {
     console.error("Error fetching properties from Firestore:", error);
     return [];
   }
+}
+
+// عقار واحد: null إن لم يوجد، ويرمي الخطأ عند فشل الاتصال
+// (صفحة العقار تعيد 404 للمحذوف فقط، لا لخطأ شبكة مؤقت يُسقط إعلاناً حقيقياً من الفهرس)
+export async function fetchPropertyStrict(id: string): Promise<Property | null> {
+  const docSnap = await getDoc(doc(db, COLLECTION_NAME, id));
+  return docSnap.exists() ? docToProperty(docSnap.data(), docSnap.id) : null;
 }
 
 // Get single property by ID
@@ -176,14 +201,15 @@ export async function updatePropertyInFirestore(
 
     const docRef = doc(db, COLLECTION_NAME, id);
     
-    // Remove id and createdAt from updates
+    // Remove id, createdAt and updatedAt from updates (updatedAt يُكتب بوقت الخادم أدناه)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id: _id, createdAt: _createdAt, ...updateData } = updates;
+    const { id: _id, createdAt: _createdAt, updatedAt: _updatedAt, ...updateData } = updates;
     
     // Clean undefined values before sending to Firestore
     const cleanedData = removeUndefined(updateData as Record<string, unknown>);
     
-    await updateDoc(docRef, cleanedData);
+    // updatedAt يحرك lastmod الإعلان في sitemap.xml عند تعديل السعر أو الحالة
+    await updateDoc(docRef, { ...cleanedData, updatedAt: serverTimestamp() });
     return { success: true };
   } catch (error) {
     console.error("Error updating property in Firestore:", error);

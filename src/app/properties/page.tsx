@@ -1,31 +1,9 @@
-import PropertiesClient from "./PropertiesClient";
-import {
-  getPropertiesServer,
-  serializeProperties,
-  buildItemListSchema,
-} from "@/lib/serverProperties";
+import PropertiesListing from "./PropertiesListing";
 
-// ISR كل 5 دقائق — كل العقارات تظهر في HTML الخادم
+// ISR كل 5 دقائق — العقارات تظهر في HTML الخادم
+// الصفحات 2+ (?page=N) يخدمها ./p/[n] عبر rewrite في next.config.mjs
 export const revalidate = 300;
 
 export default async function PropertiesPage() {
-  const all = await getPropertiesServer();
-
-  const itemListSchema = buildItemListSchema(
-    all.filter((p) => p.status !== "تم البيع"),
-    "جميع العقارات للبيع في دمياط الجديدة والمنصورة الجديدة",
-    30
-  );
-
-  return (
-    <>
-      {all.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-        />
-      )}
-      <PropertiesClient initialProperties={serializeProperties(all)} />
-    </>
-  );
+  return <PropertiesListing page={1} />;
 }

@@ -55,4 +55,5 @@ credentials.json
 
 # اختبارات قسم بيت الوطن (مخرجات مؤقتة)
 .bw-test/
+.seo-test/
 firestore-debug.log

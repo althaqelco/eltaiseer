@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PropertyCard } from "@/components/PropertyCard";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -13,26 +12,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CreditCard, ChevronLeft, ChevronRight, Building2 } from "lucide-react";
+import { CreditCard, Building2 } from "lucide-react";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
 import type { FaqItem } from "@/lib/homeFaq";
+import { ListingPagination } from "@/components/ListingPagination";
+import { CATEGORY_PAGE_SIZE } from "@/lib/pagination";
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = CATEGORY_PAGE_SIZE;
 
 interface InstallmentsClientProps {
   initialProperties: Property[];
   faq: FaqItem[];
+  // رقم الصفحة من الرابط (?page=N) — يُعرض من الخادم
+  page?: number;
 }
 
-export default function InstallmentsClient({ initialProperties, faq }: InstallmentsClientProps) {
+export default function InstallmentsClient({ initialProperties, faq, page = 1 }: InstallmentsClientProps) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   const [selectedCity, setSelectedCity] = useState("all");
   const [maxDownPayment, setMaxDownPayment] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
+  // صفحة الترقيم المحلي عند تفعيل فلتر؛ بدونه الصفحة تأتي من الرابط (?page=N)
+  const [filterPage, setFilterPage] = useState(1);
 
   useEffect(() => {
     // البيانات الأولية من الخادم؛ تحديث حي من Firestore بعد التحميل
@@ -57,8 +61,11 @@ export default function InstallmentsClient({ initialProperties, faq }: Installme
   }, [properties, selectedCity, maxDownPayment]);
 
   useEffect(() => {
-    setCurrentPage(1);
+    setFilterPage(1);
   }, [selectedCity, maxDownPayment]);
+
+  const filtersActive = selectedCity !== "all" || maxDownPayment !== "all";
+  const currentPage = filtersActive ? filterPage : page;
 
   const totalPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
   const paginatedProperties = filteredProperties.slice(
@@ -140,32 +147,14 @@ export default function InstallmentsClient({ initialProperties, faq }: Installme
           </div>
         )}
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-3 mb-12">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => p - 1)}
-            >
-              <ChevronRight className="h-4 w-4" />
-              السابق
-            </Button>
-            <span className="text-sm text-gray-600">
-              صفحة {currentPage} من {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((p) => p + 1)}
-            >
-              التالي
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+        {/* Pagination — روابط ?page=N حقيقية، أو أزرار محلية عند تفعيل فلتر */}
+        <ListingPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath="/properties/installments/"
+          onPageChange={filtersActive ? setFilterPage : undefined}
+          className="mb-12"
+        />
 
         {/* SEO Content + FAQ */}
         <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm max-w-4xl mx-auto">
