@@ -36,4 +36,7 @@ export interface Property {
   contact_whatsapp: string;
   isVerified: boolean;
   createdAt: Date;
+  // آخر تعديل من لوحة التحكم (يُكتب عند الإضافة والتعديل) — يغذي lastmod في sitemap.xml
+  // الإعلانات الأقدم من إضافة الحقل لا تحمله فيُستخدم createdAt
+  updatedAt?: Date;
 }

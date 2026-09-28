@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, Suspense } from "react";
+import { useState, useEffect, useMemo, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -29,13 +29,10 @@ import {
   Maximize,
   Phone,
   Eye,
-  ChevronLeft,
-  ChevronRight,
   Search,
   SlidersHorizontal,
   CheckCircle2,
   Building2,
-  Loader2,
 } from "lucide-react";
 import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
 import { getAllPropertiesAsync } from "@/lib/propertyStore";
@@ -44,6 +41,8 @@ import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";
 import { getPropertyUrl } from "@/lib/districtSlugs";
 import { formatPriceShort as formatPrice, getWhatsAppUrl, COMPANY_WHATSAPP } from "@/lib/format";
+import { ListingPagination } from "@/components/ListingPagination";
+import { HUB_PAGE_SIZE } from "@/lib/pagination";
 
 const PROPERTY_TYPES = [
   "شقة",
@@ -60,22 +59,48 @@ const PROPERTY_TYPES = [
   "روف",
 ];
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = HUB_PAGE_SIZE;
+const DEFAULT_PRICE_RANGE = { min: 0, max: 100000000 };
 
-function PropertiesContent({ initialProperties }: { initialProperties: Property[] }) {
+// يقرأ فلاتر الرابط (?district= ?type= ?search= التي يستخدمها SearchAction) داخل Suspense خاص به —
+// useSearchParams في صفحة ثابتة يحوّل أقرب Suspense لعرض عميل فقط، وكان يغلف الصفحة كلها
+// فيرسل الخادم «جاري تحميل العقارات...» بلا H1 ولا روابط إعلانات
+function UrlFilterSync({
+  onChange,
+}: {
+  onChange: (filters: { district: string | null; type: string | null; search: string | null }) => void;
+}) {
   const searchParams = useSearchParams();
+  useEffect(() => {
+    onChange({
+      district: searchParams.get("district"),
+      type: searchParams.get("type"),
+      search: searchParams.get("search"),
+    });
+  }, [searchParams, onChange]);
+  return null;
+}
+
+interface PropertiesClientProps {
+  initialProperties: Property[];
+  // رقم الصفحة من الرابط (?page=N) — يُعرض من الخادم
+  page?: number;
+}
+
+export default function PropertiesClient({ initialProperties, page = 1 }: PropertiesClientProps) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
-  const [currentPage, setCurrentPage] = useState(1);
+  // صفحة الترقيم المحلي عند تفعيل فلتر؛ بدون فلاتر الصفحة تأتي من الرابط (?page=N)
+  const [filterPage, setFilterPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
   const [selectedDistrict, setSelectedDistrict] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("all");
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 100000000 });
+  const [priceRange, setPriceRange] = useState(DEFAULT_PRICE_RANGE);
 
   useEffect(() => {
     // البيانات الأولية من الخادم؛ تحديث حي من Firestore بعد التحميل
@@ -84,15 +109,18 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
         setProperties(firestoreProperties);
       }
     }).catch(console.error);
+  }, []);
 
-    // Check URL params (يدعم search الذي يستخدمه SearchAction schema)
-    const district = searchParams.get("district");
-    const type = searchParams.get("type");
-    const search = searchParams.get("search");
-    if (district) setSelectedDistrict(district);
-    if (type) setSelectedType(type);
-    if (search) setSearchQuery(search);
-  }, [searchParams]);
+  // Check URL params (يدعم search الذي يستخدمه SearchAction schema)
+  const applyUrlFilters = useCallback(
+    ({ district, type, search }: { district: string | null; type: string | null; search: string | null }) => {
+      if (district) setSelectedDistrict(district);
+      if (type) setSelectedType(type);
+      if (search) setSearchQuery(search);
+      if (district || type || search) setFilterPage(1);
+    },
+    []
+  );
 
   const filteredProperties = useMemo(() => {
     return properties.filter((p) => {
@@ -117,6 +145,16 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
     });
   }, [properties, selectedCity, selectedDistrict, selectedType, selectedStatus, selectedPaymentMethod, priceRange, searchQuery]);
 
+  const filtersActive =
+    searchQuery !== "" ||
+    selectedCity !== "all" ||
+    selectedDistrict !== "all" ||
+    selectedType !== "all" ||
+    selectedStatus !== "all" ||
+    selectedPaymentMethod !== "all" ||
+    priceRange.min !== DEFAULT_PRICE_RANGE.min ||
+    priceRange.max !== DEFAULT_PRICE_RANGE.max;
+  const currentPage = filtersActive ? filterPage : page;
   const totalPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
   const paginatedProperties = filteredProperties.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -136,9 +174,9 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
     setSelectedType("all");
     setSelectedStatus("all");
     setSelectedPaymentMethod("all");
-    setPriceRange({ min: 0, max: 100000000 });
+    setPriceRange(DEFAULT_PRICE_RANGE);
     setSearchQuery("");
-    setCurrentPage(1);
+    setFilterPage(1);
   };
 
   // Get categories based on selected city
@@ -154,6 +192,9 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Suspense fallback={null}>
+        <UrlFilterSync onChange={applyUrlFilters} />
+      </Suspense>
       <Header />
 
       {/* Breadcrumb */}
@@ -184,7 +225,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    setCurrentPage(1);
+                    setFilterPage(1);
                   }}
                   className="pr-10"
                 />
@@ -196,7 +237,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                 onValueChange={(value) => {
                   setSelectedCity(value as CityId | "all");
                   setSelectedDistrict("all");
-                  setCurrentPage(1);
+                  setFilterPage(1);
                 }}
               >
                 <SelectTrigger>
@@ -217,7 +258,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                 value={selectedDistrict}
                 onValueChange={(value) => {
                   setSelectedDistrict(value);
-                  setCurrentPage(1);
+                  setFilterPage(1);
                 }}
               >
                 <SelectTrigger>
@@ -248,7 +289,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                 value={selectedType}
                 onValueChange={(value) => {
                   setSelectedType(value);
-                  setCurrentPage(1);
+                  setFilterPage(1);
                 }}
               >
                 <SelectTrigger>
@@ -272,7 +313,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                 value={selectedStatus}
                 onValueChange={(value) => {
                   setSelectedStatus(value);
-                  setCurrentPage(1);
+                  setFilterPage(1);
                 }}
               >
                 <SelectTrigger>
@@ -290,7 +331,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                 value={selectedPaymentMethod}
                 onValueChange={(value) => {
                   setSelectedPaymentMethod(value);
-                  setCurrentPage(1);
+                  setFilterPage(1);
                 }}
               >
                 <SelectTrigger>
@@ -492,80 +533,16 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
           </div>
         )}
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-8">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              let pageNum;
-              if (totalPages <= 5) {
-                pageNum = i + 1;
-              } else if (currentPage <= 3) {
-                pageNum = i + 1;
-              } else if (currentPage >= totalPages - 2) {
-                pageNum = totalPages - 4 + i;
-              } else {
-                pageNum = currentPage - 2 + i;
-              }
-              return (
-                <Button
-                  key={pageNum}
-                  variant={currentPage === pageNum ? "default" : "outline"}
-                  size="icon"
-                  onClick={() => setCurrentPage(pageNum)}
-                  className={currentPage === pageNum ? "bg-orange-500" : ""}
-                >
-                  {pageNum}
-                </Button>
-              );
-            })}
-
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+        {/* Pagination — روابط ?page=N حقيقية، أو أزرار محلية عند تفعيل فلتر */}
+        <ListingPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath="/properties/"
+          onPageChange={filtersActive ? setFilterPage : undefined}
+        />
       </main>
 
       <Footer />
     </div>
-  );
-}
-
-// Loading component for Suspense fallback
-function PropertiesLoading() {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-orange-500 mx-auto mb-4" />
-          <p className="text-gray-600">جاري تحميل العقارات...</p>
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
-}
-
-// Main export with Suspense boundary
-export default function PropertiesClient({ initialProperties }: { initialProperties: Property[] }) {
-  return (
-    <Suspense fallback={<PropertiesLoading />}>
-      <PropertiesContent initialProperties={initialProperties} />
-    </Suspense>
   );
 }

@@ -1,7 +1,7 @@
 // هيكل تحميل لصفحة العقار فقط (ديناميكية تُجلب من Firestore عند كل طلب) — يظهر فوراً عند الضغط على بطاقة عقار.
 // لا تنقله للجذر ولا لأي مستوى أعلى: أي loading.tsx يبث الصفحة قبل تنفيذ notFound()/redirect() في الصفحات تحته،
 // فتخرج 404 و308 بحالة 200 (noindex أو meta refresh). لهذا فحص المدينة في [city]/layout.tsx فوق هذه الحدود،
-// وأي notFound()/redirect() يُضاف لصفحة العقار لن يُخرج حالة HTTP صحيحة — ضعه في layout فوقها.
+// وأي notFound()/redirect() يُضاف لصفحة العقار لن يُخرج حالة HTTP صحيحة — لهذا 404 و308 العقار في ./layout.tsx.
 export default function Loading() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">

@@ -16,20 +16,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Castle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Castle } from "lucide-react";
 import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
 import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { PLACE_CATEGORIES } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
+import { ListingPagination } from "@/components/ListingPagination";
+import { CATEGORY_PAGE_SIZE } from "@/lib/pagination";
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = CATEGORY_PAGE_SIZE;
 const VILLA_TYPES = ["فيلا منفصلة", "تاون هاوس", "توين هاوس"];
 
-export default function VillasClient({ initialProperties }: { initialProperties: Property[] }) {
+export default function VillasClient({ initialProperties, page = 1 }: { initialProperties: Property[]; page?: number }) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
-  const [currentPage, setCurrentPage] = useState(1);
+  // صفحة الترقيم المحلي عند تفعيل فلتر الحي؛ بدونه الصفحة تأتي من الرابط (?page=N)
+  const [filterPage, setFilterPage] = useState(1);
   const [selectedDistrict, setSelectedDistrict] = useState("all");
 
   useEffect(() => {
@@ -44,6 +47,12 @@ export default function VillasClient({ initialProperties }: { initialProperties:
     if (selectedDistrict === "all") return properties;
     return properties.filter(p => p.location.district === selectedDistrict);
   }, [properties, selectedDistrict]);
+
+  const filtersActive = selectedDistrict !== "all";
+  const currentPage = filtersActive ? filterPage : page;
+  useEffect(() => {
+    setFilterPage(1);
+  }, [selectedDistrict]);
 
   const totalPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
   const paginatedProperties = filteredProperties.slice(
@@ -125,22 +134,13 @@ export default function VillasClient({ initialProperties }: { initialProperties:
           </div>
         )}
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-8">
-            <Button variant="outline" size="icon" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1}>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map((page) => (
-              <Button key={page} variant={currentPage === page ? "default" : "outline"} size="icon" onClick={() => setCurrentPage(page)} className={currentPage === page ? "bg-orange-500" : ""}>
-                {page}
-              </Button>
-            ))}
-            <Button variant="outline" size="icon" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+        {/* Pagination — روابط ?page=N حقيقية، أو أزرار محلية عند تفعيل فلتر الحي */}
+        <ListingPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath="/properties/villas/"
+          onPageChange={filtersActive ? setFilterPage : undefined}
+        />
 
         {/* SEO Content */}
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">

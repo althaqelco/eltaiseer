@@ -10,8 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Breadcrumb, getCityBreadcrumb } from "@/components/Breadcrumb";
 import {
   MapPin,
-  ChevronRight,
-  ChevronLeft,
   Building2,
   LayoutGrid,
   List,
@@ -24,15 +22,19 @@ import { Property } from "@/lib/mockData";
 import { getDistrictSlug } from "@/lib/districtSlugs";
 import { CITY_FAQ } from "@/lib/cityFaq";
 import { buildFaqSchema } from "@/lib/homeFaq";
+import { ListingPagination } from "@/components/ListingPagination";
+import { CITY_PAGE_SIZE as ITEMS_PER_PAGE } from "@/lib/pagination";
 
-const ITEMS_PER_PAGE = 20;
+const DEFAULT_PRICE_RANGE = { min: 0, max: 50000000 };
 
 interface CityClientProps {
   citySlug: string;
   initialProperties: Property[];
+  // رقم الصفحة من الرابط (?page=N) — يُعرض من الخادم
+  page?: number;
 }
 
-export default function CityClient({ citySlug, initialProperties }: CityClientProps) {
+export default function CityClient({ citySlug, initialProperties, page = 1 }: CityClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const cityData = CITY_DATA[cityId];
@@ -40,12 +42,13 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
-  const [currentPage, setCurrentPage] = useState(1);
+  // صفحة الترقيم المحلي عند تفعيل فلتر؛ بدون فلاتر الصفحة تأتي من الرابط (?page=N)
+  const [filterPage, setFilterPage] = useState(1);
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<string>("الكل");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>("الكل");
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 50000000 });
+  const [priceRange, setPriceRange] = useState(DEFAULT_PRICE_RANGE);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(initialProperties.length === 0);
@@ -84,6 +87,14 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
   }, [properties, selectedDistricts, selectedTypes, priceRange, selectedStatus, selectedPaymentMethod]);
 
   // Pagination
+  const filtersActive =
+    selectedDistricts.length > 0 ||
+    selectedTypes.length > 0 ||
+    selectedStatus !== "الكل" ||
+    selectedPaymentMethod !== "الكل" ||
+    priceRange.min !== DEFAULT_PRICE_RANGE.min ||
+    priceRange.max !== DEFAULT_PRICE_RANGE.max;
+  const currentPage = filtersActive ? filterPage : page;
   const totalPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
   const paginatedProperties = filteredProperties.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -91,7 +102,7 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
   );
 
   useEffect(() => {
-    setCurrentPage(1);
+    setFilterPage(1);
   }, [selectedDistricts, selectedTypes, priceRange, selectedStatus, selectedPaymentMethod]);
 
   const clearFilters = () => {
@@ -99,23 +110,7 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
     setSelectedTypes([]);
     setSelectedStatus("الكل");
     setSelectedPaymentMethod("الكل");
-    setPriceRange({ min: 0, max: 50000000 });
-  };
-
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      if (currentPage <= 3) {
-        pages.push(1, 2, 3, 4, "...", totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
-      } else {
-        pages.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
-      }
-    }
-    return pages;
+    setPriceRange(DEFAULT_PRICE_RANGE);
   };
 
   if (!city || !cityData) {
@@ -272,44 +267,14 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
               </div>
             )}
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-8">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-                {getPageNumbers().map((page, idx) =>
-                  typeof page === "number" ? (
-                    <Button
-                      key={idx}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="icon"
-                      onClick={() => setCurrentPage(page)}
-                      className={currentPage === page ? `bg-${themeColor}-500` : ""}
-                    >
-                      {page}
-                    </Button>
-                  ) : (
-                    <span key={idx} className="px-2 text-gray-400">
-                      {page}
-                    </span>
-                  )
-                )}
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
+            {/* Pagination — روابط ?page=N حقيقية، أو أزرار محلية عند تفعيل فلتر */}
+            <ListingPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              basePath={`/${citySlug}/`}
+              onPageChange={filtersActive ? setFilterPage : undefined}
+              activeClassName={`bg-${themeColor}-500`}
+            />
           </div>
 
           {/* Mobile Filters Modal */}

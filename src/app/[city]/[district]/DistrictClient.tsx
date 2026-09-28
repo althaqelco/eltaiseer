@@ -11,16 +11,15 @@ import { Breadcrumb, getDistrictBreadcrumb } from "@/components/Breadcrumb";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { MapPin, ChevronRight, ChevronLeft, Building2 } from "lucide-react";
+import { MapPin, ChevronRight, Building2 } from "lucide-react";
 import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { getCategoryByDistrict, CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
 import type { DistrictEditorial } from "@/lib/districtContent";
 
-const ITEMS_PER_PAGE = 12;
-
-// District slug mapping
+// كل عروض الحي تُعرض في صفحة واحدة بلا ترقيم (أكبر حي اليوم 25 عرضاً) —
+// الترقيم بالأزرار كان يخفي عن الزاحف كل ما بعد أول 12 عرضاً
 const PROPERTY_TYPES = ["الكل", "شقة", "شقة فاخرة", "فيلا منفصلة", "دوبلكس", "محل تجاري", "أرض"];
 
 export interface DistrictStats {
@@ -48,7 +47,6 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedType, setSelectedType] = useState("الكل");
 
   const category = getCategoryByDistrict(districtName, cityId);
@@ -74,12 +72,6 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
     if (selectedType === "الكل") return properties;
     return properties.filter(p => p.type === selectedType);
   }, [properties, selectedType]);
-
-  const totalPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
-  const paginatedProperties = filteredProperties.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
 
   const themeColor = isNM ? "emerald" : "orange";
 
@@ -137,16 +129,16 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
                 </SelectContent>
               </Select>
               <p className="text-gray-500 text-sm">
-                عرض {paginatedProperties.length} من {filteredProperties.length} عقار
+                عرض {filteredProperties.length} من {properties.length} عقار
               </p>
             </div>
           </CardContent>
         </Card>
 
         {/* Properties Grid */}
-        {paginatedProperties.length > 0 ? (
+        {filteredProperties.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {paginatedProperties.map((property) => (
+            {filteredProperties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>
@@ -156,39 +148,6 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
             <p className="text-gray-500 text-lg">لا توجد عقارات متاحة في {districtName}</p>
             <Button asChild className={`mt-4 bg-${themeColor}-500`}>
               <Link href={`/${citySlug}`}>تصفح عقارات {city?.nameAr}</Link>
-            </Button>
-          </div>
-        )}
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-8">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))} 
-              disabled={currentPage === 1}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map((page) => (
-              <Button 
-                key={page} 
-                variant={currentPage === page ? "default" : "outline"} 
-                size="icon" 
-                onClick={() => setCurrentPage(page)} 
-                className={currentPage === page ? `bg-${themeColor}-500` : ""}
-              >
-                {page}
-              </Button>
-            ))}
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} 
-              disabled={currentPage === totalPages}
-            >
-              <ChevronLeft className="h-4 w-4" />
             </Button>
           </div>
         )}

@@ -93,6 +93,13 @@ export function getCityDistrictSlugs(cityId: CityId): string[] {
   );
 }
 
+// الحي صالح فقط داخل مدينته — الـ slugs فريدة، لكن /new-mansoura/sixth-district/ ليست صفحة
+// (كانت تعيد 200 مكرراً قابلاً للفهرسة لكل حي تحت المدينة الأخرى)
+export function isCityDistrictSlug(city: string, slug: string): boolean {
+  if (!Object.prototype.hasOwnProperty.call(CITY_DATA, city)) return false;
+  return getCityDistrictSlugs(city as CityId).includes(slug);
+}
+
 // رابط صفحة العقار بالهيكل الجديد /[city]/[district]/[propertyId]
 export function getPropertyUrl(property: Property): string {
   const citySlug = property.location.cityId || "new-damietta";

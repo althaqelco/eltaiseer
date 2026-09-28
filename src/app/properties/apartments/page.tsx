@@ -1,34 +1,14 @@
+import CategoryListing, { categoryRobotsMetadata } from "../CategoryListing";
 import ApartmentsClient from "./ApartmentsClient";
-import {
-  getPropertiesServer,
-  serializeProperties,
-  filterByTypes,
-  buildItemListSchema,
-} from "@/lib/serverProperties";
 
 // ISR كل 5 دقائق — عقارات الفئة تظهر في HTML الخادم
+// الصفحات 2+ (?page=N) يخدمها ./p/[n] عبر rewrite في next.config.mjs
 export const revalidate = 300;
 
-const TYPES = ["شقة", "شقة فاخرة", "دوبلكس", "بنتهاوس", "روف"];
+export async function generateMetadata() {
+  return categoryRobotsMetadata("apartments");
+}
 
 export default async function Page() {
-  const all = await getPropertiesServer();
-  const filtered = filterByTypes(all, TYPES);
-
-  const itemListSchema = buildItemListSchema(
-    filtered.filter((p) => p.status !== "تم البيع"),
-    "شقق للبيع في دمياط الجديدة والمنصورة الجديدة"
-  );
-
-  return (
-    <>
-      {filtered.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-        />
-      )}
-      <ApartmentsClient initialProperties={serializeProperties(filtered)} />
-    </>
-  );
+  return <CategoryListing slug="apartments" page={1} Client={ApartmentsClient} />;
 }

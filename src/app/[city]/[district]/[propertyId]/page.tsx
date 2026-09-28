@@ -1,9 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cache } from "react";
 import PropertyPageClient from "./PropertyPageClient";
-import { getPropertyFromFirestore } from "@/lib/firestoreProperties";
-import { getPropertiesServer, serializeProperties } from "@/lib/serverProperties";
+import { getPropertiesServer, getPropertyServer, serializeProperties } from "@/lib/serverProperties";
 import { calculateSimilarity } from "@/lib/propertyStore";
 import { generatePropertySchema } from "@/lib/seoOptimizer";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
@@ -20,14 +18,15 @@ type Props = {
   params: { city: string; district: string; propertyId: string };
 };
 
-// cache() يمنع جلب العقار مرتين (مرة للـ metadata ومرة للصفحة) في نفس الطلب
-const getProperty = cache(async (id: string): Promise<Property | null> => {
+// getPropertyServer مُخزّن بـ cache() فيُجلب العقار مرة واحدة للطلب (layout + metadata + الصفحة).
+// العقار المفقود (404) والرابط غير الأساسي (308) يعالجهما layout.tsx فوق حد loading.tsx
+const getProperty = async (id: string): Promise<Property | null> => {
   try {
-    return await getPropertyFromFirestore(id);
+    return await getPropertyServer(id);
   } catch {
     return null;
   }
-});
+};
 
 function formatPrice(price: number): string {
   if (price >= 1000000) {
@@ -81,6 +80,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: canonicalUrl },
+    // صريح هنا لأن robots يُورث من layout الحي: عقار بحي غير مُعرّف (unknown-district)
+    // كان يرث noindex,nofollow من ذلك الـ layout رغم أنه في sitemap.xml
+    robots: { index: true, follow: true },
     openGraph: {
       title,
       description,
