@@ -9,14 +9,13 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Footer } from "@/components/Footer";
 import { Property } from "@/lib/mockData";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { CityId } from "@/lib/egyptPlaces";
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, List, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function HomeClient({ initialProperties = [] }: { initialProperties?: Property[] }) {
-  const [properties, setProperties] = useState<Property[]>(
+  const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
@@ -30,14 +29,8 @@ export default function HomeClient({ initialProperties = [] }: { initialProperti
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 20;
 
-  useEffect(() => {
-    // البيانات الأولية من الخادم؛ تحديث حي من Firestore بعد التحميل
-    getAllPropertiesAsync().then((firestoreProperties) => {
-      if (firestoreProperties.length > 0) {
-        setProperties(firestoreProperties);
-      }
-    }).catch(console.error);
-  }, []);
+  // البيانات تأتي من الخادم (ISR يحدّثها كل 300 ث)، فلا نعيد جلبها من Firestore في المتصفح:
+  // إعادة الجلب كانت تحمّل Firebase SDK وتقرأ المجموعة كاملة في كل زيارة لبيانات موجودة في HTML.
 
   const filteredProperties = useMemo(() => {
     return properties.filter((property) => {

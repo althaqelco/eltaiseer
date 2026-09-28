@@ -25,7 +25,6 @@ import {
   Share2,
   Loader2,
 } from "lucide-react";
-import { getPropertyByIdAsync, getRelatedPropertiesAsync } from "@/lib/propertyStore";
 import { CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { PropertyCard } from "@/components/PropertyCard";
@@ -61,9 +60,13 @@ export default function PropertyPageClient({
   const [isFavorite, setIsFavorite] = useState(false);
 
   // Load property (only when the server did not provide it) and related properties
+  // Firestore يُحمَّل بـ import() في هذه الحالة فقط — الخادم يرسل العقار والعقارات المشابهة عادةً،
+  // فلا تدخل حزمة Firebase في JavaScript الصفحة الأولي.
   useEffect(() => {
+    if (initialProperty && initialRelated.length > 0) return;
     const loadProperty = async () => {
       try {
+        const { getPropertyByIdAsync, getRelatedPropertiesAsync } = await import("@/lib/propertyStore");
         let prop = initialProperty;
         if (!prop) {
           setIsLoading(true);
@@ -192,6 +195,7 @@ export default function PropertyPageClient({
                     src={property.images[currentImageIndex]}
                     alt={property.title}
                     fill
+                    sizes="(max-width: 1023px) 100vw, (max-width: 1535px) 66vw, 1000px"
                     className="object-cover transition-opacity duration-300"
                     priority
                   />
@@ -281,6 +285,7 @@ export default function PropertyPageClient({
                           src={img}
                           alt={`صورة ${idx + 1}`}
                           fill
+                          sizes="80px"
                           className="object-cover"
                         />
                       </button>
@@ -507,6 +512,7 @@ export default function PropertyPageClient({
 
                     <Link
                       href={`/${citySlug}/${districtSlug}`}
+                      prefetch={false}
                       className={`flex items-center gap-1 text-${themeColor}-600 hover:text-${themeColor}-700 text-sm font-medium`}
                     >
                       <ChevronRight className="h-4 w-4" />
@@ -558,6 +564,7 @@ export default function PropertyPageClient({
               </div>
               <Link
                 href={`/${citySlug}/${districtSlug}`}
+                prefetch={false}
                 className={`text-${themeColor}-600 hover:text-${themeColor}-700 text-sm font-medium flex items-center gap-1`}
               >
                 عرض المزيد

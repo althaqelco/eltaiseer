@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -12,7 +12,6 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { MapPin, ChevronRight, ChevronLeft, Building2 } from "lucide-react";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { getCategoryByDistrict, CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
@@ -45,7 +44,7 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
   const districtName = SLUG_TO_DISTRICT[districtSlug] || decodeURIComponent(districtSlug).replace(/-/g, " ");
   const isNM = citySlug === "new-mansoura";
 
-  const [properties, setProperties] = useState<Property[]>(
+  const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,22 +52,8 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
 
   const category = getCategoryByDistrict(districtName, cityId);
 
-  // البيانات الأولية من الخادم؛ تحديث حي من Firestore بمطابقة تامة لاسم الحي
-  // (المطابقة الضبابية القديمة كانت تخلط "الحي الأول" مع "سكن مصر - جنوب الحي الأول")
-  useEffect(() => {
-    getAllPropertiesAsync()
-      .then((all) => {
-        if (all.length > 0) {
-          const filtered = all.filter(
-            (p) =>
-              (p.location.cityId || "new-damietta") === cityId &&
-              p.location.district?.trim() === districtName.trim()
-          );
-          setProperties(filtered);
-        }
-      })
-      .catch(console.error);
-  }, [districtName, cityId]);
+  // البيانات تأتي من الخادم (ISR يحدّثها كل 300 ث)، فلا نعيد جلبها من Firestore في المتصفح:
+  // إعادة الجلب كانت تحمّل Firebase SDK وتقرأ المجموعة كاملة في كل زيارة لبيانات موجودة في HTML.
 
   const filteredProperties = useMemo(() => {
     if (selectedType === "الكل") return properties;
@@ -113,6 +98,7 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
           {/* Back to city link */}
           <Link 
             href={`/${citySlug}`}
+            prefetch={false}
             className={`inline-flex items-center gap-1 mt-4 text-sm ${isNM ? "text-emerald-300 hover:text-emerald-200" : "text-orange-300 hover:text-orange-200"}`}
           >
             <ChevronRight className="h-4 w-4" />
@@ -282,6 +268,7 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
                   <Link
                     key={d}
                     href={`/${citySlug}/${getDistrictSlug(d)}`}
+                    prefetch={false}
                     className={`px-4 py-2 rounded-full text-sm border transition-colors ${
                       isNM
                         ? "border-emerald-200 text-emerald-700 hover:bg-emerald-50"

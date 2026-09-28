@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -9,30 +9,52 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Trash2, ArrowRight, ChevronLeft, Home } from "lucide-react";
 import { getFavorites, clearFavorites } from "@/lib/favoritesStore";
-import { getPropertyById } from "@/lib/propertyStore";
+import { getAllProperties, getAllPropertiesAsync } from "@/lib/propertyStore";
 import { Property } from "@/lib/mockData";
+
+// العقارات المفضلة بترتيب حفظها
+function pickFavorites(all: Property[]): Property[] {
+  const byId = new Map(all.map((p) => [p.id, p]));
+  return getFavorites()
+    .map((id) => byId.get(id))
+    .filter((p): p is Property => Boolean(p));
+}
 
 export default function FavoritesPage() {
   const [favoriteProperties, setFavoriteProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const allPropertiesRef = useRef<Property[]>([]);
 
   useEffect(() => {
-    loadFavorites();
+    // عرض فوري من الكاش المحلي إن وُجد
+    allPropertiesRef.current = getAllProperties();
+    setFavoriteProperties(pickFavorites(allPropertiesRef.current));
+    if (getFavorites().length === 0) {
+      setIsLoading(false);
+      return;
+    }
+    if (allPropertiesRef.current.length > 0) setIsLoading(false);
+
+    // الصفحات العامة لم تعد تعيد جلب العقارات من Firestore (فلم تعد تملأ الكاش المحلي)،
+    // لذلك تجلبها صفحة المفضلة بنفسها
+    let cancelled = false;
+    getAllPropertiesAsync()
+      .then((all) => {
+        if (cancelled || all.length === 0) return;
+        allPropertiesRef.current = all;
+        setFavoriteProperties(pickFavorites(all));
+      })
+      .catch(console.error)
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const loadFavorites = () => {
-    const favoriteIds = getFavorites();
-    const properties: Property[] = [];
-    
-    favoriteIds.forEach((id) => {
-      const property = getPropertyById(id);
-      if (property) {
-        properties.push(property);
-      }
-    });
-    
-    setFavoriteProperties(properties);
-    setIsLoading(false);
+    setFavoriteProperties(pickFavorites(allPropertiesRef.current));
   };
 
   const handleClearAll = () => {

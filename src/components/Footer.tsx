@@ -27,42 +27,42 @@ export function Footer() {
             <h4 className="font-bold mb-4 text-orange-400">روابط سريعة</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-gray-400 hover:text-white transition-colors">
+                <Link prefetch={false} href="/" className="text-gray-400 hover:text-white transition-colors">
                   الرئيسية
                 </Link>
               </li>
               <li>
-                <Link href="/properties" className="text-gray-400 hover:text-white transition-colors">
+                <Link prefetch={false} href="/properties" className="text-gray-400 hover:text-white transition-colors">
                   العقارات
                 </Link>
               </li>
               <li>
-                <Link href="/prices" className="text-gray-400 hover:text-white transition-colors">
+                <Link prefetch={false} href="/prices" className="text-gray-400 hover:text-white transition-colors">
                   أسعار العقارات
                 </Link>
               </li>
               <li>
-                <Link href="/valuation" className="text-gray-400 hover:text-white transition-colors">
+                <Link prefetch={false} href="/valuation" className="text-gray-400 hover:text-white transition-colors">
                   تقييم العقارات
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-gray-400 hover:text-white transition-colors">
+                <Link prefetch={false} href="/blog" className="text-gray-400 hover:text-white transition-colors">
                   المدونة
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
+                <Link prefetch={false} href="/about" className="text-gray-400 hover:text-white transition-colors">
                   من نحن
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
+                <Link prefetch={false} href="/contact" className="text-gray-400 hover:text-white transition-colors">
                   اتصل بنا
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className="text-gray-400 hover:text-white transition-colors">
+                <Link prefetch={false} href="/careers" className="text-gray-400 hover:text-white transition-colors">
                   وظائف
                 </Link>
               </li>
@@ -142,66 +142,66 @@ export function Footer() {
           <div className="mb-6">
             <h4 className="font-bold mb-3 text-orange-400 text-sm">تصفح حسب نوع العقار</h4>
             <div className="flex flex-wrap gap-2 text-xs text-gray-500">
-              <Link href="/properties/apartments" className="hover:text-orange-400 transition-colors">شقق للبيع</Link>
+              <Link prefetch={false} href="/properties/apartments" className="hover:text-orange-400 transition-colors">شقق للبيع</Link>
               <span>•</span>
-              <Link href="/properties/villas" className="hover:text-orange-400 transition-colors">فيلات للبيع</Link>
+              <Link prefetch={false} href="/properties/villas" className="hover:text-orange-400 transition-colors">فيلات للبيع</Link>
               <span>•</span>
-              <Link href="/properties/lands" className="hover:text-orange-400 transition-colors">أراضي للبيع</Link>
+              <Link prefetch={false} href="/properties/lands" className="hover:text-orange-400 transition-colors">أراضي للبيع</Link>
               <span>•</span>
-              <Link href="/properties/shops" className="hover:text-orange-400 transition-colors">محلات تجارية</Link>
+              <Link prefetch={false} href="/properties/shops" className="hover:text-orange-400 transition-colors">محلات تجارية</Link>
               <span>•</span>
-              <Link href="/properties/clinics" className="hover:text-orange-400 transition-colors">عيادات</Link>
+              <Link prefetch={false} href="/properties/clinics" className="hover:text-orange-400 transition-colors">عيادات</Link>
               <span>•</span>
-              <Link href="/properties/chalets" className="hover:text-orange-400 transition-colors">شاليهات</Link>
+              <Link prefetch={false} href="/properties/chalets" className="hover:text-orange-400 transition-colors">شاليهات</Link>
               <span>•</span>
-              <Link href="/properties/installments" className="hover:text-orange-400 transition-colors font-semibold">عقارات بالتقسيط</Link>
+              <Link prefetch={false} href="/properties/installments" className="hover:text-orange-400 transition-colors font-semibold">عقارات بالتقسيط</Link>
               <span>•</span>
-              <Link href="/beit-al-watan-for-sale" className="hover:text-orange-400 transition-colors font-semibold">أراضي بيت الوطن للبيع</Link>
+              <Link prefetch={false} href="/beit-al-watan-for-sale" className="hover:text-orange-400 transition-colors font-semibold">أراضي بيت الوطن للبيع</Link>
             </div>
           </div>
           {/* دمياط الجديدة */}
           <div className="mb-6">
             <h4 className="font-bold mb-3 text-orange-400 text-sm">أحياء دمياط الجديدة</h4>
             <div className="flex flex-wrap gap-2 text-xs text-gray-500">
-              <Link href="/new-damietta" className="hover:text-orange-400 transition-colors">جميع عقارات دمياط الجديدة</Link>
+              <Link prefetch={false} href="/new-damietta" className="hover:text-orange-400 transition-colors">جميع عقارات دمياط الجديدة</Link>
               <span>•</span>
-              <Link href="/new-damietta/first-district" className="hover:text-orange-400 transition-colors">الحي الأول</Link>
+              <Link prefetch={false} href="/new-damietta/first-district" className="hover:text-orange-400 transition-colors">الحي الأول</Link>
               <span>•</span>
-              <Link href="/new-damietta/second-district" className="hover:text-orange-400 transition-colors">الحي الثاني</Link>
+              <Link prefetch={false} href="/new-damietta/second-district" className="hover:text-orange-400 transition-colors">الحي الثاني</Link>
               <span>•</span>
-              <Link href="/new-damietta/janna-project" className="hover:text-orange-400 transition-colors">مشروع جنة</Link>
+              <Link prefetch={false} href="/new-damietta/janna-project" className="hover:text-orange-400 transition-colors">مشروع جنة</Link>
               <span>•</span>
-              <Link href="/new-damietta/chalets" className="hover:text-orange-400 transition-colors">الشاليهات</Link>
+              <Link prefetch={false} href="/new-damietta/chalets" className="hover:text-orange-400 transition-colors">الشاليهات</Link>
             </div>
           </div>
           {/* المنصورة الجديدة */}
           <div className="mb-6">
             <h4 className="font-bold mb-3 text-emerald-400 text-sm">أحياء المنصورة الجديدة</h4>
             <div className="flex flex-wrap gap-2 text-xs text-gray-500">
-              <Link href="/new-mansoura" className="hover:text-emerald-400 transition-colors">جميع عقارات المنصورة الجديدة</Link>
+              <Link prefetch={false} href="/new-mansoura" className="hover:text-emerald-400 transition-colors">جميع عقارات المنصورة الجديدة</Link>
               <span>•</span>
-              <Link href="/new-mansoura/r1" className="hover:text-emerald-400 transition-colors">R1</Link>
+              <Link prefetch={false} href="/new-mansoura/r1" className="hover:text-emerald-400 transition-colors">R1</Link>
               <span>•</span>
-              <Link href="/new-mansoura/r2" className="hover:text-emerald-400 transition-colors">R2</Link>
+              <Link prefetch={false} href="/new-mansoura/r2" className="hover:text-emerald-400 transition-colors">R2</Link>
               <span>•</span>
-              <Link href="/new-mansoura/villas-district" className="hover:text-emerald-400 transition-colors">حي الفيلات</Link>
+              <Link prefetch={false} href="/new-mansoura/villas-district" className="hover:text-emerald-400 transition-colors">حي الفيلات</Link>
               <span>•</span>
-              <Link href="/new-mansoura/downtown" className="hover:text-emerald-400 transition-colors">داون تاون</Link>
+              <Link prefetch={false} href="/new-mansoura/downtown" className="hover:text-emerald-400 transition-colors">داون تاون</Link>
               <span>•</span>
-              <Link href="/new-mansoura/waterfront" className="hover:text-emerald-400 transition-colors">الواجهة البحرية</Link>
+              <Link prefetch={false} href="/new-mansoura/waterfront" className="hover:text-emerald-400 transition-colors">الواجهة البحرية</Link>
             </div>
           </div>
         </div>
 
         {/* Legal Links */}
         <div className="border-t border-gray-800 mt-4 pt-6 flex flex-wrap justify-center gap-4 text-xs text-gray-500">
-          <Link href="/terms" className="hover:text-orange-400 transition-colors">الشروط والأحكام</Link>
+          <Link prefetch={false} href="/terms" className="hover:text-orange-400 transition-colors">الشروط والأحكام</Link>
           <span>•</span>
-          <Link href="/privacy" className="hover:text-orange-400 transition-colors">سياسة الخصوصية</Link>
+          <Link prefetch={false} href="/privacy" className="hover:text-orange-400 transition-colors">سياسة الخصوصية</Link>
           <span>•</span>
-          <Link href="/cookies" className="hover:text-orange-400 transition-colors">سياسة ملفات تعريف الارتباط</Link>
+          <Link prefetch={false} href="/cookies" className="hover:text-orange-400 transition-colors">سياسة ملفات تعريف الارتباط</Link>
           <span>•</span>
-          <Link href="/sitemap-page" className="hover:text-orange-400 transition-colors">خريطة الموقع</Link>
+          <Link prefetch={false} href="/sitemap-page" className="hover:text-orange-400 transition-colors">خريطة الموقع</Link>
         </div>
 
         {/* Copyright */}

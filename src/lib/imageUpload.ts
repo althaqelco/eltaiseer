@@ -1,7 +1,7 @@
 // lib/imageUpload.ts
 // Image Upload Service for El Taiseer Real Estate
 
-import { storage } from "./firebase";
+import { storage } from "./firebaseStorage";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 // Generate unique filename

@@ -18,7 +18,6 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictSlug } from "@/lib/districtSlugs";
@@ -37,7 +36,7 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
   const city = CITIES[cityId];
   const cityData = CITY_DATA[cityId];
 
-  const [properties, setProperties] = useState<Property[]>(
+  const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,18 +47,9 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
   const [priceRange, setPriceRange] = useState({ min: 0, max: 50000000 });
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [isLoading, setIsLoading] = useState(initialProperties.length === 0);
 
-  // البيانات الأولية تأتي من الخادم؛ التحديث الحي من Firestore بعد التحميل
-  useEffect(() => {
-    getAllPropertiesAsync().then((firestoreProperties) => {
-      if (firestoreProperties.length > 0) {
-        const filtered = firestoreProperties.filter(p => (p.location.cityId || "new-damietta") === cityId);
-        setProperties(filtered);
-      }
-      setIsLoading(false);
-    }).catch(() => setIsLoading(false));
-  }, [cityId]);
+  // البيانات تأتي من الخادم (ISR يحدّثها كل 300 ث)، فلا نعيد جلبها من Firestore في المتصفح:
+  // إعادة الجلب كانت تحمّل Firebase SDK وتقرأ المجموعة كاملة في كل زيارة لبيانات موجودة في HTML.
 
   // Filter properties
   const filteredProperties = useMemo(() => {
@@ -172,6 +162,7 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
                   <Link
                     key={district}
                     href={`/${citySlug}/${districtSlug}`}
+                    prefetch={false}
                     className={`px-3 py-1 rounded-full text-sm ${isNewMansoura
                         ? "bg-emerald-800/50 text-emerald-200 hover:bg-emerald-700/50"
                         : "bg-orange-800/50 text-orange-200 hover:bg-orange-700/50"
@@ -246,11 +237,7 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
 
           {/* Properties Grid */}
           <div className="flex-1">
-            {isLoading ? (
-              <div className="flex items-center justify-center py-16">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-              </div>
-            ) : paginatedProperties.length > 0 ? (
+            {paginatedProperties.length > 0 ? (
               <div className={`grid gap-6 ${viewMode === "grid"
                   ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                   : "grid-cols-1"
@@ -370,6 +357,7 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
                         <li key={district}>
                           <Link
                             href={`/${citySlug}/${districtSlug}`}
+                            prefetch={false}
                             className="hover:text-orange-600"
                           >
                             عقارات {district}

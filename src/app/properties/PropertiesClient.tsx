@@ -38,7 +38,6 @@ import {
   Loader2,
 } from "lucide-react";
 import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";
@@ -64,7 +63,7 @@ const ITEMS_PER_PAGE = 20;
 
 function PropertiesContent({ initialProperties }: { initialProperties: Property[] }) {
   const searchParams = useSearchParams();
-  const [properties, setProperties] = useState<Property[]>(
+  const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
@@ -77,14 +76,9 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("all");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000000 });
 
+  // البيانات تأتي من الخادم (ISR يحدّثها كل 300 ث)، فلا نعيد جلبها من Firestore في المتصفح:
+  // إعادة الجلب كانت تحمّل Firebase SDK وتقرأ المجموعة كاملة في كل زيارة لبيانات موجودة في HTML.
   useEffect(() => {
-    // البيانات الأولية من الخادم؛ تحديث حي من Firestore بعد التحميل
-    getAllPropertiesAsync().then((firestoreProperties) => {
-      if (firestoreProperties.length > 0) {
-        setProperties(firestoreProperties);
-      }
-    }).catch(console.error);
-
     // Check URL params (يدعم search الذي يستخدمه SearchAction schema)
     const district = searchParams.get("district");
     const type = searchParams.get("type");
@@ -372,12 +366,14 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                   {/* Image */}
                   <Link
                     href={getPropertyUrl(property)}
+                    prefetch={false}
                     className="relative w-full md:w-80 h-48 md:h-auto flex-shrink-0"
                   >
                     <Image
                       src={property.images[0]}
                       alt={property.title}
                       fill
+                      sizes="(max-width: 767px) 100vw, 320px"
                       className="object-cover"
                     />
                     <Badge className="absolute top-3 right-3 bg-orange-500">
@@ -399,6 +395,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 mb-3">
                           <Link
                             href={getPropertyUrl(property)}
+                            prefetch={false}
                             className="hover:text-orange-600 transition-colors"
                           >
                             <h3 className="text-xl font-bold text-gray-800">
@@ -475,7 +472,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                           واتساب
                         </Button>
                         <Button asChild variant="outline" className="gap-2">
-                          <Link href={getPropertyUrl(property)}>
+                          <Link href={getPropertyUrl(property)} prefetch={false}>
                             <Eye className="h-4 w-4" />
                             عرض التفاصيل
                           </Link>
