@@ -44,7 +44,6 @@ const LINK = "text-orange-700 underline";
 
 /** مقدمة صفحة النوع وأقسامها (spec-final A2.9) — من العروض المتاحة نفسها التي تعرضها الصفحة */
 function hubContent(slug: TypeCategorySlug, available: Property[], dataModified: string | null) {
-  const path = `/properties/${slug}/`;
   const nd = filterByCity(available, "new-damietta");
   const nm = filterByCity(available, "new-mansoura");
   const prices = available.map((p) => Number(p.price) || 0).filter((n) => n > 0);
