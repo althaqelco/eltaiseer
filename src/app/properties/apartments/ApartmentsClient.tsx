@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, type ReactNode } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PropertyCard } from "@/components/PropertyCard";
@@ -25,7 +25,18 @@ import { CATEGORY_PAGE_SIZE } from "@/lib/pagination";
 const ITEMS_PER_PAGE = CATEGORY_PAGE_SIZE;
 const APARTMENT_TYPES = ["شقة", "شقة فاخرة", "دوبلكس", "بنتهاوس", "روف"];
 
-export default function ApartmentsClient({ initialProperties, page = 1 }: { initialProperties: Property[]; page?: number }) {
+// lede وanswersSlot يُبنيان في الخادم (CategoryListing) للصفحة الأولى — لا نصوص إجابات في حزمة المتصفح
+export default function ApartmentsClient({
+  initialProperties,
+  page = 1,
+  lede,
+  answersSlot,
+}: {
+  initialProperties: Property[];
+  page?: number;
+  lede?: string;
+  answersSlot?: ReactNode;
+}) {
   const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -69,9 +80,13 @@ export default function ApartmentsClient({ initialProperties, page = 1 }: { init
               <h1 className="text-3xl md:text-4xl font-bold text-white">
                 شقق للبيع في دمياط الجديدة والمنصورة الجديدة
               </h1>
-              <p className="text-gray-300 mt-2">
-                {filteredProperties.length} شقة متاحة للبيع - شقق تمليك، دوبلكس، بنتهاوس، روف
-              </p>
+              {lede ? (
+                <p className="answer-lede text-gray-200 mt-3 leading-loose max-w-4xl">{lede}</p>
+              ) : (
+                <p className="text-gray-300 mt-2">
+                  {filteredProperties.length} شقة متاحة للبيع - شقق تمليك، دوبلكس، بنتهاوس، روف
+                </p>
+              )}
             </div>
           </div>
           
@@ -135,30 +150,8 @@ export default function ApartmentsClient({ initialProperties, page = 1 }: { init
           onPageChange={filtersActive ? setFilterPage : undefined}
         />
 
-        {/* SEO Content Section */}
-        <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">شقق للبيع في دمياط الجديدة والمنصورة الجديدة 2026</h2>
-          <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            <p>
-              دمياط الجديدة مدينة على ساحل البحر المتوسط بأحياء مخططة ومساحات خضراء. نعرض في التيسير للعقارات شققًا للبيع في أحيائها بأسعارها كما يعرضها البائعون، ووسيط سعر المتر لكل حي في صفحة أسعار العقارات.
-            </p>
-            <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">أنواع الشقق المتوفرة</h3>
-            <ul className="list-disc list-inside space-y-2">
-              <li><strong>شقق تمليك:</strong> مساحات من 80 إلى 200 متر مربع</li>
-              <li><strong>دوبلكس:</strong> شقق دورين بمساحات واسعة</li>
-              <li><strong>بنتهاوس:</strong> شقق بالدور الأخير مع روف خاص</li>
-              <li><strong>روف:</strong> شقق بسطح خاص ومساحات مفتوحة</li>
-            </ul>
-            <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">مميزات الشقق في دمياط الجديدة</h3>
-            <ul className="list-disc list-inside space-y-2">
-              <li>تشطيبات سوبر لوكس ونصف تشطيب</li>
-              <li>مواقف سيارات خاصة</li>
-              <li>أمن وحراسة 24 ساعة</li>
-              <li>قريبة من المدارس والخدمات</li>
-              <li>عقارات تقبل التقسيط بشروط يحددها البائع</li>
-            </ul>
-          </div>
-        </div>
+        {/* سؤال السعر وسطر التحديث من الخادم (الصفحة الأولى) */}
+        {answersSlot}
       </main>
 
       <Footer />

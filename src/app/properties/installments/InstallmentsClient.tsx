@@ -87,13 +87,12 @@ export default function InstallmentsClient({ initialProperties, faqSlot, page = 
                 عقارات بالتقسيط في دمياط الجديدة والمنصورة الجديدة
               </h1>
               <p className="text-gray-300 mt-2">
-                {filteredProperties.length} عقاراً متاحاً بالتقسيط
+                عقارات تقبل التقسيط الآن: {filteredProperties.length.toLocaleString("en-US")}
               </p>
             </div>
           </div>
           <p className="text-gray-400 text-sm max-w-3xl">
-            كل عقار هنا يقبل التقسيط فعلاً ويعرض مقدمه وقسطه الشهري ومدته بأرقام حقيقية —
-            لا وعود عامة. التقسيط في أغلب الوحدات مباشر مع المالك دون إجراءات بنكية.
+            كل عقار هنا يقبل التقسيط، ويعرض في صفحته المقدم والقسط والمدة كما حددها البائع.
           </p>
         </div>
       </div>
@@ -148,7 +147,9 @@ export default function InstallmentsClient({ initialProperties, faqSlot, page = 
           className="mb-12"
         />
 
-        {/* SEO Content + FAQ */}
+        {/* أسئلة التقسيط لكل مدينة (Q168 / Q180) من الخادم، ثم شرح عام */}
+        {faqSlot && <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm max-w-4xl mx-auto mb-8">{faqSlot}</div>}
+
         <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             الشراء بالتقسيط في المدن الجديدة — كيف يعمل؟
@@ -165,7 +166,6 @@ export default function InstallmentsClient({ initialProperties, faqSlot, page = 
               لها أنظمة سداد تعلنها الجهة المالكة لكل مشروع. وفي إعادة البيع يحدد كل بائع شروطه، وتظهر في صفحة العقار.
             </p>
           </div>
-          {faqSlot}
         </div>
       </main>
 

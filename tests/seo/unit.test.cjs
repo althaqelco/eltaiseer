@@ -237,6 +237,7 @@ function sampleData() {
     dataModified: s.dataModified,
     ndDistrictCount: slugs.getCityDistrictSlugs("new-damietta").length,
     installments: { "new-damietta": { k: 7, maxYears: 5, minDown: 250000 }, "new-mansoura": { k: 0, maxYears: null, minDown: null } },
+    counts: { "new-damietta": 12, "new-mansoura": 0 },
   };
 }
 
@@ -286,6 +287,69 @@ test("answersFor يعرض على المالك فقط، والمعلّق لا ي�
   assert.ok(!faq.some((f) => f.id === "M-PR-03")); // مرئي فقط
   assert.deepEqual(answers.teaser("Q167", "ما أفضل حي للسكن في دمياط الجديدة؟"), { q: "ما أفضل حي للسكن في دمياط الجديدة؟", href: "/blog/best-districts/" });
   assert.equal(answers.teaser("Q001", "ما هو بيت الوطن؟"), null); // صفحات المنصة عبر PlatformLink فقط
+});
+
+// مقدمات الصفحات (answer-lede) وأسئلة الأحياء وصفحات الأنواع: 30–70 كلمة، أرقام لاتينية، وتمر من الفحص
+test("المقدمات وأسئلة الحي وصفحات الأنواع: الطول والأرقام والعبارات، والبدائل عند نقص البيانات", () => {
+  const data = sampleData();
+  const date = data.dataModified;
+  const ok = (t, lede = true) => {
+    assert.deepEqual(lint.lintText(t), [], t);
+    assert.ok(!/[٠-٩]/.test(t), `Arabic-Indic digits: ${t}`);
+    if (lede) {
+      const w = lint.wordCount(t);
+      assert.ok(w >= 30 && w <= 70, `lede words ${w}: ${t}`);
+    }
+  };
+  // الرئيسية: سطر الاستقلالية داخل المقدمة
+  const home = local.homeLede({ n: 63, nD: 45, nM: 18, dataModified: date });
+  ok(home);
+  assert.ok(lint.INDEPENDENCE.test(home));
+  ok(local.homeLede({ n: 0, nD: 0, nM: 0, dataModified: date }));
+  ok(local.homePricesSentence(data.prices), false);
+  // المدينتان: بالوسيط وبدونه
+  for (const c of ["new-damietta", "new-mansoura"]) {
+    ok(local.cityLede(c, { n: 40, k: 9, prices: data.prices, dataModified: date }));
+    ok(local.cityLede(c, { n: 2, k: 1, prices: null, dataModified: date }));
+  }
+  // الحي: كل النصوص التحريرية مع المعروض الآن ومع صفر عروض
+  const ed = require(path.join(OUT, "districtContent.js"));
+  for (const city of ["new-damietta", "new-mansoura"]) {
+    for (const slug of slugs.getCityDistrictSlugs(city)) {
+      const name = slugs.SLUG_TO_DISTRICT[slug];
+      const intro = ed.getDistrictEditorial(slug)?.intro;
+      ok(local.districtLede({ intro, districtName: name, cityId: city, n: 7, minPrice: 900000, maxPrice: 3200000, dataModified: date }));
+      ok(local.districtLede({ intro, districtName: name, cityId: city, n: 0, minPrice: 0, maxPrice: 0, dataModified: date }), false);
+    }
+  }
+  // سؤال السعر في أحياء بيت الوطن يسمّي المدينة دائمًا
+  assert.equal(local.districtPriceQuestion("بيت الوطن - شرق", "new-damietta"), "كم سعر المتر في حي بيت الوطن - شرق بدمياط الجديدة؟");
+  assert.equal(local.districtPriceQuestion("R1", "new-mansoura"), "كم سعر المتر في حي R1 بالمنصورة الجديدة؟");
+  const rows = data.prices.rows.filter((r) => r.district === "الحي الأول");
+  const groups = local.districtGroups([{ type: "شقة" }, { type: "شقة" }, { type: "شقة" }, { type: "فيلا منفصلة" }], rows, prices.TYPE_GROUP);
+  const pa = local.districtPriceAnswer({ districtName: "الحي الأول", cityId: "new-damietta", groups, dataModified: date, pricesHref: "/prices/#first-district" });
+  ok(pa, false);
+  assert.match(pa, /وسيط سعر متر الشقق/);
+  assert.match(pa, /فيلات فيه أقل من 3/);
+  assert.match(local.districtPriceAnswer({ districtName: "الحي الأول", cityId: "new-damietta", groups: [], dataModified: date, pricesHref: "/prices/" }), /لا توجد عروض منشورة/);
+  // صفحات الأنواع
+  const hub = [
+    { price: 1_000_000, area: 100, cityId: "new-damietta" },
+    { price: 1_200_000, area: 120, cityId: "new-damietta" },
+    { price: 1_500_000, area: 110, cityId: "new-damietta" },
+    { price: 90_000_000, area: 100, cityId: "new-damietta" }, // شاذ: خارج حدود سعر المتر
+    { price: 2_000_000, area: 150, cityId: "new-mansoura" },
+  ];
+  const d = local.hubCityStats(hub, "apartment", "new-damietta");
+  assert.deepEqual(d, { n: 4, valid: 3, medianPrice: 1_200_000, medianPpm: 10_000 });
+  assert.equal(local.hubCityStats(hub, "apartment", "new-mansoura").medianPpm, null);
+  for (const slug of Object.keys(local.HUB)) {
+    ok(local.hubLede(slug, { nD: 21, nM: 4, minPrice: 650000, maxPrice: 7500000, dataModified: date }));
+    ok(local.hubLede(slug, { nD: 0, nM: 0, minPrice: 0, maxPrice: 0, dataModified: date }));
+    ok(local.hubPriceQuestion(slug), false);
+    ok(local.hubPriceAnswer(slug, { cities: { "new-damietta": d, "new-mansoura": local.hubCityStats(hub, "apartment", "new-mansoura") }, dataModified: date }), false);
+  }
+  assert.equal(local.HUB.lands.priceQuestion, false); // سعر الأرض يملكه /prices/
 });
 
 test("Q169 يذكر كل فئات مناطق دمياط الجديدة، والعدد = صفحات الأحياء", () => {

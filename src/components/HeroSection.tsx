@@ -21,7 +21,12 @@ interface HeroSectionProps {
     type: string;
   }) => void;
   totalProperties?: number;
-  totalDistricts?: number;
+  /** إعلانات بيت الوطن الموثّقة النشطة (تُخفى عند 0) */
+  bwListings?: number;
+  /** مقدمة الإجابة (answer-lede) — نص محسوب في الخادم يُعرض بعد H1 مباشرة */
+  lede?: string;
+  /** «آخر تحديث للعروض» (مكوّن خادم يُمرَّر جاهزًا) تحت المقدمة */
+  freshness?: React.ReactNode;
 }
 
 const PROPERTY_TYPE_OPTIONS = [
@@ -39,7 +44,7 @@ const PROPERTY_TYPE_OPTIONS = [
   { value: "روف", label: "روف" },
 ];
 
-export function HeroSection({ onSearch, totalProperties = 0, totalDistricts = 0 }: HeroSectionProps) {
+export function HeroSection({ onSearch, totalProperties = 0, bwListings = 0, lede, freshness }: HeroSectionProps) {
   const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
   const [selectedDistrict, setSelectedDistrict] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
@@ -81,17 +86,23 @@ export function HeroSection({ onSearch, totalProperties = 0, totalDistricts = 0 
       </div>
 
       <div className="container mx-auto px-4 py-8 md:py-16 relative z-10">
-        {/* Header */}
+        {/* Header: العلامة سطر تمهيدي، وH1 عن موضوع الصفحة (لا يكرر H1 صفحة «من نحن») */}
         <div className="text-center mb-6 md:mb-12">
-          <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-4">
-            التيسير <span className="text-orange-400">للعقارات</span>
+          <p className="text-orange-300 font-semibold text-sm md:text-base mb-2">التيسير للعقارات</p>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-3 md:mb-4">
+            عقارات للبيع في <span className="text-orange-400">دمياط الجديدة</span> و
+            <span className="text-emerald-400">المنصورة الجديدة</span>
           </h1>
-          <p className="hero-description text-sm sm:text-base md:text-xl text-gray-300 max-w-3xl mx-auto px-2">
-            عقارات للبيع بأسعارها الفعلية في{" "}
-            <span className="text-orange-400 font-semibold">دمياط الجديدة</span>
-            {" "}و{" "}
-            <span className="text-emerald-400 font-semibold">المنصورة الجديدة</span>
-          </p>
+          {lede ? (
+            <p className="answer-lede text-sm sm:text-base md:text-lg text-gray-200 max-w-3xl mx-auto px-2 leading-relaxed">
+              {lede}
+            </p>
+          ) : (
+            <p className="hero-description text-sm sm:text-base md:text-xl text-gray-300 max-w-3xl mx-auto px-2">
+              عقارات للبيع بأسعارها الفعلية في دمياط الجديدة والمنصورة الجديدة
+            </p>
+          )}
+          {freshness}
 
           {/* City Tags */}
           <div className="flex justify-center gap-3 mt-4">
@@ -209,12 +220,6 @@ export function HeroSection({ onSearch, totalProperties = 0, totalDistricts = 0 
 
         {/* Stats — أرقام محسوبة من العروض الحالية فقط ([OWNER D11]: لا «سنوات خبرة» قبل تأكيد سنة التأسيس) */}
         <div className="flex justify-center gap-4 sm:gap-6 md:gap-12 mt-6 md:mt-12 flex-wrap">
-          <div className="text-center">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-              2
-            </p>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base">مدينتان</p>
-          </div>
           {totalProperties > 0 && (
             <div className="text-center">
               <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
@@ -223,18 +228,20 @@ export function HeroSection({ onSearch, totalProperties = 0, totalDistricts = 0 
               <p className="text-gray-300 text-xs sm:text-sm md:text-base">عقار معروض الآن</p>
             </div>
           )}
-          {totalDistricts > 0 && (
+          <div className="text-center">
+            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">2</p>
+            <p className="text-gray-300 text-xs sm:text-sm md:text-base">مدينتان</p>
+          </div>
+          {bwListings > 0 && (
             <div className="text-center">
               <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-                {totalDistricts.toLocaleString("en-US")}
+                {bwListings.toLocaleString("en-US")}
               </p>
-              <p className="text-gray-300 text-xs sm:text-sm md:text-base">منطقة فيها عروض</p>
+              <p className="text-gray-300 text-xs sm:text-sm md:text-base">إعلان بيت الوطن موثّق</p>
             </div>
           )}
           <div className="text-center">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-              مجاني
-            </p>
+            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">مجاني</p>
             <p className="text-gray-300 text-xs sm:text-sm md:text-base">تقييم عقاري</p>
           </div>
         </div>

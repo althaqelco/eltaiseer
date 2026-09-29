@@ -46,10 +46,13 @@ function Sources({ sources }: { sources: string[] }) {
   return <p className="sources text-xs text-gray-500 mt-2">المصدر: {sources.join("؛ ")}</p>;
 }
 
-/** سؤال كعنوان H2 (قسم مستقل قابل للاقتباس) */
-export function AnswerSection({ item, children }: { item: RenderedAnswer; children?: React.ReactNode }) {
+/**
+ * سؤال كعنوان H2 (قسم مستقل قابل للاقتباس). id: معرّف ثابت للقسم حين لا يعطي questions.json السؤال جزء رابط
+ * (جزء الرابط في questions.json يغلب دائمًا).
+ */
+export function AnswerSection({ item, id, children }: { item: RenderedAnswer; id?: string; children?: React.ReactNode }) {
   return (
-    <section id={item.anchor} className="scroll-mt-24">
+    <section id={item.anchor || id} className="scroll-mt-24">
       <h2 className="text-2xl font-bold text-gray-900 mb-3">{item.q}</h2>
       <Paragraphs text={item.a} className="text-gray-700 leading-relaxed mb-2" />
       <Sources sources={item.sources} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -19,7 +19,18 @@ import { CATEGORY_PAGE_SIZE } from "@/lib/pagination";
 
 const ITEMS_PER_PAGE = CATEGORY_PAGE_SIZE;
 
-export default function ClinicsClient({ initialProperties, page = 1 }: { initialProperties: Property[]; page?: number }) {
+// lede وanswersSlot يُبنيان في الخادم (CategoryListing) للصفحة الأولى — لا نصوص إجابات في حزمة المتصفح
+export default function ClinicsClient({
+  initialProperties,
+  page = 1,
+  lede,
+  answersSlot,
+}: {
+  initialProperties: Property[];
+  page?: number;
+  lede?: string;
+  answersSlot?: ReactNode;
+}) {
   const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -56,12 +67,15 @@ export default function ClinicsClient({ initialProperties, page = 1 }: { initial
             <Stethoscope className="h-10 w-10 text-orange-400" />
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-white">عيادات للبيع في دمياط الجديدة والمنصورة الجديدة</h1>
-              <p className="text-gray-300 mt-2">{filteredProperties.length} عيادة متاحة للبيع</p>
+              {lede ? (
+                <p className="answer-lede text-gray-200 mt-3 leading-loose max-w-4xl">{lede}</p>
+              ) : (
+                <p className="text-gray-300 mt-2">{filteredProperties.length} عيادة متاحة للبيع</p>
+              )}
             </div>
           </div>
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            عيادات طبية جاهزة للتشغيل في دمياط الجديدة. مواقع مميزة في المجمعات الطبية والمناطق الحيوية.
-            تراخيص جاهزة ومساحات مناسبة لجميع التخصصات.
+            عيادات معروضة للبيع في دمياط الجديدة والمنصورة الجديدة، ولكل عيادة صفحة بمساحتها وسعرها وحالتها.
           </p>
         </div>
       </div>
@@ -106,19 +120,8 @@ export default function ClinicsClient({ initialProperties, page = 1 }: { initial
           onPageChange={filtersActive ? setFilterPage : undefined}
         />
 
-        <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">عيادات طبية للبيع في دمياط الجديدة والمنصورة الجديدة</h2>
-          <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            <p>عيادات معروضة للبيع في دمياط الجديدة والمنصورة الجديدة، ولكل عيادة صفحة بمساحتها وسعرها وحالتها.</p>
-            <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">مميزات العيادات</h3>
-            <ul className="list-disc list-inside space-y-2">
-              <li>مواقع في مجمعات طبية</li>
-              <li>تراخيص طبية جاهزة</li>
-              <li>تشطيبات مناسبة للعيادات</li>
-              <li>مواقف سيارات للمرضى</li>
-            </ul>
-          </div>
-        </div>
+        {/* سؤال السعر وسطر التحديث من الخادم (الصفحة الأولى) */}
+        {answersSlot}
       </main>
 
       <Footer />

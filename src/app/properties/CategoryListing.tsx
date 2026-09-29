@@ -1,10 +1,15 @@
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 import type { Metadata, ResolvingMetadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPropertiesForIsr, getPropertiesServerResult, serializeProperties } from "@/lib/serverProperties";
+import { filterByCity, getPropertiesForIsr, getPropertiesServerResult, serializeProperties } from "@/lib/serverProperties";
 import { getPropertyUrl } from "@/lib/districtSlugs";
 import { JsonLd } from "@/components/JsonLd";
-import { graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { Freshness } from "@/components/Freshness";
+import { AnswerSection, RichText } from "@/components/Answers";
+import { answersFor, faqFrom } from "@/lib/answers";
+import { HUB, hubCityStats, hubLede, hubPriceAnswer, hubPriceQuestion } from "@/lib/answers/local";
+import { faqNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { cairoIso, maxIso } from "@/lib/seo/time";
 import {
   categoryProperties,
@@ -25,7 +30,80 @@ const LIST_NAMES: Record<TypeCategorySlug, string> = {
   chalets: "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة",
 };
 
-export type CategoryClientProps = { initialProperties: Property[]; page?: number };
+export type CategoryClientProps = {
+  initialProperties: Property[];
+  page?: number;
+  /** مقدمة الإجابة (answer-lede): نص محسوب في الخادم يُعرض بعد H1 مباشرة (الصفحة الأولى) */
+  lede?: string;
+  /** سؤال السعر وسطر التحديث والروابط — عقد خادم جاهزة (الصفحة الأولى) */
+  answersSlot?: ReactNode;
+};
+
+const LINK = "text-orange-700 underline";
+
+/** مقدمة صفحة النوع وأقسامها (spec-final A2.9) — من العروض المتاحة نفسها التي تعرضها الصفحة */
+function hubContent(slug: TypeCategorySlug, available: Property[], dataModified: string | null) {
+  const path = `/properties/${slug}/`;
+  const nd = filterByCity(available, "new-damietta");
+  const nm = filterByCity(available, "new-mansoura");
+  const prices = available.map((p) => Number(p.price) || 0).filter((n) => n > 0);
+  const lede = hubLede(slug, {
+    nD: nd.length,
+    nM: nm.length,
+    minPrice: prices.length ? Math.min(...prices) : 0,
+    maxPrice: prices.length ? Math.max(...prices) : 0,
+    dataModified,
+  });
+  const listings = available.map((p) => ({
+    price: Number(p.price) || 0,
+    area: Number(p.details?.area_sqm) || 0,
+    cityId: p.location.cityId || "new-damietta",
+  }));
+  // Q182 على صفحة الأراضي وحدها (faq-owners.json)؛ سؤال السعر المحسوب لباقي الأنواع بلا Question
+  const owned = answersFor(path, { dataModified, counts: { "new-damietta": nd.length, "new-mansoura": nm.length } }, slug === "lands" ? ["Q182"] : []);
+  const faq = faqNode(path, faqFrom(owned));
+  const priceAnswer = HUB[slug].priceQuestion
+    ? hubPriceAnswer(slug, {
+        cities: {
+          "new-damietta": hubCityStats(listings, HUB[slug].group, "new-damietta"),
+          "new-mansoura": hubCityStats(listings, HUB[slug].group, "new-mansoura"),
+        },
+        dataModified,
+      })
+    : null;
+
+  const answersSlot = (
+    <div className="mt-12 bg-white rounded-xl p-6 shadow-sm space-y-8">
+      {owned.map((item) => (
+        <AnswerSection key={item.id} item={item} id="where" />
+      ))}
+      {priceAnswer && (
+        <section id="price" className="scroll-mt-24">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">{hubPriceQuestion(slug)}</h2>
+          {priceAnswer.split(/\n\n+/).map((para, i) => (
+            <p key={i} className="text-gray-700 leading-relaxed mb-2">
+              <RichText text={para} />
+            </p>
+          ))}
+          <p className="sources text-xs text-gray-500 mt-2">
+            المصدر: إعلانات البيع النشطة على eltaiseer.com (وسيط لكل مدينة من 3 عروض على الأقل).
+          </p>
+        </section>
+      )}
+      {slug === "lands" && (
+        <p className="text-gray-700">
+          تبحث عن أرض بيت الوطن؟{" "}
+          <Link href="/beit-al-watan-for-sale/" prefetch={false} className={LINK}>
+            أراضي بيت الوطن للبيع (موثّقة)
+          </Link>
+        </p>
+      )}
+      <Freshness data={dataModified} dataLabel="آخر تحديث للعروض" className="freshness text-sm text-gray-500" />
+    </div>
+  );
+  return { lede, answersSlot, faq };
+}
+
 
 // فئة بلا عروض متاحة = noindex,follow (القاعدة وشرحها في lib/indexRules.ts)؛
 // من نفس بيانات الخادم التي تعرضها الصفحة. العنوان والوصف والـ canonical من layout الفئة
@@ -65,6 +143,7 @@ export default async function CategoryListing({
   const available = filtered.filter(isAvailable);
   const path = `/properties/${slug}/`;
   const dataModified = maxIso(available.map((p) => p.updatedAt || p.createdAt));
+  const content = page === 1 ? hubContent(slug, available, dataModified) : null;
   const pageGraph =
     page === 1
       ? graph(
@@ -74,6 +153,7 @@ export default async function CategoryListing({
             name: LIST_NAMES[slug],
             breadcrumb: false, // BreadcrumbList يطبعه مكوّن المسار في الصفحة
             mainEntity: available.length ? ref(`${pageUrl(path)}#itemlist`) : undefined,
+            hasPart: content?.faq ? [ref(`${pageUrl(path)}#faq`)] : undefined,
             dateModified: dataModified ? cairoIso(dataModified) : undefined,
           }),
           available.length
@@ -81,14 +161,20 @@ export default async function CategoryListing({
                 name: LIST_NAMES[slug],
                 total: available.length,
               })
-            : null
+            : null,
+          content?.faq ?? null
         )
       : null;
 
   return (
     <>
       {pageGraph && <JsonLd graph={pageGraph} />}
-      <Client initialProperties={serializeProperties(filtered)} page={page} />
+      <Client
+        initialProperties={serializeProperties(filtered)}
+        page={page}
+        lede={content?.lede}
+        answersSlot={content?.answersSlot}
+      />
     </>
   );
 }

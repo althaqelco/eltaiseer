@@ -8,20 +8,42 @@ import {
   filterByDistrict,
 } from "@/lib/serverProperties";
 import { SLUG_TO_DISTRICT, getCityDistrictSlugs, getPropertyUrl, isCityDistrictSlug } from "@/lib/districtSlugs";
+import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { Freshness } from "@/components/Freshness";
-import { computePriceStats, toPriceInput } from "@/lib/seo/prices";
-import { breadcrumbNode, districtPlaceId, graphWith, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { AnswerSection, RichText } from "@/components/Answers";
+import { computePriceStats, toPriceInput, TYPE_GROUP } from "@/lib/seo/prices";
+import { breadcrumbNode, districtPlaceId, faqNode, graphWith, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { cairoIso, maxIso } from "@/lib/seo/time";
 import { getDistrictEditorial } from "@/lib/districtContent";
 import { isAvailable } from "@/lib/listingCategories";
 import { isDistrictIndexable, NOINDEX_FOLLOW } from "@/lib/indexRules";
+import { answersFor, faqFrom } from "@/lib/answers";
+import {
+  districtFitQuestion,
+  districtGroups,
+  districtLede,
+  districtPriceAnswer,
+  districtPriceQuestion,
+} from "@/lib/answers/local";
+import { BeitAlWatanBox, resaleCityHref } from "../CitySections";
 
 // ISR كل 5 دقائق — العقارات تظهر في HTML الخادم مع بقاء البيانات حديثة
 export const revalidate = 300;
 export const dynamicParams = true;
 
 const VALID_CITIES = ["new-damietta", "new-mansoura"] as const;
+
+// أسئلة يملكها حي بعينه (faq-owners.json): Q163 على بيت الوطن - شرق، وQ171 على دار مصر - موقع 1.
+// Q164 (بيت الوطن - غرب) معلّق [VERIFY] فلا يظهر. المعرّف الثابت للقسم حين لا يعطيه questions.json جزء رابط.
+const DISTRICT_ANSWERS: Record<string, { id: string; anchor: string }[]> = {
+  "beit-al-watan-east": [{ id: "Q163", anchor: "what-is-beit-al-watan" }],
+  "beit-al-watan-west": [{ id: "Q164", anchor: "map" }],
+  "dar-misr-1": [{ id: "Q171", anchor: "projects" }],
+};
+// «بيت الوطن» في دمياط الجديدة اسم مناطق سكنية قائمة (spec-final §0.3): صندوق المدينة على صفحاتها الثلاث
+const BW_DISTRICTS = ["beit-al-watan-east", "beit-al-watan-west", "beit-al-watan-beach"];
+const LINK = "text-orange-700 underline";
 
 type Props = { params: { city: string; district: string } };
 
@@ -66,26 +88,84 @@ export default async function DistrictPage({ params }: Props) {
   const { all, districtName, districtProperties, available } = await loadDistrict(city, district);
   const cityName = city === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
 
-  // إحصاءات حية تجعل محتوى كل حي فريداً ومحدثاً تلقائياً. سعر المتر = وسيط الشقق في الحي من 3 عروض فأكثر
-  // (نفس حساب /prices/): المتوسط البسيط القديم خلط الشقق بالأراضي والمحلات وضخّمته قيمة شاذة واحدة.
+  // المعروض الآن ونطاق سعره، ووسيط سعر المتر لكل نوع من 3 عروض فأكثر (نفس حساب /prices/): لا تقديرات مكتوبة يدويًا
   const prices = available.map((p) => p.price).filter((n) => n > 0);
-  const aptRow = computePriceStats(all.map(toPriceInput)).rows.find(
-    (r) => r.cityId === city && r.district === districtName.trim() && r.group === "apartment"
-  );
-  const districtStats =
-    available.length > 0
-      ? {
-          count: available.length,
-          minPrice: prices.length ? Math.min(...prices) : 0,
-          maxPrice: prices.length ? Math.max(...prices) : 0,
-          apartmentMedianPpm: aptRow ? { value: aptRow.medianPpm, n: aptRow.n } : null,
-          types: Array.from(new Set(available.map((p) => p.type))),
-        }
-      : null;
-
+  const stats = computePriceStats(all.map(toPriceInput));
+  const rows = stats.rows.filter((r) => r.cityId === city && r.district === districtName.trim());
+  const groups = districtGroups(available, rows, TYPE_GROUP);
+  const editorial = getDistrictEditorial(district);
   const path = `/${city}/${district}/`;
   const dataModified = maxIso(available.map((p) => p.updatedAt || p.createdAt));
   const placeId = districtPlaceId(city, district);
+
+  const lede = districtLede({
+    intro: editorial?.intro,
+    districtName,
+    cityId: city,
+    n: available.length,
+    minPrice: prices.length ? Math.min(...prices) : 0,
+    maxPrice: prices.length ? Math.max(...prices) : 0,
+    dataModified,
+  });
+  // أسئلة الحي المملوكة (Q163/Q171) وحدها تدخل FAQPage؛ سؤالا السعر و«لمن يناسب» محسوبان لكل حي بلا Question
+  const own = DISTRICT_ANSWERS[district] || [];
+  const owned = answersFor(path, { prices: stats, dataModified: stats.dataModified }, own.map((o) => o.id));
+  const faq = faqNode(path, faqFrom(owned));
+  const isBw = city === "new-damietta" && BW_DISTRICTS.includes(district);
+  const resaleHref = isBw ? await resaleCityHref(city) : null;
+  const priceAnswer = districtPriceAnswer({
+    districtName,
+    cityId: city,
+    groups,
+    dataModified,
+    // صف الحي في جدول /prices/ (معرّفه slug الحي) إن كان له وسيط، وإلا قسم المدينة
+    pricesHref: rows.length > 0 ? `/prices/#${district}` : `/prices/#${city}`,
+  });
+
+  const answersSlot = (
+    <div className="mt-12 bg-white rounded-xl p-6 shadow-sm space-y-10">
+      {owned.map((item) => (
+        <AnswerSection key={item.id} item={item} id={own.find((o) => o.id === item.id)?.anchor} />
+      ))}
+      <section id="price" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">{districtPriceQuestion(districtName, city)}</h2>
+        {priceAnswer.split(/\n\n+/).map((para, i) => (
+          <p key={i} className="text-gray-700 leading-relaxed mb-2">
+            <RichText text={para} />
+          </p>
+        ))}
+        <p className="sources text-xs text-gray-500 mt-2">
+          المصدر: إعلانات البيع النشطة على eltaiseer.com (وسيط لكل نوع عقار من 3 عروض على الأقل).
+        </p>
+      </section>
+      {editorial && editorial.bestFor.length > 0 && (
+        <section id="fit" className="scroll-mt-24">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">{districtFitQuestion(districtName)}</h2>
+          <ul className="list-disc pr-5 space-y-1 text-gray-700">
+            {editorial.bestFor.map((tag) => (
+              <li key={tag}>{tag}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {available.length === 0 && (
+        <p className="text-gray-700">
+          تصفح{" "}
+          <Link href={`/${city}/`} prefetch={false} className={LINK}>
+            عقارات {cityName}
+          </Link>
+          ، أو{" "}
+          <Link href="/contact/" prefetch={false} className={LINK}>
+            أرسل لنا طلب شراء في {districtName}
+          </Link>
+          .
+        </p>
+      )}
+      {isBw && resaleHref && (
+        <BeitAlWatanBox citySlug={city} resaleHref={resaleHref} skipDistrict={district} withText={district !== "beit-al-watan-east"} />
+      )}
+    </div>
+  );
   const pageGraph = graphWith(
     [placeId], // معرّف في layout الحي
     webPage({
@@ -94,6 +174,7 @@ export default async function DistrictPage({ params }: Props) {
       name: `عقارات ${districtName} - ${cityName}`,
       about: ref(placeId),
       mainEntity: available.length > 0 ? ref(`${pageUrl(path)}#itemlist`) : undefined,
+      hasPart: faq ? [ref(`${pageUrl(path)}#faq`)] : undefined,
       dateModified: dataModified ? cairoIso(dataModified) : undefined,
     }),
     available.length > 0
@@ -102,6 +183,7 @@ export default async function DistrictPage({ params }: Props) {
           total: available.length,
         })
       : null,
+    faq,
     breadcrumbNode(path, [
       { name: "الرئيسية", path: "/" },
       { name: "العقارات", path: "/properties/" },
@@ -118,8 +200,8 @@ export default async function DistrictPage({ params }: Props) {
         citySlug={city}
         districtSlug={district}
         initialProperties={serializeProperties(districtProperties)}
-        districtStats={districtStats}
-        editorial={getDistrictEditorial(district)}
+        lede={lede}
+        answersSlot={answersSlot}
         freshnessSlot={
           <Freshness data={dataModified} dataLabel="آخر تحديث للعروض" className="freshness text-sm text-gray-500 mt-4" />
         }

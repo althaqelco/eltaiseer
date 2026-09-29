@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -25,7 +25,18 @@ import { CATEGORY_PAGE_SIZE } from "@/lib/pagination";
 
 const ITEMS_PER_PAGE = CATEGORY_PAGE_SIZE;
 
-export default function VillasClient({ initialProperties, page = 1 }: { initialProperties: Property[]; page?: number }) {
+// lede وanswersSlot يُبنيان في الخادم (CategoryListing) للصفحة الأولى — لا نصوص إجابات في حزمة المتصفح
+export default function VillasClient({
+  initialProperties,
+  page = 1,
+  lede,
+  answersSlot,
+}: {
+  initialProperties: Property[];
+  page?: number;
+  lede?: string;
+  answersSlot?: ReactNode;
+}) {
   const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -69,15 +80,18 @@ export default function VillasClient({ initialProperties, page = 1 }: { initialP
               <h1 className="text-3xl md:text-4xl font-bold text-white">
                 فيلات للبيع في دمياط الجديدة والمنصورة الجديدة
               </h1>
-              <p className="text-gray-300 mt-2">
-                {filteredProperties.length} فيلا متاحة للبيع - فيلات مستقلة، تاون هاوس، توين هاوس
-              </p>
+              {lede ? (
+                <p className="answer-lede text-gray-200 mt-3 leading-loose max-w-4xl">{lede}</p>
+              ) : (
+                <p className="text-gray-300 mt-2">
+                  {filteredProperties.length} فيلا متاحة للبيع - فيلات مستقلة، تاون هاوس، توين هاوس
+                </p>
+              )}
             </div>
           </div>
           
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفخم الفيلات للبيع في دمياط الجديدة والمنصورة الجديدة. فيلات مستقلة بحدائق خاصة، تاون هاوس، 
-            توين هاوس بمساحات من 200 متر حتى 1000 متر. تشطيبات فاخرة وحمامات سباحة خاصة.
+            فيلات مستقلة وتاون هاوس وتوين هاوس معروضة للبيع في دمياط الجديدة والمنصورة الجديدة، ولكل فيلا صفحة بمساحتها وسعرها ومواصفاتها.
           </p>
         </div>
       </div>
@@ -135,23 +149,8 @@ export default function VillasClient({ initialProperties, page = 1 }: { initialP
           onPageChange={filtersActive ? setFilterPage : undefined}
         />
 
-        {/* SEO Content */}
-        <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">فيلات فاخرة للبيع في دمياط الجديدة والمنصورة الجديدة</h2>
-          <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            <p>
-              فيلات معروضة للبيع في دمياط الجديدة والمنصورة الجديدة: فيلات مستقلة وتاون هاوس وتوين هاوس، ولكل فيلا صفحة بمساحتها وسعرها ومواصفاتها.
-            </p>
-            <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">مميزات الفيلات</h3>
-            <ul className="list-disc list-inside space-y-2">
-              <li>حدائق خاصة ومساحات خضراء</li>
-              <li>حمامات سباحة خاصة</li>
-              <li>جراجات لعدة سيارات</li>
-              <li>غرف خدم وسائقين</li>
-              <li>تشطيبات فاخرة ألترا سوبر لوكس</li>
-            </ul>
-          </div>
-        </div>
+        {/* سؤال السعر وسطر التحديث من الخادم (الصفحة الأولى) */}
+        {answersSlot}
       </main>
 
       <Footer />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -19,7 +19,18 @@ import { CATEGORY_PAGE_SIZE } from "@/lib/pagination";
 
 const ITEMS_PER_PAGE = CATEGORY_PAGE_SIZE;
 
-export default function ShopsClient({ initialProperties, page = 1 }: { initialProperties: Property[]; page?: number }) {
+// lede وanswersSlot يُبنيان في الخادم (CategoryListing) للصفحة الأولى — لا نصوص إجابات في حزمة المتصفح
+export default function ShopsClient({
+  initialProperties,
+  page = 1,
+  lede,
+  answersSlot,
+}: {
+  initialProperties: Property[];
+  page?: number;
+  lede?: string;
+  answersSlot?: ReactNode;
+}) {
   const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -56,12 +67,15 @@ export default function ShopsClient({ initialProperties, page = 1 }: { initialPr
             <Store className="h-10 w-10 text-orange-400" />
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-white">محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة</h1>
-              <p className="text-gray-300 mt-2">{filteredProperties.length} محل تجاري ومقر إداري متاح للبيع</p>
+              {lede ? (
+                <p className="answer-lede text-gray-200 mt-3 leading-loose max-w-4xl">{lede}</p>
+              ) : (
+                <p className="text-gray-300 mt-2">{filteredProperties.length} محل تجاري ومقر إداري متاح للبيع</p>
+              )}
             </div>
           </div>
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            محلات تجارية ومقرات إدارية معروضة للبيع في دمياط الجديدة والمنصورة الجديدة.
-            مساحات متنوعة تناسب جميع الأنشطة التجارية.
+            محلات تجارية ومقرات إدارية معروضة للبيع في دمياط الجديدة والمنصورة الجديدة، ولكل وحدة صفحة بمساحتها وسعرها وموقعها.
           </p>
         </div>
       </div>
@@ -106,18 +120,8 @@ export default function ShopsClient({ initialProperties, page = 1 }: { initialPr
           onPageChange={filtersActive ? setFilterPage : undefined}
         />
 
-        <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">محلات تجارية ومقرات إدارية للبيع</h2>
-          <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            <p>محلات ومقرات إدارية معروضة للبيع، ولكل وحدة صفحة بمساحتها وسعرها وموقعها.</p>
-            <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">أنواع العقارات التجارية</h3>
-            <ul className="list-disc list-inside space-y-2">
-              <li><strong>محلات تجارية:</strong> على الشوارع الرئيسية والمولات</li>
-              <li><strong>مقرات إدارية:</strong> مكاتب جاهزة للشركات</li>
-              <li><strong>معارض:</strong> مساحات كبيرة للعرض</li>
-            </ul>
-          </div>
-        </div>
+        {/* سؤال السعر وسطر التحديث من الخادم (الصفحة الأولى) */}
+        {answersSlot}
       </main>
 
       <Footer />
