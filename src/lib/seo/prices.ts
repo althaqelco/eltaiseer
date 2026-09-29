@@ -186,6 +186,15 @@ export function computePriceStats(all: PriceInput[]): PriceStats {
 }
 
 /** صفوف مدينة واحدة لمجموعة (أو مجموعات) معينة، بترتيب الحي */
+/**
+ * رابط صف الحي في جدول /prices/ (معرّف أول صف للحي = slug الحي) حين يكون له وسيط، وإلا قسم المدينة
+ * (#{cityId} موجود دائمًا) — فلا رابط إلى جزء غير موجود. يستخدمه قالب الحي والمقالات.
+ */
+export function districtPricesHref(stats: PriceStats | null, cityId: string, districtName: string, districtSlug: string): string {
+  const has = !!stats?.rows.some((r) => r.cityId === cityId && r.district === districtName.trim());
+  return has ? `/prices/#${districtSlug}` : `/prices/#${cityId}`;
+}
+
 export function cityRows(stats: PriceStats, cityId: string, groups: TypeGroup[]): PriceRow[] {
   return stats.rows.filter((r) => r.cityId === cityId && groups.includes(r.group));
 }

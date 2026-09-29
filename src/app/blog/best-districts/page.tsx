@@ -6,6 +6,11 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, MapPin, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleSchema, PostDates } from "@/components/ArticleSchema";
+import { getPropertiesForIsr } from "@/lib/serverProperties";
+import { computePriceStats, districtPricesHref, toPriceInput } from "@/lib/seo/prices";
+
+// ISR مثل /prices/: رابط «صفحة أسعار العقارات» يشير إلى صف الحي الأول حين يكون له وسيط، وإلا قسم المدينة
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "أفضل الأحياء للسكن في دمياط الجديدة 2026 | مقارنة شاملة",
@@ -38,7 +43,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BestDistrictsArticle() {
+export default async function BestDistrictsArticle() {
+  const stats = computePriceStats((await getPropertiesForIsr()).map(toPriceInput));
+  const firstDistrictPrices = districtPricesHref(stats, "new-damietta", "الحي الأول", "first-district");
   return (
     <div className="min-h-screen bg-gray-50">
       <ArticleSchema
@@ -150,7 +157,7 @@ export default function BestDistrictsArticle() {
             <p className="text-gray-700 leading-relaxed mb-6">
               تختلف أسعار الشقق في الحي الأول حسب المساحة والدور ومستوى التشطيب، ووسيط سعر المتر المحسوب من
               العروض الحالية في{" "}
-              <Link href="/prices/#first-district" className="text-orange-600 hover:underline">صفحة أسعار العقارات</Link>.
+              <Link href={firstDistrictPrices} className="text-orange-600 hover:underline">صفحة أسعار العقارات</Link>.
               يمكنك الاطلاع على <Link href="/new-damietta/first-district" className="text-orange-600 hover:underline">عقارات الحي الأول</Link> المتاحة حالياً.
             </p>
 

@@ -373,6 +373,13 @@ test("Q169 يذكر كل فئات مناطق دمياط الجديدة، وال�
   assert.ok(text.includes(`${slugs.getCityDistrictSlugs("new-damietta").length} منطقة`));
 });
 
+test("districtPricesHref: صف الحي حين يكون له وسيط، وإلا قسم المدينة (لا جزء رابط غير موجود)", () => {
+  const s = sampleData().prices;
+  assert.equal(prices.districtPricesHref(s, "new-damietta", "الحي الأول", "first-district"), "/prices/#first-district");
+  assert.equal(prices.districtPricesHref(s, "new-damietta", "الحي الرابع", "fourth-district"), "/prices/#new-damietta");
+  assert.equal(prices.districtPricesHref(null, "new-mansoura", "R1", "r1"), "/prices/#new-mansoura");
+});
+
 // ── رسم صفحة العقار ─────────────────────────────────────────────────────────
 test("propertyGraph: Place بلا خصائص Accommodation، والعنوان مدينة ومحافظة، وحي غير معرّف بلا جملة فارغة", () => {
   const property = require(path.join(OUT, "seo/property.js"));

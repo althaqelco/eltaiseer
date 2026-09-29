@@ -12,7 +12,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { Freshness } from "@/components/Freshness";
 import { AnswerSection, RichText, TeaserLinks } from "@/components/Answers";
-import { computePriceStats, toPriceInput, TYPE_GROUP } from "@/lib/seo/prices";
+import { computePriceStats, districtPricesHref, toPriceInput, TYPE_GROUP } from "@/lib/seo/prices";
 import { breadcrumbNode, districtPlaceId, faqNode, graphWith, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { cairoIso, maxIso } from "@/lib/seo/time";
 import { getDistrictEditorial } from "@/lib/districtContent";
@@ -126,7 +126,7 @@ export default async function DistrictPage({ params }: Props) {
     groups,
     dataModified,
     // صف الحي في جدول /prices/ (معرّفه slug الحي) إن كان له وسيط، وإلا قسم المدينة
-    pricesHref: rows.length > 0 ? `/prices/#${district}` : `/prices/#${city}`,
+    pricesHref: districtPricesHref(stats, city, districtName, district),
   });
 
   const answersSlot = (
