@@ -1,12 +1,17 @@
 import { Metadata } from "next";
+import { pageOpenGraph } from "@/lib/seo/og";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Cookie } from "lucide-react";
 
+const TITLE = "سياسة ملفات تعريف الارتباط";
+const DESCRIPTION = "سياسة ملفات تعريف الارتباط (الكوكيز) الخاصة بموقع التيسير للعقارات";
+
 export const metadata: Metadata = {
-  title: "سياسة ملفات تعريف الارتباط",
-  description: "سياسة ملفات تعريف الارتباط (الكوكيز) الخاصة بموقع التيسير للعقارات",
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: pageOpenGraph({ path: "/cookies/", title: TITLE, description: DESCRIPTION }),
   alternates: {
     canonical: "https://eltaiseer.com/cookies/",
   },

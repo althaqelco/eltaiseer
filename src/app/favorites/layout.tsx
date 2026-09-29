@@ -1,9 +1,14 @@
 import { Metadata } from "next";
+import { pageOpenGraph } from "@/lib/seo/og";
 
 // صفحة شخصية تعتمد على localStorage — لا قيمة لفهرستها
+const TITLE = "المفضلة";
+const DESCRIPTION = "قائمة العقارات المفضلة لديك في التيسير للعقارات.";
+
 export const metadata: Metadata = {
-  title: "المفضلة",
-  description: "قائمة العقارات المفضلة لديك في التيسير للعقارات.",
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: pageOpenGraph({ path: "/favorites/", title: TITLE, description: DESCRIPTION }),
   robots: { index: false, follow: true },
 };
 

@@ -1,12 +1,17 @@
 import { Metadata } from "next";
+import { pageOpenGraph } from "@/lib/seo/og";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, FileText } from "lucide-react";
 
+const TITLE = "الشروط والأحكام";
+const DESCRIPTION = "الشروط والأحكام الخاصة باستخدام موقع التيسير للعقارات، ومنها شروط بيع وشراء أراضي بيت الوطن (التنازل) عبر الموقع.";
+
 export const metadata: Metadata = {
-  title: "الشروط والأحكام",
-  description: "الشروط والأحكام الخاصة باستخدام موقع التيسير للعقارات، ومنها شروط بيع وشراء أراضي بيت الوطن (التنازل) عبر الموقع.",
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: pageOpenGraph({ path: "/terms/", title: TITLE, description: DESCRIPTION }),
   alternates: {
     canonical: "https://eltaiseer.com/terms/",
   },

@@ -1,12 +1,17 @@
 import { Metadata } from "next";
+import { pageOpenGraph } from "@/lib/seo/og";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Shield } from "lucide-react";
 
+const TITLE = "سياسة الخصوصية";
+const DESCRIPTION = "سياسة الخصوصية لموقع التيسير للعقارات: كيف نجمع بياناتك ونستخدمها ونحميها، ومنها بيانات إعلانات بيع وشراء أراضي بيت الوطن ومستندات التحقق.";
+
 export const metadata: Metadata = {
-  title: "سياسة الخصوصية",
-  description: "سياسة الخصوصية لموقع التيسير للعقارات: كيف نجمع بياناتك ونستخدمها ونحميها، ومنها بيانات إعلانات بيع وشراء أراضي بيت الوطن ومستندات التحقق.",
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: pageOpenGraph({ path: "/privacy/", title: TITLE, description: DESCRIPTION }),
   alternates: {
     canonical: "https://eltaiseer.com/privacy/",
   },

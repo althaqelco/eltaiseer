@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { pageOpenGraph } from "@/lib/seo/og";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -8,9 +9,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { JsonLd } from "@/components/JsonLd";
 import { ORG, graph } from "@/lib/seo/schema";
 
+const TITLE = "وظائف | انضم لفريق التيسير للعقارات";
+const DESCRIPTION = "انضم لفريق التيسير للعقارات - فرص عمل متميزة في مجال العقارات بدمياط الجديدة";
+
 export const metadata: Metadata = {
-  title: "وظائف | انضم لفريق التيسير للعقارات",
-  description: "انضم لفريق التيسير للعقارات - فرص عمل متميزة في مجال العقارات بدمياط الجديدة",
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: pageOpenGraph({ path: "/careers/", title: TITLE, description: DESCRIPTION }),
   alternates: {
     canonical: "https://eltaiseer.com/careers/",
   },

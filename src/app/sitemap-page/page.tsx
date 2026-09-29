@@ -1,12 +1,17 @@
 import { Metadata } from "next";
+import { pageOpenGraph } from "@/lib/seo/og";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Map, MapPin, FileText, Users } from "lucide-react";
 
+const TITLE = "خريطة الموقع";
+const DESCRIPTION = "خريطة موقع التيسير للعقارات - جميع صفحات الموقع والأقسام والعقارات";
+
 export const metadata: Metadata = {
-  title: "خريطة الموقع",
-  description: "خريطة موقع التيسير للعقارات - جميع صفحات الموقع والأقسام والعقارات",
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: pageOpenGraph({ path: "/sitemap-page/", title: TITLE, description: DESCRIPTION }),
   alternates: {
     canonical: "https://eltaiseer.com/sitemap-page/",
   },
