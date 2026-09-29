@@ -35,3 +35,15 @@ export function getWhatsAppUrl(contact: string, text?: string): string {
   const query = text ? `?text=${encodeURIComponent(text)}` : "";
   return `https://wa.me/${phone}${query}`;
 }
+
+// العنوان المخزن قد يحمل لاحقة سيو بعد « | » (مثل «| شقة الحي الأول - دمياط الجديدة») أضافها enhanceTitle،
+// وبعض إعلانات المنصورة الجديدة حملت اسم دمياط فيها. العنوان المعروض (H1 وبطاقة العقار) بلا لاحقة.
+export function displayTitle(title: string): string {
+  return (title || "").split(" | ")[0].trim();
+}
+
+// وصف قديم لإعلان في المنصورة الجديدة أُضيفت له خاتمة «التيسير للعقارات - دمياط الجديدة» خطأً
+export function fixBrandSuffix(description: string, cityId?: string): string {
+  if (cityId !== "new-mansoura") return description;
+  return description.replace("التيسير للعقارات - دمياط الجديدة", "التيسير للعقارات - المنصورة الجديدة");
+}

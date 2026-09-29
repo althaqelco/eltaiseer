@@ -60,7 +60,7 @@ export default function ChaletsClient({ initialProperties, page = 1 }: { initial
             </div>
           </div>
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            استمتع بالإجازات على شاطئ البحر مع أفضل الشاليهات للبيع في دمياط الجديدة والمنصورة الجديدة. 
+            شاليهات معروضة للبيع على البحر في دمياط الجديدة والمنصورة الجديدة، ولكل شاليه صفحة بسعره ومساحته. 
             شاليهات بإطلالات بحرية مباشرة ومرافق متكاملة.
           </p>
         </div>

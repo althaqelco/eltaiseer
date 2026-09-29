@@ -60,7 +60,7 @@ export default function ShopsClient({ initialProperties, page = 1 }: { initialPr
             </div>
           </div>
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفضل المحلات التجارية والمقرات الإدارية للبيع في دمياط الجديدة والمنصورة الجديدة. مواقع استراتيجية على الشوارع الرئيسية.
+            محلات تجارية ومقرات إدارية معروضة للبيع في دمياط الجديدة والمنصورة الجديدة.
             مساحات متنوعة تناسب جميع الأنشطة التجارية.
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function ShopsClient({ initialProperties, page = 1 }: { initialPr
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">محلات تجارية ومقرات إدارية للبيع</h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            <p>ابدأ مشروعك التجاري في دمياط الجديدة مع أفضل المحلات والمقرات الإدارية. مواقع استراتيجية وإطلالات مميزة.</p>
+            <p>محلات ومقرات إدارية معروضة للبيع، ولكل وحدة صفحة بمساحتها وسعرها وموقعها.</p>
             <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">أنواع العقارات التجارية</h3>
             <ul className="list-disc list-inside space-y-2">
               <li><strong>محلات تجارية:</strong> على الشوارع الرئيسية والمولات</li>

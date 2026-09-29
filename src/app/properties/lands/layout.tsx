@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "أراضي للبيع في دمياط الجديدة والمنصورة الجديدة | أراضي سكنية وتجارية",
-  description: "أفضل الأراضي للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة 2026. أراضي سكنية وتجارية بمواقع مميزة. مساحات من 150 إلى 5000 متر. أسعار تنافسية وتقسيط مريح.",
+  description: "أراضٍ للبيع في دمياط الجديدة والمنصورة الجديدة: أراضٍ سكنية وتجارية بأسعارها الفعلية كما يعرضها البائعون.",
   keywords: [
     "أراضي للبيع في دمياط الجديدة والمنصورة الجديدة",
     "أرض سكنية دمياط",
@@ -15,28 +15,15 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "أراضي للبيع في دمياط الجديدة والمنصورة الجديدة | التيسير للعقارات",
-    description: "أفضل الأراضي للبيع - أراضي سكنية وتجارية بمواقع مميزة",
+    description: "أراضٍ للبيع في دمياط الجديدة والمنصورة الجديدة: أراضٍ سكنية وتجارية بأسعارها الفعلية كما يعرضها البائعون.",
     url: "https://eltaiseer.com/properties/lands/",
   },
   alternates: { canonical: "https://eltaiseer.com/properties/lands/" },
 };
 
 export default function LandsLayout({ children }: { children: React.ReactNode }) {
-  const itemListSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "أراضي للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة",
-    description: "أفضل الأراضي السكنية والتجارية للبيع بمواقع مميزة",
-    url: "https://eltaiseer.com/properties/lands/",
-    itemListOrder: "https://schema.org/ItemListUnordered",
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-      />
       {children}
     </>
   );

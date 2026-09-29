@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة | شاليهات على البحر",
-  description: "شاليهات فاخرة للبيع في دمياط الجديدة والمنصورة الجديدة بإطلالات بحرية مباشرة. شاليهات بحمامات سباحة ومرافق متكاملة. أسعار تنافسية وتقسيط مريح.",
+  description: "شاليهات للبيع على البحر في دمياط الجديدة والمنصورة الجديدة، بأسعارها الفعلية كما يعرضها البائعون.",
   keywords: [
     "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة",
     "شاليه على البحر دمياط",
@@ -20,21 +20,8 @@ export const metadata: Metadata = {
 };
 
 export default function ChaletsLayout({ children }: { children: React.ReactNode }) {
-  const itemListSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "شاليهات للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة",
-    description: "شاليهات فاخرة بإطلالات بحرية مباشرة",
-    url: "https://eltaiseer.com/properties/chalets/",
-    itemListOrder: "https://schema.org/ItemListUnordered",
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-      />
       {children}
     </>
   );

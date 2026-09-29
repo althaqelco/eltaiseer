@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";
 import { getPropertyUrl } from "@/lib/districtSlugs";
-import { getWhatsAppUrl, formatPriceShort as formatPrice, COMPANY_WHATSAPP, COMPANY_TEL } from "@/lib/format";
+import { getWhatsAppUrl, formatPriceShort as formatPrice, COMPANY_WHATSAPP, COMPANY_TEL, displayTitle } from "@/lib/format";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -156,7 +156,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
         {/* Title - Clickable */}
         <Link href={propertyUrl} prefetch={false} className="block hover:text-orange-500 transition-colors">
           <h3 className="font-semibold text-base sm:text-lg line-clamp-2 text-gray-800 leading-relaxed">
-            {property.title}
+            {displayTitle(property.title)}
           </h3>
         </Link>
 

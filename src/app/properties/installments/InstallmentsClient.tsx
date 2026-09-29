@@ -15,7 +15,6 @@ import {
 import { CreditCard, Building2 } from "lucide-react";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Property } from "@/lib/mockData";
-import type { FaqItem } from "@/lib/homeFaq";
 import { ListingPagination } from "@/components/ListingPagination";
 import { CATEGORY_PAGE_SIZE } from "@/lib/pagination";
 
@@ -23,12 +22,13 @@ const ITEMS_PER_PAGE = CATEGORY_PAGE_SIZE;
 
 interface InstallmentsClientProps {
   initialProperties: Property[];
-  faq: FaqItem[];
+  // أسئلة التقسيط تُبنى في الخادم (InstallmentsListing) — لا نص أسئلة في حزمة المتصفح
+  faqSlot?: React.ReactNode;
   // رقم الصفحة من الرابط (?page=N) — يُعرض من الخادم
   page?: number;
 }
 
-export default function InstallmentsClient({ initialProperties, faq, page = 1 }: InstallmentsClientProps) {
+export default function InstallmentsClient({ initialProperties, faqSlot, page = 1 }: InstallmentsClientProps) {
   const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -87,7 +87,7 @@ export default function InstallmentsClient({ initialProperties, faq, page = 1 }:
                 عقارات بالتقسيط في دمياط الجديدة والمنصورة الجديدة
               </h1>
               <p className="text-gray-300 mt-2">
-                {filteredProperties.length} عقاراً متاحاً بالتقسيط — مقدم من 10% وأقساط حتى 10 سنوات
+                {filteredProperties.length} عقاراً متاحاً بالتقسيط
               </p>
             </div>
           </div>
@@ -158,26 +158,14 @@ export default function InstallmentsClient({ initialProperties, faq, page = 1 }:
               التقسيط في{" "}
               <Link href="/new-damietta" className="text-orange-600 hover:underline">دمياط الجديدة</Link>{" "}
               و<Link href="/new-mansoura" className="text-emerald-600 hover:underline">المنصورة الجديدة</Link>{" "}
-              نوعان: تقسيط مباشر مع المالك أو المطور (الأسرع والأبسط — اتفاق وعقد دون بنوك)،
-              وتمويل عقاري بنكي بمدد أطول وفوائد أعلى. مشاريع الإسكان القومي مثل{" "}
+              يكون إما تقسيطًا مباشرًا مع المالك أو المطور باتفاق وعقد بين الطرفين، أو تمويلًا عقاريًا من بنك
+              بشروطه. مشروعات الإسكان القومي مثل{" "}
               <Link href="/new-damietta/janna-project" className="text-orange-600 hover:underline">جنة</Link> و
               <Link href="/new-mansoura/sakan-kol-misryeen" className="text-emerald-600 hover:underline">سكن لكل المصريين</Link>{" "}
-              تقدم أفضل شروط تقسيط مدعومة بمقدمات تبدأ من 10%.
+              لها أنظمة سداد تعلنها الجهة المالكة لكل مشروع. وفي إعادة البيع يحدد كل بائع شروطه، وتظهر في صفحة العقار.
             </p>
           </div>
-
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">أسئلة شائعة عن التقسيط</h2>
-          <div className="space-y-3">
-            {faq.map((item) => (
-              <details key={item.question} className="group bg-gray-50 rounded-xl border border-gray-200 p-5">
-                <summary className="cursor-pointer list-none font-semibold text-gray-800 flex items-center justify-between">
-                  <h3 className="text-base font-semibold">{item.question}</h3>
-                  <span className="text-orange-500 transition-transform group-open:rotate-180">▼</span>
-                </summary>
-                <p className="mt-3 text-gray-600 leading-relaxed">{item.answer}</p>
-              </details>
-            ))}
-          </div>
+          {faqSlot}
         </div>
       </main>
 

@@ -3,8 +3,12 @@ import { notFound } from "next/navigation";
 import PropertyPageClient from "./PropertyPageClient";
 import { getPropertiesServer, getPropertyServer, serializeProperties } from "@/lib/serverProperties";
 import { calculateSimilarity } from "@/lib/propertyStore";
-import { generatePropertySchema } from "@/lib/seoOptimizer";
-import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
+import { SLUG_TO_DISTRICT, getDistrictSlug, isCityDistrictSlug } from "@/lib/districtSlugs";
+import { JsonLd } from "@/components/JsonLd";
+import { propertyGraph } from "@/lib/seo/property";
+import { ROBOTS_INDEX } from "@/lib/seo/robots";
+import { SITE_NAME } from "@/lib/seo/owner-flags";
+import { displayTitle, fixBrandSuffix } from "@/lib/format";
 import { Property } from "@/lib/mockData";
 
 // صفحات العقارات ديناميكية - تُجلب من Firestore عند كل طلب لضمان حداثة البيانات
@@ -59,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const areaText = `${property.details.area_sqm} متر`;
 
   const title = `${property.type} ${areaText} ${bedroomsText ? bedroomsText + " " : ""}${districtName} - ${priceText}`;
-  const description = `${property.type} للبيع في ${districtName} ب${cityName}. المساحة: ${areaText}. ${bedroomsText ? bedroomsText + ". " : ""}التشطيب: ${property.details.finishing || "غير محدد"}. السعر: ${priceText}. ${property.payment?.type === "تقسيط" || property.payment?.type === "كاش أو تقسيط" ? "متاح التقسيط. " : ""}التيسير للعقارات - شريكك الموثوق.`;
+  const description = `${property.type} للبيع في ${districtName} ب${cityName}. المساحة: ${areaText}. ${bedroomsText ? bedroomsText + ". " : ""}التشطيب: ${property.details.finishing || "غير محدد"}. السعر: ${priceText}. ${property.payment?.type === "تقسيط" || property.payment?.type === "كاش أو تقسيط" ? "متاح التقسيط. " : ""}التيسير للعقارات.`;
 
   // الرابط الأساسي يُبنى من بيانات العقار نفسه لضمان canonical واحد صحيح دائماً
   const canonicalSlug = getDistrictSlug(property.location.district);
@@ -82,14 +86,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: { canonical: canonicalUrl },
     // صريح هنا لأن robots يُورث من layout الحي: عقار بحي غير مُعرّف (unknown-district)
     // كان يرث noindex,nofollow من ذلك الـ layout رغم أنه في sitemap.xml
-    robots: { index: true, follow: true },
+    robots: ROBOTS_INDEX,
     openGraph: {
       title,
       description,
       url: canonicalUrl,
       type: "article",
       locale: "ar_EG",
-      siteName: "التيسير للعقارات",
+      siteName: SITE_NAME,
       images,
     },
     twitter: {
@@ -110,30 +114,31 @@ export default async function PropertyDetailPage({ params }: Props) {
 
   const property = await getProperty(propertyId);
 
-  const schemas: object[] = [];
+  // رسم العقار (#webpage + #property + #offer) داخل كيان الحي المعرّف في layout الحي
+  let pageGraph: object | null = null;
   if (property) {
-    schemas.push(
-      generatePropertySchema({
-        id: property.id,
-        title: property.title,
-        images: property.images || [],
-        contact_whatsapp: property.contact_whatsapp,
-        type: property.type,
-        district: property.location.district,
-        area_sqm: property.details.area_sqm,
-        price: property.price,
-        bedrooms: property.details.bedrooms,
-        bathrooms: property.details.bathrooms,
-        level: property.details.level,
-        finishing: property.details.finishing,
-        amenities: property.amenities || [],
-        status: property.status,
-        paymentType: property.payment?.type,
-        description: property.description,
-        cityId: property.location.cityId,
-        datePosted: property.createdAt ? new Date(property.createdAt).toISOString() : undefined,
-      })
-    );
+    const cityId = property.location.cityId || "new-damietta";
+    const districtSlug = getDistrictSlug(property.location.district);
+    const title = displayTitle(property.title);
+    pageGraph = propertyGraph({
+      id: property.id,
+      title,
+      description: fixBrandSuffix(property.description || title, cityId).slice(0, 500),
+      type: property.type,
+      cityId,
+      cityName: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",
+      district: property.location.district,
+      districtSlug,
+      districtKnown: isCityDistrictSlug(cityId, districtSlug),
+      area: property.details.area_sqm,
+      bedrooms: property.details.bedrooms,
+      bathrooms: property.details.bathrooms,
+      price: property.price,
+      sold: property.status === "تم البيع",
+      images: (property.images || []).filter((u) => /^https?:\/\//.test(u)),
+      createdAt: property.createdAt,
+      updatedAt: property.updatedAt,
+    });
   }
 
   // العقارات المشابهة تُحسب وتُعرض من الخادم — روابط داخلية بين صفحات العقارات يراها الزاحف
@@ -159,13 +164,7 @@ export default async function PropertyDetailPage({ params }: Props) {
 
   return (
     <>
-      {schemas.map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      {pageGraph && <JsonLd graph={pageGraph} />}
       <PropertyPageClient
         initialProperty={serializedProperty}
         initialRelated={serializeProperties(relatedProperties)}

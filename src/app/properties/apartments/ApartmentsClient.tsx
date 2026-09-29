@@ -77,8 +77,7 @@ export default function ApartmentsClient({ initialProperties, page = 1 }: { init
           
           {/* SEO Content */}
           <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفضل الشقق للبيع في دمياط الجديدة والمنصورة الجديدة. نوفر شقق تمليك بمساحات متنوعة من 80 متر حتى 300 متر، 
-            شقق نصف تشطيب وتشطيب كامل سوبر لوكس. أسعار تبدأ من 500,000 جنيه مع إمكانية التقسيط حتى 10 سنوات.
+            شقق معروضة للبيع في دمياط الجديدة والمنصورة الجديدة بمساحات وتشطيبات مختلفة، ولكل شقة صفحة بسعرها ومساحتها وطريقة الدفع.
           </p>
         </div>
       </div>
@@ -141,9 +140,7 @@ export default function ApartmentsClient({ initialProperties, page = 1 }: { init
           <h2 className="text-2xl font-bold text-gray-800 mb-4">شقق للبيع في دمياط الجديدة والمنصورة الجديدة 2026</h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
             <p>
-              تعتبر دمياط الجديدة من أفضل المدن السكنية في مصر، حيث تتميز بالتخطيط العمراني الحديث 
-              والمساحات الخضراء الواسعة. نقدم لكم في التيسير للعقارات أفضل الشقق للبيع في جميع أحياء 
-              دمياط الجديدة بأسعار تنافسية.
+              دمياط الجديدة مدينة على ساحل البحر المتوسط بأحياء مخططة ومساحات خضراء. نعرض في التيسير للعقارات شققًا للبيع في أحيائها بأسعارها كما يعرضها البائعون، ووسيط سعر المتر لكل حي في صفحة أسعار العقارات.
             </p>
             <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">أنواع الشقق المتوفرة</h3>
             <ul className="list-disc list-inside space-y-2">
@@ -158,7 +155,7 @@ export default function ApartmentsClient({ initialProperties, page = 1 }: { init
               <li>مواقف سيارات خاصة</li>
               <li>أمن وحراسة 24 ساعة</li>
               <li>قريبة من المدارس والخدمات</li>
-              <li>إمكانية التقسيط حتى 10 سنوات</li>
+              <li>عقارات تقبل التقسيط بشروط يحددها البائع</li>
             </ul>
           </div>
         </div>

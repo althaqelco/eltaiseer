@@ -109,7 +109,7 @@ export default function ClinicsClient({ initialProperties, page = 1 }: { initial
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">عيادات طبية للبيع في دمياط الجديدة والمنصورة الجديدة</h2>
           <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            <p>ابدأ ممارستك الطبية في دمياط الجديدة مع أفضل العيادات المتاحة للبيع. عيادات جاهزة بتراخيص وتجهيزات.</p>
+            <p>عيادات معروضة للبيع في دمياط الجديدة والمنصورة الجديدة، ولكل عيادة صفحة بمساحتها وسعرها وحالتها.</p>
             <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">مميزات العيادات</h3>
             <ul className="list-disc list-inside space-y-2">
               <li>مواقع في مجمعات طبية</li>

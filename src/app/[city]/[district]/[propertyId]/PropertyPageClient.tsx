@@ -29,7 +29,7 @@ import { CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { PropertyCard } from "@/components/PropertyCard";
 import { trackEvent } from "@/components/MetaPixel";
-import { getWhatsAppUrl, formatPriceFull as formatPrice, COMPANY_WHATSAPP } from "@/lib/format";
+import { getWhatsAppUrl, formatPriceFull as formatPrice, COMPANY_WHATSAPP, displayTitle, fixBrandSuffix } from "@/lib/format";
 import { isFavorite as checkIsFavorite, toggleFavorite as toggleFavoriteStore } from "@/lib/favoritesStore";
 
 interface PropertyPageClientProps {
@@ -181,6 +181,7 @@ export default function PropertyPageClient({
           property.location.city || city?.nameAr,
           districtSlug
         )}
+        schema={false}
       />
 
       <main className="container mx-auto px-4 py-8 pb-28 lg:pb-8">
@@ -318,7 +319,7 @@ export default function PropertyPageClient({
 
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">{property.title}</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">{displayTitle(property.title)}</h1>
                     <div className="flex items-center gap-2 text-gray-600">
                       <MapPin className={`h-5 w-5 text-${themeColor}-500`} />
                       <span className="font-medium">{property.location.district} - {property.location.city || city?.nameAr}</span>
@@ -365,7 +366,7 @@ export default function PropertyPageClient({
                 {property.description && (
                   <div className="mb-6">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">وصف العقار</h3>
-                    <p className="text-gray-600 leading-relaxed text-base">{property.description}</p>
+                    <p className="text-gray-600 leading-relaxed text-base">{fixBrandSuffix(property.description, property.location.cityId)}</p>
                   </div>
                 )}
 

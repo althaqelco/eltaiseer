@@ -1,12 +1,11 @@
 import type { ComponentType } from "react";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  getPropertiesForIsr,
-  getPropertiesServerResult,
-  serializeProperties,
-  buildItemListSchema,
-} from "@/lib/serverProperties";
+import { getPropertiesForIsr, getPropertiesServerResult, serializeProperties } from "@/lib/serverProperties";
+import { getPropertyUrl } from "@/lib/districtSlugs";
+import { JsonLd } from "@/components/JsonLd";
+import { graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { cairoIso, maxIso } from "@/lib/seo/time";
 import {
   categoryProperties,
   isAvailable,
@@ -62,16 +61,33 @@ export default async function CategoryListing({
     notFound();
   }
 
-  const itemListSchema = buildItemListSchema(filtered.filter(isAvailable), LIST_NAMES[slug]);
+  // رسم الصفحة الأولى فقط (رابطها الأساسي)؛ صفحات ?page=N بلا JSON-LD
+  const available = filtered.filter(isAvailable);
+  const path = `/properties/${slug}/`;
+  const dataModified = maxIso(available.map((p) => p.updatedAt || p.createdAt));
+  const pageGraph =
+    page === 1
+      ? graph(
+          webPage({
+            path,
+            type: "CollectionPage",
+            name: LIST_NAMES[slug],
+            breadcrumb: false, // BreadcrumbList يطبعه مكوّن المسار في الصفحة
+            mainEntity: available.length ? ref(`${pageUrl(path)}#itemlist`) : undefined,
+            dateModified: dataModified ? cairoIso(dataModified) : undefined,
+          }),
+          available.length
+            ? itemListNode(path, available.slice(0, 20).map((p) => getPropertyUrl(p)), {
+                name: LIST_NAMES[slug],
+                total: available.length,
+              })
+            : null
+        )
+      : null;
 
   return (
     <>
-      {filtered.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-        />
-      )}
+      {pageGraph && <JsonLd graph={pageGraph} />}
       <Client initialProperties={serializeProperties(filtered)} page={page} />
     </>
   );

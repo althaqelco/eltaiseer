@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة | مقرات إدارية ومكاتب",
-  description: "أفضل المحلات التجارية والمقرات الإدارية للبيع في دمياط الجديدة والمنصورة الجديدة. مواقع استراتيجية على الشوارع الرئيسية. مساحات متنوعة تناسب جميع الأنشطة.",
+  description: "محلات تجارية ومقرات إدارية للبيع في دمياط الجديدة والمنصورة الجديدة بأسعارها الفعلية كما يعرضها البائعون.",
   keywords: [
     "محلات للبيع في دمياط الجديدة والمنصورة الجديدة",
     "محل تجاري دمياط",
@@ -23,21 +23,8 @@ export const metadata: Metadata = {
 };
 
 export default function ShopsLayout({ children }: { children: React.ReactNode }) {
-  const itemListSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة",
-    description: "محلات ومقرات إدارية بمواقع استراتيجية",
-    url: "https://eltaiseer.com/properties/shops/",
-    itemListOrder: "https://schema.org/ItemListUnordered",
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-      />
       {children}
     </>
   );

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "شقق للبيع في دمياط الجديدة والمنصورة الجديدة | شقق تمليك ودوبلكس وبنتهاوس",
-  description: "أفضل شقق للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة 2026. شقق تمليك، دوبلكس، بنتهاوس، روف بأسعار تبدأ من 500,000 جنيه. تشطيب سوبر لوكس ونصف تشطيب. تقسيط حتى 10 سنوات. تصفح أكثر من 50 شقة.",
+  description: "شقق للبيع في دمياط الجديدة والمنصورة الجديدة: شقق تمليك ودوبلكس وبنتهاوس وروف بأسعارها الفعلية كما يعرضها البائعون.",
   keywords: [
     "شقق للبيع في دمياط الجديدة والمنصورة الجديدة",
     "شقق تمليك دمياط الجديدة",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "شقق للبيع في دمياط الجديدة والمنصورة الجديدة | التيسير للعقارات",
-    description: "أفضل شقق للبيع في دمياط الجديدة والمنصورة الجديدة - شقق تمليك، دوبلكس، بنتهاوس بأسعار تنافسية",
+    description: "شقق للبيع في دمياط الجديدة والمنصورة الجديدة: شقق تمليك ودوبلكس وبنتهاوس وروف بأسعارها الفعلية كما يعرضها البائعون.",
     url: "https://eltaiseer.com/properties/apartments/",
     type: "website",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
@@ -38,21 +38,9 @@ export default function ApartmentsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const itemListSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "شقق للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة",
-    description: "أفضل شقق للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة - شقق تمليك، دوبلكس، بنتهاوس، روف",
-    url: "https://eltaiseer.com/properties/apartments/",
-    itemListOrder: "https://schema.org/ItemListUnordered",
-  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-      />
       {children}
     </>
   );

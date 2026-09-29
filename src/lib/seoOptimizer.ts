@@ -9,7 +9,6 @@
  * - AI-friendly content structure
  */
 
-import { getDistrictSlug } from "./districtSlugs";
 
 interface PropertySEOInput {
   type: string;
@@ -238,99 +237,7 @@ export function generateMetaKeywords(input: PropertySEOInput): string[] {
   return Array.from(new Set(keywords));
 }
 
-/**
- * Generate Schema.org structured data for property (JSON-LD)
- * Optimized for Google and AI search engines
- */
-export function generatePropertySchema(
-  input: PropertySEOInput & {
-    id: string;
-    title: string;
-    images: string[];
-    contact_whatsapp: string;
-    datePosted?: string;
-  }
-): object {
-  const {
-    id,
-    title,
-    district,
-    area_sqm,
-    price,
-    bedrooms,
-    bathrooms,
-    images,
-    status,
-    cityId,
-    datePosted,
-  } = input;
-
-  const citySlug = cityId || "new-damietta";
-  const districtSlug = getDistrictSlug(district);
-  const propertyUrl = `https://eltaiseer.com/${citySlug}/${districtSlug}/${id}/`;
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "RealEstateListing",
-    "@id": propertyUrl,
-    name: title,
-    description: generateSEODescription(input),
-    url: propertyUrl,
-    ...(datePosted ? { datePosted } : {}),
-
-    // Property details
-    about: {
-      "@type": "Residence",
-      name: title,
-      numberOfRooms: bedrooms,
-      numberOfBathroomsTotal: bathrooms,
-      floorSize: {
-        "@type": "QuantitativeValue",
-        value: area_sqm,
-        unitCode: "MTK", // Square meters
-      },
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: district,
-        addressRegion: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",
-        addressCountry: "EG",
-      },
-    },
-
-    // Price
-    offers: {
-      "@type": "Offer",
-      price: price,
-      priceCurrency: "EGP",
-      availability: status === "تم البيع"
-        ? "https://schema.org/SoldOut"
-        : "https://schema.org/InStock",
-    },
-
-    // Images
-    image: images.length > 0 ? images : undefined,
-
-    // Seller info
-    seller: {
-      "@type": "RealEstateAgent",
-      name: "التيسير للعقارات",
-      telephone: "+201500775974",
-      url: "https://eltaiseer.com",
-    },
-
-    // Location
-    contentLocation: {
-      "@type": "Place",
-      name: `${district}، ${cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة"}`,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: district,
-        addressRegion: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",
-        addressCountry: "مصر",
-      },
-    },
-  };
-}
+// رسم JSON-LD لصفحة العقار انتقل إلى lib/seo/property.ts (معرّفات ثابتة، العرض من #organization)
 
 /**
  * Validate and enhance user-provided title for SEO
@@ -384,9 +291,10 @@ export function enhanceDescription(userDescription: string, input: PropertySEOIn
     enhanced = summary + enhanced;
   }
 
-  // Add closing brand if not present
+  // خاتمة العلامة باسم مدينة الإعلان نفسه (كانت «دمياط الجديدة» حتى لإعلانات المنصورة الجديدة)
   if (!enhanced.includes("التيسير")) {
-    enhanced += " | التيسير للعقارات - دمياط الجديدة";
+    const cityName = input.cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
+    enhanced += ` | التيسير للعقارات - ${cityName}`;
   }
 
   return enhanced;

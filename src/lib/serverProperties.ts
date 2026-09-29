@@ -4,10 +4,7 @@
 
 import { cache } from "react";
 import { fetchAllPropertiesStrict, fetchPropertyStrict } from "./firestoreProperties";
-import { getPropertyUrl } from "./districtSlugs";
 import type { Property } from "./mockData";
-
-const BASE_URL = "https://eltaiseer.com";
 
 // cache() يوحّد الجلب داخل الطلب الواحد (metadata + الصفحة + الـ schema)
 // ok=false يعني فشل الجلب (لا "صفر عقارات") — قواعد noindex وsitemap لا تُطبق عليه
@@ -76,24 +73,4 @@ export function filterByDistrict(properties: Property[], districtName: string): 
 
 export function filterByTypes(properties: Property[], types: readonly string[]): Property[] {
   return properties.filter((p) => types.includes(p.type));
-}
-
-// ItemList schema لصفحات القوائم — يظهر العقارات كنتائج غنية ويغذي وكلاء AI
-export function buildItemListSchema(
-  properties: Property[],
-  listName: string,
-  limit = 20
-): object {
-  return {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: listName,
-    numberOfItems: properties.length,
-    itemListElement: properties.slice(0, limit).map((p, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      url: `${BASE_URL}${getPropertyUrl(p)}/`,
-      name: p.title,
-    })),
-  };
 }
