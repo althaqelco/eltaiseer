@@ -59,7 +59,18 @@ export function closeGraph(
 ): Node[] {
   const out = (nodes.flat(2).filter(Boolean) as Node[]).map((n) => n);
   const have = new Set<string>(opts.external || []);
-  for (const n of out) if (typeof n["@id"] === "string" && n["@type"]) have.add(n["@id"] as string);
+  // معرّف = أي كائن فيه @id و@type، في أعلى الرسم أو متداخلًا (مثل primaryImageOfPage داخل WebPage)
+  const define = (v: unknown): void => {
+    if (Array.isArray(v)) {
+      v.forEach(define);
+      return;
+    }
+    if (!v || typeof v !== "object") return;
+    const o = v as Node;
+    if (typeof o["@id"] === "string" && o["@type"]) have.add(o["@id"] as string);
+    Object.values(o).forEach(define);
+  };
+  out.forEach(define);
   const collect = (v: unknown, acc: Set<string>): void => {
     if (Array.isArray(v)) {
       v.forEach((x) => collect(x, acc));
@@ -185,6 +196,18 @@ export const graph = (...nodes: unknown[]) => ({
   "@context": "https://schema.org",
   "@graph": closeGraph(nodes, { external: LAYOUT_IDS }),
 });
+
+/** رسم صفحة تعرّف بعض عقدها في سكربت آخر على نفس الصفحة (مثل Place الحي في layout الحي). */
+export const graphWith = (external: string[], ...nodes: unknown[]) => ({
+  "@context": "https://schema.org",
+  "@graph": closeGraph(nodes, { external: new Set([...Array.from(LAYOUT_IDS), ...external]) }),
+});
+
+/** معرّف كيان الحي: أحياء «بيت الوطن» في دمياط الجديدة أسماء أماكن لها معرّف في السجل */
+export function districtPlaceId(city: string, district: string): string {
+  const m = city === "new-damietta" && district.match(/^beit-al-watan-(east|west|beach)$/);
+  return m ? `${SITE}/#place-beit-al-watan-new-damietta-${m[1]}` : districtId(city, district);
+}
 
 /** رسم الـ layout: مغلق وحده. */
 export const siteGraph = (...nodes: unknown[]) => ({ "@context": "https://schema.org", "@graph": closeGraph(nodes) });

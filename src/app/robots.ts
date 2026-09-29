@@ -1,130 +1,56 @@
 import { MetadataRoute } from "next";
+import { D5_OPEN_DATA_LIVE } from "@/lib/seo/owner-flags";
+
+// سياسة الزواحف (spec-final A5.1). مجموعة مسماة تلغي "*"، فكل مجموعة تكرر القواعد كاملة (seo_final §8.4).
+// /baitelwatan/api/ ممنوعة في كل المجموعات: الزواحف كانت تستطيع سحب /api/plots (3–4 MB) من الـ Durable Object.
+// بلا "$" بعد *.json/*.csv حتى يطابق "/baitelwatan/events.json?limit=200" أيضًا.
+const DISALLOW = [
+  "/dashboard/",
+  "/login/",
+  "/add-property/",
+  "/api/",
+  "/baitelwatan/api/",
+  "/baitelwatan/*.json",
+  "/baitelwatan/*.csv",
+  "/baitelwatan/old",
+];
+const ALLOW = ["/", "/baitelwatan/ui/*.json", "/baitelwatan/manifest.json"];
+// [OWNER D5 — PLAN CHANGE] ملفات /baitelwatan/data/ بعد إطلاقها فقط
+const DATA_ALLOW = ["/baitelwatan/data/*.csv", "/baitelwatan/data/*.json", "/baitelwatan/data/$"];
+// true فقط بعد SEO_INDEX=1 على المنصة (seo_final §8.4)
+const PLATFORM_SITEMAP_LIVE = false;
+// [OWNER D2] التوصية: السماح لزواحف التدريب على المحتوى العام
+const TRAINING_ALLOWED = true;
+
+const SEARCH_AND_ANSWER = [
+  "*",
+  "Googlebot",
+  "Googlebot-Image",
+  "Bingbot",
+  "Applebot",
+  "GoogleOther",
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "Claude-SearchBot",
+  "Claude-User",
+  "PerplexityBot",
+  "Perplexity-User",
+  "DuckAssistBot",
+  "MistralAI-User",
+];
+const TRAINING = ["GPTBot", "ClaudeBot", "CCBot", "Google-Extended", "Applebot-Extended", "Meta-ExternalAgent", "Amazonbot"];
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://eltaiseer.com";
-
+  const allow = [...ALLOW, ...(D5_OPEN_DATA_LIVE ? DATA_ALLOW : [])];
   return {
     rules: [
-      {
-        userAgent: "*",
-        allow: ["/"],
-        disallow: [
-          "/dashboard/",
-          "/login/",
-          "/add-property/",
-          "/api/",
-        ],
-      },
-      {
-        userAgent: "Googlebot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/login/", "/add-property/", "/api/"],
-      },
-      {
-        userAgent: "Googlebot-Image",
-        allow: ["/"],
-      },
-      {
-        userAgent: "Bingbot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/login/", "/add-property/", "/api/"],
-      },
-      {
-        userAgent: "GPTBot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "ChatGPT-User",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "ClaudeBot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "anthropic-ai",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "PerplexityBot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "Google-Extended",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "Bytespider",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "CCBot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "Applebot-Extended",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "cohere-ai",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "Meta-ExternalAgent",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "OAI-SearchBot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "Perplexity-User",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "Claude-SearchBot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "Claude-User",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "DuckAssistBot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "Amazonbot",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "MistralAI-User",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
-      {
-        userAgent: "GoogleOther",
-        allow: ["/"],
-        disallow: ["/dashboard/", "/api/"],
-      },
+      { userAgent: SEARCH_AND_ANSWER, allow, disallow: DISALLOW },
+      TRAINING_ALLOWED ? { userAgent: TRAINING, allow, disallow: DISALLOW } : { userAgent: TRAINING, disallow: ["/"] },
+      { userAgent: "Bytespider", disallow: ["/"] },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: [
+      "https://eltaiseer.com/sitemap.xml",
+      ...(PLATFORM_SITEMAP_LIVE ? ["https://eltaiseer.com/baitelwatan/sitemap.xml"] : []),
+    ],
   };
 }

@@ -138,6 +138,12 @@ test("closeGraph: قالب البرنامج ثم الهيئة تكراريًا،
   assert.ok(ids.includes("https://eltaiseer.com/#nuca"));
   assert.ok(!ids.includes("https://eltaiseer.com/#organization"));
   assert.throws(() => schema.graph({ "@type": "Thing", "@id": "https://eltaiseer.com/#a", about: { "@id": "https://eltaiseer.com/#nope" } }), /dangling/);
+  // عقدة معرّفة متداخلة (صورة الصفحة داخل WebPage) لا تُعد مرجعًا معلقًا
+  const nested = schema.graph(
+    schema.webPage({ path: "/blog/x/", name: "x", primaryImage: "https://example.com/a.jpg", breadcrumb: false }),
+    { "@type": "Article", "@id": "https://eltaiseer.com/blog/x/#article", image: { "@id": "https://eltaiseer.com/blog/x/#primaryimage" } }
+  );
+  assert.equal(nested["@graph"].length, 2);
   // الرسم مغلق: كل مرجع معرّف في الرسم أو في الـ layout
   const site = schema.siteGraph({ "@type": "RealEstateAgent", "@id": schema.ID.organization, areaServed: [schema.ref(schema.cityId("new-damietta"))] });
   const siteIds = new Set(site["@graph"].map((n) => n["@id"]));

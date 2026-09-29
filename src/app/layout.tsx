@@ -4,6 +4,9 @@ import "./globals.css";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { MetaPixel } from "@/components/MetaPixel";
 import { Suspense } from "react";
+import { JsonLd } from "@/components/JsonLd";
+import { ID, ORG, SITE, cityId, node, ref, siteGraph } from "@/lib/seo/schema";
+import { D11_OFFICE, IN_LANGUAGE, SITE_NAME } from "@/lib/seo/owner-flags";
 
 // display "optional": لا تبديل للخط بعد أول رسم، فلا إزاحة تخطيط (CLS كان 0.224 في صفحات الأحياء
 // و0.141 في الرئيسية عند وصول Cairo). إن لم يصل الخط خلال ~100ms في الزيارة الأولى تبقى الصفحة
@@ -24,13 +27,18 @@ export const viewport: Viewport = {
   themeColor: "#f97316",
 };
 
+// [OWNER D11] لا عنوان شارع ولا دبوس خريطة ولا رمز بريدي حتى يعطي المالك قيمها: الإحداثيات القديمة
+// (31.4175, 31.8144 / 34511) تشير إلى دمياط القديمة. geo.region = EG-DT (محافظة دمياط).
+const DEFAULT_DESCRIPTION =
+  "عقارات للبيع في دمياط الجديدة والمنصورة الجديدة: شقق وفيلات وأراضٍ ومحلات بأسعارها الفعلية، وجدول سعر المتر لكل حي، وإعلانات موثّقة لإعادة بيع أراضي بيت الوطن.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://eltaiseer.com"),
   title: {
     default: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة",
     template: "%s | التيسير للعقارات",
   },
-  description: "شقق وفيلات وأراضي ومحلات للبيع في دمياط الجديدة والمنصورة الجديدة بأسعار تنافسية وتقسيط حتى 10 سنوات. تصفح أكثر من 100 عقار مع التيسير للعقارات.",
+  description: DEFAULT_DESCRIPTION,
   keywords: [
     "عقارات دمياط الجديدة",
     "شقق للبيع في دمياط الجديدة",
@@ -74,9 +82,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ar_EG",
     url: "https://eltaiseer.com/",
-    siteName: "التيسير للعقارات",
+    siteName: SITE_NAME,
     title: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة",
-    description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع - شقق، فيلات، دوبلكس، محلات تجارية، أراضي. أسعار تنافسية وتقسيط مريح.",
+    description: DEFAULT_DESCRIPTION,
     images: [
       {
         url: "/og-image.jpg",
@@ -89,9 +97,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "التيسير للعقارات | عقارات دمياط الجديدة والمنصورة الجديدة للبيع",
-    description: "شقق، فيلات، دوبلكس، أراضي للبيع في دمياط الجديدة والمنصورة الجديدة. أسعار تنافسية وتقسيط مريح.",
+    description: DEFAULT_DESCRIPTION,
     images: ["/og-image.jpg"],
-    creator: "@eltaiseer",
   },
   robots: {
     index: true,
@@ -115,95 +122,104 @@ export const metadata: Metadata = {
   classification: "Business",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  // كيان واحد موحّد: RealEstateAgent هو نوع فرعي من LocalBusiness — لا داعي لكيانين منفصلين
-  const organizationSchema = {
-    "@context": "https://schema.org",
+// رسم الموقع (spec-final A1.2): كيان واحد لكل @id، وقيم الكيانات المشتركة من schema-registry.json.
+// ليس هنا #program-beit-al-watan ولا #phase-11 (صفحاتهما على المنصة لم تُطلق)، ولا SearchAction
+// (أوقفته جوجل في نوفمبر 2024 والبحث في /properties/ يتم في المتصفح).
+const CITY_ND = cityId("new-damietta");
+const CITY_NM = cityId("new-mansoura");
+const office = D11_OFFICE;
+const SITE_GRAPH = siteGraph(
+  node(ID.organization, {
     "@type": "RealEstateAgent",
-    "@id": "https://eltaiseer.com/#organization",
-    name: "التيسير للعقارات",
-    alternateName: "El Taiseer Real Estate",
-    description: "شركة التيسير للعقارات - أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع. شقق، فيلات، دوبلكس، محلات تجارية، أراضي بأسعار تنافسية.",
-    url: "https://eltaiseer.com/",
-    logo: "https://eltaiseer.com/logo.png",
-    image: "https://eltaiseer.com/logo.png",
+    image: ref(ID.logo),
+    description:
+      "وسيط عقاري في دمياط الجديدة والمنصورة الجديدة يعرض عقارات للبيع في المدينتين، ويقدم وساطة موثّقة لإعادة بيع أراضي بيت الوطن بالتنازل الرسمي، ويدير أداة «التيسير — الحجز الذكي» المجانية للحاجزين.",
     telephone: "+201500775974",
+    email: "info@eltaiseer.com",
     address: {
       "@type": "PostalAddress",
+      ...(office ? { streetAddress: office.streetAddress, ...(office.postalCode ? { postalCode: office.postalCode } : {}) } : {}),
       addressLocality: "دمياط الجديدة",
-      addressRegion: "دمياط",
-      postalCode: "34511",
+      addressRegion: "محافظة دمياط",
       addressCountry: "EG",
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 31.4175,
-      longitude: 31.8144,
-    },
-    hasMap: "https://maps.google.com/?q=31.4175,31.8144",
+    ...(office?.geo ? { geo: { "@type": "GeoCoordinates", ...office.geo } } : {}),
+    ...(office?.hasMap ? { hasMap: office.hasMap } : {}),
+    ...(office?.foundingDate ? { foundingDate: office.foundingDate } : {}),
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
       opens: "09:00",
       closes: "21:00",
     },
-    areaServed: [
-      { "@type": "City", name: "دمياط الجديدة" },
-      { "@type": "City", name: "المنصورة الجديدة" }
+    areaServed: [ref(CITY_ND), ref(CITY_NM)],
+    knowsAbout: [
+      "بيت الوطن (برنامج أراضي المصريين بالخارج)",
+      "المرحلة 11 من بيت الوطن",
+      "عقارات دمياط الجديدة",
+      "عقارات المنصورة الجديدة",
+      "إعادة بيع أراضي بيت الوطن بالتنازل",
+      "التنازل عن أراضي بيت الوطن",
     ],
+    makesOffer: [
+      { "@type": "Offer", itemOffered: ref(ID.serviceResale) },
+      { "@type": "Offer", itemOffered: ref(ID.serviceValuation) },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "وساطة بيع العقارات في دمياط الجديدة والمنصورة الجديدة",
+          areaServed: [ref(CITY_ND), ref(CITY_NM)],
+        },
+      },
+    ],
+    brand: ref(ID.brand),
     contactPoint: {
       "@type": "ContactPoint",
       telephone: "+201500775974",
       contactType: "sales",
       availableLanguage: ["Arabic"],
+      url: "https://wa.me/201500775974",
     },
-    sameAs: [
-      "https://wa.me/201500775974",
-    ],
-    priceRange: "$$",
-    paymentAccepted: "Cash, Bank Transfer",
-    currenciesAccepted: "EGP",
-    foundingDate: "2024",
-    numberOfEmployees: { "@type": "QuantitativeValue", value: "5-10" },
-    knowsAbout: ["عقارات دمياط الجديدة", "عقارات المنصورة الجديدة", "بيع شقق", "بيع فيلات", "بيع أراضي"],
-  };
+  }),
+  node(ID.logo, { caption: "شعار التيسير" }),
+  node(ID.website, {
+    description:
+      "عقارات للبيع في دمياط الجديدة والمنصورة الجديدة، وإعلانات موثّقة لإعادة بيع أراضي بيت الوطن، ودليل مستقل لبيت الوطن.",
+    publisher: ORG,
+    inLanguage: IN_LANGUAGE,
+  }),
+  node(ID.brand, { alternateName: ["الحجز الذكي", "التيسير بيت الوطن"] }),
+  node(ID.serviceResale),
+  node(ID.serviceValuation),
+  // geo = Wikidata P625 (أول قيمة)، جُلبت 29/9/2026 — مصدر إحداثيات واحد لكل مدينة
+  node(CITY_ND, {
+    alternateName: "New Damietta",
+    containedInPlace: ref(`${SITE}/#gov-damietta`),
+    geo: { "@type": "GeoCoordinates", latitude: 31.4368, longitude: 31.667 },
+  }),
+  node(CITY_NM, {
+    alternateName: "New Mansoura",
+    containedInPlace: ref(`${SITE}/#gov-dakahlia`),
+    geo: { "@type": "GeoCoordinates", latitude: 31.47969, longitude: 31.43267 },
+  }),
+  node(`${SITE}/#gov-damietta`),
+  node(`${SITE}/#gov-dakahlia`)
+);
 
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": "https://eltaiseer.com/#website",
-    url: "https://eltaiseer.com/",
-    name: "التيسير للعقارات",
-    description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع",
-    publisher: { "@id": "https://eltaiseer.com/#organization" },
-    inLanguage: "ar-EG",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://eltaiseer.com/properties?search={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  };
-
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="ar" dir="rtl">
       <head>
         <link rel="alternate" type="application/rss+xml" title="مدونة التيسير للعقارات" href="/feed.xml" />
-        <meta name="geo.region" content="EG-DK" />
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+        <meta name="geo.region" content="EG-DT" />
         <meta name="geo.placename" content="دمياط الجديدة" />
-        <meta name="geo.position" content="31.4175;31.8144" />
-        <meta name="ICBM" content="31.4175, 31.8144" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-        />
+        <JsonLd graph={SITE_GRAPH} />
       </head>
       <body
         className={`${cairo.variable} font-sans antialiased bg-gray-50`}
