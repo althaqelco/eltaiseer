@@ -5,33 +5,53 @@ export interface BreadcrumbItem {
   label: string;
   href?: string;
   icon?: React.ReactNode;
+  /** الاسم الكامل في JSON-LD حين يُختصر label في الواجهة */
+  schemaLabel?: string;
 }
 
 interface BreadcrumbProps {
   items: BreadcrumbItem[];
   className?: string;
+  /** مسار الصفحة الحالية: يعطي القائمة @id ثابتًا ({url}#breadcrumb) ورابطًا للعنصر الأخير */
+  path?: string;
+  /** false = واجهة فقط؛ الصفحة تضع BreadcrumbList في رسمها (lib/seo/schema breadcrumbNode) */
+  schema?: boolean;
 }
 
-export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
-  // Schema.org BreadcrumbList للـ SEO
+// نسخة محلية من abs() في lib/seo/schema: هذا المكوّن يُستورد من مكوّنات عميل، فلا نجرّ السجل إلى حزمة المتصفح
+const SITE = "https://eltaiseer.com";
+function absUrl(p: string): string {
+  const u = p.startsWith("http") ? p : SITE + (p.startsWith("/") ? p : `/${p}`);
+  return u.endsWith("/") ? u : `${u}/`;
+}
+
+export function Breadcrumb({ items, className = "", path, schema = true }: BreadcrumbProps) {
+  // Schema.org BreadcrumbList للـ SEO — بلا اختصار للأسماء، وروابط بشرطة أخيرة
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": items.map((item, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "name": item.label,
-      ...(item.href && { "item": `https://eltaiseer.com${item.href}` }),
-    })),
+    ...(path ? { "@id": `${absUrl(path)}#breadcrumb` } : {}),
+    "itemListElement": items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      const href = item.href || (isLast ? path : undefined);
+      return {
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": item.schemaLabel || item.label,
+        ...(href ? { "item": absUrl(href) } : {}),
+      };
+    }),
   };
 
   return (
     <>
       {/* Schema.org JSON-LD للـ SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
-      />
+      {schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData).replace(/</g, "\\u003c") }}
+        />
+      )}
       
       {/* Breadcrumb UI */}
       <nav 
@@ -192,7 +212,10 @@ export function getPropertyBreadcrumb(
     { label: "العقارات", href: "/properties" },
     { label: cityName || "دمياط الجديدة", href: `/${citySlug}` },
     { label: districtName, href: `/${citySlug}/${finalDistrictSlug}` },
-    { label: propertyTitle.length > 30 ? propertyTitle.substring(0, 30) + "..." : propertyTitle },
+    {
+      label: propertyTitle.length > 30 ? propertyTitle.substring(0, 30) + "..." : propertyTitle,
+      schemaLabel: propertyTitle,
+    },
   ];
 }
 
@@ -201,6 +224,6 @@ export function getBlogPostBreadcrumb(postTitle: string): BreadcrumbItem[] {
   return [
     { label: "الرئيسية", href: "/" },
     { label: "المدونة", href: "/blog" },
-    { label: postTitle.length > 40 ? postTitle.substring(0, 40) + "..." : postTitle },
+    { label: postTitle.length > 40 ? postTitle.substring(0, 40) + "..." : postTitle, schemaLabel: postTitle },
   ];
 }

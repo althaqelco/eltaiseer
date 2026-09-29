@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { WhyUsSection } from "@/components/WhyUsSection";
-import { HomeFaqSection } from "@/components/HomeFaqSection";
 import { PropertyCard } from "@/components/PropertyCard";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Footer } from "@/components/Footer";
@@ -14,7 +13,14 @@ import { Button } from "@/components/ui/button";
 import { LayoutGrid, List, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export default function HomeClient({ initialProperties = [] }: { initialProperties?: Property[] }) {
+// faqSlot: قسم الأسئلة يُبنى في page.tsx (مكوّن خادم) ويُمرَّر هنا — لا محتوى أسئلة في حزمة المتصفح
+export default function HomeClient({
+  initialProperties = [],
+  faqSlot,
+}: {
+  initialProperties?: Property[];
+  faqSlot?: React.ReactNode;
+}) {
   const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -160,8 +166,8 @@ export default function HomeClient({ initialProperties = [] }: { initialProperti
       
       <HeroSection 
         onSearch={handleHeroSearch} 
-        totalProperties={properties.length}
-        totalDistricts={new Set(properties.map(p => p.location.district)).size}
+        totalProperties={properties.filter((p) => p.status !== "تم البيع").length}
+        totalDistricts={new Set(properties.filter((p) => p.status !== "تم البيع").map((p) => p.location.district)).size}
       />
 
 
@@ -372,8 +378,8 @@ export default function HomeClient({ initialProperties = [] }: { initialProperti
       {/* Why Us Section - Before Footer */}
       <WhyUsSection />
 
-      {/* FAQ - visible content matching the FAQPage schema */}
-      <HomeFaqSection />
+      {/* أسئلة شائعة: روابط للصفحات المالكة (من الخادم) */}
+      {faqSlot}
 
       <Footer />
     </div>

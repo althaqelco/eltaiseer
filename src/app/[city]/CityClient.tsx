@@ -19,8 +19,6 @@ import {
 import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictSlug } from "@/lib/districtSlugs";
-import { CITY_FAQ } from "@/lib/cityFaq";
-import { buildFaqSchema } from "@/lib/homeFaq";
 import { ListingPagination } from "@/components/ListingPagination";
 import { CITY_PAGE_SIZE as ITEMS_PER_PAGE } from "@/lib/pagination";
 
@@ -31,9 +29,11 @@ interface CityClientProps {
   initialProperties: Property[];
   // رقم الصفحة من الرابط (?page=N) — يُعرض من الخادم
   page?: number;
+  // أسئلة المدينة وروابطها تُبنى في الخادم (CityListing) — لا نص أسئلة في حزمة المتصفح
+  answersSlot?: React.ReactNode;
 }
 
-export default function CityClient({ citySlug, initialProperties, page = 1 }: CityClientProps) {
+export default function CityClient({ citySlug, initialProperties, page = 1, answersSlot }: CityClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const cityData = CITY_DATA[cityId];
@@ -128,7 +128,7 @@ export default function CityClient({ citySlug, initialProperties, page = 1 }: Ci
       <Header />
 
       {/* Breadcrumb */}
-      <Breadcrumb items={getCityBreadcrumb(city.nameAr)} />
+      <Breadcrumb items={getCityBreadcrumb(city.nameAr)} schema={false} />
 
       {/* Hero */}
       <div className={`bg-gradient-to-l from-slate-900 via-slate-800 ${isNewMansoura ? "to-emerald-900" : "to-orange-900"} py-12`}>
@@ -337,29 +337,8 @@ export default function CityClient({ citySlug, initialProperties, page = 1 }: Ci
           </div>
         </div>
 
-        {/* الأسئلة الشائعة — محتوى مرئي مطابق للـ schema */}
-        {(CITY_FAQ[citySlug] || []).length > 0 && (
-          <section className="mt-8 bg-white rounded-xl p-6 shadow-sm" aria-labelledby="city-faq-heading">
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(CITY_FAQ[citySlug])) }}
-            />
-            <h2 id="city-faq-heading" className="text-2xl font-bold text-gray-800 mb-4">
-              أسئلة شائعة عن عقارات {city.nameAr}
-            </h2>
-            <div className="space-y-3">
-              {CITY_FAQ[citySlug].map((item) => (
-                <details key={item.question} className="group bg-gray-50 rounded-lg border border-gray-200 p-4">
-                  <summary className="cursor-pointer list-none font-semibold text-gray-800 flex items-center justify-between">
-                    <h3 className="text-base font-semibold">{item.question}</h3>
-                    <span className="text-orange-500 transition-transform group-open:rotate-180">▼</span>
-                  </summary>
-                  <p className="mt-3 text-gray-600 leading-relaxed">{item.answer}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        )}
+        {/* الأسئلة الشائعة وروابط الأسئلة التي تملكها صفحات أخرى (من الخادم) */}
+        {answersSlot}
       </main>
 
       <Footer />

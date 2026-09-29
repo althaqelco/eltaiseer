@@ -39,7 +39,7 @@ const PROPERTY_TYPE_OPTIONS = [
   { value: "روف", label: "روف" },
 ];
 
-export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 40 }: HeroSectionProps) {
+export function HeroSection({ onSearch, totalProperties = 0, totalDistricts = 0 }: HeroSectionProps) {
   const [selectedCity, setSelectedCity] = useState<CityId | "all">("all");
   const [selectedDistrict, setSelectedDistrict] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
@@ -87,7 +87,7 @@ export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 
             التيسير <span className="text-orange-400">للعقارات</span>
           </h1>
           <p className="hero-description text-sm sm:text-base md:text-xl text-gray-300 max-w-3xl mx-auto px-2">
-            منصتك الأولى للبحث عن عقارات للبيع في{" "}
+            عقارات للبيع بأسعارها الفعلية في{" "}
             <span className="text-orange-400 font-semibold">دمياط الجديدة</span>
             {" "}و{" "}
             <span className="text-emerald-400 font-semibold">المنصورة الجديدة</span>
@@ -207,37 +207,35 @@ export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 
           </div>
         </div>
 
-        {/* Stats */}
+        {/* Stats — أرقام محسوبة من العروض الحالية فقط ([OWNER D11]: لا «سنوات خبرة» قبل تأكيد سنة التأسيس) */}
         <div className="flex justify-center gap-4 sm:gap-6 md:gap-12 mt-6 md:mt-12 flex-wrap">
           <div className="text-center">
             <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
               2
             </p>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base">مدينة</p>
+            <p className="text-gray-300 text-xs sm:text-sm md:text-base">مدينتان</p>
           </div>
+          {totalProperties > 0 && (
+            <div className="text-center">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
+                {totalProperties.toLocaleString("en-US")}
+              </p>
+              <p className="text-gray-300 text-xs sm:text-sm md:text-base">عقار معروض الآن</p>
+            </div>
+          )}
+          {totalDistricts > 0 && (
+            <div className="text-center">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
+                {totalDistricts.toLocaleString("en-US")}
+              </p>
+              <p className="text-gray-300 text-xs sm:text-sm md:text-base">منطقة فيها عروض</p>
+            </div>
+          )}
           <div className="text-center">
             <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-              {totalProperties}+
+              مجاني
             </p>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base">عقار متاح</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-              {totalDistricts}+
-            </p>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base">منطقة</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-              5+
-            </p>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base">سنوات خبرة</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-400">
-              100%
-            </p>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base">موثوق</p>
+            <p className="text-gray-300 text-xs sm:text-sm md:text-base">تقييم عقاري</p>
           </div>
         </div>
       </div>

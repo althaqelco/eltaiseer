@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ROBOTS_INDEX } from "@/lib/seo/robots";
+import { SITE_NAME } from "@/lib/seo/owner-flags";
 
 type Props = {
   params: Promise<{ city: string }>;
@@ -9,7 +11,7 @@ type Props = {
 const cityMetadata: Record<string, { title: string; description: string; keywords: string[] }> = {
   "new-damietta": {
     title: "عقارات دمياط الجديدة للبيع | شقق وفيلات وأراضي 2026",
-    description: "شقق وفيلات وأراضي للبيع في جميع أحياء دمياط الجديدة — الحي الأول للسادس ومشاريع جنة ودار مصر وسكن مصر. أسعار تبدأ من 500,000 جنيه وتقسيط مريح.",
+    description: "شقق وفيلات وأراضٍ للبيع في أحياء دمياط الجديدة: الحي الأول إلى السادس، وجنة ودار مصر وسكن مصر وبيت الوطن، بأسعارها الفعلية وروابط لوسيط سعر المتر لكل حي.",
     keywords: [
       "عقارات دمياط الجديدة",
       "شقق للبيع في دمياط الجديدة",
@@ -31,7 +33,7 @@ const cityMetadata: Record<string, { title: string; description: string; keyword
   },
   "new-mansoura": {
     title: "عقارات المنصورة الجديدة للبيع | شقق وفيلات 2026",
-    description: "شقق وفيلات للبيع في المنصورة الجديدة — R1 حتى R7 وحي الفيلات وداون تاون وسكن لكل المصريين. مدينة الجيل الرابع بأسعار استثمارية وتقسيط مريح.",
+    description: "شقق وفيلات للبيع في المنصورة الجديدة: R1 حتى R7 وحي الفيلات وداون تاون وسكن لكل المصريين، بأسعارها الفعلية في مدينة الجيل الرابع على البحر المتوسط.",
     keywords: [
       "عقارات المنصورة الجديدة",
       "شقق للبيع في المنصورة الجديدة",
@@ -46,7 +48,6 @@ const cityMetadata: Record<string, { title: string; description: string; keyword
       "دار مصر المنصورة الجديدة",
       "جنة المنصورة الجديدة",
       "أسعار الشقق المنصورة الجديدة 2026",
-      "الاستثمار في المنصورة الجديدة",
       "apartments for sale new mansoura",
       "real estate new mansoura egypt",
     ],
@@ -75,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://eltaiseer.com/${citySlug}/`,
       type: "website",
       locale: "ar_EG",
-      siteName: "التيسير للعقارات",
+      siteName: SITE_NAME,
       images: [{ url: ogImage, width: 1200, height: 630, alt: meta.title }],
     },
     twitter: {
@@ -87,10 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `https://eltaiseer.com/${citySlug}/`,
     },
-    robots: {
-      index: true,
-      follow: true,
-    },
+    robots: ROBOTS_INDEX,
   };
 }
 
@@ -101,36 +99,8 @@ export default async function CityLayout({ children, params }: { children: React
   // فيخرج 404 حقيقي لكل ما تحت مدينة غير معروفة، بما فيه /x/y/id
   if (!cityMetadata[city]) notFound();
 
-  const cityName = city === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
-  const placeSchema = {
-    "@context": "https://schema.org",
-    "@type": "City",
-    name: cityName,
-    url: `https://eltaiseer.com/${city === "new-mansoura" ? "new-mansoura" : "new-damietta"}/`,
-    // ربط الكيان بمصادر موثوقة — يساعد محركات البحث ووكلاء AI على تمييز المدينة
-    sameAs:
-      city === "new-mansoura"
-        ? [
-            "https://ar.wikipedia.org/wiki/المنصورة_الجديدة",
-            "https://en.wikipedia.org/wiki/New_Mansoura",
-          ]
-        : [
-            "https://ar.wikipedia.org/wiki/دمياط_الجديدة",
-            "https://en.wikipedia.org/wiki/New_Damietta",
-          ],
-    containedInPlace: {
-      "@type": "Country",
-      name: "مصر",
-    },
-  };
-
+  // كيان المدينة معرّف مرة واحدة في رسم الموقع (app/layout.tsx، #city-{slug})، وصفحة المدينة تشير إليه
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(placeSchema) }}
-      />
-      {children}
-    </>
+    <>{children}</>
   );
 }

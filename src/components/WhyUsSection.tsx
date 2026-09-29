@@ -3,29 +3,29 @@ import { Shield, Users, Clock, Award, Headphones, CheckCircle, Sparkles, Target,
 const features = [
   {
     icon: Shield,
-    title: "ضمان الموثوقية",
-    description: "جميع العقارات المعروضة موثقة ومتحقق منها لضمان حقوقك",
+    title: "بيانات واضحة لكل عقار",
+    description: "السعر والمساحة والحي والتشطيب وطريقة الدفع معروضة في صفحة كل عقار",
     gradient: "from-blue-500 to-blue-600",
     shadowColor: "shadow-blue-500/25",
   },
   {
     icon: Users,
-    title: "فريق متخصص",
-    description: "فريق من الخبراء العقاريين بخبرة تتجاوز 5 سنوات في سوق دمياط الجديدة",
+    title: "فريق في دمياط الجديدة",
+    description: "فريق التيسير للعقارات يتابع العروض في دمياط الجديدة والمنصورة الجديدة ويرد على استفساراتك",
     gradient: "from-orange-500 to-red-500",
     shadowColor: "shadow-orange-500/25",
   },
   {
     icon: Clock,
     title: "توفير الوقت",
-    description: "نختصر عليك عناء البحث بتقديم أفضل الخيارات المناسبة لاحتياجاتك",
+    description: "صفِّ العروض بالمدينة والحي ونوع العقار والسعر وطريقة الدفع",
     gradient: "from-emerald-500 to-teal-500",
     shadowColor: "shadow-emerald-500/25",
   },
   {
     icon: Award,
-    title: "أفضل الأسعار",
-    description: "نضمن لك الحصول على أفضل سعر في السوق مع خيارات دفع مرنة",
+    title: "أسعار معلنة",
+    description: "كل عقار بسعره المطلوب، ووسيط سعر المتر لكل حي في صفحة أسعار العقارات",
     gradient: "from-purple-500 to-violet-600",
     shadowColor: "shadow-purple-500/25",
   },
@@ -39,7 +39,7 @@ const features = [
   {
     icon: Target,
     title: "دقة في الاختيار",
-    description: "نساعدك في اختيار العقار المثالي بناءً على احتياجاتك وميزانيتك",
+    description: "نساعدك في المقارنة بين العروض حسب احتياجاتك وميزانيتك",
     gradient: "from-rose-500 to-pink-600",
     shadowColor: "shadow-rose-500/25",
   },
@@ -73,13 +73,13 @@ export function WhyUsSection() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
             <Sparkles className="h-4 w-4 text-orange-400" />
-            <span className="text-orange-300 text-sm font-medium">شريكك الموثوق</span>
+            <span className="text-orange-300 text-sm font-medium">وسيط عقاري في المدينتين</span>
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
             لماذا <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">التيسير</span> للعقارات؟
           </h2>
           <p className="text-gray-300 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            نحن شريكك الموثوق في رحلة البحث عن عقارك المثالي في دمياط الجديدة
+            وسيط عقاري يعرض عقارات للبيع في دمياط الجديدة والمنصورة الجديدة
           </p>
         </div>
 
@@ -116,19 +116,19 @@ export function WhyUsSection() {
               <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
                 <Shield className="h-5 w-5 text-white" />
               </div>
-              <span className="text-white font-medium">معاملات آمنة</span>
+              <span className="text-white font-medium">تقييم عقاري مجاني</span>
             </div>
             <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-5 py-3 border border-white/10">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-500 rounded-full flex items-center justify-center">
                 <CheckCircle className="h-5 w-5 text-white" />
               </div>
-              <span className="text-white font-medium">عقارات موثقة</span>
+              <span className="text-white font-medium">جدول أسعار لكل حي</span>
             </div>
             <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-5 py-3 border border-white/10">
               <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
                 <ThumbsUp className="h-5 w-5 text-white" />
               </div>
-              <span className="text-white font-medium">+500 عميل سعيد</span>
+              <span className="text-white font-medium">تواصل مباشر على واتساب</span>
             </div>
           </div>
         </div>

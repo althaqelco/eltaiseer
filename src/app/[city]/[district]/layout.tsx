@@ -1,5 +1,9 @@
 import { Metadata } from "next";
 import { SLUG_TO_DISTRICT, isCityDistrictSlug } from "@/lib/districtSlugs";
+import { JsonLd } from "@/components/JsonLd";
+import { ROBOTS_INDEX } from "@/lib/seo/robots";
+import { SITE_NAME } from "@/lib/seo/owner-flags";
+import { cityId, districtPlaceId, graph, node, pageUrl, ref } from "@/lib/seo/schema";
 
 type Props = {
   params: Promise<{ city: string; district: string }>;
@@ -24,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const citySlug = isNM ? "new-mansoura" : "new-damietta";
 
   const title = `عقارات ${districtName} - ${cityName} | شقق وفيلات للبيع 2026`;
-  const description = `شقق وفيلات وأراضي للبيع في ${districtName} ب${cityName}. أسعار تنافسية وتقسيط مريح. تصفح أفضل العقارات المتاحة في ${districtName}. التيسير للعقارات - شريكك الموثوق.`;
+  const description = `عقارات للبيع في ${districtName} ب${cityName}: شقق وفيلات وأراضٍ ومحلات بأسعارها الفعلية كما يعرضها البائعون، مع عدد العروض الحالية ونطاق أسعارها. التيسير للعقارات.`;
 
   const keywords = [
     `عقارات ${districtName}`,
@@ -49,20 +53,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://eltaiseer.com/${citySlug}/${district}/`,
       type: "website",
       locale: "ar_EG",
-      siteName: "التيسير للعقارات",
+      siteName: SITE_NAME,
+      images: [{ url: `/og-${citySlug}.jpg`, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [`/og-${citySlug}.jpg`],
     },
     alternates: {
       canonical: `https://eltaiseer.com/${citySlug}/${district}/`,
     },
-    robots: {
-      index: true,
-      follow: true,
-    },
+    robots: ROBOTS_INDEX,
   };
 }
 
@@ -81,31 +84,26 @@ export default async function DistrictLayout({ children, params }: { children: R
   const cityName = isNM ? "المنصورة الجديدة" : "دمياط الجديدة";
   const citySlug = isNM ? "new-mansoura" : "new-damietta";
 
-  const neighborhoodSchema = {
-    "@context": "https://schema.org",
-    "@type": "Place",
-    additionalType: "https://schema.org/Neighborhood",
-    name: districtName,
-    url: `https://eltaiseer.com/${citySlug}/${district}/`,
-    description: `${districtName} - منطقة سكنية في ${cityName}. تصفح شقق وفيلات وأراضي للبيع في ${districtName} بأسعار تنافسية.`,
-    containedInPlace: {
-      "@type": "City",
-      name: cityName,
-      containedInPlace: {
-        "@type": "Country",
-        name: "مصر",
-      },
-    },
-  };
-
-
+  // كيان الحي بمعرّف ثابت، داخل كيان المدينة المعرّف في رسم الموقع. أحياء «بيت الوطن» أسماء أماكن سكنية
+  // قائمة (ليست البرنامج) ولها قالبها في السجل. يُعرَّف هنا لأن صفحات العقارات تحت الحي تشير إليه أيضًا.
+  const path = `/${citySlug}/${district}/`;
+  const placeGraph = graph(
+    node(districtPlaceId(citySlug, district), {
+      "@type": "Place",
+      additionalType: "https://schema.org/Neighborhood",
+      name: `${districtName}، ${cityName}`,
+      url: pageUrl(path),
+      description: `${districtName}: منطقة في ${cityName}، وفيها عقارات معروضة للبيع على التيسير.`,
+      containedInPlace: ref(cityId(citySlug)),
+      ...(district.startsWith("beit-al-watan-") && citySlug === "new-damietta"
+        ? { relatedLink: ["https://eltaiseer.com/beit-al-watan-for-sale/new-damietta/"] }
+        : {}),
+    })
+  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(neighborhoodSchema) }}
-      />
+      <JsonLd graph={placeGraph} />
       {children}
     </>
   );

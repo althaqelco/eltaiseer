@@ -25,7 +25,8 @@ export interface DistrictStats {
   count: number;
   minPrice: number;
   maxPrice: number;
-  avgPerSqm: number | null;
+  /** وسيط سعر متر الشقق في الحي (3 شقق على الأقل)، وإلا null */
+  apartmentMedianPpm: { value: number; n: number } | null;
   types: string[];
 }
 
@@ -35,9 +36,11 @@ interface DistrictClientProps {
   initialProperties: Property[];
   districtStats?: DistrictStats | null;
   editorial?: DistrictEditorial | null;
+  // «آخر تحديث للعروض» يُبنى في الخادم (page.tsx) بتاريخ يطابق dateModified في JSON-LD
+  freshnessSlot?: React.ReactNode;
 }
 
-export default function DistrictClient({ citySlug, districtSlug, initialProperties, districtStats, editorial }: DistrictClientProps) {
+export default function DistrictClient({ citySlug, districtSlug, initialProperties, districtStats, editorial, freshnessSlot }: DistrictClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const districtName = SLUG_TO_DISTRICT[districtSlug] || decodeURIComponent(districtSlug).replace(/-/g, " ");
@@ -65,7 +68,7 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
       <Header />
 
       {/* Breadcrumb */}
-      <Breadcrumb items={getDistrictBreadcrumb(districtName, city?.nameAr)} />
+      <Breadcrumb items={getDistrictBreadcrumb(districtName, city?.nameAr)} schema={false} />
 
       {/* Hero */}
       <div className={`bg-gradient-to-l from-slate-900 via-slate-800 ${isNM ? "to-emerald-900" : "to-orange-900"} py-12`}>
@@ -158,18 +161,12 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
                       ✓ {tag}
                     </span>
                   ))}
-                  {editorial.pricePerSqm && (
-                    <span className="text-sm px-3 py-1.5 rounded-full bg-gray-100 text-gray-700">
-                      سعر المتر: {editorial.pricePerSqm}
-                    </span>
-                  )}
                 </div>
               </>
             ) : (
               <p>
-                اكتشف أفضل الفرص العقارية في {districtName} ب{city?.nameAr}. 
-                نوفر لك مجموعة متنوعة من العقارات تشمل الشقق السكنية والفيلات والدوبلكس 
-                بأسعار تنافسية وخيارات دفع مرنة.
+                عقارات للبيع في {districtName} ب{city?.nameAr}: العروض الحالية بأسعارها كما يعرضها
+                البائعون، ولكل عقار صفحة بمساحته وتشطيبه وطريقة الدفع.
               </p>
             )}
             {districtStats && (
@@ -184,12 +181,14 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
                   </p>
                   <p className="text-sm text-gray-500">نطاق الأسعار (جنيه)</p>
                 </div>
-                {districtStats.avgPerSqm && (
+                {districtStats.apartmentMedianPpm && (
                   <div className="bg-gray-50 rounded-lg p-4 text-center">
                     <p className={`text-2xl font-bold text-${themeColor}-600`}>
-                      {districtStats.avgPerSqm.toLocaleString("ar-EG")}
+                      {districtStats.apartmentMedianPpm.value.toLocaleString("en-US")}
                     </p>
-                    <p className="text-sm text-gray-500">متوسط سعر المتر (جنيه)</p>
+                    <p className="text-sm text-gray-500">
+                      وسيط سعر متر الشقق بالجنيه (عدد الشقق: {districtStats.apartmentMedianPpm.n.toLocaleString("en-US")})
+                    </p>
                   </div>
                 )}
                 <div className="bg-gray-50 rounded-lg p-4 text-center">
@@ -201,18 +200,10 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
               </div>
             )}
 
-            <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">
-              لماذا {districtName}؟
-            </h3>
-            <ul className="list-disc list-inside space-y-2">
-              <li>موقع استراتيجي في قلب {city?.nameAr}</li>
-              <li>قريب من الخدمات والمرافق الأساسية</li>
-              <li>بنية تحتية متطورة وشوارع واسعة</li>
-              <li>مجتمع آمن ومناسب للعائلات</li>
-              {isNM && <li>مدينة الجيل الرابع بتصميم عصري</li>}
-            </ul>
           </div>
         </div>
+
+        {freshnessSlot}
 
         {/* روابط المناطق المجاورة — ربط داخلي دلالي بين أحياء نفس الفئة */}
         {category && category.districts.length > 1 && (

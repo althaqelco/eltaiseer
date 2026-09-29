@@ -6,9 +6,13 @@ import {
   serializeProperties,
   filterByCity,
   filterByDistrict,
-  buildItemListSchema,
 } from "@/lib/serverProperties";
-import { SLUG_TO_DISTRICT, getCityDistrictSlugs, isCityDistrictSlug } from "@/lib/districtSlugs";
+import { SLUG_TO_DISTRICT, getCityDistrictSlugs, getPropertyUrl, isCityDistrictSlug } from "@/lib/districtSlugs";
+import { JsonLd } from "@/components/JsonLd";
+import { Freshness } from "@/components/Freshness";
+import { computePriceStats, toPriceInput } from "@/lib/seo/prices";
+import { breadcrumbNode, districtPlaceId, graphWith, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { cairoIso, maxIso } from "@/lib/seo/time";
 import { getDistrictEditorial } from "@/lib/districtContent";
 import { isAvailable } from "@/lib/listingCategories";
 import { isDistrictIndexable, NOINDEX_FOLLOW } from "@/lib/indexRules";
@@ -36,7 +40,7 @@ async function loadDistrict(city: string, district: string) {
   const districtName = SLUG_TO_DISTRICT[district];
   const districtProperties = filterByDistrict(filterByCity(all, city), districtName);
   const available = districtProperties.filter(isAvailable);
-  return { ok, districtName, districtProperties, available };
+  return { ok, all, districtName, districtProperties, available };
 }
 
 // حي بلا عروض متاحة = noindex,follow (القاعدة وشرحها في lib/indexRules.ts)؛
@@ -59,36 +63,56 @@ export default async function DistrictPage({ params }: Props) {
     notFound();
   }
 
-  const { districtName, districtProperties, available } = await loadDistrict(city, district);
+  const { all, districtName, districtProperties, available } = await loadDistrict(city, district);
+  const cityName = city === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
 
-  // إحصاءات حية تجعل محتوى كل حي فريداً ومحدثاً تلقائياً (بدل النص المكرر في 53 صفحة)
+  // إحصاءات حية تجعل محتوى كل حي فريداً ومحدثاً تلقائياً. سعر المتر = وسيط الشقق في الحي من 3 عروض فأكثر
+  // (نفس حساب /prices/): المتوسط البسيط القديم خلط الشقق بالأراضي والمحلات وضخّمته قيمة شاذة واحدة.
   const prices = available.map((p) => p.price).filter((n) => n > 0);
-  const perSqm = available
-    .filter((p) => p.price > 0 && p.details?.area_sqm > 0)
-    .map((p) => Math.round(p.price / p.details.area_sqm));
+  const aptRow = computePriceStats(all.map(toPriceInput)).rows.find(
+    (r) => r.cityId === city && r.district === districtName.trim() && r.group === "apartment"
+  );
   const districtStats =
     available.length > 0
       ? {
           count: available.length,
-          minPrice: Math.min(...prices),
-          maxPrice: Math.max(...prices),
-          avgPerSqm: perSqm.length
-            ? Math.round(perSqm.reduce((a, b) => a + b, 0) / perSqm.length)
-            : null,
+          minPrice: prices.length ? Math.min(...prices) : 0,
+          maxPrice: prices.length ? Math.max(...prices) : 0,
+          apartmentMedianPpm: aptRow ? { value: aptRow.medianPpm, n: aptRow.n } : null,
           types: Array.from(new Set(available.map((p) => p.type))),
         }
       : null;
 
-  const itemListSchema = buildItemListSchema(available, `عقارات للبيع في ${districtName}`);
+  const path = `/${city}/${district}/`;
+  const dataModified = maxIso(available.map((p) => p.updatedAt || p.createdAt));
+  const placeId = districtPlaceId(city, district);
+  const pageGraph = graphWith(
+    [placeId], // معرّف في layout الحي
+    webPage({
+      path,
+      type: "CollectionPage",
+      name: `عقارات ${districtName} - ${cityName}`,
+      about: ref(placeId),
+      mainEntity: available.length > 0 ? ref(`${pageUrl(path)}#itemlist`) : undefined,
+      dateModified: dataModified ? cairoIso(dataModified) : undefined,
+    }),
+    available.length > 0
+      ? itemListNode(path, available.slice(0, 30).map((p) => getPropertyUrl(p)), {
+          name: `عقارات للبيع في ${districtName}`,
+          total: available.length,
+        })
+      : null,
+    breadcrumbNode(path, [
+      { name: "الرئيسية", path: "/" },
+      { name: "العقارات", path: "/properties/" },
+      { name: cityName, path: `/${city}/` },
+      { name: `عقارات ${districtName}`, path },
+    ])
+  );
 
   return (
     <>
-      {districtProperties.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-        />
-      )}
+      <JsonLd graph={pageGraph} />
       {/* كل عروض الحي في HTML الخادم (بلا ترقيم) — كل إعلان له رابط يزحف إليه من صفحة حيه */}
       <DistrictClient
         citySlug={city}
@@ -96,6 +120,9 @@ export default async function DistrictPage({ params }: Props) {
         initialProperties={serializeProperties(districtProperties)}
         districtStats={districtStats}
         editorial={getDistrictEditorial(district)}
+        freshnessSlot={
+          <Freshness data={dataModified} dataLabel="آخر تحديث للعروض" className="freshness text-sm text-gray-500 mt-4" />
+        }
       />
     </>
   );

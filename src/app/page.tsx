@@ -1,20 +1,26 @@
 import { Metadata } from "next";
 import HomeClient from "./HomeClient";
-import { HOME_FAQ, buildFaqSchema } from "@/lib/homeFaq";
-import {
-  getPropertiesForIsr,
-  serializeProperties,
-  buildItemListSchema,
-} from "@/lib/serverProperties";
+import { HomeFaqSection } from "@/components/HomeFaqSection";
+import { JsonLd } from "@/components/JsonLd";
+import { Freshness } from "@/components/Freshness";
+import { getPropertiesForIsr, serializeProperties } from "@/lib/serverProperties";
+import { getPropertyUrl } from "@/lib/districtSlugs";
+import { ORG, graph, itemListNode, pageUrl, webPage } from "@/lib/seo/schema";
+import { cairoIso, maxIso } from "@/lib/seo/time";
+import { SITE_NAME } from "@/lib/seo/owner-flags";
 
 // ISR كل 5 دقائق — عقارات الرئيسية تظهر في HTML الخادم
 export const revalidate = 300;
 
+const TITLE = "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة 2026";
+const HOME_DESCRIPTION =
+  "عقارات للبيع في دمياط الجديدة والمنصورة الجديدة بأسعارها الفعلية: شقق وفيلات وأراضٍ ومحلات، وجدول سعر المتر لكل حي محسوب من المعروض، وإعلانات موثّقة لإعادة بيع أراضي بيت الوطن.";
+
 export const metadata: Metadata = {
   title: {
-    absolute: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة 2026",
+    absolute: TITLE,
   },
-  description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع 2026 — شقق وفيلات وأراضي بأسعار تنافسية وتقسيط حتى 10 سنوات. أكثر من 100 عقار في جميع الأحياء.",
+  description: HOME_DESCRIPTION,
   keywords: [
     "عقارات دمياط الجديدة",
     "شقق للبيع في دمياط الجديدة",
@@ -29,7 +35,6 @@ export const metadata: Metadata = {
     "شقق للبيع في المنصورة الجديدة",
     "فيلات المنصورة الجديدة",
     "أسعار الشقق في المنصورة الجديدة 2026",
-    "الاستثمار في المنصورة الجديدة",
     "التيسير للعقارات",
     "عقارات مصر",
     "real estate new damietta",
@@ -41,12 +46,12 @@ export const metadata: Metadata = {
     canonical: "https://eltaiseer.com/",
   },
   openGraph: {
-    title: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة 2026",
-    description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع 2026 - شقق، فيلات، دوبلكس، محلات تجارية، أراضي. أسعار تنافسية وتقسيط مريح.",
+    title: TITLE,
+    description: HOME_DESCRIPTION,
     url: "https://eltaiseer.com/",
     type: "website",
     locale: "ar_EG",
-    siteName: "التيسير للعقارات",
+    siteName: SITE_NAME,
     images: [
       {
         url: "/og-image.jpg",
@@ -59,47 +64,53 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "التيسير للعقارات | عقارات دمياط الجديدة والمنصورة الجديدة 2026",
-    description: "شقق، فيلات، دوبلكس، أراضي للبيع في دمياط الجديدة والمنصورة الجديدة. أسعار تنافسية وتقسيط مريح.",
+    description: HOME_DESCRIPTION,
     images: ["/og-image.jpg"],
   },
 };
 
 export default async function Home() {
-  const homepageFaqSchema = buildFaqSchema(HOME_FAQ);
   const allProperties = await getPropertiesForIsr();
-  const itemListSchema = buildItemListSchema(
-    allProperties.filter((p) => p.status !== "تم البيع"),
-    "أحدث عقارات دمياط الجديدة والمنصورة الجديدة"
-  );
+  const active = allProperties.filter((p) => p.status !== "تم البيع");
+  const dataModified = maxIso(active.map((p) => p.updatedAt || p.createdAt));
 
-  const speakableSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة",
-    "speakable": {
-      "@type": "SpeakableSpecification",
-      "cssSelector": ["h1", "h2", ".hero-description"]
-    },
-    "url": "https://eltaiseer.com/"
-  };
+  // رسم الصفحة (spec-final A1.3): بلا FAQPage ولا speakable — أسئلة الرئيسية روابط لصفحاتها المالكة
+  const listingsId = `${pageUrl("/")}#listings`;
+  const pageGraph = graph(
+    webPage({
+      path: "/",
+      name: TITLE,
+      breadcrumb: false,
+      about: ORG,
+      mainEntity: active.length > 0 ? { "@id": listingsId } : undefined,
+      dateModified: dataModified ? cairoIso(dataModified) : undefined,
+      significantLink: [pageUrl("/prices/"), pageUrl("/beit-al-watan-for-sale/")],
+    }),
+    active.length > 0
+      ? {
+          ...itemListNode("/", active.slice(0, 20).map((p) => getPropertyUrl(p)), {
+            name: "أحدث العقارات المعروضة للبيع",
+            total: active.length,
+          }),
+          "@id": listingsId,
+        }
+      : null
+  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageFaqSchema) }}
+      <JsonLd graph={pageGraph} />
+      <HomeClient
+        initialProperties={serializeProperties(allProperties)}
+        faqSlot={
+          <>
+            <div className="container mx-auto px-4">
+              <Freshness data={dataModified} dataLabel="آخر تحديث للعروض" className="freshness text-sm text-gray-500 py-3 text-center" />
+            </div>
+            <HomeFaqSection />
+          </>
+        }
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
-      />
-      {allProperties.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-        />
-      )}
-      <HomeClient initialProperties={serializeProperties(allProperties)} />
     </>
   );
 }
