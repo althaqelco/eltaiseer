@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { propertyGraph } from "@/lib/seo/property";
 import { ROBOTS_INDEX } from "@/lib/seo/robots";
 import { SITE_NAME } from "@/lib/seo/owner-flags";
-import { displayTitle, fixBrandSuffix } from "@/lib/format";
+import { displayTitle } from "@/lib/format";
 import { Property } from "@/lib/mockData";
 
 // صفحات العقارات ديناميكية - تُجلب من Firestore عند كل طلب لضمان حداثة البيانات
@@ -123,7 +123,10 @@ export default async function PropertyDetailPage({ params }: Props) {
     pageGraph = propertyGraph({
       id: property.id,
       title,
-      description: fixBrandSuffix(property.description || title, cityId).slice(0, 500),
+      // وصف وقائعي مولَّد (لا نص البائع الحر في JSON-LD): النوع والحي والمساحة والسعر
+      description: `${property.type} للبيع في ${property.location.district}، ${
+        cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة"
+      }: ${property.details.area_sqm.toLocaleString("en-US")} م²، السعر ${property.price.toLocaleString("en-US")} جنيه.`,
       type: property.type,
       cityId,
       cityName: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",

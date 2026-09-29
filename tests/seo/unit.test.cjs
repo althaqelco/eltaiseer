@@ -192,6 +192,7 @@ const FIXTURES = [
 test("lintText يلتقط كل عبارات A0.1", () => {
   for (const f of FIXTURES) assert.ok(lint.lintText(f).length > 0, f);
   assert.deepEqual(lint.lintText("قرابة ألف حجز حقيقي"), []);
+  assert.deepEqual(lint.lintText('"dateModified":"2026-01-15T16:54:48+02:00"'), []); // لا إنذار كاذب من الطوابع الزمنية
   assert.ok(lint.lintText("zone score").length > 0);
   assert.ok(lint.lintText("الأكثر حجزًا").length > 0);
 });
