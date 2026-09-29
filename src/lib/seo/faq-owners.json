@@ -1,0 +1,1178 @@
+[
+ {
+  "id": "M-IN-01",
+  "owner_url": "https://eltaiseer.com/properties/installments/",
+  "normalized_question": "هل التقسيط مباشر مع المالك ام عن طريق بنك",
+  "status": "verified"
+ },
+ {
+  "id": "M-ND-01",
+  "owner_url": "https://eltaiseer.com/new-damietta/",
+  "normalized_question": "هل دمياط الجديده مدينه مكتمله الخدمات",
+  "status": "verified"
+ },
+ {
+  "id": "M-NM-01",
+  "owner_url": "https://eltaiseer.com/new-mansoura/#distance",
+  "normalized_question": "كم تبعد المنصوره الجديده عن المنصوره",
+  "status": "verified"
+ },
+ {
+  "id": "M-NM-02",
+  "owner_url": "https://eltaiseer.com/new-mansoura/",
+  "normalized_question": "ما هي مناطق R1 الي R7 في المنصوره الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "M-NM-03",
+  "owner_url": "https://eltaiseer.com/new-mansoura/",
+  "normalized_question": "متي يتم تسليم شقق المنصوره الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "M-P11-01",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/phase-11/",
+  "normalized_question": "ايه اللي يدفعه المشتري",
+  "status": "verified"
+ },
+ {
+  "id": "M-P11-02",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/phase-11/",
+  "normalized_question": "ازاي بتتاكدوا ان القطعه محجوزه فعلا",
+  "status": "verified"
+ },
+ {
+  "id": "M-PR-01",
+  "owner_url": "https://eltaiseer.com/prices/#method",
+  "normalized_question": "كيف نحسب هذه الاسعار",
+  "status": "verified"
+ },
+ {
+  "id": "M-PR-02",
+  "owner_url": "https://eltaiseer.com/prices/",
+  "normalized_question": "لماذا يختلف سعر المتر من حي لاخر",
+  "status": "verified"
+ },
+ {
+  "id": "M-PR-03",
+  "owner_url": "https://eltaiseer.com/prices/",
+  "normalized_question": "هل الاسعار قابله للتفاوض",
+  "status": "verified"
+ },
+ {
+  "id": "M-RS-01",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "ما القطع التي تقبلونها للبيع",
+  "status": "verified"
+ },
+ {
+  "id": "M-RS-02",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "كيف تتاكدون ان الاعلان حقيقي",
+  "status": "verified"
+ },
+ {
+  "id": "M-RS-03",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "هل تستلمون عربونا او اي مبالغ",
+  "status": "verified"
+ },
+ {
+  "id": "M-RS-04",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "كيف يتم نقل الارض للمشتري",
+  "status": "verified"
+ },
+ {
+  "id": "M-RS-05",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "لماذا تقارنون بسعر المرحله 11",
+  "status": "verified"
+ },
+ {
+  "id": "Q001",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/#what",
+  "normalized_question": "ما هو مشروع بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q002",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/",
+  "normalized_question": "ما هو مشروع بيت الوطن للمصريين بالخارج / للعاملين بالخارج",
+  "status": "external"
+ },
+ {
+  "id": "Q003",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/#eligibility",
+  "normalized_question": "من يحق له حجز اراضي بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q004",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#eligibility",
+  "normalized_question": "ما هي شروط بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q005",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#payment-channels",
+  "normalized_question": "هل يمكن حجز بيت الوطن من داخل مصر او من حساب دولاري في بنك مصري",
+  "status": "external"
+ },
+ {
+  "id": "Q006",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#eligibility",
+  "normalized_question": "هل يمكن حجز ارض بيت الوطن باسم قاصر",
+  "status": "external"
+ },
+ {
+  "id": "Q007",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#eligibility",
+  "normalized_question": "كم قطعه ارض يحق لي حجزها في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q008",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/#place-names",
+  "normalized_question": "هل بيت الوطن كمبوند",
+  "status": "external"
+ },
+ {
+  "id": "Q009",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/#place-names",
+  "normalized_question": "اين يقع بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q010",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/#official",
+  "normalized_question": "هل التيسير هو الموقع الرسمي لحجز بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q013",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/#official",
+  "normalized_question": "هل بيت الوطن تابع لهيئه المجتمعات العمرانيه",
+  "status": "external"
+ },
+ {
+  "id": "Q014",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/#history",
+  "normalized_question": "ما هي مراحل بيت الوطن السابقه",
+  "status": "external"
+ },
+ {
+  "id": "Q015",
+  "owner_url": "https://eltaiseer.com/baitelwatan/guide/#phase-12",
+  "normalized_question": "هل توجد مرحله 12 من بيت الوطن ومتي",
+  "status": "external"
+ },
+ {
+  "id": "Q016",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#takmily",
+  "normalized_question": "ما هو بيت الوطن التكميلي",
+  "status": "external"
+ },
+ {
+  "id": "Q017",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#announcement-11",
+  "normalized_question": "هل «الاعلان الحادي عشر» هو المرحله 11 من بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q018",
+  "owner_url": "https://eltaiseer.com/baitelwatan/faq/",
+  "normalized_question": "هل الاستثمار في اراضي بيت الوطن مضمون",
+  "status": "external"
+ },
+ {
+  "id": "Q019",
+  "owner_url": "https://eltaiseer.com/baitelwatan/faq/",
+  "normalized_question": "ما هي مشاكل بيت الوطن الشائعه",
+  "status": "external"
+ },
+ {
+  "id": "Q020",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/",
+  "normalized_question": "ما هو بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q021",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#numbers",
+  "normalized_question": "كم عدد قطع اراضي بيت الوطن في المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q022",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#now",
+  "normalized_question": "ما هي اخر نافذه تسجيل (مسلسل) في بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q023",
+  "owner_url": "https://eltaiseer.com/baitelwatan/#my-turn",
+  "normalized_question": "متي ياتي دوري حسب مسلسل الحواله في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q024",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#priority",
+  "normalized_question": "كيف يتم ترتيب الاولويه في بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q025",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#priority",
+  "normalized_question": "هل توجد قرعه في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q026",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#timeline",
+  "normalized_question": "متي كانت الحوالات التنشيطيه لبيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q027",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#timeline",
+  "normalized_question": "ما هي فتره تحويل الارصده لبيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q028",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#timeline",
+  "normalized_question": "متي اتيحت بيانات قطع المرحله 11 والكروكيات",
+  "status": "external"
+ },
+ {
+  "id": "Q029",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#now",
+  "normalized_question": "كم قطعه متبقيه في بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q030",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#whats-new",
+  "normalized_question": "ما الفرق بين المرحله العاشره والمرحله 11 في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q031",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#timeline",
+  "normalized_question": "متي موعد طرح اراضي بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q032",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#windows",
+  "normalized_question": "ما معني «الانتهاء من التسجيل حتي مسلسل» في تنويهات الهيئه",
+  "status": "external"
+ },
+ {
+  "id": "Q033",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#windows",
+  "normalized_question": "كم مسلسل يفتح في في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q034",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#now",
+  "normalized_question": "ما موعد نافذه التسجيل بتوقيت السعوديه والكويت والامارات",
+  "status": "external"
+ },
+ {
+  "id": "Q035",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/",
+  "normalized_question": "كم سعر متر ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q036",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/",
+  "normalized_question": "ما هو جدول اسعار بيت الوطن المرحله 11 لكل مدينه",
+  "status": "external"
+ },
+ {
+  "id": "Q037",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#totals",
+  "normalized_question": "كم سعر ارض بيت الوطن بالكامل (اجمالي القطعه)",
+  "status": "external"
+ },
+ {
+  "id": "Q038",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#sort-price",
+  "normalized_question": "ما هو ارخص سعر متر في بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q039",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#usd",
+  "normalized_question": "هل سعر ارض بيت الوطن بالدولار ام بالجنيه",
+  "status": "external"
+ },
+ {
+  "id": "Q040",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#fx",
+  "normalized_question": "ما هو سعر الدولار المعتمد في اسعار بيت الوطن (تثبيت الدولار)",
+  "status": "external"
+ },
+ {
+  "id": "Q041",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#today",
+  "normalized_question": "هل يتغير سعر بيت الوطن يوميا (سعر بيت الوطن اليوم)",
+  "status": "external"
+ },
+ {
+  "id": "Q042",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#down-payment",
+  "normalized_question": "كم مقدم حجز ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q043",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#premiums",
+  "normalized_question": "ما هي علاوات التميز (ناصيه، حديقه، بحر) في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q044",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#vs-phase-10",
+  "normalized_question": "ما الفرق بين اسعار المرحله 11 والمرحله العاشره",
+  "status": "external"
+ },
+ {
+  "id": "Q046",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#payment",
+  "normalized_question": "ما هو نظام سداد اراضي بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q047",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#payment",
+  "normalized_question": "كم سنه تقسيط ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q048",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#interest",
+  "normalized_question": "كم فائده تقسيط بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q049",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#first-installment",
+  "normalized_question": "متي يبدا اول قسط في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q050",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#examples",
+  "normalized_question": "كيف احسب اقساط ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q051",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#how-to-pay",
+  "normalized_question": "كيف اسدد اقساط بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q052",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#options",
+  "normalized_question": "ايهما انسب: البديل الاول ام الثاني في سداد بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q053",
+  "owner_url": "https://eltaiseer.com/baitelwatan/faq/",
+  "normalized_question": "هل يوجد تمويل عقاري لاراضي بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q054",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#cancellation",
+  "normalized_question": "ماذا يحدث لو تاخرت في سداد اقساط بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q055",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/",
+  "normalized_question": "هل يمكن دفع ثمن ارض بيت الوطن كاش مره واحده",
+  "status": "external"
+ },
+ {
+  "id": "Q056",
+  "owner_url": "https://eltaiseer.com/baitelwatan/prices/#fund",
+  "normalized_question": "ما هو ال1% صندوق الاسكان في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q057",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/",
+  "normalized_question": "كيف احجز ارض في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q058",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#from-gulf",
+  "normalized_question": "كيف احجز بيت الوطن من السعوديه او الكويت او الامارات",
+  "status": "external"
+ },
+ {
+  "id": "Q059",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#account",
+  "normalized_question": "كيف انشئ حسابا علي موقع حجز بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q060",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#activation",
+  "normalized_question": "ما هي جديه الحجز في بيت الوطن وكم قيمتها",
+  "status": "external"
+ },
+ {
+  "id": "Q061",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#activation",
+  "normalized_question": "ما هي الحواله التنشيطيه في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q062",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#activation",
+  "normalized_question": "هل ال50 دولار في الحواله التنشيطيه تسترد",
+  "status": "external"
+ },
+ {
+  "id": "Q063",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#booking-code",
+  "normalized_question": "ما هو كود حجز بيت الوطن وكيف اكتبه في التحويل",
+  "status": "external"
+ },
+ {
+  "id": "Q064",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#transfer-details",
+  "normalized_question": "ما هي بيانات التحويل (رقم الحساب وIBAN) لبيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q065",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#tracking",
+  "normalized_question": "كيف اتتبع حواله بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q066",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#transfer-rules",
+  "normalized_question": "ما هي شروط التحويل لبيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q067",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#mistakes",
+  "normalized_question": "هل يمكن تعديل حجز بيت الوطن بعد تاكيده",
+  "status": "external"
+ },
+ {
+  "id": "Q068",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#mistakes",
+  "normalized_question": "هل يمكن نقل كود الحجز او المبلغ المحول لشخص اخر",
+  "status": "external"
+ },
+ {
+  "id": "Q069",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/",
+  "normalized_question": "هل يمكن حجز بيت الوطن بتوكيل",
+  "status": "external"
+ },
+ {
+  "id": "Q070",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#mistakes",
+  "normalized_question": "ما هي الاخطاء الشائعه عند حجز بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q071",
+  "owner_url": "https://eltaiseer.com/baitelwatan/faq/",
+  "normalized_question": "لماذا تختفي القطعه من موقع الحجز ثم تعود",
+  "status": "external"
+ },
+ {
+  "id": "Q072",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#prepare",
+  "normalized_question": "كيف استعد ليوم نافذه التسجيل في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q073",
+  "owner_url": "https://eltaiseer.com/baitelwatan/faq/#not-booking-agent",
+  "normalized_question": "هل يحجز التيسير ارض بيت الوطن نيابه عني",
+  "status": "external"
+ },
+ {
+  "id": "Q074",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#refunds",
+  "normalized_question": "هل يمكن استرداد فلوس بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q075",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#refund-request",
+  "normalized_question": "كيف اقدم طلب استرداد في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q076",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#withdrawal",
+  "normalized_question": "كم يخصم عند الغاء حجز ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q077",
+  "owner_url": "https://eltaiseer.com/baitelwatan/phase-11/#phase-10-balances",
+  "normalized_question": "هل يمكن استخدام مبالغ المرحله العاشره في حجز المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q078",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/",
+  "normalized_question": "اين اجد كراسه شروط بيت الوطن المرحله 11 PDF",
+  "status": "external"
+ },
+ {
+  "id": "Q079",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#older",
+  "normalized_question": "اين اجد كراسه شروط بيت الوطن المرحله العاشره/التاسعه/الثامنه PDF",
+  "status": "external"
+ },
+ {
+  "id": "Q080",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#summary",
+  "normalized_question": "ما اهم ما في كراسه شروط بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q081",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#floors",
+  "normalized_question": "كم دور مسموح بناؤه في ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q082",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#ratio",
+  "normalized_question": "ما هي نسبه البناء المسموحه في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q083",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#setbacks",
+  "normalized_question": "ما هي الردود (الارتدادات) في اراضي بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q084",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#building",
+  "normalized_question": "ما هي اشتراطات البناء في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q085",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#building-rules",
+  "normalized_question": "ما هي اشتراطات البناء في بيت الوطن التجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q086",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#basement",
+  "normalized_question": "هل يسمح بالبدروم وغرف السطح في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q087",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#units",
+  "normalized_question": "كم شقه يمكن بناؤها علي ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q088",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#build-deadline",
+  "normalized_question": "ما هي مهله البناء في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q089",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#license",
+  "normalized_question": "كيف استخرج رخصه بناء لارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q090",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#restrictions",
+  "normalized_question": "هل يمكن تقسيم ارض بيت الوطن او تغيير نشاطها",
+  "status": "external"
+ },
+ {
+  "id": "Q091",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#area",
+  "normalized_question": "هل مساحه قطعه بيت الوطن نهائيه",
+  "status": "external"
+ },
+ {
+  "id": "Q092",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#allocation",
+  "normalized_question": "متي يصدر خطاب تخصيص بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q093",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#delivery",
+  "normalized_question": "متي يتم استلام اراضي بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q094",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#delivery-fees",
+  "normalized_question": "ما هي مصاريف استلام ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q095",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#delivery-older",
+  "normalized_question": "متي تسليم اراضي بيت الوطن المرحله الثامنه والعاشره",
+  "status": "external"
+ },
+ {
+  "id": "Q096",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/#delivery",
+  "normalized_question": "هل استلام ارض بيت الوطن الزامي",
+  "status": "external"
+ },
+ {
+  "id": "Q097",
+  "owner_url": "https://eltaiseer.com/baitelwatan/faq/",
+  "normalized_question": "متي يسكن بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q098",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/",
+  "normalized_question": "هل يحتاج المغترب للنزول الي مصر لاستلام الارض او التنازل",
+  "status": "external"
+ },
+ {
+  "id": "Q099",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#can-i-sell",
+  "normalized_question": "هل يجوز بيع ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q100",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/phase-11/#before-allocation",
+  "normalized_question": "هل يمكن بيع ارض المرحله 11 قبل التخصيص",
+  "status": "verified"
+ },
+ {
+  "id": "Q101",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/phase-11/#code",
+  "normalized_question": "هل يجوز بيع كود الحجز او المسلسل",
+  "status": "verified"
+ },
+ {
+  "id": "Q102",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#transfer",
+  "normalized_question": "ما هي خطوات التنازل عن ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q103",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#transfer-fees",
+  "normalized_question": "كم رسوم التنازل عن ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q104",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#contract",
+  "normalized_question": "ما هو عقد بيع ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q105",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#overage",
+  "normalized_question": "ما هو «الاوفر» في ارض بيت الوطن وكيف يحسب",
+  "status": "external"
+ },
+ {
+  "id": "Q106",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "اين اجد اراضي بيت الوطن للبيع موثقه",
+  "status": "external"
+ },
+ {
+  "id": "Q107",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "اراضي بيت الوطن للبيع في التجمع الخامس والحي الرابع",
+  "status": "external"
+ },
+ {
+  "id": "Q108",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "اراضي بيت الوطن للبيع في اكتوبر والشيخ زايد",
+  "status": "external"
+ },
+ {
+  "id": "Q109",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "اراضي بيت الوطن للبيع في العبور الجديده وبدر والعاشر من رمضان",
+  "status": "external"
+ },
+ {
+  "id": "Q110",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/sell/",
+  "normalized_question": "كيف ابيع ارضي في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q111",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/buy-request/",
+  "normalized_question": "كيف اشتري ارض بيت الوطن بالتنازل بامان",
+  "status": "external"
+ },
+ {
+  "id": "Q112",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/how-we-verify/",
+  "normalized_question": "كيف اتاكد ان اعلان ارض بيت الوطن ليس نصبا",
+  "status": "external"
+ },
+ {
+  "id": "Q113",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#faq",
+  "normalized_question": "هل ادفع عربونا قبل التنازل عن ارض بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q114",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#faq",
+  "normalized_question": "هل يلتزم المشتري بالاقساط ومهله البناء بعد التنازل",
+  "status": "external"
+ },
+ {
+  "id": "Q115",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#faq",
+  "normalized_question": "هل يمكن التنازل عن ارض بيت الوطن قبل سداد كامل الثمن",
+  "status": "external"
+ },
+ {
+  "id": "Q116",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "كم سعر المتر في احياء بيت الوطن القائمه بالتجمع الخامس (اعاده البيع)",
+  "status": "external"
+ },
+ {
+  "id": "Q117",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#phase-11-new-cairo",
+  "normalized_question": "كم سعر متر بيت الوطن في التجمع الخامس في المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q118",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "هل سعر اعاده بيع ارض بيت الوطن اعلي من سعر الهيئه",
+  "status": "external"
+ },
+ {
+  "id": "Q119",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/phase-11/",
+  "normalized_question": "هل المشتري لازم تنطبق عليه شروط الحجز",
+  "status": "verified"
+ },
+ {
+  "id": "Q120",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/",
+  "normalized_question": "اين يقع بيت الوطن التجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q121",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#districts",
+  "normalized_question": "كم حي في بيت الوطن التجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q122",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#best-district",
+  "normalized_question": "ما هو افضل حي في بيت الوطن التجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q123",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/district-4/",
+  "normalized_question": "ما هو الحي الرابع بيت الوطن واين يقع",
+  "status": "external"
+ },
+ {
+  "id": "Q124",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/district-4/",
+  "normalized_question": "كم قطعه في الحي الرابع بيت الوطن بالمرحله 11 وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q125",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/district-4/#map",
+  "normalized_question": "اين اجد خريطه بيت الوطن الحي الرابع PDF",
+  "status": "external"
+ },
+ {
+  "id": "Q126",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/district-4/#location",
+  "normalized_question": "هل الحي الرابع بيت الوطن قريب من شارع النوادي والنادي الاهلي",
+  "status": "external"
+ },
+ {
+  "id": "Q127",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#district-1",
+  "normalized_question": "ما هو بيت الوطن الحي الاول بالتجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q128",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#district-2",
+  "normalized_question": "ما هو بيت الوطن الحي الثاني بالتجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q129",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#district-3",
+  "normalized_question": "ما هو بيت الوطن الحي الثالث بالتجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q130",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#district-5",
+  "normalized_question": "ما هو بيت الوطن الحي الخامس بالتجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q131",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#district-6",
+  "normalized_question": "ما هو بيت الوطن الحي السادس بالتجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q132",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#district-7",
+  "normalized_question": "ما هو بيت الوطن الحي السابع بالتجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q133",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#north",
+  "normalized_question": "ما هو شمال بيت الوطن بالتجمع الخامس",
+  "status": "external"
+ },
+ {
+  "id": "Q134",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/#phase-11-new-cairo",
+  "normalized_question": "ما هي منطقه الامتداد الجنوبي قرب ديستركت فايف في المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q135",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/",
+  "normalized_question": "ما هي منطقه الفيو زون في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q136",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/",
+  "normalized_question": "هل مرافق بيت الوطن بالقاهره الجديده مكتمله",
+  "status": "external"
+ },
+ {
+  "id": "Q137",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-october/",
+  "normalized_question": "ما هي اراضي بيت الوطن في اكتوبر الجديده: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q138",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/6th-of-october/",
+  "normalized_question": "ما هي اراضي بيت الوطن في السادس من اكتوبر: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q139",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/sheikh-zayed/",
+  "normalized_question": "ما هي اراضي بيت الوطن في الشيخ زايد: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q140",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/sheikh-zayed/#decree-77",
+  "normalized_question": "ما هو بيت الوطن الشيخ زايد قرار 77",
+  "status": "external"
+ },
+ {
+  "id": "Q141",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-obour/",
+  "normalized_question": "ما هي اراضي بيت الوطن في العبور الجديده: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q142",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-obour/#obour",
+  "normalized_question": "هل بيت الوطن العبور هو نفسه العبور الجديده",
+  "status": "external"
+ },
+ {
+  "id": "Q143",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-alamein/",
+  "normalized_question": "ما هي اراضي بيت الوطن في العلمين الجديده: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q144",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/10th-of-ramadan/",
+  "normalized_question": "ما هي اراضي بيت الوطن في العاشر من رمضان: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q145",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/badr/",
+  "normalized_question": "ما هي اراضي بيت الوطن في بدر: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q146",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/shorouk/",
+  "normalized_question": "ما هي اراضي بيت الوطن في الشروق: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q147",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-assiut/",
+  "normalized_question": "ما هي اراضي بيت الوطن في اسيوط الجديده: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q148",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-mansoura/",
+  "normalized_question": "ما هي اراضي بيت الوطن في المنصوره الجديده: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q149",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/new-damietta/",
+  "normalized_question": "ما هي اراضي بيت الوطن في دمياط الجديده: كم قطعه وكم سعر المتر",
+  "status": "external"
+ },
+ {
+  "id": "Q150",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/",
+  "normalized_question": "ما هي مدن بيت الوطن المرحله 11 الاخري (سفنكس، سوهاج، قنا، بني سويف، برج العرب، حدائق العاصمه…)",
+  "status": "external"
+ },
+ {
+  "id": "Q151",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/",
+  "normalized_question": "ما هي مدن بيت الوطن المرحله 11",
+  "status": "external"
+ },
+ {
+  "id": "Q152",
+  "owner_url": "https://eltaiseer.com/baitelwatan/map/",
+  "normalized_question": "اين اجد خريطه بيت الوطن كامله PDF",
+  "status": "external"
+ },
+ {
+  "id": "Q153",
+  "owner_url": "https://eltaiseer.com/baitelwatan/map/",
+  "normalized_question": "اين اجد خريطه بيت الوطن التجمع الخامس PDF",
+  "status": "external"
+ },
+ {
+  "id": "Q154",
+  "owner_url": "https://eltaiseer.com/baitelwatan/cities/6th-of-october/#map",
+  "normalized_question": "اين اجد خريطه بيت الوطن التكميلي PDF",
+  "status": "external"
+ },
+ {
+  "id": "Q155",
+  "owner_url": "https://eltaiseer.com/baitelwatan/",
+  "normalized_question": "ما هو التيسير — الحجز الذكي لبيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q156",
+  "owner_url": "https://eltaiseer.com/baitelwatan/",
+  "normalized_question": "هل اداه التيسير مجانيه",
+  "status": "external"
+ },
+ {
+  "id": "Q157",
+  "owner_url": "https://eltaiseer.com/baitelwatan/about/#methodology",
+  "normalized_question": "علي ماذا يعتمد الترتيب الذكي في التيسير",
+  "status": "external"
+ },
+ {
+  "id": "Q158",
+  "owner_url": "https://eltaiseer.com/baitelwatan/performance/",
+  "normalized_question": "ما دقه ترشيحات التيسير في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q159",
+  "owner_url": "https://eltaiseer.com/baitelwatan/#notifications",
+  "normalized_question": "كيف اعرف فور توفر قطعه او اقتراب دوري في بيت الوطن",
+  "status": "external"
+ },
+ {
+  "id": "Q160",
+  "owner_url": "https://eltaiseer.com/baitelwatan/about/#business-model",
+  "normalized_question": "من يدير التيسير وكيف يربح",
+  "status": "external"
+ },
+ {
+  "id": "Q161",
+  "owner_url": "https://eltaiseer.com/baitelwatan/how-to-book/#from-gulf",
+  "normalized_question": "هل تقبل البنوك في السعوديه والكويت والامارات التحويل لبيت الوطن وكم تخصم",
+  "status": "external"
+ },
+ {
+  "id": "Q162",
+  "owner_url": "https://eltaiseer.com/baitelwatan/booklet/",
+  "normalized_question": "هل يمكن الحجز في بيت الوطن بجواز سفر مصري فقط بدون اقامه بالخارج",
+  "status": "external"
+ },
+ {
+  "id": "Q163",
+  "owner_url": "https://eltaiseer.com/new-damietta/beit-al-watan-east/",
+  "normalized_question": "ما هو بيت الوطن في دمياط الجديده واين يقع",
+  "status": "external"
+ },
+ {
+  "id": "Q164",
+  "owner_url": "https://eltaiseer.com/new-damietta/beit-al-watan-west/",
+  "normalized_question": "اين اجد خريطه بيت الوطن دمياط الجديده (غرب حورس)",
+  "status": "external"
+ },
+ {
+  "id": "Q165",
+  "owner_url": "https://eltaiseer.com/prices/#new-damietta-land",
+  "normalized_question": "كم سعر متر الارض في دمياط الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "Q166",
+  "owner_url": "https://eltaiseer.com/prices/#new-damietta-apartments",
+  "normalized_question": "كم اسعار الشقق في دمياط الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "Q167",
+  "owner_url": "https://eltaiseer.com/blog/best-districts/",
+  "normalized_question": "ما هو افضل حي للسكن في دمياط الجديده",
+  "status": "external"
+ },
+ {
+  "id": "Q168",
+  "owner_url": "https://eltaiseer.com/properties/installments/#new-damietta",
+  "normalized_question": "هل توجد شقق بالتقسيط في دمياط الجديده وكم المقدم",
+  "status": "verified"
+ },
+ {
+  "id": "Q169",
+  "owner_url": "https://eltaiseer.com/new-damietta/#districts",
+  "normalized_question": "ما هي احياء دمياط الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "Q170",
+  "owner_url": "https://eltaiseer.com/new-damietta/#map",
+  "normalized_question": "اين تقع دمياط الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "Q171",
+  "owner_url": "https://eltaiseer.com/new-damietta/dar-misr-1/",
+  "normalized_question": "كم سعر شقق دار مصر وجنه وسكن مصر في دمياط الجديده",
+  "status": "external"
+ },
+ {
+  "id": "Q172",
+  "owner_url": "https://eltaiseer.com/blog/buying-steps-legal/",
+  "normalized_question": "ما خطوات شراء شقه في دمياط الجديده والاوراق المطلوبه",
+  "status": "external"
+ },
+ {
+  "id": "Q173",
+  "owner_url": "https://eltaiseer.com/valuation/",
+  "normalized_question": "كم يساوي عقاري في دمياط الجديده او المنصوره الجديده",
+  "status": "external"
+ },
+ {
+  "id": "Q174",
+  "owner_url": "https://eltaiseer.com/blog/damietta-vs-mansoura/",
+  "normalized_question": "دمياط الجديده ام المنصوره الجديده: ايهما انسب للسكن",
+  "status": "verified"
+ },
+ {
+  "id": "Q175",
+  "owner_url": "https://eltaiseer.com/prices/#new-mansoura-land",
+  "normalized_question": "كم سعر متر الارض في المنصوره الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "Q176",
+  "owner_url": "https://eltaiseer.com/prices/#new-mansoura-apartments",
+  "normalized_question": "كم اسعار الشقق في المنصوره الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "Q177",
+  "owner_url": "https://eltaiseer.com/blog/new-mansoura-districts/",
+  "normalized_question": "ما هي افضل مناطق السكن في المنصوره الجديده",
+  "status": "external"
+ },
+ {
+  "id": "Q178",
+  "owner_url": "https://eltaiseer.com/new-mansoura/#governorate",
+  "normalized_question": "المنصوره الجديده تتبع اي محافظه",
+  "status": "verified"
+ },
+ {
+  "id": "Q179",
+  "owner_url": "https://eltaiseer.com/new-mansoura/#sea",
+  "normalized_question": "هل المنصوره الجديده علي البحر",
+  "status": "verified"
+ },
+ {
+  "id": "Q180",
+  "owner_url": "https://eltaiseer.com/properties/installments/#new-mansoura",
+  "normalized_question": "هل توجد شقق بالتقسيط في المنصوره الجديده",
+  "status": "verified"
+ },
+ {
+  "id": "Q181",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "normalized_question": "هل يوجد بيت الوطن في المنصوره الجديده لاعاده البيع",
+  "status": "external"
+ },
+ {
+  "id": "Q182",
+  "owner_url": "https://eltaiseer.com/properties/lands/",
+  "normalized_question": "اين اجد اراضي للبيع في دمياط الجديده",
+  "status": "external"
+ },
+ {
+  "id": "Q183",
+  "owner_url": "https://eltaiseer.com/new-damietta/#services",
+  "normalized_question": "اين يقع جهاز تعمير دمياط الجديده",
+  "status": "pending"
+ },
+ {
+  "id": "Q184",
+  "owner_url": "https://eltaiseer.com/blog/national-housing-projects/",
+  "normalized_question": "متي موعد طرح اراضي هيئه المجتمعات العمرانيه ووزاره الاسكان القادم",
+  "status": "external"
+ }
+]

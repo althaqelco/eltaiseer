@@ -1,0 +1,420 @@
+{
+ "version": "2026-09-29",
+ "site": "https://eltaiseer.com",
+ "ids": {
+  "organization": "https://eltaiseer.com/#organization",
+  "website": "https://eltaiseer.com/#website",
+  "logo": "https://eltaiseer.com/#logo",
+  "app": "https://eltaiseer.com/#app-smart-booking",
+  "brand": "https://eltaiseer.com/#brand-smart-booking",
+  "editor": "https://eltaiseer.com/#editor",
+  "serviceResale": "https://eltaiseer.com/#service-bw-resale",
+  "serviceValuation": "https://eltaiseer.com/#service-valuation",
+  "datacatalog": "https://eltaiseer.com/#datacatalog",
+  "program": "https://eltaiseer.com/#program-beit-al-watan",
+  "phase11": "https://eltaiseer.com/#phase-11",
+  "phase10Takmiliya": "https://eltaiseer.com/#phase-10-takmiliya",
+  "handbook": "https://eltaiseer.com/#handbook-phase-11",
+  "pricesDataset": "https://eltaiseer.com/baitelwatan/prices/#dataset",
+  "nuca": "https://eltaiseer.com/#nuca",
+  "egypt": "https://eltaiseer.com/#egypt",
+  "glossary": "https://eltaiseer.com/#glossary"
+ },
+ "stubs": {
+  "https://eltaiseer.com/#organization": {
+   "@type": "RealEstateAgent",
+   "name": "التيسير للعقارات",
+   "alternateName": [
+    "El Taiseer Real Estate",
+    "Eltaiseer",
+    "eltaiseer.com"
+   ],
+   "url": "https://eltaiseer.com/",
+   "logo": "https://eltaiseer.com/logo.png",
+   "sameAs": [
+    "https://www.instagram.com/eltaiseercom",
+    "https://www.tiktok.com/@eltaiseer.com",
+    "https://www.facebook.com/profile.php?id=61586663700452"
+   ],
+   "disambiguatingDescription": "التيسير منصة مستقلة غير تابعة لهيئة المجتمعات العمرانية. لا علاقة لها بشركات أخرى تحمل اسم «التيسير»."
+  },
+  "https://eltaiseer.com/#website": {
+   "@type": "WebSite",
+   "url": "https://eltaiseer.com/",
+   "name": "التيسير للعقارات",
+   "alternateName": [
+    "eltaiseer.com"
+   ]
+  },
+  "https://eltaiseer.com/#logo": {
+   "@type": "ImageObject",
+   "url": "https://eltaiseer.com/logo.png",
+   "contentUrl": "https://eltaiseer.com/logo.png"
+  },
+  "https://eltaiseer.com/#app-smart-booking": {
+   "@type": "WebApplication",
+   "name": "التيسير — الحجز الذكي",
+   "url": "https://eltaiseer.com/baitelwatan/",
+   "disambiguatingDescription": "التيسير منصة مستقلة غير تابعة لهيئة المجتمعات العمرانية. الحجز يتم فقط على موقع هيئة المجتمعات العمرانية (lands.nuca.gov.eg)."
+  },
+  "https://eltaiseer.com/#brand-smart-booking": {
+   "@type": "Brand",
+   "name": "التيسير — الحجز الذكي",
+   "url": "https://eltaiseer.com/baitelwatan/"
+  },
+  "https://eltaiseer.com/#service-bw-resale": {
+   "@type": "Service",
+   "name": "وساطة موثّقة لإعادة بيع أراضي بيت الوطن بالتنازل الرسمي",
+   "url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+   "provider": {
+    "@id": "https://eltaiseer.com/#organization"
+   }
+  },
+  "https://eltaiseer.com/#service-valuation": {
+   "@type": "Service",
+   "name": "تقييم عقاري مجاني في دمياط الجديدة والمنصورة الجديدة",
+   "url": "https://eltaiseer.com/valuation/",
+   "provider": {
+    "@id": "https://eltaiseer.com/#organization"
+   }
+  },
+  "https://eltaiseer.com/#datacatalog": {
+   "@type": "DataCatalog",
+   "name": "بيانات التيسير",
+   "publisher": {
+    "@id": "https://eltaiseer.com/#organization"
+   }
+  },
+  "https://eltaiseer.com/#program-beit-al-watan": {
+   "@type": "Service",
+   "name": "بيت الوطن",
+   "url": "https://lands.nuca.gov.eg/",
+   "provider": {
+    "@id": "https://eltaiseer.com/#nuca"
+   }
+  },
+  "https://eltaiseer.com/#phase-11": {
+   "@type": "DefinedTerm",
+   "name": "المرحلة الحادية عشر من بيت الوطن",
+   "url": "https://eltaiseer.com/baitelwatan/phase-11/"
+  },
+  "https://eltaiseer.com/#phase-10-takmiliya": {
+   "@type": "DefinedTerm",
+   "name": "المرحلة العاشرة التكميلية من بيت الوطن",
+   "url": "https://eltaiseer.com/baitelwatan/phase-11/#takmily"
+  },
+  "https://eltaiseer.com/#handbook-phase-11": {
+   "@type": "DigitalDocument",
+   "name": "كراسة شروط طرح الأراضي للمصريين بالخارج — المرحلة الحادية عشر (يونيو 2026)",
+   "url": "https://lands.nuca.gov.eg/Files/Handbook.pdf",
+   "publisher": {
+    "@id": "https://eltaiseer.com/#nuca"
+   },
+   "inLanguage": "ar"
+  },
+  "https://eltaiseer.com/baitelwatan/prices/#dataset": {
+   "@type": "Dataset",
+   "name": "أراضي بيت الوطن المرحلة 11: المطروح والمتاح وسعر المتر الرسمي لكل مدينة",
+   "url": "https://eltaiseer.com/baitelwatan/prices/"
+  },
+  "https://eltaiseer.com/#nuca": {
+   "@type": "Organization",
+   "name": "هيئة المجتمعات العمرانية الجديدة",
+   "url": "http://www.newcities.gov.eg/",
+   "sameAs": "https://www.wikidata.org/wiki/Q19850166"
+  },
+  "https://eltaiseer.com/#egypt": {
+   "@type": "Country",
+   "name": "مصر",
+   "sameAs": "https://www.wikidata.org/wiki/Q79"
+  },
+  "https://eltaiseer.com/#gov-alexandria": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة الإسكندرية",
+   "sameAs": "https://www.wikidata.org/wiki/Q29943"
+  },
+  "https://eltaiseer.com/#gov-aswan": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة أسوان",
+   "sameAs": "https://www.wikidata.org/wiki/Q29937"
+  },
+  "https://eltaiseer.com/#gov-asyut": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة أسيوط",
+   "sameAs": "https://www.wikidata.org/wiki/Q29965"
+  },
+  "https://eltaiseer.com/#gov-beni-suef": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة بني سويف",
+   "sameAs": "https://www.wikidata.org/wiki/Q30683"
+  },
+  "https://eltaiseer.com/#gov-cairo": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة القاهرة",
+   "sameAs": "https://www.wikidata.org/wiki/Q30805"
+  },
+  "https://eltaiseer.com/#gov-dakahlia": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة الدقهلية",
+   "sameAs": "https://www.wikidata.org/wiki/Q31068"
+  },
+  "https://eltaiseer.com/#gov-damietta": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة دمياط",
+   "sameAs": "https://www.wikidata.org/wiki/Q30644"
+  },
+  "https://eltaiseer.com/#gov-faiyum": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة الفيوم",
+   "sameAs": "https://www.wikidata.org/wiki/Q30656"
+  },
+  "https://eltaiseer.com/#gov-giza": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة الجيزة",
+   "sameAs": "https://www.wikidata.org/wiki/Q30832"
+  },
+  "https://eltaiseer.com/#gov-matrouh": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة مطروح",
+   "sameAs": "https://www.wikidata.org/wiki/Q30682"
+  },
+  "https://eltaiseer.com/#gov-minya": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة المنيا",
+   "sameAs": "https://www.wikidata.org/wiki/Q30675"
+  },
+  "https://eltaiseer.com/#gov-monufia": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة المنوفية",
+   "sameAs": "https://www.wikidata.org/wiki/Q30786"
+  },
+  "https://eltaiseer.com/#gov-qalyubia": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة القليوبية",
+   "sameAs": "https://www.wikidata.org/wiki/Q31075"
+  },
+  "https://eltaiseer.com/#gov-qena": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة قنا",
+   "sameAs": "https://www.wikidata.org/wiki/Q31065"
+  },
+  "https://eltaiseer.com/#gov-sharqia": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة الشرقية",
+   "sameAs": "https://www.wikidata.org/wiki/Q31074"
+  },
+  "https://eltaiseer.com/#gov-sohag": {
+   "@type": "AdministrativeArea",
+   "name": "محافظة سوهاج",
+   "sameAs": "https://www.wikidata.org/wiki/Q30669"
+  },
+  "https://eltaiseer.com/#city-10th-of-ramadan": {
+   "@type": "City",
+   "name": "العاشر من رمضان",
+   "url": "https://eltaiseer.com/baitelwatan/cities/10th-of-ramadan/",
+   "sameAs": "https://www.wikidata.org/wiki/Q337539"
+  },
+  "https://eltaiseer.com/#city-15-may": {
+   "@type": "City",
+   "name": "15 مايو",
+   "url": "https://eltaiseer.com/baitelwatan/cities/15-may/",
+   "sameAs": "https://www.wikidata.org/wiki/Q4119766"
+  },
+  "https://eltaiseer.com/#city-6th-of-october": {
+   "@type": "City",
+   "name": "السادس من أكتوبر",
+   "url": "https://eltaiseer.com/baitelwatan/cities/6th-of-october/",
+   "sameAs": "https://www.wikidata.org/wiki/Q335708"
+  },
+  "https://eltaiseer.com/#city-badr": {
+   "@type": "City",
+   "name": "بدر",
+   "url": "https://eltaiseer.com/baitelwatan/cities/badr/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12197650"
+  },
+  "https://eltaiseer.com/#city-capital-gardens": {
+   "@type": "City",
+   "name": "حدائق العاصمة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/#capital-gardens",
+   "sameAs": "https://www.wikidata.org/wiki/Q106095709"
+  },
+  "https://eltaiseer.com/#city-hadayek-el-asher": {
+   "@type": "City",
+   "name": "حدائق العاشر",
+   "url": "https://eltaiseer.com/baitelwatan/cities/hadayek-el-asher/"
+  },
+  "https://eltaiseer.com/#city-nasser-west-assiut": {
+   "@type": "City",
+   "name": "ناصر (غرب أسيوط)",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-assiut/#nasser",
+   "sameAs": "https://www.wikidata.org/wiki/Q68169457"
+  },
+  "https://eltaiseer.com/#city-new-akhmim": {
+   "@type": "City",
+   "name": "أخميم الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-akhmim/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12179198"
+  },
+  "https://eltaiseer.com/#city-new-alamein": {
+   "@type": "City",
+   "name": "العلمين الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-alamein/",
+   "sameAs": "https://www.wikidata.org/wiki/Q96395299"
+  },
+  "https://eltaiseer.com/#city-new-assiut": {
+   "@type": "City",
+   "name": "أسيوط الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-assiut/",
+   "sameAs": "https://www.wikidata.org/wiki/Q7005393"
+  },
+  "https://eltaiseer.com/#city-new-aswan": {
+   "@type": "City",
+   "name": "أسوان الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-aswan/",
+   "sameAs": "https://www.wikidata.org/wiki/Q7005391"
+  },
+  "https://eltaiseer.com/#city-new-beni-suef": {
+   "@type": "City",
+   "name": "بني سويف الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-beni-suef/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12199525"
+  },
+  "https://eltaiseer.com/#city-new-borg-el-arab": {
+   "@type": "City",
+   "name": "برج العرب الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-borg-el-arab/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12197874"
+  },
+  "https://eltaiseer.com/#city-new-cairo": {
+   "@type": "City",
+   "name": "القاهرة الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-cairo/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12191144"
+  },
+  "https://eltaiseer.com/#city-new-damietta": {
+   "@type": "City",
+   "name": "دمياط الجديدة",
+   "url": "https://eltaiseer.com/new-damietta/",
+   "sameAs": [
+    "https://www.wikidata.org/wiki/Q12211943",
+    "https://ar.wikipedia.org/wiki/دمياط_الجديدة",
+    "https://en.wikipedia.org/wiki/New_Damietta"
+   ]
+  },
+  "https://eltaiseer.com/#city-new-fayoum": {
+   "@type": "City",
+   "name": "الفيوم الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-fayoum/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12191078"
+  },
+  "https://eltaiseer.com/#city-new-mansoura": {
+   "@type": "City",
+   "name": "المنصورة الجديدة",
+   "url": "https://eltaiseer.com/new-mansoura/",
+   "sameAs": [
+    "https://www.wikidata.org/wiki/Q63122627",
+    "https://ar.wikipedia.org/wiki/المنصورة_الجديدة",
+    "https://en.wikipedia.org/wiki/New_Mansoura"
+   ]
+  },
+  "https://eltaiseer.com/#city-new-minya": {
+   "@type": "City",
+   "name": "المنيا الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-minya/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12193973"
+  },
+  "https://eltaiseer.com/#city-new-obour": {
+   "@type": "City",
+   "name": "العبور الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-obour/",
+   "sameAs": "https://www.wikidata.org/wiki/Q108750045"
+  },
+  "https://eltaiseer.com/#city-new-october": {
+   "@type": "City",
+   "name": "أكتوبر الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-october/",
+   "sameAs": "https://www.wikidata.org/wiki/Q108750051"
+  },
+  "https://eltaiseer.com/#city-new-qena": {
+   "@type": "City",
+   "name": "قنا الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-qena/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12233558"
+  },
+  "https://eltaiseer.com/#city-new-sohag": {
+   "@type": "City",
+   "name": "سوهاج الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-sohag/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12217454"
+  },
+  "https://eltaiseer.com/#city-new-sphinx": {
+   "@type": "City",
+   "name": "سفنكس الجديدة",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-sphinx/",
+   "sameAs": "https://www.wikidata.org/wiki/Q112110813"
+  },
+  "https://eltaiseer.com/#city-obour": {
+   "@type": "City",
+   "name": "العبور",
+   "url": "https://eltaiseer.com/baitelwatan/cities/new-obour/#obour",
+   "sameAs": "https://www.wikidata.org/wiki/Q4120190"
+  },
+  "https://eltaiseer.com/#city-sadat": {
+   "@type": "City",
+   "name": "السادات",
+   "url": "https://eltaiseer.com/baitelwatan/cities/sadat/",
+   "sameAs": "https://www.wikidata.org/wiki/Q4166063"
+  },
+  "https://eltaiseer.com/#city-sheikh-zayed": {
+   "@type": "City",
+   "name": "الشيخ زايد",
+   "url": "https://eltaiseer.com/baitelwatan/cities/sheikh-zayed/",
+   "sameAs": "https://www.wikidata.org/wiki/Q4165945"
+  },
+  "https://eltaiseer.com/#city-shorouk": {
+   "@type": "City",
+   "name": "الشروق",
+   "url": "https://eltaiseer.com/baitelwatan/cities/shorouk/",
+   "sameAs": "https://www.wikidata.org/wiki/Q12188944"
+  },
+  "https://eltaiseer.com/#glossary": {
+   "@type": "DefinedTermSet",
+   "name": "مصطلحات بيت الوطن",
+   "url": "https://eltaiseer.com/baitelwatan/faq/#glossary"
+  },
+  "https://eltaiseer.com/#place-beit-al-watan-new-cairo": {
+   "@type": "Place",
+   "name": "منطقة بيت الوطن بالتجمع الخامس",
+   "containedInPlace": {
+    "@id": "https://eltaiseer.com/#city-new-cairo"
+   }
+  },
+  "https://eltaiseer.com/#place-beit-al-watan-new-damietta-east": {
+   "@type": "Place",
+   "name": "بيت الوطن - شرق (دمياط الجديدة)",
+   "url": "https://eltaiseer.com/new-damietta/beit-al-watan-east/",
+   "containedInPlace": {
+    "@id": "https://eltaiseer.com/#city-new-damietta"
+   },
+   "disambiguatingDescription": "منطقة سكنية قائمة في دمياط الجديدة تحمل اسم بيت الوطن؛ العقارات المعروضة فيها على التيسير بيع بين أفراد."
+  },
+  "https://eltaiseer.com/#place-beit-al-watan-new-damietta-west": {
+   "@type": "Place",
+   "name": "بيت الوطن - غرب (دمياط الجديدة)",
+   "url": "https://eltaiseer.com/new-damietta/beit-al-watan-west/",
+   "containedInPlace": {
+    "@id": "https://eltaiseer.com/#city-new-damietta"
+   },
+   "disambiguatingDescription": "منطقة سكنية قائمة في دمياط الجديدة تحمل اسم بيت الوطن؛ العقارات المعروضة فيها على التيسير بيع بين أفراد."
+  },
+  "https://eltaiseer.com/#place-beit-al-watan-new-damietta-beach": {
+   "@type": "Place",
+   "name": "بيت الوطن - امتداد الشاطئ (دمياط الجديدة)",
+   "url": "https://eltaiseer.com/new-damietta/beit-al-watan-beach/",
+   "containedInPlace": {
+    "@id": "https://eltaiseer.com/#city-new-damietta"
+   },
+   "disambiguatingDescription": "منطقة سكنية قائمة في دمياط الجديدة تحمل اسم بيت الوطن؛ العقارات المعروضة فيها على التيسير بيع بين أفراد."
+  }
+ }
+}
