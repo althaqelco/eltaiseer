@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, MapPin, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleSchema, PostDates } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "أفضل الأحياء للسكن في دمياط الجديدة 2026 | مقارنة شاملة",
@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     "مناطق سكنية دمياط",
   ],
   openGraph: {
+    url: "https://eltaiseer.com/blog/best-districts/",
     title: "أفضل الأحياء للسكن في دمياط الجديدة 2026",
     description: "مقارنة شاملة بين أحياء دمياط الجديدة - اكتشف المنطقة المناسبة لك",
     type: "article",
@@ -74,7 +75,7 @@ export default function BestDistrictsArticle() {
               <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">المناطق</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                10 يناير 2026
+                <PostDates path="/blog/best-districts/" className="" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -147,8 +148,9 @@ export default function BestDistrictsArticle() {
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">أسعار العقارات في الحي الأول</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
-              تتراوح أسعار الشقق في الحي الأول بين 1,200,000 و 3,000,000 جنيه حسب المساحة ومستوى التشطيب. 
-              الشقق بمساحة 120 متر مربع تبدأ من حوالي 1,500,000 جنيه للتشطيب الكامل.
+              تختلف أسعار الشقق في الحي الأول حسب المساحة والدور ومستوى التشطيب، ووسيط سعر المتر المحسوب من
+              العروض الحالية في{" "}
+              <Link href="/prices/#first-district" className="text-orange-600 hover:underline">صفحة أسعار العقارات</Link>.
               يمكنك الاطلاع على <Link href="/new-damietta/first-district" className="text-orange-600 hover:underline">عقارات الحي الأول</Link> المتاحة حالياً.
             </p>
 
@@ -168,17 +170,14 @@ export default function BestDistrictsArticle() {
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الحي الثاني: التوازن المثالي</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
               يمثل <Link href="/new-damietta/second-district" className="text-orange-600 hover:underline font-semibold">الحي الثاني</Link> 
-              الخيار الأمثل لمن يبحث عن توازن بين الموقع الجيد والسعر المعقول. يتميز بقربه من الحي الأول 
-              مع أسعار أقل نسبياً، مما يجعله وجهة مفضلة للعائلات الشابة والمستثمرين.
+              خيارًا مناسبًا لمن يبحث عن موقع قريب من خدمات الحي الأول في حي أهدأ، ويناسب العائلات الشابة.
             </p>
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">لماذا تختار الحي الثاني؟</h3>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li>أسعار أقل بنسبة 15-20% مقارنة بالحي الأول</li>
               <li>قرب من الخدمات الرئيسية في الحي الأول</li>
               <li>مناطق خضراء وحدائق عامة</li>
               <li>مستوى تشطيب جيد في معظم العمارات</li>
-              <li>فرص استثمارية واعدة مع تطور المنطقة</li>
             </ul>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الحي الثالث والرابع: الهدوء والخصوصية</h2>
@@ -186,29 +185,26 @@ export default function BestDistrictsArticle() {
               إذا كنت تبحث عن الهدوء والخصوصية بعيداً عن صخب المناطق المركزية، 
               فإن <Link href="/new-damietta/third-district" className="text-orange-600 hover:underline font-semibold">الحي الثالث</Link> و
               <Link href="/new-damietta/fourth-district" className="text-orange-600 hover:underline font-semibold">الحي الرابع</Link> 
-              يوفران بيئة سكنية هادئة مع أسعار تنافسية للغاية.
+              يوفران بيئة سكنية هادئة.
             </p>
 
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">مميزات الحي الثالث والرابع</h3>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li><strong>الأسعار:</strong> من أقل الأسعار في دمياط الجديدة</li>
               <li><strong>المساحات:</strong> شقق بمساحات أكبر بنفس السعر</li>
               <li><strong>الهدوء:</strong> كثافة سكانية أقل ومستوى ضوضاء منخفض</li>
-              <li><strong>التطور:</strong> مشاريع تطوير مستمرة ترفع من قيمة العقارات</li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الحي الخامس والسادس: مستقبل المدينة</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الحي الخامس والسادس: أحياء ما زالت تُستكمل</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
               يشهد <Link href="/new-damietta/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link> 
-              والحي السادس (المتميز) تطوراً سريعاً مع مشاريع بنية تحتية ضخمة. 
-              هذه المناطق تمثل فرصة استثمارية ممتازة لمن يستطيع الانتظار لاكتمال الخدمات.
+              والحي السادس (المتميز) أعمال تطوير في البنية التحتية، والخدمات فيهما أقل اكتمالًا من الأحياء الأولى.
             </p>
 
             <div className="bg-blue-50 rounded-xl p-6 mb-6">
-              <h4 className="font-bold text-blue-800 mb-3">💡 نصيحة استثمارية</h4>
+              <h4 className="font-bold text-blue-800 mb-3">💡 لمن يناسبان؟</h4>
               <p className="text-blue-700">
-                الشراء في الحي الخامس والسادس الآن بأسعار منخفضة يمكن أن يحقق عوائد ممتازة 
-                خلال 3-5 سنوات مع اكتمال مشاريع التطوير.
+                مناسبان لمن يقبل حيًا ما زال يُستكمل. قارن وسيط سعر المتر في كل حي في صفحة أسعار العقارات قبل القرار.
+                المعلومات للاسترشاد وليست نصيحة مالية أو استثمارية.
               </p>
             </div>
 

@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleSchema, PostDates } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026 | نصائح الخبراء",
@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     "شقق تمليك دمياط",
   ],
   openGraph: {
+    url: "https://eltaiseer.com/blog/buying-apartment-guide/",
     title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026",
     description: "كل ما تحتاج معرفته قبل شراء شقتك في دمياط الجديدة - نصائح الخبراء",
     type: "article",
@@ -47,14 +48,6 @@ export default function BuyingGuideArticle() {
         url="https://eltaiseer.com/blog/buying-apartment-guide"
         image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200"
         datePublished="2026-01-15"
-        isHowTo={true}
-        howToSteps={[
-          { name: "تحديد الميزانية", text: "حدد ميزانيتك الكاملة بما يشمل سعر الشقة وتكاليف التشطيب والنقل والرسوم القانونية." },
-          { name: "اختيار المنطقة", text: "قارن بين أحياء دمياط الجديدة من حيث الخدمات والأسعار والموقع واختر الأنسب." },
-          { name: "معاينة العقارات", text: "قم بزيارة عدة شقق ومعاينتها شخصياً. تحقق من التشطيبات والمرافق والإطلالة." },
-          { name: "التفاوض على السعر", text: "تفاوض بذكاء بناءً على أسعار السوق الحالية ومقارنة مع شقق مماثلة في نفس المنطقة." },
-          { name: "الإجراءات القانونية", text: "تأكد من صحة الأوراق والملكية، واستعن بمحامي لمراجعة العقد قبل التوقيع." },
-        ]}
       />
       <Header />
 
@@ -83,7 +76,7 @@ export default function BuyingGuideArticle() {
               <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full">نصائح الشراء</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                15 يناير 2026
+                <PostDates path="/blog/buying-apartment-guide/" className="" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -129,13 +122,10 @@ export default function BuyingGuideArticle() {
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخطوة الأولى: تحديد الميزانية</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
               قبل البدء في البحث عن شقة، من الضروري تحديد ميزانيتك بدقة. تتراوح أسعار الشقق في دمياط الجديدة 
-              بشكل كبير حسب المنطقة والمساحة ومستوى التشطيب. إليك نظرة عامة على الأسعار:
+              بشكل كبير حسب المنطقة والمساحة ومستوى التشطيب. وسيط سعر المتر لكل حي ونوع عقار، محسوبًا من العروض
+              الحالية، في{" "}
+              <Link href="/prices/" className="text-orange-600 hover:underline font-semibold">صفحة أسعار العقارات</Link>.
             </p>
-            <ul className="list-disc list-inside space-y-3 text-gray-700 mb-6">
-              <li><strong>الأحياء السكنية (الأول إلى الخامس):</strong> تتراوح الأسعار من 800,000 إلى 2,500,000 جنيه</li>
-              <li><strong>مشاريع الإسكان القومي:</strong> تبدأ من 500,000 جنيه للوحدات الصغيرة</li>
-              <li><strong>المناطق المتميزة:</strong> قد تصل إلى 4,000,000 جنيه للوحدات الفاخرة</li>
-            </ul>
             <p className="text-gray-700 leading-relaxed mb-6">
               يمكنك استعراض <Link href="/new-damietta" className="text-orange-600 hover:underline font-semibold">شقق للبيع في دمياط الجديدة</Link> 
               على موقعنا للاطلاع على الأسعار الحالية في السوق.
@@ -169,7 +159,7 @@ export default function BuyingGuideArticle() {
               </li>
               <li>
                 <Link href="/new-damietta/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link>: 
-                يشهد تطوراً سريعاً مع فرص استثمارية جيدة
+                ما زال يُستكمل
               </li>
             </ul>
 

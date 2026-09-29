@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { JsonLd } from "@/components/JsonLd";
+import { ORG, breadcrumbNode, graph, webPage } from "@/lib/seo/schema";
+import { editorialIso } from "@/lib/seo/editorial";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Phone, MapPin, Clock, Mail, MessageCircle, Building2 } from "lucide-react";
@@ -26,13 +29,19 @@ export const metadata: Metadata = {
   },
 };
 
-const contactPageSchema = {
-  "@context": "https://schema.org",
-  "@type": "ContactPage",
-  name: "اتصل بنا - التيسير للعقارات",
-  url: "https://eltaiseer.com/contact/",
-  mainEntity: { "@id": "https://eltaiseer.com/#organization" },
-};
+const contactGraph = graph(
+  webPage({
+    path: "/contact/",
+    type: "ContactPage",
+    name: "اتصل بنا - التيسير للعقارات",
+    mainEntity: ORG,
+    dateModified: editorialIso("/contact/", "modified"),
+  }),
+  breadcrumbNode("/contact/", [
+    { name: "الرئيسية", path: "/" },
+    { name: "اتصل بنا", path: "/contact/" },
+  ])
+);
 
 const CONTACT_CHANNELS = [
   {
@@ -64,10 +73,7 @@ const CONTACT_CHANNELS = [
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageSchema) }}
-      />
+      <JsonLd graph={contactGraph} />
       <Header />
 
       <Breadcrumb
@@ -75,6 +81,8 @@ export default function ContactPage() {
           { label: "الرئيسية", href: "/" },
           { label: "اتصل بنا" },
         ]}
+        path="/contact/"
+        schema={false}
       />
 
       {/* Hero */}
@@ -190,7 +198,7 @@ export default function ContactPage() {
         <div className="text-center bg-gradient-to-l from-orange-500 to-orange-600 rounded-2xl p-10 text-white">
           <h2 className="text-2xl font-bold mb-3">عندك عقار وعايز تبيعه؟</h2>
           <p className="text-orange-100 mb-6 max-w-xl mx-auto">
-            اعرض عقارك معنا مجاناً ووصّله لآلاف الباحثين عن عقارات في دمياط الجديدة
+            اعرض عقارك معنا مجاناً على صفحات التيسير للعقارات في دمياط الجديدة والمنصورة الجديدة
             والمنصورة الجديدة
           </p>
           <Button asChild size="lg" variant="secondary" className="font-bold">

@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, FileCheck, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleSchema, PostDates } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "خطوات شراء عقار في دمياط الجديدة والمنصورة الجديدة: الأوراق والإجراءات",
@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     "شراء شقة في دمياط الجديدة",
   ],
   openGraph: {
+    url: "https://eltaiseer.com/blog/buying-steps-legal/",
     title: "خطوات شراء عقار: الأوراق والإجراءات خطوة بخطوة",
     description: "من فحص الأوراق حتى التسجيل — الدليل العملي الكامل والأخطاء الشائعة",
     type: "article",
@@ -71,8 +72,6 @@ export default function BuyingStepsLegalArticle() {
         url="https://eltaiseer.com/blog/buying-steps-legal"
         image="https://eltaiseer.com/og-image.jpg"
         datePublished="2026-08-17"
-        isHowTo
-        howToSteps={STEPS.map((s) => ({ name: s.name, text: s.text }))}
       />
       <Header />
 
@@ -99,7 +98,7 @@ export default function BuyingStepsLegalArticle() {
               <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">إجراءات وقانون</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                17 أغسطس 2026
+                <PostDates path="/blog/buying-steps-legal/" className="" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />

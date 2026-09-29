@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, Paintbrush, CheckCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleSchema, PostDates } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "نصائح التشطيب الذكي 2026 | كيف تشطب شقتك بأقل تكلفة وأعلى جودة",
@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     "أسعار التشطيب دمياط",
   ],
   openGraph: {
+    url: "https://eltaiseer.com/blog/finishing-tips/",
     title: "نصائح التشطيب الذكي - كيف تشطب شقتك بأقل تكلفة",
     description: "دليل شامل لتشطيب الشقق بجودة عالية وتكلفة معقولة",
     type: "article",
@@ -46,14 +47,6 @@ export default function FinishingTipsArticle() {
         url="https://eltaiseer.com/blog/finishing-tips"
         image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200"
         datePublished="2026-01-28"
-        isHowTo={true}
-        howToSteps={[
-          { name: "التخطيط والتصميم", text: "ضع خطة تشطيب واضحة تشمل التصميم الداخلي وتوزيع المساحات واختيار الألوان والمواد." },
-          { name: "اختيار المقاول", text: "اختر مقاول موثوق بسمعة جيدة واطلب عرض أسعار تفصيلي وعقد مكتوب." },
-          { name: "تجهيز البنية التحتية", text: "ابدأ بالسباكة والكهرباء والعزل قبل التشطيبات النهائية." },
-          { name: "التشطيبات النهائية", text: "ركب الأرضيات والحوائط والأسقف والحمامات والمطبخ بالترتيب الصحيح." },
-          { name: "المراجعة والتسليم", text: "راجع كل التفاصيل قبل التسليم وتأكد من جودة العمل ومطابقته للمواصفات." },
-        ]}
       />
       <Header />
 
@@ -82,7 +75,7 @@ export default function FinishingTipsArticle() {
               <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full">التشطيب</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                28 ديسمبر 2024
+                <PostDates path="/blog/finishing-tips/" className="" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />

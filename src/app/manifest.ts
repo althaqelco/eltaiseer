@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "التيسير للعقارات - عقارات دمياط الجديدة",
     short_name: "التيسير للعقارات",
-    description: "أفضل عقارات دمياط الجديدة للبيع - شقق، فيلات، دوبلكس، محلات تجارية، أراضي بأسعار تنافسية",
+    description: "عقارات للبيع في دمياط الجديدة والمنصورة الجديدة: شقق وفيلات وأراضٍ ومحلات بأسعارها الفعلية",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

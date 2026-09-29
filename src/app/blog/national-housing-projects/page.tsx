@@ -5,7 +5,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, Building2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleSchema, PostDates } from "@/components/ArticleSchema";
+import { BrandPlatformLink } from "@/lib/bw/platformLinks";
 
 export const metadata: Metadata = {
   title: "مشاريع الإسكان القومية في دمياط الجديدة 2026 | جنة - دار مصر - سكن مصر",
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     "بيت الوطن دمياط",
   ],
   openGraph: {
+    url: "https://eltaiseer.com/blog/national-housing-projects/",
     title: "مشاريع الإسكان القومية في دمياط الجديدة 2026",
     description: "كل ما تحتاج معرفته عن مشاريع جنة ودار مصر وسكن مصر",
     type: "article",
@@ -74,7 +76,7 @@ export default function NationalHousingArticle() {
               <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">المشاريع</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                5 يناير 2026
+                <PostDates path="/blog/national-housing-projects/" className="" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -106,8 +108,7 @@ export default function NationalHousingArticle() {
             
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">مقدمة عن مشاريع الإسكان القومية</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              تمثل مشاريع الإسكان القومية في دمياط الجديدة فرصة ذهبية للمواطنين للحصول على وحدات سكنية 
-              عالية الجودة بأسعار مدعومة من الدولة. تتنوع هذه المشاريع لتناسب مختلف الشرائح الاجتماعية، 
+              تتيح مشاريع الإسكان القومية في دمياط الجديدة وحدات سكنية بأسعار مدعومة من الدولة. تتنوع هذه المشاريع لتناسب مختلف الشرائح الاجتماعية، 
               من الإسكان الاقتصادي إلى الإسكان الفاخر.
             </p>
             <p className="text-gray-700 leading-relaxed mb-6">
@@ -257,17 +258,24 @@ export default function NationalHousingArticle() {
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">بيت الوطن: للمصريين بالخارج</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يستهدف مشروع <Link href="/new-damietta/beit-al-watan-east" className="text-orange-600 hover:underline font-semibold">بيت الوطن</Link> 
-              المصريين المقيمين بالخارج، حيث يتم السداد بالدولار الأمريكي. يوفر المشروع قطع أراضي 
-              ووحدات سكنية بمواقع متميزة في دمياط الجديدة.
+              بيت الوطن برنامج تطرحه هيئة المجتمعات العمرانية الجديدة لبيع أراضٍ سكنية للمصريين بالخارج بالسداد
+              بالدولار، والحجز فيه يتم فقط على{" "}
+              <a href="https://lands.nuca.gov.eg/" rel="noopener" className="text-orange-600 hover:underline">الموقع الرسمي للحجز (هيئة المجتمعات العمرانية)</a>.
+              وفي دمياط الجديدة يحمل الاسم أيضًا مناطق سكنية قائمة (بيت الوطن شرق وغرب وامتداد الشاطئ)، والعقارات
+              المعروضة فيها على التيسير بيع بين أفراد. التيسير منصة مستقلة غير تابعة لهيئة المجتمعات العمرانية.
             </p>
-
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">مميزات بيت الوطن</h3>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li>السداد بالدولار يحمي من تقلبات سعر الصرف</li>
-              <li>مواقع متميزة بالقرب من الشاطئ</li>
-              <li>إمكانية البناء حسب التصميم المفضل</li>
-              <li>فرصة استثمارية ممتازة للمغتربين</li>
+              <li>
+                <Link href="/new-damietta/beit-al-watan-east/" className="text-orange-600 hover:underline">عقارات بيت الوطن شرق</Link>
+                {" "}و<Link href="/new-damietta/beit-al-watan-west/" className="text-orange-600 hover:underline">غرب</Link>
+                {" "}و<Link href="/new-damietta/beit-al-watan-beach/" className="text-orange-600 hover:underline">امتداد الشاطئ</Link>
+              </li>
+              <li>
+                <Link href="/beit-al-watan-for-sale/" className="text-orange-600 hover:underline">أراضي بيت الوطن للبيع (موثّقة)</Link>
+              </li>
+              <li>
+                أداة متابعة الطرح المجانية للحاجزين: <BrandPlatformLink className="text-orange-600 hover:underline" />
+              </li>
             </ul>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">مقارنة شاملة بين المشاريع</h2>
@@ -300,12 +308,6 @@ export default function NationalHousingArticle() {
                     <td className="p-3">محدودي الدخل</td>
                     <td className="p-3">500 ألف-1 مليون</td>
                     <td className="p-3">نصف تشطيب</td>
-                  </tr>
-                  <tr className="border-b bg-gray-50">
-                    <td className="p-3 font-semibold">بيت الوطن</td>
-                    <td className="p-3">المغتربين</td>
-                    <td className="p-3">بالدولار</td>
-                    <td className="p-3">حسب الاختيار</td>
                   </tr>
                 </tbody>
               </table>

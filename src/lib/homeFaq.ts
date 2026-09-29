@@ -11,24 +11,3 @@ export const HOME_FAQ_LINKS: { q: string; href: string }[] = [
   { q: "أين أجد أراضي بيت الوطن للبيع موثّقة؟", href: "/beit-al-watan-for-sale/" },
   { q: "كم يساوي عقاري؟", href: "/valuation/" },
 ];
-
-// مصدر الـ schema القديم لصفحات لم تنتقل بعد إلى src/lib/answers — يُحذف مع آخر مستخدم له
-export interface FaqItem {
-  question: string;
-  answer: string;
-}
-
-export function buildFaqSchema(items: FaqItem[]) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: items.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
-      },
-    })),
-  };
-}

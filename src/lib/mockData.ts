@@ -345,7 +345,7 @@ function generatePropertyForDistrict(district: string, id: number, cityId: CityI
   // Generate description
   const descriptions = [
     `${type} مميزة في ${district} - ${cityName} بمساحة ${area} متر مربع، تشطيب ${finishing}، موقع متميز وقريب من جميع الخدمات.`,
-    `فرصة استثمارية رائعة! ${type} في قلب ${district} بـ${cityName}، ${bedrooms} غرف نوم، تشطيب راقي ومميز.`,
+    `عرض للبيع: ${type} في قلب ${district} بـ${cityName}، ${bedrooms} غرف نوم، تشطيب راقي ومميز.`,
     `${type} للبيع بموقع حيوي في ${district} - ${cityName}، مساحة ${area} م²، تصميم عصري وإطلالة مميزة.`,
     `عرض خاص! ${type} فاخرة في ${district} بـ${cityName}، ${finishing}، قريبة من المدارس والمستشفيات.`,
     `${type} جاهزة للسكن في ${district} - ${cityName}، ${bedrooms} غرف + ${bathrooms} حمام، سعر مميز جداً.`,

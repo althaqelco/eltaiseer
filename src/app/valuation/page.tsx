@@ -100,8 +100,8 @@ export default function ValuationPage() {
                   <CheckCircle className="h-6 w-6 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-800">خبرة واسعة</h3>
-                  <p className="text-gray-600">فريق من الخبراء بخبرة +10 سنوات في سوق دمياط الجديدة</p>
+                  <h3 className="font-bold text-gray-800">مقارنة بالعروض الحالية</h3>
+                  <p className="text-gray-600">نقارن عقارك بوسيط سعر المتر لنفس النوع في نفس الحي من العروض الحالية</p>
                 </div>
               </div>
               

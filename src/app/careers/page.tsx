@@ -5,6 +5,8 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Briefcase, Users, TrendingUp, Heart, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { JsonLd } from "@/components/JsonLd";
+import { ORG, graph } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
   title: "وظائف | انضم لفريق التيسير للعقارات",
@@ -42,8 +44,7 @@ const openPositions = [
 ];
 
 export default function CareersPage() {
-  const jobPostingSchemas = openPositions.map((position) => ({
-    "@context": "https://schema.org",
+  const jobPostingNodes = openPositions.map((position) => ({
     "@type": "JobPosting",
     title: position.title,
     description: position.description,
@@ -57,12 +58,7 @@ export default function CareersPage() {
         addressCountry: "EG",
       },
     },
-    hiringOrganization: {
-      "@type": "Organization",
-      name: "التيسير للعقارات",
-      sameAs: "https://eltaiseer.com",
-      logo: "https://eltaiseer.com/logo.png",
-    },
+    hiringOrganization: ORG,
     datePosted: "2026-08-01",
     validThrough: "2027-06-30",
     jobLocationType: position.location.includes("عن بعد") ? "TELECOMMUTE" : undefined,
@@ -70,13 +66,7 @@ export default function CareersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {jobPostingSchemas.map((schema, index) => (
-        <script
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <JsonLd graph={graph(...jobPostingNodes)} />
       <Header />
 
       {/* Breadcrumb */}

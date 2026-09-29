@@ -7,12 +7,22 @@ import { Home, ChevronLeft, BookOpen, Calendar, ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/JsonLd";
+import { graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { editorialIso } from "@/lib/seo/editorial";
 
 export const metadata: Metadata = {
   title: "المدونة | نصائح ومقالات عقارية",
-  description: "مقالات ونصائح عقارية من خبراء التيسير للعقارات - كل ما تحتاج معرفته عن سوق العقارات في دمياط الجديدة والمنصورة الجديدة",
+  description: "مقالات التيسير للعقارات عن الشراء والأحياء والإجراءات والتشطيب في دمياط الجديدة والمنصورة الجديدة.",
   alternates: {
     canonical: "https://eltaiseer.com/blog/",
+  },
+  openGraph: {
+    url: "https://eltaiseer.com/blog/",
+    type: "website",
+    locale: "ar_EG",
+    title: "المدونة العقارية | التيسير للعقارات",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };
 
@@ -31,8 +41,8 @@ const blogPosts = [
   {
     id: 0,
     slug: "damietta-vs-mansoura",
-    title: "دمياط الجديدة أم المنصورة الجديدة؟ مقارنة شاملة بالأرقام 2026",
-    excerpt: "أكثر سؤال يصلنا من عملائنا — مقارنة تفصيلية بالأرقام: الأسعار، الخدمات، التسليم، وفرص الاستثمار، مع إجابة عملية مباشرة حسب هدفك.",
+    title: "دمياط الجديدة أم المنصورة الجديدة؟ مقارنة شاملة 2026",
+    excerpt: "أكثر سؤال يصلنا من عملائنا — مقارنة بين المدينتين في الخدمات والتسليم وحالة العمران، مع رابط لأسعار العروض الحالية وإجابة عملية حسب هدفك.",
     image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
     category: "مقارنات",
     categoryColor: "bg-slate-700",
@@ -54,7 +64,7 @@ const blogPosts = [
     id: 2,
     slug: "new-mansoura-districts",
     title: "أفضل المناطق للسكن في المنصورة الجديدة 2026",
-    excerpt: "دليل شامل لأحياء المنصورة الجديدة من R1 إلى R7، حي الفيلات، داون تاون، والواجهة البحرية. الأسعار والمميزات لكل منطقة.",
+    excerpt: "دليل لأحياء المنصورة الجديدة من R1 إلى R7، وحي الفيلات، وداون تاون، والواجهة البحرية: طبيعة كل منطقة ولمن تناسب.",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
     category: "المنصورة الجديدة",
     categoryColor: "bg-emerald-500",
@@ -64,10 +74,10 @@ const blogPosts = [
   {
     id: 3,
     slug: "new-mansoura-investment",
-    title: "الاستثمار العقاري في المنصورة الجديدة: دليل المستثمر الذكي",
-    excerpt: "فرص الاستثمار الذهبية في المنصورة الجديدة. عوائد تصل إلى 40% خلال 3 سنوات، أفضل المناطق للشراء، ونصائح الخبراء.",
+    title: "دليل المشتري في المنصورة الجديدة: الأحياء والتسليم وما تسأل عنه",
+    excerpt: "دليل المنصورة الجديدة للمشتري: الأحياء، والتسليم، وما تسأل عنه قبل الشراء.",
     image: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=800",
-    category: "استثمار",
+    category: "المنصورة الجديدة",
     categoryColor: "bg-emerald-600",
     date: "17 يناير 2026",
     readTime: "20 دقيقة",
@@ -87,7 +97,7 @@ const blogPosts = [
     id: 5,
     slug: "national-housing-projects",
     title: "مشاريع الإسكان القومية في دمياط الجديدة",
-    excerpt: "دليل شامل لمشاريع جنة ودار مصر وسكن مصر وبيت الوطن. الأسعار والمميزات وطرق الحجز.",
+    excerpt: "دليل لمشاريع جنة ودار مصر وسكن مصر في دمياط الجديدة، ومناطق بيت الوطن السكنية فيها.",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
     category: "المشاريع",
     categoryColor: "bg-orange-500",
@@ -97,10 +107,10 @@ const blogPosts = [
   {
     id: 6,
     slug: "investment-guide",
-    title: "الاستثمار العقاري في دمياط الجديدة: دليل المستثمر",
-    excerpt: "فرص الاستثمار العقاري والعائد المتوقع. كيف تحقق أرباحاً من العقارات في دمياط الجديدة.",
+    title: "كيف تقيّم عقارًا قبل الشراء في دمياط الجديدة",
+    excerpt: "كيف تقيّم عقارًا في دمياط الجديدة قبل الشراء: الموقع، والتشطيب، وسعر المتر مقارنة بالحي.",
     image: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=800",
-    category: "الاستثمار",
+    category: "نصائح الشراء",
     categoryColor: "bg-orange-500",
     date: "1 يناير 2026",
     readTime: "15 دقيقة",
@@ -118,34 +128,25 @@ const blogPosts = [
   },
 ];
 
-const categories = ["الكل", "نصائح الشراء", "المناطق", "المنصورة الجديدة", "المشاريع", "التشطيب", "استثمار"];
+const categories = ["الكل", "نصائح الشراء", "المناطق", "المنصورة الجديدة", "المشاريع", "التشطيب"];
 
 export default function BlogPage() {
-  const collectionSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "المدونة العقارية | التيسير للعقارات",
-    description: "مقالات ونصائح عقارية من خبراء التيسير للعقارات عن سوق العقارات في دمياط الجديدة والمنصورة الجديدة",
-    url: "https://eltaiseer.com/blog/",
-    isPartOf: { "@type": "WebSite", "@id": "https://eltaiseer.com/#website" },
-    mainEntity: {
-      "@type": "ItemList",
-      numberOfItems: blogPosts.length,
-      itemListElement: blogPosts.map((post, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        url: `https://eltaiseer.com/blog/${post.slug}/`,
-        name: post.title,
-      })),
-    },
-  };
+  const pageGraph = graph(
+    webPage({
+      path: "/blog/",
+      type: "CollectionPage",
+      name: "المدونة العقارية | التيسير للعقارات",
+      description: "مقالات عن الشراء والأحياء والإجراءات في دمياط الجديدة والمنصورة الجديدة",
+      mainEntity: ref(`${pageUrl("/blog/")}#itemlist`),
+      dateModified: editorialIso("/blog/", "modified"),
+      breadcrumb: false,
+    }),
+    itemListNode("/blog/", blogPosts.map((post) => `/blog/${post.slug}/`))
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
-      />
+      <JsonLd graph={pageGraph} />
       <Header />
 
       {/* Breadcrumb */}
@@ -168,7 +169,7 @@ export default function BlogPage() {
           <BookOpen className="h-16 w-16 text-orange-400 mx-auto mb-4" />
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">المدونة العقارية</h1>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            نصائح ومقالات من خبراء العقارات لمساعدتك في اتخاذ القرار الصحيح
+            مقالات عن الشراء والأحياء والإجراءات في دمياط الجديدة والمنصورة الجديدة
           </p>
         </div>
       </div>

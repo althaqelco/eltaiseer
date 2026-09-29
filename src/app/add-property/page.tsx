@@ -112,7 +112,7 @@ ${formData.notes || "لا يوجد"}
             <Building2 className="h-10 w-10 text-orange-400" />
             <div>
               <h1 className="text-3xl font-bold text-white">أضف عقارك مجاناً</h1>
-              <p className="text-orange-200 mt-1">اعرض عقارك أمام آلاف الباحثين عن العقارات</p>
+              <p className="text-orange-200 mt-1">اعرض عقارك على صفحات التيسير للعقارات</p>
             </div>
           </div>
         </div>
@@ -310,7 +310,7 @@ ${formData.notes || "لا يوجد"}
                 <ul className="space-y-3">
                   {[
                     "إضافة مجانية 100%",
-                    "وصول لآلاف الباحثين عن العقارات",
+                    "صفحة خاصة لعقارك بسعره ومواصفاته",
                     "عرض احترافي لعقارك",
                     "دعم فني متواصل",
                     "تسويق عبر منصات التواصل",

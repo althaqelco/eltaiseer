@@ -16,11 +16,11 @@ export const EDITORIAL: Record<string, EditorialDates> = {
   "/sitemap-page/": { published: "2026-01-12", modified: "2026-01-12", reviewed: "2026-01-12" },
   "/terms/": { published: "2026-01-12", modified: "2026-09-28", reviewed: "2026-09-28" },
   "/privacy/": { published: "2026-01-12", modified: "2026-09-28", reviewed: "2026-09-28" },
-  "/valuation/": { published: "2026-01-12", modified: "2026-09-28", reviewed: "2026-09-28" },
+  "/valuation/": { published: "2026-01-12", modified: "2026-09-29", reviewed: "2026-09-29" },
   "/blog/": { published: "2026-01-01", modified: "2026-09-29", reviewed: "2026-09-29" },
   "/beit-al-watan-for-sale/": { published: "2026-09-28", modified: "2026-09-29", reviewed: "2026-09-29" },
   "/beit-al-watan-for-sale/phase-11/": { published: "2026-09-28", modified: "2026-09-29", reviewed: "2026-09-29" },
-  "/beit-al-watan-for-sale/how-we-verify/": { published: "2026-09-28", modified: "2026-09-28", reviewed: "2026-09-28" },
+  "/beit-al-watan-for-sale/how-we-verify/": { published: "2026-09-28", modified: "2026-09-29", reviewed: "2026-09-29" },
   "/beit-al-watan-for-sale/sell/": { published: "2026-09-28", modified: "2026-09-28", reviewed: "2026-09-28" },
   "/beit-al-watan-for-sale/buy-request/": { published: "2026-09-28", modified: "2026-09-28", reviewed: "2026-09-28" },
   // صفحات تجمع إعلانات: dateModified من الإعلانات، وهذا لتاريخ مراجعة النص فقط

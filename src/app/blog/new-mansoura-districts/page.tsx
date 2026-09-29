@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, MapPin, CheckCircle, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleSchema, PostDates } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
     title: "أفضل المناطق للسكن في المنصورة الجديدة 2026 | دليل شامل",
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
         "فيلات المنصورة الجديدة",
     ],
     openGraph: {
+        url: "https://eltaiseer.com/blog/new-mansoura-districts/",
         title: "أفضل المناطق للسكن في المنصورة الجديدة 2026",
         description: "دليل شامل لأحياء ومناطق المنصورة الجديدة - اكتشف المنطقة المناسبة لك",
         type: "article",
@@ -76,7 +77,7 @@ export default function NewMansouraDistrictsArticle() {
                             <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">المنصورة الجديدة</span>
                             <span className="flex items-center gap-1">
                                 <Calendar className="h-4 w-4" />
-                                17 يناير 2026
+                                <PostDates path="/blog/new-mansoura-districts/" className="" />
                             </span>
                             <span className="flex items-center gap-1">
                                 <Clock className="h-4 w-4" />
@@ -171,8 +172,8 @@ export default function NewMansouraDistrictsArticle() {
                         <p className="text-gray-700 leading-relaxed mb-6">
                             يمثل <Link href="/new-mansoura/r2" className="text-emerald-600 hover:underline font-semibold">حي R2</Link> و
                             <Link href="/new-mansoura/r3" className="text-emerald-600 hover:underline font-semibold"> R3</Link>
-                            الخيار الأمثل للباحثين عن التوازن بين الموقع الجيد والسعر المعقول. هذه الأحياء تتميز
-                            بأسعار أقل من R1 مع الحفاظ على جودة البنية التحتية والتصميم.
+                            من أحياء النطاق السكني الأول، وخيار للمقارنة مع R1 في المساحات المتاحة. قارن وسيط
+                            سعر المتر في كل حي في صفحة أسعار العقارات.
                         </p>
 
                         {/* Image Break */}
@@ -222,11 +223,11 @@ export default function NewMansouraDistrictsArticle() {
                         <div className="bg-blue-50 rounded-xl p-6 mb-6">
                             <div className="flex items-center gap-2 mb-3">
                                 <TrendingUp className="h-5 w-5 text-blue-600" />
-                                <h4 className="font-bold text-blue-800">💡 نصيحة استثمارية</h4>
+                                <h4 className="font-bold text-blue-800">💡 قبل الشراء</h4>
                             </div>
                             <p className="text-blue-700">
-                                الوحدات في الواجهة البحرية تحقق أعلى عوائد إيجارية في المدينة، خاصة في موسم الصيف.
-                                الشراء الآن بأسعار ما قبل الاكتمال يضمن لك أرباحاً مضاعفة خلال 3-5 سنوات.
+                                اسأل المطور أو جهاز المدينة عن موعد تسليم الوحدة ومرافقها كتابيًا قبل التعاقد. المعلومات
+                                للاسترشاد وليست نصيحة مالية أو استثمارية.
                             </p>
                         </div>
 
@@ -250,7 +251,6 @@ export default function NewMansouraDistrictsArticle() {
                                 <thead className="bg-emerald-600 text-white">
                                     <tr>
                                         <th className="p-4 text-right">المنطقة</th>
-                                        <th className="p-4 text-right">متوسط السعر/م²</th>
                                         <th className="p-4 text-right">نوع العقارات</th>
                                         <th className="p-4 text-right">مناسب لـ</th>
                                     </tr>
@@ -258,33 +258,28 @@ export default function NewMansouraDistrictsArticle() {
                                 <tbody>
                                     <tr className="border-b">
                                         <td className="p-4 font-semibold">R1</td>
-                                        <td className="p-4">8,000 - 15,000 ج</td>
                                         <td className="p-4">شقق فاخرة</td>
                                         <td className="p-4">العائلات الراقية</td>
                                     </tr>
                                     <tr className="border-b bg-gray-50">
                                         <td className="p-4 font-semibold">R2 - R3</td>
-                                        <td className="p-4">8,000 - 14,000 ج</td>
                                         <td className="p-4">شقق متنوعة</td>
                                         <td className="p-4">العائلات الشابة</td>
                                     </tr>
                                     <tr className="border-b">
                                         <td className="p-4 font-semibold">حي الفيلات</td>
-                                        <td className="p-4">15,000 - 35,000 ج</td>
                                         <td className="p-4">فيلات وتوين هاوس</td>
                                         <td className="p-4">الباحثين عن الفخامة</td>
                                     </tr>
                                     <tr className="border-b bg-gray-50">
                                         <td className="p-4 font-semibold">داون تاون</td>
-                                        <td className="p-4">20,000 - 40,000 ج</td>
                                         <td className="p-4">تجاري وإداري</td>
-                                        <td className="p-4">المستثمرين</td>
+                                        <td className="p-4">النشاط التجاري</td>
                                     </tr>
                                     <tr className="border-b">
                                         <td className="p-4 font-semibold">الواجهة البحرية</td>
-                                        <td className="p-4">22,000 - 45,000 ج</td>
                                         <td className="p-4">شاليهات ووحدات فندقية</td>
-                                        <td className="p-4">محبي البحر والاستثمار</td>
+                                        <td className="p-4">محبي البحر</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -294,17 +289,16 @@ export default function NewMansouraDistrictsArticle() {
                         <ul className="list-disc list-inside space-y-3 text-gray-700 mb-6">
                             <li><strong>موقع استراتيجي:</strong> على ساحل البحر المتوسط وقريبة من المنصورة القديمة</li>
                             <li><strong>بنية تحتية ذكية:</strong> شبكة طرق حديثة ومرافق متطورة</li>
-                            <li><strong>بيئة صحية:</strong> 40% من المساحة مخصصة للمساحات الخضراء</li>
+                            <li><strong>مساحات خضراء:</strong> حدائق ومتنزهات في التخطيط العام للمدينة</li>
                             <li><strong>فرص عمل:</strong> منطقة صناعية ومنطقة أعمال مركزية</li>
-                            <li><strong>جامعة المنصورة الجديدة:</strong> أكبر جامعة تكنولوجية في الدلتا</li>
-                            <li><strong>مستثبل واعد:</strong> استثمارات حكومية ضخمة في التطوير</li>
+                            <li><strong>جامعة المنصورة الجديدة:</strong> داخل المدينة</li>
                         </ul>
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخلاصة</h2>
                         <p className="text-gray-700 leading-relaxed mb-6">
                             المنصورة الجديدة توفر خيارات متنوعة تناسب جميع الاحتياجات والميزانيات. من الأحياء السكنية
-                            المتكاملة إلى الفيلات الفاخرة والوحدات الشاطئية، ستجد ما يناسبك. المدينة في مرحلة نمو سريع،
-                            مما يجعل الشراء الآن فرصة استثمارية ذهبية.
+                            المتكاملة إلى الفيلات والوحدات الشاطئية، ستجد ما يناسبك. المدينة ما زالت تُستكمل، فراجع موعد
+                            التسليم لكل مشروع قبل الشراء.
                         </p>
                         <p className="text-gray-700 leading-relaxed mb-6">
                             ننصحك بزيارة المدينة شخصياً للتعرف على المناطق المختلفة. يمكنك
