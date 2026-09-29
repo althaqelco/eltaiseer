@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { fetchAllPropertiesStrict } from "@/lib/firestoreProperties";
-import { getCityDistrictSlugs, getPropertyUrl, SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
+import { getCityDistrictSlugs, getPropertyUrl, isPropertyDistrictKnown, SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
 import { filterByCity, filterByDistrict } from "@/lib/serverProperties";
 import { CATEGORY_SLUGS, categoryProperties, isAvailable } from "@/lib/listingCategories";
 import { isCategoryIndexable, isDistrictIndexable } from "@/lib/indexRules";
@@ -134,9 +134,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   // Property detail pages — صفحات المال الحقيقية، تُجلب من Firestore
-  // (إعلان بحي غير مُعرّف يبقى مدرجاً: صفحته قابلة للفهرسة، وإن صُحح حيه يحوَّل رابطه 308 للجديد)
+  // (إعلان بحي غير مُعرّف خارج الخريطة: صفحته noindex حتى يُصحَّح حيه، ثم يحوَّل رابطه 308 للجديد ويُدرج)
   const propertyPages: MetadataRoute.Sitemap = all
-    .filter(isAvailable)
+    .filter((p) => isAvailable(p) && isPropertyDistrictKnown(p))
     .map((p) => entry(getPropertyUrl(p), propertyLastmod(p), "weekly", 0.8));
 
   // أراضي بيت الوطن للبيع: الصفحات الثابتة، والإعلانات الموثّقة النشطة، والمدن القابلة للفهرسة فقط (5 إعلانات أو حي فيه 3)

@@ -37,6 +37,8 @@ interface PropertyPageClientProps {
   initialRelated?: Property[];
   citySlug: string;
   districtSlug: string;
+  /** false لحي فارغ أو غير معرّف: لا صفحة حي، فروابط «المزيد» ومسار التنقل إلى المدينة */
+  districtKnown?: boolean;
   propertyId: string;
 }
 
@@ -45,9 +47,11 @@ export default function PropertyPageClient({
   initialRelated = [],
   citySlug,
   districtSlug,
+  districtKnown = true,
   propertyId,
 }: PropertyPageClientProps) {
   const cityId = citySlug as CityId;
+  const moreHref = districtKnown ? `/${citySlug}/${districtSlug}/` : `/${citySlug}/`;
   const city = CITIES[cityId];
   const isNM = citySlug === "new-mansoura";
 
@@ -179,7 +183,8 @@ export default function PropertyPageClient({
           property.title,
           property.location.district,
           property.location.city || city?.nameAr,
-          districtSlug
+          districtSlug,
+          districtKnown
         )}
         schema={false}
       />
@@ -512,7 +517,7 @@ export default function PropertyPageClient({
                     </button>
 
                     <Link
-                      href={`/${citySlug}/${districtSlug}`}
+                      href={moreHref}
                       prefetch={false}
                       className={`flex items-center gap-1 text-${themeColor}-600 hover:text-${themeColor}-700 text-sm font-medium`}
                     >
@@ -564,7 +569,7 @@ export default function PropertyPageClient({
                 <p className="text-gray-500 text-sm mt-1">عقارات تناسب اهتماماتك بناءً على بحثك</p>
               </div>
               <Link
-                href={`/${citySlug}/${districtSlug}`}
+                href={moreHref}
                 prefetch={false}
                 className={`text-${themeColor}-600 hover:text-${themeColor}-700 text-sm font-medium flex items-center gap-1`}
               >

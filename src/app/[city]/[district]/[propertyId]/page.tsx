@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 import PropertyPageClient from "./PropertyPageClient";
 import { getPropertiesServer, getPropertyServer, serializeProperties } from "@/lib/serverProperties";
 import { calculateSimilarity } from "@/lib/propertyStore";
-import { SLUG_TO_DISTRICT, getDistrictSlug, isCityDistrictSlug } from "@/lib/districtSlugs";
+import { getDistrictSlug, isPropertyDistrictKnown } from "@/lib/districtSlugs";
 import { JsonLd } from "@/components/JsonLd";
 import { propertyGraph } from "@/lib/seo/property";
-import { ROBOTS_INDEX } from "@/lib/seo/robots";
+import { ROBOTS_INDEX, ROBOTS_NOINDEX } from "@/lib/seo/robots";
 import { SITE_NAME } from "@/lib/seo/owner-flags";
 import { displayTitle } from "@/lib/format";
 import { Property } from "@/lib/mockData";
@@ -41,7 +41,7 @@ function formatPrice(price: number): string {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { city, district, propertyId } = params;
+  const { city, propertyId } = params;
 
   if (!VALID_CITIES.includes(city)) {
     return { title: "الصفحة غير موجودة", robots: { index: false, follow: false } };
@@ -57,13 +57,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const cityName = property.location.cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
-  const districtName = property.location.district || SLUG_TO_DISTRICT[district] || "";
+  // حي فارغ: لا جملة حي في العنوان والوصف (كانت «… 3 غرف نوم  - …» و«للبيع في  بدمياط الجديدة»)
+  const districtName = (property.location.district || "").trim();
+  const districtKnown = isPropertyDistrictKnown(property);
   const priceText = formatPrice(property.price);
   const bedroomsText = property.details.bedrooms > 0 ? `${property.details.bedrooms} غرف نوم` : "";
   const areaText = `${property.details.area_sqm} متر`;
 
-  const title = `${property.type} ${areaText} ${bedroomsText ? bedroomsText + " " : ""}${districtName} - ${priceText}`;
-  const description = `${property.type} للبيع في ${districtName} ب${cityName}. المساحة: ${areaText}. ${bedroomsText ? bedroomsText + ". " : ""}التشطيب: ${property.details.finishing || "غير محدد"}. السعر: ${priceText}. ${property.payment?.type === "تقسيط" || property.payment?.type === "كاش أو تقسيط" ? "متاح التقسيط. " : ""}التيسير للعقارات.`;
+  const title = [property.type, areaText, bedroomsText, districtName].filter(Boolean).join(" ") + ` - ${priceText}`;
+  const where = districtName ? `في ${districtName} ب${cityName}` : `في ${cityName}`;
+  const description = `${property.type} للبيع ${where}. المساحة: ${areaText}. ${bedroomsText ? bedroomsText + ". " : ""}التشطيب: ${property.details.finishing || "غير محدد"}. السعر: ${priceText}. ${property.payment?.type === "تقسيط" || property.payment?.type === "كاش أو تقسيط" ? "متاح التقسيط. " : ""}التيسير للعقارات.`;
 
   // الرابط الأساسي يُبنى من بيانات العقار نفسه لضمان canonical واحد صحيح دائماً
   const canonicalSlug = getDistrictSlug(property.location.district);
@@ -84,9 +87,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    // صريح هنا لأن robots يُورث من layout الحي: عقار بحي غير مُعرّف (unknown-district)
-    // كان يرث noindex,nofollow من ذلك الـ layout رغم أنه في sitemap.xml
-    robots: ROBOTS_INDEX,
+    // صريح هنا لأن robots يُورث من layout الحي (noindex,nofollow لحي غير مُعرّف).
+    // عقار بحي غير مُعرّف (unknown-district): noindex,follow وخارج sitemap.xml حتى يُصحَّح حيه
+    robots: districtKnown ? ROBOTS_INDEX : ROBOTS_NOINDEX,
     openGraph: {
       title,
       description,
@@ -119,20 +122,22 @@ export default async function PropertyDetailPage({ params }: Props) {
   if (property) {
     const cityId = property.location.cityId || "new-damietta";
     const districtSlug = getDistrictSlug(property.location.district);
+    const districtName = (property.location.district || "").trim();
+    const cityName = cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
     const title = displayTitle(property.title);
     pageGraph = propertyGraph({
       id: property.id,
       title,
-      // وصف وقائعي مولَّد (لا نص البائع الحر في JSON-LD): النوع والحي والمساحة والسعر
-      description: `${property.type} للبيع في ${property.location.district}، ${
-        cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة"
-      }: ${property.details.area_sqm.toLocaleString("en-US")} م²، السعر ${property.price.toLocaleString("en-US")} جنيه.`,
+      // وصف وقائعي مولَّد (لا نص البائع الحر في JSON-LD): النوع والحي والمساحة والسعر؛ بلا جملة حي إن كان فارغًا
+      description: `${property.type} للبيع في ${districtName ? `${districtName}، ` : ""}${cityName}: ${property.details.area_sqm.toLocaleString(
+        "en-US"
+      )} م²، السعر ${property.price.toLocaleString("en-US")} جنيه.`,
       type: property.type,
       cityId,
-      cityName: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",
-      district: property.location.district,
+      cityName,
+      district: districtName,
       districtSlug,
-      districtKnown: isCityDistrictSlug(cityId, districtSlug),
+      districtKnown: isPropertyDistrictKnown(property),
       area: property.details.area_sqm,
       bedrooms: property.details.bedrooms,
       bathrooms: property.details.bathrooms,
@@ -173,6 +178,7 @@ export default async function PropertyDetailPage({ params }: Props) {
         initialRelated={serializeProperties(relatedProperties)}
         citySlug={city}
         districtSlug={district}
+        districtKnown={property ? isPropertyDistrictKnown(property) : true}
         propertyId={propertyId}
       />
     </>

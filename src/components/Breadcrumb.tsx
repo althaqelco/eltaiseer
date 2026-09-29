@@ -203,7 +203,9 @@ export function getPropertyBreadcrumb(
   propertyTitle: string, 
   districtName: string,
   cityName?: string,
-  districtSlug?: string
+  districtSlug?: string,
+  /** false لحي فارغ أو غير معرّف: لا حلقة حي (صفحته غير موجودة) */
+  districtKnown = true
 ): BreadcrumbItem[] {
   const citySlug = cityName === "المنصورة الجديدة" ? "new-mansoura" : "new-damietta";
   const finalDistrictSlug = districtSlug || districtName.toLowerCase().replace(/\s+/g, "-");
@@ -211,7 +213,7 @@ export function getPropertyBreadcrumb(
     { label: "الرئيسية", href: "/" },
     { label: "العقارات", href: "/properties" },
     { label: cityName || "دمياط الجديدة", href: `/${citySlug}` },
-    { label: districtName, href: `/${citySlug}/${finalDistrictSlug}` },
+    ...(districtKnown && districtName ? [{ label: districtName, href: `/${citySlug}/${finalDistrictSlug}` }] : []),
     {
       label: propertyTitle.length > 30 ? propertyTitle.substring(0, 30) + "..." : propertyTitle,
       schemaLabel: propertyTitle,

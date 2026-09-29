@@ -100,6 +100,13 @@ export function isCityDistrictSlug(city: string, slug: string): boolean {
   return getCityDistrictSlugs(city as CityId).includes(slug);
 }
 
+// إعلان حيه فارغ أو غير معرّف في مدينته (رابطه /{city}/unknown-district/…): صفحته noindex وخارج sitemap.xml،
+// وعنوانه ووصفه بلا جملة الحي، وروابط «المزيد» فيه إلى صفحة المدينة (صفحة الحي غير موجودة)
+export function isPropertyDistrictKnown(property: Pick<Property, "location">): boolean {
+  const citySlug = property.location.cityId || "new-damietta";
+  return isCityDistrictSlug(citySlug, getDistrictSlug(property.location.district));
+}
+
 // رابط صفحة العقار بالهيكل الجديد /[city]/[district]/[propertyId]
 export function getPropertyUrl(property: Property): string {
   const citySlug = property.location.cityId || "new-damietta";
