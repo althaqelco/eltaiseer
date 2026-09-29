@@ -8,6 +8,8 @@ import { getActiveListings } from "@/lib/bw/listings";
 import { isLive, listingPath } from "@/lib/bw/calc";
 import { BW_BASE } from "@/lib/bw/constants";
 import type { Property } from "@/lib/types";
+import { BLOG_SLUGS, editorialIso } from "@/lib/seo/editorial";
+import { cairoIso, cairoLocalToIso } from "@/lib/seo/time";
 
 const BASE_URL = "https://eltaiseer.com";
 
@@ -22,29 +24,20 @@ function url(path: string): string {
 
 // ── lastmod ──────────────────────────────────────────────────────────────────
 // لا "الآن" أبداً: وقت التوليد يتغير كل ساعة فيتعلم جوجل تجاهل lastmod الموقع كله.
-// - الإعلان: أحدث من updatedAt (يُكتب عند كل تعديل من لوحة التحكم) وcreatedAt
-// - صفحة تجمع إعلانات (الرئيسية، المدن، الأحياء، الفئات، الأسعار): أحدث lastmod بين إعلاناتها
-//   (المباعة ضمنها — تغيير الحالة لمباع يغير محتوى الصفحة). صفحة بلا إعلانات: بلا lastmod
-// - الصفحات الثابتة: تاريخ ثابت يُحدَّث يدوياً عند تعديل محتواها
-const LEGAL_UPDATED = new Date("2026-01-12");
-// نموذج التقييم يسلم الطلب إلى واتساب منذ 28/9/2026
-const VALUATION_UPDATED = new Date("2026-09-28");
-// الشروط والخصوصية حُدِّثتا 28/9/2026 بقسم بيع وشراء أراضي بيت الوطن
-const TERMS_UPDATED = new Date("2026-09-28");
-const BW_UPDATED = new Date("2026-09-28");
+// كل lastmod بصيغة cairoIso (إزاحة القاهرة السارية) ومن نفس مصدر dateModified في JSON-LD الصفحة (spec-final A3.2):
+// - الإعلان: updatedAt (يُكتب عند كل تعديل من لوحة التحكم) وإلا createdAt
+// - صفحة تجمع إعلانات (الرئيسية، المدن، الأحياء، الفئات، الأسعار): أحدث lastmod بين إعلاناتها المتاحة.
+//   صفحة بلا إعلانات: بلا lastmod
+// - الصفحات الثابتة والمقالات: تاريخ آخر تعديل حقيقي للنص من src/lib/seo/editorial.ts
+// - إعلان بيت الوطن: تاريخ توثيقه بتوقيت القاهرة
 
-// تاريخ آخر تعديل لكل مقال: الأحدث بين تاريخه في feed.xml وdatePublished في صفحته وتاريخه السابق هنا
-const BLOG_POSTS: Record<string, string> = {
-  "buying-steps-legal": "2026-08-17",
-  "damietta-vs-mansoura": "2026-08-17",
-  "buying-apartment-guide": "2026-01-18",
-  "best-districts": "2026-01-18",
-  "national-housing-projects": "2026-01-18",
-  "investment-guide": "2026-01-18",
-  "finishing-tips": "2026-01-28",
-  "new-mansoura-districts": "2026-01-18",
-  "new-mansoura-investment": "2026-01-18",
-};
+function verifiedIso(d: string): string | undefined {
+  try {
+    return cairoLocalToIso(String(d).slice(0, 10));
+  } catch {
+    return undefined;
+  }
+}
 
 function validDate(value: unknown): Date | undefined {
   if (!value) return undefined;
@@ -58,24 +51,26 @@ function maxDate(dates: (Date | undefined)[]): Date | undefined {
   return best;
 }
 
+// نفس تعريف dateModified في صفحة العقار: updatedAt إن وُجد وإلا createdAt
 function propertyLastmod(p: Property): Date | undefined {
-  return maxDate([validDate(p.updatedAt), validDate(p.createdAt)]);
+  return validDate(p.updatedAt) || validDate(p.createdAt);
 }
 
+// صفحات القوائم تحسب dateModified من الإعلانات المتاحة فقط، فالخريطة كذلك (lastmod ≤ dateModified)
 function hubLastmod(properties: Property[]): Date | undefined {
-  return maxDate(properties.map(propertyLastmod));
+  return maxDate(properties.filter(isAvailable).map(propertyLastmod));
 }
 
 // lastModified اختياري: الصفحة بلا تاريخ معروف تُدرج بلا <lastmod> بدل تاريخ مختلق
 function entry(
   path: string,
-  lastModified: Date | undefined,
+  lastModified: string | Date | undefined,
   changeFrequency: NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>,
   priority: number
 ): MetadataRoute.Sitemap[number] {
   return {
     url: url(path),
-    ...(lastModified ? { lastModified } : {}),
+    ...(lastModified ? { lastModified: typeof lastModified === "string" ? lastModified : cairoIso(lastModified) } : {}),
     changeFrequency,
     priority,
   };
@@ -92,26 +87,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // فشل الاتصال بـ Firestore وقت البناء لا يجب أن يكسر بقية الـ sitemap
   }
   const listingsLastmod = hubLastmod(all);
+  const ed = (path: string) => editorialIso(path, "modified");
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     entry("", listingsLastmod, "daily", 1.0),
     entry("properties", listingsLastmod, "daily", 0.9),
     entry("prices", listingsLastmod, "daily", 0.85),
-    entry("blog", maxDate(Object.values(BLOG_POSTS).map((d) => new Date(d))), "weekly", 0.8),
-    entry("valuation", VALUATION_UPDATED, "monthly", 0.8),
-    entry("about", LEGAL_UPDATED, "monthly", 0.7),
-    entry("contact", LEGAL_UPDATED, "monthly", 0.7),
-    entry("careers", LEGAL_UPDATED, "monthly", 0.6),
-    entry("terms", TERMS_UPDATED, "yearly", 0.3),
-    entry("privacy", TERMS_UPDATED, "yearly", 0.3),
-    entry("cookies", LEGAL_UPDATED, "yearly", 0.3),
-    entry("sitemap-page", LEGAL_UPDATED, "monthly", 0.5),
+    entry("blog", ed("/blog/"), "weekly", 0.8),
+    entry("valuation", ed("/valuation/"), "monthly", 0.8),
+    entry("about", ed("/about/"), "monthly", 0.7),
+    entry("contact", ed("/contact/"), "monthly", 0.7),
+    entry("careers", ed("/careers/"), "monthly", 0.6),
+    entry("terms", ed("/terms/"), "yearly", 0.3),
+    entry("privacy", ed("/privacy/"), "yearly", 0.3),
+    entry("cookies", ed("/cookies/"), "yearly", 0.3),
+    entry("sitemap-page", ed("/sitemap-page/"), "monthly", 0.5),
   ];
 
-  // Blog posts
-  const blogPages: MetadataRoute.Sitemap = Object.entries(BLOG_POSTS).map(([slug, date]) =>
-    entry(`blog/${slug}`, new Date(date), "monthly", 0.7)
+  // Blog posts — آخر تعديل حقيقي لكل مقال (لا تاريخ النشر)
+  const blogPages: MetadataRoute.Sitemap = BLOG_SLUGS.map((slug) =>
+    entry(`blog/${slug}`, ed(`/blog/${slug}/`), "monthly", 0.7)
   );
 
   // Category pages (ومنها التقسيط) — فئة بلا عروض متاحة خارج الخريطة (lib/indexRules.ts)
@@ -149,8 +145,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const now = Date.now();
     const live = (await getActiveListings()).filter((l) => isLive(l, now));
-    const listingLastmod = (l: (typeof live)[number]) =>
-      maxDate([validDate(l.updatedAt), validDate(l.verifiedAt)]);
+    // نفس dateModified في صفحة الإعلان: تاريخ التوثيق (بتوقيت القاهرة)
+    const listingLastmod = (l: (typeof live)[number]) => validDate(verifiedIso(l.verifiedAt));
     bwListingsLastmod = maxDate(live.map(listingLastmod));
     const byCity: Record<string, { districts: Record<string, number>; lastmod?: Date }> = {};
     for (const l of live) {
@@ -167,7 +163,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .map(([city, c]) => entry(`${BW_BASE}/${city}`, c.lastmod, "daily", 0.8));
     const items = live.map((l) => ({
       url: url(listingPath(l)),
-      lastModified: new Date(l.verifiedAt),
+      ...(verifiedIso(l.verifiedAt) ? { lastModified: verifiedIso(l.verifiedAt) as string } : {}),
       changeFrequency: "weekly" as const,
       priority: 0.7,
     }));
@@ -176,11 +172,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // فشل Firestore لا يكسر بقية الـ sitemap
   }
   bwPages = [
-    entry(BW_BASE, maxDate([BW_UPDATED, bwListingsLastmod]), "daily", 0.9),
-    entry(`${BW_BASE}/buy-request`, BW_UPDATED, "monthly", 0.7),
-    entry(`${BW_BASE}/sell`, BW_UPDATED, "monthly", 0.7),
-    entry(`${BW_BASE}/how-we-verify`, BW_UPDATED, "monthly", 0.6),
-    entry(`${BW_BASE}/phase-11`, BW_UPDATED, "daily", 0.8),
+    entry(BW_BASE, maxDate([validDate(ed(`${BW_BASE}/`)), bwListingsLastmod]), "daily", 0.9),
+    entry(`${BW_BASE}/buy-request`, ed(`${BW_BASE}/buy-request/`), "monthly", 0.7),
+    entry(`${BW_BASE}/sell`, ed(`${BW_BASE}/sell/`), "monthly", 0.7),
+    entry(`${BW_BASE}/how-we-verify`, ed(`${BW_BASE}/how-we-verify/`), "monthly", 0.6),
+    entry(`${BW_BASE}/phase-11`, ed(`${BW_BASE}/phase-11/`), "daily", 0.8),
     ...bwPages,
   ];
 
