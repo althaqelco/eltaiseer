@@ -9,7 +9,7 @@ import { ArticleSchema, PostDates } from "@/components/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026 | نصائح الخبراء",
-  description: "دليل شامل ومفصل لشراء شقة في دمياط الجديدة. تعرف على أفضل المناطق، الأسعار، نصائح التفاوض، والإجراءات القانونية. كل ما تحتاج معرفته قبل شراء شقتك.",
+  description: "خطوات شراء شقة في دمياط الجديدة: تحديد الميزانية من وسيط سعر المتر في كل حي، ومعاينة الشقة، والتحقق من الأوراق مع محامٍ، والتفاوض على سعر الطلب.",
   keywords: [
     "شراء شقة دمياط الجديدة",
     "شقق للبيع دمياط الجديدة",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     url: "https://eltaiseer.com/blog/buying-apartment-guide/",
     title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026",
-    description: "كل ما تحتاج معرفته قبل شراء شقتك في دمياط الجديدة - نصائح الخبراء",
+    description: "خطوات شراء شقة في دمياط الجديدة: الميزانية والمعاينة والأوراق والتفاوض",
     type: "article",
     publishedTime: "2026-01-15",
     authors: ["التيسير للعقارات"],
@@ -44,7 +44,7 @@ export default function BuyingGuideArticle() {
     <div className="min-h-screen bg-gray-50">
       <ArticleSchema
         title="دليلك الشامل لشراء شقة في دمياط الجديدة 2026 | نصائح الخبراء"
-        description="دليل شامل ومفصل لشراء شقة في دمياط الجديدة. تعرف على أفضل المناطق، الأسعار، نصائح التفاوض، والإجراءات القانونية."
+        description="خطوات شراء شقة في دمياط الجديدة: تحديد الميزانية من وسيط سعر المتر في كل حي، ومعاينة الشقة، والتحقق من الأوراق مع محامٍ، والتفاوض على سعر الطلب."
         url="https://eltaiseer.com/blog/buying-apartment-guide"
         image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200"
         datePublished="2026-01-15"
@@ -80,15 +80,16 @@ export default function BuyingGuideArticle() {
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
-                12 دقيقة قراءة
+                6 دقائق قراءة
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
               دليلك الشامل لشراء شقة في دمياط الجديدة 2026
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              هل تفكر في شراء شقة في دمياط الجديدة؟ في هذا الدليل الشامل، نقدم لك كل ما تحتاج معرفته 
-              من اختيار المنطقة المناسبة إلى إتمام عملية الشراء بنجاح.
+            <p className="answer-lede text-xl text-gray-600 leading-relaxed">
+              لشراء شقة في دمياط الجديدة: حدّد ميزانيتك بمقارنة وسيط سعر المتر في الحي الذي تريده، ثم عاين الشقة
+              والمبنى في أوقات مختلفة، وتحقق من أوراق الملكية وموقف الأقساط والمرافق مع محامٍ قبل دفع أي مبلغ، ثم
+              فاوض على سعر الطلب ووقّع العقد. يشرح هذا الدليل كل خطوة باختصار ويحيلك إلى الأرقام المحسوبة من العروض الحالية.
             </p>
           </header>
 
@@ -96,7 +97,7 @@ export default function BuyingGuideArticle() {
           <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-10">
             <Image
               src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200"
-              alt="شقق للبيع في دمياط الجديدة - دليل شامل لشراء الشقق"
+              alt="صورة توضيحية لمبنى سكني"
               fill
               className="object-cover"
               priority
@@ -105,212 +106,115 @@ export default function BuyingGuideArticle() {
 
           {/* Article Content */}
           <div className="prose prose-lg max-w-none">
-            
-            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">مقدمة: لماذا دمياط الجديدة؟</h2>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              تعتبر مدينة دمياط الجديدة واحدة من أكثر المدن الجديدة جاذبية للاستثمار العقاري في مصر. 
-              تتميز المدينة بموقعها الاستراتيجي على ساحل البحر المتوسط، وتخطيطها العمراني الحديث، 
-              وأسعارها التنافسية مقارنة بالمدن الجديدة الأخرى. سواء كنت تبحث عن سكن دائم أو استثمار عقاري، 
-              فإن دمياط الجديدة توفر لك فرصاً متنوعة تناسب جميع الاحتياجات والميزانيات.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              في <Link href="/" className="text-orange-600 hover:underline font-semibold">التيسير للعقارات</Link>، 
-              نقدم لك هذا الدليل الشامل الذي يغطي جميع جوانب شراء شقة في دمياط الجديدة، 
-              من اختيار الحي المناسب إلى إتمام الإجراءات القانونية.
-            </p>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخطوة الأولى: تحديد الميزانية</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              قبل البدء في البحث عن شقة، من الضروري تحديد ميزانيتك بدقة. تتراوح أسعار الشقق في دمياط الجديدة 
-              بشكل كبير حسب المنطقة والمساحة ومستوى التشطيب. وسيط سعر المتر لكل حي ونوع عقار، محسوبًا من العروض
-              الحالية، في{" "}
-              <Link href="/prices/" className="text-orange-600 hover:underline font-semibold">صفحة أسعار العقارات</Link>.
+              تختلف أسعار الشقق في دمياط الجديدة حسب الحي والمساحة والدور ومستوى التشطيب. بدل الاعتماد على أرقام عامة،
+              قارن وسيط سعر المتر في الحي الذي تريده، وهو محسوب من العروض الحالية ويتحدث تلقائيًا، في 
+              <Link href="/prices/#new-damietta" className="text-orange-600 hover:underline font-semibold">صفحة أسعار العقارات</Link>. الأسعار هناك أسعار طلب من البائعين
+              وليست أسعار بيع منفذة.
             </p>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يمكنك استعراض <Link href="/new-damietta" className="text-orange-600 hover:underline font-semibold">شقق للبيع في دمياط الجديدة</Link> 
-              على موقعنا للاطلاع على الأسعار الحالية في السوق.
+              وإن كنت تفكر في التقسيط، فشروطه يحددها كل بائع وتظهر في صفحة العقار؛ والشقق التي تقبل التقسيط الآن في 
+              <Link href="/properties/installments/#new-damietta" className="text-orange-600 hover:underline font-semibold">عقارات بالتقسيط في دمياط الجديدة</Link>.
             </p>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخطوة الثانية: اختيار المنطقة المناسبة</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              يعد اختيار المنطقة من أهم القرارات التي ستتخذها. كل حي في دمياط الجديدة له مميزاته الخاصة:
-            </p>
-
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">الأحياء السكنية التقليدية</h3>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              تضم دمياط الجديدة ستة أحياء سكنية رئيسية، لكل منها طابعه الخاص:
+              لا يوجد حي واحد يناسب الجميع؛ الاختيار يعتمد على موعد السكن الذي تحتاجه، وقربك من العمل والمدارس، وميزانيتك.
+              لكل حي صفحة بعروضه الحالية ووسيط سعر المتر فيه:
             </p>
             <ul className="list-disc list-inside space-y-3 text-gray-700 mb-6">
               <li>
-                <Link href="/new-damietta/first-district" className="text-orange-600 hover:underline font-semibold">الحي الأول</Link>: 
-                من أقدم وأرقى الأحياء، يتميز بالخدمات المكتملة والموقع المركزي
+                الأحياء الرئيسية: 
+                <Link href="/new-damietta/first-district/" className="text-orange-600 hover:underline">الحي الأول</Link>، 
+                <Link href="/new-damietta/second-district/" className="text-orange-600 hover:underline">الثاني</Link>، 
+                <Link href="/new-damietta/third-district/" className="text-orange-600 hover:underline">الثالث</Link>، 
+                <Link href="/new-damietta/fourth-district/" className="text-orange-600 hover:underline">الرابع</Link>، 
+                <Link href="/new-damietta/fifth-district/" className="text-orange-600 hover:underline">الخامس</Link>.
               </li>
               <li>
-                <Link href="/new-damietta/second-district" className="text-orange-600 hover:underline font-semibold">الحي الثاني</Link>: 
-                يوفر توازناً جيداً بين السعر والموقع، مثالي للعائلات
-              </li>
-              <li>
-                <Link href="/new-damietta/third-district" className="text-orange-600 hover:underline font-semibold">الحي الثالث</Link>: 
-                أسعار معقولة مع توفر الخدمات الأساسية
-              </li>
-              <li>
-                <Link href="/new-damietta/fourth-district" className="text-orange-600 hover:underline font-semibold">الحي الرابع</Link>: 
-                منطقة هادئة مناسبة للباحثين عن الخصوصية
-              </li>
-              <li>
-                <Link href="/new-damietta/fifth-district" className="text-orange-600 hover:underline font-semibold">الحي الخامس</Link>: 
-                ما زال يُستكمل
+                مشروعات الإسكان القومي: 
+                <Link href="/new-damietta/janna-project/" className="text-orange-600 hover:underline">مشروع جنة</Link>، 
+                <Link href="/new-damietta/dar-misr-1/" className="text-orange-600 hover:underline">دار مصر</Link>، 
+                <Link href="/new-damietta/sakan-misr-south/" className="text-orange-600 hover:underline">سكن مصر</Link>. مواصفات التشطيب ونظام السداد
+                الأصلي تحددهما كراسة طرح كل مشروع، وتفاصيلها في 
+                <Link href="/blog/national-housing-projects/" className="text-orange-600 hover:underline">مشاريع الإسكان القومية في دمياط الجديدة</Link>.
               </li>
             </ul>
-
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">مشاريع الإسكان القومي</h3>
             <p className="text-gray-700 leading-relaxed mb-6">
-              توفر المشاريع القومية خيارات ممتازة للباحثين عن أسعار معقولة مع جودة بناء عالية:
+              وللمقارنة بين الأحياء حسب الغرض: 
+              <Link href="/blog/best-districts/" className="text-orange-600 hover:underline font-semibold">أفضل الأحياء للسكن في دمياط الجديدة</Link>.
             </p>
-            <ul className="list-disc list-inside space-y-3 text-gray-700 mb-6">
-              <li>
-                <Link href="/new-damietta/janna-project" className="text-orange-600 hover:underline font-semibold">مشروع جنة</Link>: 
-                وحدات فاخرة بتشطيبات عالية الجودة
-              </li>
-              <li>
-                <Link href="/new-damietta/dar-misr-1" className="text-orange-600 hover:underline font-semibold">دار مصر</Link>: 
-                تشطيب سوبر لوكس بأسعار تنافسية
-              </li>
-              <li>
-                <Link href="/new-damietta/sakan-misr-south" className="text-orange-600 hover:underline font-semibold">سكن مصر</Link>: 
-                خيار اقتصادي مع مستوى تشطيب جيد
-              </li>
-            </ul>
-
-            {/* Image Break */}
-            <div className="relative h-[300px] rounded-xl overflow-hidden my-10">
-              <Image
-                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200"
-                alt="أحياء دمياط الجديدة - مناطق سكنية متميزة"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <p className="text-white text-sm">أحياء دمياط الجديدة تتميز بالتخطيط العمراني الحديث</p>
-              </div>
-            </div>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخطوة الثالثة: معاينة الشقة</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              المعاينة الشخصية للشقة خطوة لا يمكن تجاوزها. إليك قائمة بأهم النقاط التي يجب التحقق منها:
+              المعاينة الشخصية خطوة لا يمكن تجاوزها، ويفضل أن تكون في أوقات مختلفة من اليوم. تحقق من:
             </p>
-
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">الفحص الإنشائي</h3>
+            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">حالة الشقة والمبنى</h3>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li>التأكد من عدم وجود شروخ في الحوائط أو الأسقف</li>
-              <li>فحص حالة الأرضيات والنوافذ</li>
-              <li>التحقق من سلامة التمديدات الكهربائية والصحية</li>
-              <li>معاينة السلالم والمصعد (إن وجد)</li>
-              <li>التأكد من جودة العزل المائي والحراري</li>
+              <li>عدم وجود شروخ في الحوائط أو الأسقف</li>
+              <li>حالة الأرضيات والنوافذ</li>
+              <li>سلامة التمديدات الكهربائية والصحية</li>
+              <li>حالة السلالم والمصعد (إن وجد) والأجزاء المشتركة</li>
+              <li>العزل المائي، خاصة في الدور الأخير</li>
             </ul>
-
             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">الموقع والخدمات</h3>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li>قرب الشقة من المدارس والجامعات</li>
-              <li>توفر المواصلات العامة</li>
-              <li>وجود المحلات التجارية والخدمات الأساسية</li>
-              <li>مستوى الأمان في المنطقة</li>
-              <li>جودة الشوارع والبنية التحتية</li>
+              <li>المسافة إلى المدارس والجامعة والعمل</li>
+              <li>المواصلات العامة</li>
+              <li>المحلات والخدمات الأساسية في الحي</li>
+              <li>حالة الشوارع والإنارة</li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخطوة الرابعة: التفاوض على السعر</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخطوة الرابعة: التحقق من الأوراق</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              التفاوض مهارة أساسية في سوق العقارات. إليك بعض النصائح للحصول على أفضل سعر:
+              الأوراق المطلوبة ورسوم التسجيل تختلف حسب حالة الشقة: عقد مسجل، أو عقود ابتدائية متسلسلة، أو تخصيص من جهاز
+              المدينة لم يُستكمل سداده. لذلك لا ننشر هنا نسبًا أو رسومًا ثابتة؛ راجع الحالة الفعلية مع محامٍ ومع الشهر العقاري
+              أو جهاز المدينة قبل التوقيع. قبل دفع أي مبلغ:
+            </p>
+            <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
+              <li>اطلب ما يثبت ملكية البائع، وتأكد أن اسمه يطابق بطاقته</li>
+              <li>اسأل عن أي أقساط متبقية للجهاز أو للمطور، وعن إيصالات المرافق</li>
+              <li>راجع مسودة العقد مع محامٍ متخصص في العقارات</li>
+            </ul>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              تفاصيل الإجراءات في 
+              <Link href="/blog/buying-steps-legal/" className="text-orange-600 hover:underline font-semibold">خطوات شراء عقار: الأوراق والإجراءات</Link>.
+            </p>
+
+            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخطوة الخامسة: التفاوض على السعر</h2>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              السعر المعروض سعر طلب يحدده البائع، والتفاوض يتم بين الطرفين. قبل التفاوض:
             </p>
             <ul className="list-disc list-inside space-y-3 text-gray-700 mb-6">
-              <li><strong>اعرف السوق:</strong> ابحث عن أسعار الشقق المماثلة في نفس المنطقة</li>
-              <li><strong>لا تظهر الحماس:</strong> حافظ على هدوئك ولا تُظهر رغبتك الشديدة في الشراء</li>
-              <li><strong>اذكر العيوب:</strong> استخدم أي عيوب في الشقة كورقة تفاوض</li>
-              <li><strong>كن مستعداً للانسحاب:</strong> أحياناً التهديد بالانسحاب يجلب عروضاً أفضل</li>
-              <li><strong>تفاوض على الإضافات:</strong> إذا لم ينخفض السعر، تفاوض على تحسينات أو أثاث</li>
+              <li><strong>اعرف السوق:</strong> قارن سعر المتر في الشقة بوسيط الحي في صفحة الأسعار</li>
+              <li><strong>اذكر ما وجدته في المعاينة:</strong> العيوب وتكلفة إصلاحها جزء من التفاوض</li>
+              <li><strong>لا تتعجل:</strong> لا تتخذ القرار تحت ضغط البائع أو الوسيط</li>
+              <li><strong>اتفق على التفاصيل كتابة:</strong> ما يشمله السعر، وموعد التسليم، وطريقة الدفع</li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخطوة الخامسة: الإجراءات القانونية</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">التمويل العقاري</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              بعد الاتفاق على السعر، تأتي مرحلة الإجراءات القانونية التي يجب التعامل معها بحذر:
+              إن كنت تحتاج تمويلًا عقاريًا، فالمقدم ومدة السداد والفائدة يحددها كل بنك أو جهة تمويل وتتغير من برنامج لآخر؛
+              اطلب الشروط مكتوبة ومحدثة من البنك قبل الالتزام مع البائع.
             </p>
 
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">المستندات المطلوبة</h3>
+            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">كيف يساعدك التيسير للعقارات؟</h2>
             <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li>صورة بطاقة الرقم القومي للبائع والمشتري</li>
-              <li>سند ملكية العقار الأصلي</li>
-              <li>شهادة من الحي تفيد بعدم وجود مخالفات</li>
-              <li>إيصالات المرافق (كهرباء، مياه، غاز)</li>
-              <li>رخصة البناء إن وجدت</li>
-            </ul>
-
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">خطوات التسجيل</h3>
-            <ol className="list-decimal list-inside space-y-2 text-gray-700 mb-6">
-              <li>كتابة عقد ابتدائي وتسجيله في الشهر العقاري</li>
-              <li>دفع رسوم التسجيل (حوالي 2-3% من قيمة العقار)</li>
-              <li>الحصول على العقد المسجل النهائي</li>
-              <li>نقل ملكية المرافق باسم المالك الجديد</li>
-            </ol>
-
-            {/* Image Break */}
-            <div className="relative h-[300px] rounded-xl overflow-hidden my-10">
-              <Image
-                src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200"
-                alt="إجراءات شراء شقة - الأوراق والمستندات المطلوبة"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <p className="text-white text-sm">تأكد من استكمال جميع الأوراق القانونية قبل إتمام الشراء</p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">نصائح إضافية للمشترين</h2>
-            
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">التمويل العقاري</h3>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              إذا كنت تحتاج لتمويل عقاري، فإن العديد من البنوك المصرية توفر برامج تمويل بشروط ميسرة:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li>مقدم يبدأ من 15-20% من قيمة الوحدة</li>
-              <li>فترات سداد تصل إلى 20 عاماً</li>
-              <li>معدلات فائدة تنافسية (متناقصة أو ثابتة)</li>
-              <li>إمكانية السداد المبكر بدون غرامات في بعض البرامج</li>
-            </ul>
-
-            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-3">أخطاء يجب تجنبها</h3>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li>عدم التسرع في اتخاذ القرار تحت ضغط البائع</li>
-              <li>إهمال فحص المستندات القانونية</li>
-              <li>عدم زيارة الشقة في أوقات مختلفة من اليوم</li>
-              <li>تجاهل حالة المبنى والمناطق المشتركة</li>
-              <li>عدم الاستعانة بمحامٍ متخصص في العقارات</li>
-            </ul>
-
-            <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">لماذا تختار التيسير للعقارات؟</h2>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              في <Link href="/" className="text-orange-600 hover:underline font-semibold">التيسير للعقارات</Link>، 
-              نقدم لك تجربة شراء سلسة وآمنة. نحن نوفر:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
-              <li>مجموعة واسعة من <Link href="/properties" className="text-orange-600 hover:underline">العقارات المتاحة</Link> بأسعار مختلفة</li>
-              <li>معلومات دقيقة وشفافة عن كل عقار</li>
-              <li>خدمة <Link href="/valuation" className="text-orange-600 hover:underline">تقييم العقارات</Link> المجانية</li>
-              <li>فريق من الخبراء لمساعدتك في كل خطوة</li>
-              <li>متابعة ما بعد البيع لضمان رضاك التام</li>
+              <li><Link href="/properties/" className="text-orange-600 hover:underline">العقارات المعروضة للبيع</Link>، ولكل عقار صفحة بمساحته وسعره وطريقة الدفع</li>
+              <li><Link href="/prices/" className="text-orange-600 hover:underline">وسيط سعر المتر لكل حي</Link> من العروض الحالية</li>
+              <li><Link href="/valuation/" className="text-orange-600 hover:underline">تقييم عقاري مجاني</Link> إن كنت تريد مقارنة سعر شقة بعينها</li>
             </ul>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">الخلاصة</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              شراء شقة في دمياط الجديدة قرار استثماري ممتاز إذا تم بالشكل الصحيح. باتباع الخطوات 
-              المذكورة في هذا الدليل والاستعانة بالخبراء المتخصصين، يمكنك الحصول على شقة أحلامك 
-              بأفضل سعر وبدون مشاكل قانونية.
+              حدّد ميزانيتك من الأسعار الفعلية في الحي، وعاين الشقة جيدًا، وتحقق من الأوراق مع محامٍ قبل دفع أي مبلغ،
+              ثم فاوض على سعر الطلب. المعلومات هنا للاسترشاد وليست نصيحة مالية أو استثمارية أو قانونية.
             </p>
             <p className="text-gray-700 leading-relaxed mb-6">
-              لا تتردد في <Link href="/properties" className="text-orange-600 hover:underline font-semibold">تصفح شققنا المتاحة</Link> أو 
-              التواصل معنا للحصول على استشارة مجانية. نحن هنا لمساعدتك في العثور على منزل أحلامك.
+              <Link href="/new-damietta/" className="text-orange-600 hover:underline font-semibold">تصفح عقارات دمياط الجديدة</Link> أو تواصل معنا لأي سؤال.
             </p>
-
           </div>
 
           {/* Author & Share */}
@@ -336,7 +240,7 @@ export default function BuyingGuideArticle() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Link href="/blog/best-districts" className="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow flex items-center gap-4">
                 <div className="w-20 h-20 relative rounded-lg overflow-hidden flex-shrink-0">
-                  <Image src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200" alt="أفضل الأحياء" fill className="object-cover" />
+                  <Image src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200" alt="" fill className="object-cover" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 line-clamp-2">أفضل الأحياء للسكن في دمياط الجديدة</h4>
@@ -347,10 +251,10 @@ export default function BuyingGuideArticle() {
               </Link>
               <Link href="/blog/investment-guide" className="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow flex items-center gap-4">
                 <div className="w-20 h-20 relative rounded-lg overflow-hidden flex-shrink-0">
-                  <Image src="https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=200" alt="الاستثمار العقاري" fill className="object-cover" />
+                  <Image src="https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=200" alt="" fill className="object-cover" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 line-clamp-2">دليل الاستثمار العقاري في دمياط الجديدة</h4>
+                  <h4 className="font-semibold text-gray-900 line-clamp-2">كيف تقيّم عقارًا قبل الشراء في دمياط الجديدة</h4>
                   <span className="text-sm text-orange-600 flex items-center gap-1 mt-2">
                     اقرأ المزيد <ArrowLeft className="h-3 w-3" />
                   </span>
@@ -362,9 +266,9 @@ export default function BuyingGuideArticle() {
           {/* CTA */}
           <div className="bg-gradient-to-l from-orange-500 to-orange-600 rounded-2xl p-8 mt-10 text-center text-white">
             <h3 className="text-2xl font-bold mb-4">هل أنت مستعد لشراء شقتك؟</h3>
-            <p className="text-orange-100 mb-6">تصفح مئات الشقق المتاحة في دمياط الجديدة الآن</p>
+            <p className="text-orange-100 mb-6">تصفح الشقق المعروضة للبيع الآن في دمياط الجديدة والمنصورة الجديدة</p>
             <Button asChild variant="secondary" size="lg">
-              <Link href="/properties">تصفح الشقق المتاحة</Link>
+              <Link href="/properties/apartments/">تصفح الشقق المتاحة</Link>
             </Button>
           </div>
 
