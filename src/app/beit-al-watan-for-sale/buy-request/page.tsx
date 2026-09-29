@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 import { Disclaimer } from "@/components/bw/BwParts";
 import { RequestForm } from "@/components/bw/RequestForm";
 import { cityBySlug } from "@/lib/bw/cities";
+import { getAnswer } from "@/lib/answers";
 import { BW_BASE, NO_DEPOSIT_LINE } from "@/lib/bw/constants";
 
 const TITLE = "طلب شراء أرض بيت الوطن (بالتنازل الرسمي)";
@@ -17,6 +18,8 @@ export const metadata: Metadata = bwMeta({ title: TITLE, description: DESC, path
 export default function BuyRequestPage({ searchParams }: { searchParams: { city?: string; phase?: string } }) {
   const city = cityBySlug(searchParams.city || "")?.slug || "";
   const phase = searchParams.phase === "11" ? "11" : undefined;
+  // الفقرة الافتتاحية تجيب Q111 (src/lib/answers/resale.ts)
+  const lede = getAnswer("Q111")?.a({}) ?? null;
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -25,9 +28,7 @@ export default function BuyRequestPage({ searchParams }: { searchParams: { city?
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 max-w-6xl mx-auto">
           <div className="lg:col-span-2 space-y-5">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">سجّل طلب شراء أرض بيت الوطن</h1>
-            <p className="text-gray-700 text-lg leading-relaxed">
-              اكتب المدينة والميزانية، ونتواصل معك أول ما تتوثّق قطعة مطابقة. لا نرسل لك إلا إعلانات راجعنا مستنداتها وعاينّاها.
-            </p>
+            {lede && <p className="answer-lede text-gray-700 text-lg leading-relaxed">{lede}</p>}
             <div className="rounded-xl bg-amber-50 border border-amber-200 p-5">
               <h2 className="font-bold text-gray-900 mb-2">عن المرحلة 11</h2>
               <p className="text-gray-800 leading-relaxed">

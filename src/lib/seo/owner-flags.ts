@@ -43,10 +43,15 @@ export const BOOKED_MIN_DISPLAY = D8_SHOW_BOOKED_UNDER_15 ? 0 : 15;
 
 /**
  * [OWNER D3 / D13] نموذج الربح (من يدفع للترتيب الذكي)، وصياغة عمولة الوساطة، ومدة تصحيح الأخطاء.
- * مطفأ: فقرة «كيف تربح التيسير؟» في /about/ معلّقة، ولا رقم لمدة التصحيح. (خارج صفحات هذه الحزمة؛ WP-09)
+ * مطفأ: فقرة «كيف تربح التيسير؟» في /about/ معلّقة، ولا رقم لمدة التصحيح. التشغيل: الثلاثة معًا
+ * (D3_BUSINESS_MODEL_APPROVED + D3_SMART_RANKING_MODEL + D13_LOCAL_COMMISSION) — انظر M-AB-01 في src/lib/answers/resale.ts.
  */
 export const D3_BUSINESS_MODEL_APPROVED = false;
 export const D13_CORRECTIONS_TURNAROUND: string | null = null;
+/** [OWNER D3] كيف يُباع الترتيب الذكي ومن يدفع له، بصياغة المالك (تكمل «ومن …»). null = الفقرة معلّقة. */
+export const D3_SMART_RANKING_MODEL: string | null = null;
+/** [OWNER D13] من يدفع عمولة الوساطة العقارية المحلية ومتى، بصياغة المالك (تكمل «نربح من …»). null = الفقرة معلّقة. */
+export const D13_LOCAL_COMMISSION: string | null = null;
 
 /** [OWNER D5 / D6 — PLAN CHANGE] ملفات البيانات المفتوحة وتقرير شهري. مطفأ (robots بلا Allow لـ /baitelwatan/data/). */
 export const D5_OPEN_DATA_LIVE = false;

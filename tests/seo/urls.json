@@ -9,7 +9,7 @@
   { "url": "/new-damietta/third-district/RX8UTBXQ/", "template": "property", "indexable": true, "bw": false, "lede": false },
   { "url": "/properties/apartments/", "template": "type-hub", "indexable": true, "bw": false, "lede": true },
   { "url": "/properties/", "template": "properties", "indexable": true, "bw": false, "lede": false },
-  { "url": "/about/", "template": "about", "indexable": true, "bw": false, "independence": true, "lede": false },
+  { "url": "/about/", "template": "about", "indexable": true, "bw": false, "independence": true, "lede": true },
   { "url": "/contact/", "template": "contact", "indexable": true, "bw": false, "lede": false },
   { "url": "/valuation/", "template": "valuation", "indexable": true, "bw": false, "lede": false },
   { "url": "/blog/", "template": "blog-hub", "indexable": true, "bw": false, "lede": false },
@@ -17,9 +17,9 @@
   { "url": "/blog/new-mansoura-investment/", "template": "blog", "indexable": true, "bw": false, "lede": true },
   { "url": "/blog/damietta-vs-mansoura/", "template": "blog", "indexable": true, "bw": false, "lede": false },
   { "url": "/blog/national-housing-projects/", "template": "blog", "indexable": true, "bw": false, "lede": true },
-  { "url": "/beit-al-watan-for-sale/", "template": "resale-hub", "indexable": true, "bw": true, "lede": false, "caveat": true },
+  { "url": "/beit-al-watan-for-sale/", "template": "resale-hub", "indexable": true, "bw": true, "lede": true, "caveat": true },
   { "url": "/beit-al-watan-for-sale/phase-11/", "template": "resale-phase-11", "indexable": true, "bw": true, "lede": true, "caveat": true },
-  { "url": "/beit-al-watan-for-sale/how-we-verify/", "template": "how-we-verify", "indexable": true, "bw": true, "lede": false },
-  { "url": "/beit-al-watan-for-sale/sell/", "template": "sell", "indexable": true, "bw": true, "lede": false },
-  { "url": "/beit-al-watan-for-sale/buy-request/", "template": "buy-request", "indexable": true, "bw": true, "lede": false }
+  { "url": "/beit-al-watan-for-sale/how-we-verify/", "template": "how-we-verify", "indexable": true, "bw": true, "lede": true },
+  { "url": "/beit-al-watan-for-sale/sell/", "template": "sell", "indexable": true, "bw": true, "lede": true },
+  { "url": "/beit-al-watan-for-sale/buy-request/", "template": "buy-request", "indexable": true, "bw": true, "lede": true }
 ]

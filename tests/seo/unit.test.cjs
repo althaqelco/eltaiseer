@@ -126,6 +126,11 @@ test("قرارات المالك المعلّقة مطفأة، والسجل يط�
   }
   assert.equal(flags.D11_OFFICE, null);
   assert.equal(flags.D13_CORRECTIONS_TURNAROUND, null);
+  assert.equal(flags.D3_SMART_RANKING_MODEL, null);
+  assert.equal(flags.D13_LOCAL_COMMISSION, null);
+  // M-AB-01 «كيف تربح التيسير؟» معلّق حتى D3 وD13: لا يظهر في /about/ ولا في FAQPage
+  assert.deepEqual(answers.answersFor("/about/", {}, ["M-AB-01"]), []);
+  assert.equal(answers.getAnswer("M-AB-01").status, "pending");
   assert.equal(registry.stubs["https://eltaiseer.com/#website"].name, flags.SITE_NAME);
   assert.equal(flags.BOOKED_MIN_DISPLAY, 15);
   assert.equal(schema.webPage({ path: "/x/", name: "x" }).inLanguage, flags.IN_LANGUAGE);

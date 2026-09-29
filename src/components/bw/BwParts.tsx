@@ -282,13 +282,21 @@ export function VerifyStamp({ l }: { l: BwListing }) {
   );
 }
 
-export function OfficialTable({ live, counts }: { live: BwLive; counts: Record<string, number> }) {
+export function OfficialTable({
+  live,
+  counts,
+  caption = "سعر المتر الرسمي والمتاح في الطرح الحالي لكل مدينة",
+}: {
+  live: BwLive;
+  counts: Record<string, number>;
+  caption?: string;
+}) {
   // ترتيب محايد بالاسم (spec-final A0.4): لا ترتيب بعدد الإعلانات أو المحجوز
   const rows = Object.values(live.cities).sort((a, b) => a.nameAr.localeCompare(b.nameAr, "ar"));
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
       <table className="w-full text-sm">
-        <caption className="sr-only">سعر المتر الرسمي والمتاح في الطرح الحالي لكل مدينة</caption>
+        <caption className="p-3 text-right font-semibold text-gray-800">{caption}</caption>
         <thead className="bg-slate-800 text-white">
           <tr>
             <th scope="col" className="p-3 text-right">المدينة</th>
