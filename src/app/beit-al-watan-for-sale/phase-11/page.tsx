@@ -15,8 +15,8 @@ import { MIN_POINTS } from "@/lib/bw/types";
 import { BW_BASE, ELIGIBILITY_CAVEAT, NO_DEPOSIT_LINE } from "@/lib/bw/constants";
 import { BrandPlatformLink, PlatformLink } from "@/lib/bw/platformLinks";
 import { JsonLd } from "@/components/JsonLd";
-import { AnswerSection, FaqList } from "@/components/Answers";
-import { answersFor, faqFrom } from "@/lib/answers";
+import { AnswerSection, FaqList, TeaserLinks } from "@/components/Answers";
+import { answersFor, faqFrom, teaser } from "@/lib/answers";
 import { P11_LEDE } from "@/lib/answers/resale";
 import { ID, ORG, breadcrumbNode, faqNode, graph, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { cairoDateTime } from "@/lib/seo/time";
@@ -32,9 +32,10 @@ const DESC =
 export const metadata: Metadata = bwMeta({ title: TITLE, description: DESC, path: `${BW_BASE}/phase-11/` });
 
 const PATH = `${BW_BASE}/phase-11/`;
-// Q100 وQ101 أقسام بعنوان سؤال؛ الباقي أسئلة شائعة. كلها على مالكها هنا (faq-owners.json)
+// Q100 وQ101 أقسام بعنوان سؤال؛ الباقي أسئلة شائعة. كلها على مالكها هنا (faq-owners.json).
+// «إزاي بتتأكدوا إن القطعة محجوزة فعلًا؟» (كان M-P11-02) رابط فقط: نية التوثيق مالكها how-we-verify/#verified-meaning
 const SECTION_ANSWERS = ["Q100", "Q101"];
-const FAQ_ANSWERS = ["Q119", "M-P11-01", "M-P11-02"];
+const FAQ_ANSWERS = ["Q119", "M-P11-01"];
 
 export default async function Phase11Page() {
   const now = Date.now();
@@ -246,6 +247,10 @@ export default async function Phase11Page() {
         </section>
 
         <FaqList items={faq} title="أسئلة عن بيع المرحلة 11" id="faq" className="" />
+        <TeaserLinks
+          title="أسئلة تجيب عنها صفحات أخرى"
+          items={[teaser("M-HV-02", "إزاي بتتأكدوا إن القطعة محجوزة فعلًا؟")]}
+        />
 
         <Disclaimer />
       </main>

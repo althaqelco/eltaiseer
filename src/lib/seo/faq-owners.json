@@ -84,12 +84,6 @@
   "status": "verified"
  },
  {
-  "id": "M-P11-02",
-  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/phase-11/",
-  "normalized_question": "ازاي بتتاكدوا ان القطعه محجوزه فعلا",
-  "status": "verified"
- },
- {
   "id": "M-PR-01",
   "owner_url": "https://eltaiseer.com/prices/#method",
   "normalized_question": "كيف نحسب هذه الاسعار",
@@ -111,12 +105,6 @@
   "id": "M-RS-01",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
   "normalized_question": "ما القطع التي تقبلونها للبيع",
-  "status": "verified"
- },
- {
-  "id": "M-RS-02",
-  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
-  "normalized_question": "كيف تتاكدون ان الاعلان حقيقي",
   "status": "verified"
  },
  {
