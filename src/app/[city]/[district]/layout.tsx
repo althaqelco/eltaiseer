@@ -95,9 +95,7 @@ export default async function DistrictLayout({ children, params }: { children: R
       url: pageUrl(path),
       description: `${districtName}: منطقة في ${cityName}، وفيها عقارات معروضة للبيع على التيسير.`,
       containedInPlace: ref(cityId(citySlug)),
-      ...(district.startsWith("beit-al-watan-") && citySlug === "new-damietta"
-        ? { relatedLink: ["https://eltaiseer.com/beit-al-watan-for-sale/new-damietta/"] }
-        : {}),
+      // لا relatedLink هنا: خاصية WebPage لا Place، ووجهتها (/beit-al-watan-for-sale/new-damietta/) noindex الآن
     })
   );
 

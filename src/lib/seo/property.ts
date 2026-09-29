@@ -5,6 +5,7 @@
 import { ORG, breadcrumbNode, districtPlaceId, graphWith, pageUrl, ref, webPage } from "./schema";
 import { TYPE_GROUP } from "./prices";
 import { cairoIso } from "./time";
+import { CITIES } from "../egyptPlaces";
 
 export interface PropertyGraphInput {
   id: string;
@@ -27,12 +28,48 @@ export interface PropertyGraphInput {
   updatedAt?: string | Date;
 }
 
-function unitType(type: string): string {
+/** نوع سكني من Accommodation (يقبل floorSize وnumberOfRooms وnumberOfBathroomsTotal)، أو null لغير السكني */
+function residentialType(type: string): string | null {
   const g = TYPE_GROUP[type];
   if (g === "apartment") return "Apartment";
   if (g === "villa") return "SingleFamilyResidence";
   if (g === "chalet") return "Accommodation";
-  return "Place";
+  return null;
+}
+
+/**
+ * الوحدة #property: السكني بنوعه ومساحته وغرفه وحماماته؛ وغير السكني (محل، عيادة، مقر، أرض، مبنى) Place
+ * بنوعه نصًا في additionalType ومساحته PropertyValue — Place لا يقبل floorSize ولا numberOfRooms ولا numberOfBathroomsTotal.
+ */
+function unitFields(p: PropertyGraphInput): Record<string, unknown> {
+  const t = residentialType(p.type);
+  const area = p.area > 0 ? { "@type": "QuantitativeValue", value: p.area, unitCode: "MTK" } : null;
+  if (t) {
+    return {
+      "@type": t,
+      ...(area ? { floorSize: area } : {}),
+      ...(p.bedrooms > 0 ? { numberOfRooms: p.bedrooms } : {}),
+      ...(p.bathrooms > 0 ? { numberOfBathroomsTotal: p.bathrooms } : {}),
+    };
+  }
+  return {
+    "@type": "Place",
+    ...(p.type ? { additionalType: p.type } : {}),
+    ...(p.area > 0
+      ? { additionalProperty: [{ "@type": "PropertyValue", name: "المساحة", value: p.area, unitCode: "MTK", unitText: "م²" }] }
+      : {}),
+  };
+}
+
+/** العنوان: المدينة والمحافظة (الحي عبر containedInPlace، لا في addressLocality) */
+function address(p: PropertyGraphInput): object {
+  const gov = CITIES[p.cityId]?.governorate;
+  return {
+    "@type": "PostalAddress",
+    addressLocality: p.cityName,
+    ...(gov ? { addressRegion: `محافظة ${gov}` } : {}),
+    addressCountry: "EG",
+  };
 }
 
 export function propertyGraph(p: PropertyGraphInput): object {
@@ -54,18 +91,10 @@ export function propertyGraph(p: PropertyGraphInput): object {
     p.districtKnown ? [placeId] : [],
     { ...page, ...(posted ? { datePosted: posted } : {}), offers: ref(`${u}#offer`) },
     {
-      "@type": unitType(p.type),
+      ...unitFields(p),
       "@id": `${u}#property`,
       name: p.title,
-      ...(p.area > 0 ? { floorSize: { "@type": "QuantitativeValue", value: p.area, unitCode: "MTK" } } : {}),
-      ...(p.bedrooms > 0 ? { numberOfRooms: p.bedrooms } : {}),
-      ...(p.bathrooms > 0 ? { numberOfBathroomsTotal: p.bathrooms } : {}),
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: p.district,
-        addressRegion: p.cityName,
-        addressCountry: "EG",
-      },
+      address: address(p),
       ...(p.districtKnown ? { containedInPlace: ref(placeId) } : {}),
       ...(p.images.length ? { image: p.images.slice(0, 6) } : {}),
     },

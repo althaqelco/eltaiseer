@@ -364,6 +364,36 @@ test("Q169 يذكر كل فئات مناطق دمياط الجديدة، وال�
   assert.ok(text.includes(`${slugs.getCityDistrictSlugs("new-damietta").length} منطقة`));
 });
 
+// ── رسم صفحة العقار ─────────────────────────────────────────────────────────
+test("propertyGraph: Place بلا خصائص Accommodation، والعنوان مدينة ومحافظة، وحي غير معرّف بلا جملة فارغة", () => {
+  const property = require(path.join(OUT, "seo/property.js"));
+  const base = {
+    id: "X1", title: "عقار", description: "d", cityId: "new-damietta", cityName: "دمياط الجديدة",
+    district: "الحي الثالث", districtSlug: "third-district", districtKnown: true,
+    area: 120, bedrooms: 3, bathrooms: 2, price: 1_500_000, sold: false, images: [], createdAt: "2026-09-01T10:00:00Z",
+  };
+  const unit = (g) => g["@graph"].find((n) => String(n["@id"]).endsWith("#property"));
+  const flat = unit(property.propertyGraph({ ...base, type: "شقة" }));
+  assert.equal(flat["@type"], "Apartment");
+  assert.equal(flat.floorSize.value, 120);
+  assert.equal(flat.numberOfBathroomsTotal, 2);
+  assert.deepEqual(flat.address, { "@type": "PostalAddress", addressLocality: "دمياط الجديدة", addressRegion: "محافظة دمياط", addressCountry: "EG" });
+  for (const type of ["محل تجاري", "أرض", "عيادة", "مبنى تحت الإنشاء"]) {
+    const u = unit(property.propertyGraph({ ...base, type }));
+    assert.equal(u["@type"], "Place", type);
+    for (const k of ["floorSize", "numberOfRooms", "numberOfBathroomsTotal"]) assert.ok(!(k in u), `${type} ${k}`);
+    assert.equal(u.additionalProperty[0].value, 120, type);
+  }
+  const nm = unit(property.propertyGraph({ ...base, type: "شقة", cityId: "new-mansoura", cityName: "المنصورة الجديدة" }));
+  assert.equal(nm.address.addressRegion, "محافظة الدقهلية");
+  const unknown = property.propertyGraph({ ...base, type: "شقة", district: "", districtSlug: "unknown-district", districtKnown: false });
+  const json = JSON.stringify(unknown);
+  assert.ok(!json.includes('"addressLocality":""'));
+  assert.ok(!json.includes("containedInPlace"));
+  const crumbs = unknown["@graph"].find((n) => n["@type"] === "BreadcrumbList").itemListElement.map((i) => i.item);
+  assert.ok(!crumbs.includes("https://eltaiseer.com/new-damietta/unknown-district/"));
+});
+
 // ── المحتوى على الخادم فقط ──────────────────────────────────────────────────
 test("لا ملف \"use client\" يستورد الإجابات أو lib/seo أو content", () => {
   const files = [];
