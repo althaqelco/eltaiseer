@@ -10,7 +10,7 @@
     "lint": "next lint",
     "test:bw": "rm -rf .bw-test && tsc --outDir .bw-test --module commonjs --target es2020 --moduleResolution node --skipLibCheck --strict src/lib/bw/calc.ts src/lib/bw/live-parse.ts src/lib/bw/cities.ts src/lib/bw/types.ts src/lib/bw/publish.ts src/lib/bw/constants.ts && node --test tests/bw/bw.test.cjs",
     "test:bw-rules": "firebase emulators:exec --only firestore --project demo-bw \"node --test tests/bw/rules.test.mjs\"",
-    "test:seo": "rm -rf .seo-test && tsc --outDir .seo-test --module commonjs --target es2020 --moduleResolution node --resolveJsonModule --esModuleInterop --skipLibCheck --strict src/lib/districtSlugs.ts src/lib/pagination.ts src/lib/indexRules.ts src/lib/listingCategories.ts src/lib/seo/prices.ts src/lib/seo/schema.ts src/lib/seo/lint.ts src/lib/seo/time.ts src/lib/seo/editorial.ts src/lib/answers/index.ts && node --test tests/seo/seo.test.mjs tests/seo/unit.test.cjs tests/seo/content.test.cjs",
+    "test:seo": "rm -rf .seo-test && tsc --outDir .seo-test --module commonjs --target es2020 --moduleResolution node --resolveJsonModule --esModuleInterop --skipLibCheck --strict src/lib/districtSlugs.ts src/lib/pagination.ts src/lib/indexRules.ts src/lib/listingCategories.ts src/lib/seo/prices.ts src/lib/seo/schema.ts src/lib/seo/lint.ts src/lib/seo/time.ts src/lib/seo/editorial.ts src/lib/answers/index.ts src/lib/seo/llms.ts && node --test tests/seo/seo.test.mjs tests/seo/unit.test.cjs tests/seo/content.test.cjs",
     "faq-owners": "node scripts/build-faq-owners.mjs",
     "test:seo:rendered": "node --test tests/seo/rendered.test.mjs"
   },
