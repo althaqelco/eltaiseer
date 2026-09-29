@@ -75,6 +75,7 @@ export default function InstallmentsClient({ initialProperties, faqSlot, page = 
           { label: "العقارات", href: "/properties" },
           { label: "عقارات بالتقسيط" },
         ]}
+        schema={false}
       />
 
       {/* Hero */}

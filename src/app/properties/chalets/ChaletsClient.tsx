@@ -59,7 +59,7 @@ export default function ChaletsClient({
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <Breadcrumb items={breadcrumbPresets.chalets} />
+      <Breadcrumb items={breadcrumbPresets.chalets} schema={false} />
 
       <div className="bg-gradient-to-l from-cyan-900 via-cyan-800 to-orange-900 py-12">
         <div className="container mx-auto px-4">

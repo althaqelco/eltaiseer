@@ -190,7 +190,7 @@ export default function PropertiesClient({ initialProperties, page = 1 }: Proper
       <Header />
 
       {/* Breadcrumb */}
-      <Breadcrumb items={breadcrumbPresets.properties} />
+      <Breadcrumb items={breadcrumbPresets.properties} schema={false} />
 
       {/* Page Header */}
       <div className="bg-gradient-to-l from-slate-900 via-slate-800 to-orange-900 py-12">

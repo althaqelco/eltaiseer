@@ -8,22 +8,48 @@ import { RequestForm } from "@/components/bw/RequestForm";
 import { cityBySlug } from "@/lib/bw/cities";
 import { getAnswer } from "@/lib/answers";
 import { BW_BASE, NO_DEPOSIT_LINE } from "@/lib/bw/constants";
+import { JsonLd } from "@/components/JsonLd";
+import { ID, breadcrumbNode, graph, ref, webPage } from "@/lib/seo/schema";
+import { editorialIso } from "@/lib/seo/editorial";
 
 const TITLE = "طلب شراء أرض بيت الوطن (بالتنازل الرسمي)";
 const DESC =
   "فاتتك قطعة في جلسة الحجز أو تبحث عن أرض بيت الوطن مستلمة؟ سجّل طلب الشراء بالمدينة والميزانية، ونتواصل معك عند توثيق قطعة مطابقة. كود الحجز لا يُباع.";
 
-export const metadata: Metadata = bwMeta({ title: TITLE, description: DESC, path: `${BW_BASE}/buy-request/` });
+const PATH = `${BW_BASE}/buy-request/`;
+
+export const metadata: Metadata = bwMeta({ title: TITLE, description: DESC, path: PATH });
 
 export default function BuyRequestPage({ searchParams }: { searchParams: { city?: string; phase?: string } }) {
   const city = cityBySlug(searchParams.city || "")?.slug || "";
   const phase = searchParams.phase === "11" ? "11" : undefined;
   // الفقرة الافتتاحية تجيب Q111 (src/lib/answers/resale.ts)
   const lede = getAnswer("Q111")?.a({}) ?? null;
+  // رسم واحد: الصفحة ومسار التنقل (dateModified = lastmod في sitemap.xml من editorial.ts)
+  const pageGraph = graph(
+    webPage({
+      path: PATH,
+      name: TITLE,
+      description: DESC,
+      about: ref(ID.serviceResale),
+      datePublished: editorialIso(PATH, "published"),
+      dateModified: editorialIso(PATH, "modified"),
+    }),
+    breadcrumbNode(PATH, [
+      { name: "الرئيسية", path: "/" },
+      { name: "أراضي بيت الوطن للبيع", path: `${BW_BASE}/` },
+      { name: "طلب شراء", path: PATH },
+    ])
+  );
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd graph={pageGraph} />
       <Header />
-      <Breadcrumb items={[{ label: "الرئيسية", href: "/" }, { label: "أراضي بيت الوطن للبيع", href: `${BW_BASE}/` }, { label: "طلب شراء" }]} />
+      <Breadcrumb
+        items={[{ label: "الرئيسية", href: "/" }, { label: "أراضي بيت الوطن للبيع", href: `${BW_BASE}/` }, { label: "طلب شراء" }]}
+        path={PATH}
+        schema={false}
+      />
       <main className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 max-w-6xl mx-auto">
           <div className="lg:col-span-2 space-y-5">

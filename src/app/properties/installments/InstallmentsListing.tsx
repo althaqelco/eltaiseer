@@ -11,7 +11,7 @@ import { Freshness } from "@/components/Freshness";
 import { answersFor, faqFrom } from "@/lib/answers";
 import type { InstallmentFacts } from "@/lib/answers/types";
 import { TYPE_GROUP } from "@/lib/seo/prices";
-import { faqNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { breadcrumbNode, faqNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { cairoIso, maxIso } from "@/lib/seo/time";
 
 const PATH = "/properties/installments/";
@@ -77,7 +77,6 @@ export default async function InstallmentsListing({ page }: { page: number }) {
         path: PATH,
         type: "CollectionPage",
         name: "عقارات بالتقسيط في دمياط الجديدة والمنصورة الجديدة",
-        breadcrumb: false, // BreadcrumbList يطبعه مكوّن المسار في الصفحة
         mainEntity: installmentProperties.length ? ref(`${pageUrl(PATH)}#itemlist`) : undefined,
         hasPart: faq ? [ref(`${pageUrl(PATH)}#faq`)] : undefined,
         dateModified: dataModified ? cairoIso(dataModified) : undefined,
@@ -88,7 +87,13 @@ export default async function InstallmentsListing({ page }: { page: number }) {
             total: installmentProperties.length,
           })
         : null,
-      faq
+      faq,
+      // نفس حلقات مسار التنقل الظاهر في InstallmentsClient (المكوّن بلا schema)
+      breadcrumbNode(PATH, [
+        { name: "الرئيسية", path: "/" },
+        { name: "العقارات", path: "/properties/" },
+        { name: "عقارات بالتقسيط", path: PATH },
+      ])
     );
   }
 

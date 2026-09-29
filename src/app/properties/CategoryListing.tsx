@@ -9,7 +9,8 @@ import { Freshness } from "@/components/Freshness";
 import { AnswerSection, RichText } from "@/components/Answers";
 import { answersFor, faqFrom } from "@/lib/answers";
 import { HUB, hubCityStats, hubLede, hubPriceAnswer, hubPriceQuestion } from "@/lib/answers/local";
-import { faqNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { breadcrumbNode, faqNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { breadcrumbPresets } from "@/components/Breadcrumb";
 import { cairoIso, maxIso } from "@/lib/seo/time";
 import {
   categoryProperties,
@@ -151,7 +152,6 @@ export default async function CategoryListing({
             path,
             type: "CollectionPage",
             name: LIST_NAMES[slug],
-            breadcrumb: false, // BreadcrumbList يطبعه مكوّن المسار في الصفحة
             mainEntity: available.length ? ref(`${pageUrl(path)}#itemlist`) : undefined,
             hasPart: content?.faq ? [ref(`${pageUrl(path)}#faq`)] : undefined,
             dateModified: dataModified ? cairoIso(dataModified) : undefined,
@@ -162,7 +162,12 @@ export default async function CategoryListing({
                 total: available.length,
               })
             : null,
-          content?.faq ?? null
+          content?.faq ?? null,
+          // نفس حلقات مسار التنقل الظاهر (المكوّن بلا schema) داخل الرسم الواحد
+          breadcrumbNode(
+            path,
+            breadcrumbPresets[slug].map((it) => ({ name: it.label, path: it.href || path }))
+          )
         )
       : null;
 

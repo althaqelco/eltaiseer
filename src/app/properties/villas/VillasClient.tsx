@@ -69,7 +69,7 @@ export default function VillasClient({
       <Header />
 
       {/* Breadcrumb */}
-      <Breadcrumb items={breadcrumbPresets.villas} />
+      <Breadcrumb items={breadcrumbPresets.villas} schema={false} />
 
       {/* Hero Section */}
       <div className="bg-gradient-to-l from-emerald-900 via-emerald-800 to-orange-900 py-12">

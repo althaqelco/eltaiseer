@@ -59,7 +59,7 @@ export default function ClinicsClient({
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <Breadcrumb items={breadcrumbPresets.clinics} />
+      <Breadcrumb items={breadcrumbPresets.clinics} schema={false} />
 
       <div className="bg-gradient-to-l from-teal-900 via-teal-800 to-orange-900 py-12">
         <div className="container mx-auto px-4">

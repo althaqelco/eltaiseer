@@ -59,7 +59,7 @@ export default function LandsClient({
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <Breadcrumb items={breadcrumbPresets.lands} />
+      <Breadcrumb items={breadcrumbPresets.lands} schema={false} />
 
       <div className="bg-gradient-to-l from-amber-900 via-amber-800 to-orange-900 py-12">
         <div className="container mx-auto px-4">

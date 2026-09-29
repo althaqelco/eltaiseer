@@ -69,7 +69,7 @@ export default function ApartmentsClient({
       <Header />
 
       {/* Breadcrumb */}
-      <Breadcrumb items={breadcrumbPresets.apartments} />
+      <Breadcrumb items={breadcrumbPresets.apartments} schema={false} />
 
       {/* Hero Section */}
       <div className="bg-gradient-to-l from-slate-900 via-slate-800 to-orange-900 py-12">

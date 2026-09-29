@@ -3,7 +3,8 @@ import PropertiesClient from "./PropertiesClient";
 import { getPropertiesForIsr, serializeProperties } from "@/lib/serverProperties";
 import { getPropertyUrl } from "@/lib/districtSlugs";
 import { JsonLd } from "@/components/JsonLd";
-import { graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { breadcrumbNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { breadcrumbPresets } from "@/components/Breadcrumb";
 import { cairoIso, maxIso } from "@/lib/seo/time";
 import { HUB_PAGE_SIZE, totalPages } from "@/lib/pagination";
 
@@ -24,13 +25,17 @@ export default async function PropertiesListing({ page }: { page: number }) {
             path: "/properties/",
             type: "CollectionPage",
             name,
-            breadcrumb: false, // BreadcrumbList يطبعه مكوّن المسار في الصفحة
             mainEntity: active.length ? ref(`${pageUrl("/properties/")}#itemlist`) : undefined,
             dateModified: dataModified ? cairoIso(dataModified) : undefined,
           }),
           active.length
             ? itemListNode("/properties/", active.slice(0, 30).map((p) => getPropertyUrl(p)), { name, total: active.length })
-            : null
+            : null,
+          // نفس حلقات مسار التنقل الظاهر (المكوّن بلا schema) داخل الرسم الواحد
+          breadcrumbNode(
+            "/properties/",
+            breadcrumbPresets.properties.map((it) => ({ name: it.label, path: it.href || "/properties/" }))
+          )
         )
       : null;
 
