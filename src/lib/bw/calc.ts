@@ -148,6 +148,20 @@ export function marketByCity(listings: BwListing[], now: number): Record<string,
   return out;
 }
 
+// ─── فهرسة صفحة المدينة في إعادة البيع ───
+/** إعلانات مدينة المنشورة الآن (نشطة وغير منتهية)، الأحدث توثيقًا أولًا */
+export function cityLiveListings(all: BwListing[], citySlug: string, now: number): BwListing[] {
+  return all.filter((l) => l.citySlug === citySlug && isLive(l, now)).sort((a, b) => b.verifiedAt.localeCompare(a.verifiedAt));
+}
+
+/** صفحة المدينة تُفهرس فقط إذا فيها 5 إعلانات، أو حي فيه 3 إعلانات؛ غير ذلك صفحة رقيقة تبقى خارج الفهرس (وخارج llms) */
+export function resaleCityIndexable(listings: BwListing[]): boolean {
+  if (listings.length >= 5) return true;
+  const by: Record<string, number> = {};
+  for (const l of listings) by[l.districtSlug || l.district] = (by[l.districtSlug || l.district] || 0) + 1;
+  return Object.values(by).some((n) => n >= MIN_POINTS);
+}
+
 // ─── الروابط ───
 export function listingSlug(l: Pick<BwListing, "id" | "districtSlug" | "area">): string {
   const area = Math.round(l.area);

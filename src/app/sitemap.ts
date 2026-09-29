@@ -5,7 +5,7 @@ import { filterByCity, filterByDistrict } from "@/lib/serverProperties";
 import { CATEGORY_SLUGS, categoryProperties, isAvailable } from "@/lib/listingCategories";
 import { isCategoryIndexable, isDistrictIndexable } from "@/lib/indexRules";
 import { getActiveListings } from "@/lib/bw/listings";
-import { isLive, listingPath } from "@/lib/bw/calc";
+import { isLive, listingPath, resaleCityIndexable } from "@/lib/bw/calc";
 import { BW_BASE } from "@/lib/bw/constants";
 import type { Property } from "@/lib/types";
 import { BLOG_SLUGS, editorialIso } from "@/lib/seo/editorial";
@@ -148,18 +148,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // نفس dateModified في صفحة الإعلان: تاريخ التوثيق (بتوقيت القاهرة)
     const listingLastmod = (l: (typeof live)[number]) => validDate(verifiedIso(l.verifiedAt));
     bwListingsLastmod = maxDate(live.map(listingLastmod));
-    const byCity: Record<string, { districts: Record<string, number>; lastmod?: Date }> = {};
+    const byCity: Record<string, { lastmod?: Date }> = {};
     for (const l of live) {
-      const c = (byCity[l.citySlug] ||= { districts: {} });
-      const key = l.districtSlug || l.district;
-      c.districts[key] = (c.districts[key] || 0) + 1;
+      const c = (byCity[l.citySlug] ||= {});
       c.lastmod = maxDate([c.lastmod, listingLastmod(l)]);
     }
     const bwCities = Object.entries(byCity)
-      .filter(([, c]) => {
-        const counts = Object.values(c.districts);
-        return counts.reduce((a, b) => a + b, 0) >= 5 || counts.some((n) => n >= 3);
-      })
+      .filter(([city]) => resaleCityIndexable(live.filter((l) => l.citySlug === city)))
       .map(([city, c]) => entry(`${BW_BASE}/${city}`, c.lastmod, "daily", 0.8));
     const items = live.map((l) => ({
       url: url(listingPath(l)),

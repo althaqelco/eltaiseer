@@ -2,13 +2,9 @@
 // كل رابط لصفحة من صفحات المنصة يُعرض فقط حين يكون مسارها في platform-routes.json (حي ومفهرس)؛
 // قبل ذلك لا يُعرض شيء، أو الرابط باسم العلامة فقط إلى /baitelwatan/. ممنوع أي نص موضوعي على جذر
 // التطبيق (noindex)، وممنوع next/link هنا (لا prefetch لصفحات المنصة). (spec-final A0.8 / A7)
-import routes from "./platform-routes.json";
+import { PLATFORM_BRAND, PLATFORM_ROOT, platformLive } from "./platformRoutes";
 
-export const PLATFORM_ROOT = "/baitelwatan/";
-export const PLATFORM_BRAND = "التيسير — الحجز الذكي";
-
-/** يُضاف المسار في نفس الـ commit التالي لإطلاقه على المنصة، بعد أن يعيد 200 بلا noindex */
-export const platformLive = (path: string): boolean => (routes as string[]).includes(path);
+export { PLATFORM_BRAND, PLATFORM_ROOT, platformLive };
 
 export function PlatformLink({
   path,

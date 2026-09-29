@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Disclaimer, ListingCard, LiveStamp, TrustStrip } from "@/components/bw/BwParts";
 import { getActiveListings, getDemand } from "@/lib/bw/listings";
 import { getBwLive } from "@/lib/bw/live";
-import { fmtUsd, isLive, plotsCount } from "@/lib/bw/calc";
+import { cityLiveListings, fmtUsd, plotsCount, resaleCityIndexable } from "@/lib/bw/calc";
 import { cityBySlug } from "@/lib/bw/cities";
 import { MIN_POINTS, type BwListing } from "@/lib/bw/types";
 import { BW_BASE, ELIGIBILITY_CAVEAT } from "@/lib/bw/constants";
@@ -25,16 +25,7 @@ export function generateStaticParams() {
 type Props = { params: { city: string } };
 
 function cityListings(all: BwListing[], slug: string): BwListing[] {
-  const now = Date.now();
-  return all.filter((l) => l.citySlug === slug && isLive(l, now)).sort((a, b) => b.verifiedAt.localeCompare(a.verifiedAt));
-}
-
-// صفحة المدينة تُفهرس فقط إذا فيها 5 إعلانات، أو حي فيه 3 إعلانات — غير ذلك صفحة رقيقة تبقى خارج الفهرس
-function indexable(listings: BwListing[]): boolean {
-  if (listings.length >= 5) return true;
-  const by: Record<string, number> = {};
-  for (const l of listings) by[l.districtSlug || l.district] = (by[l.districtSlug || l.district] || 0) + 1;
-  return Object.values(by).some((n) => n >= MIN_POINTS);
+  return cityLiveListings(all, slug, Date.now());
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -43,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const listings = cityListings(await getActiveListings(), city.slug);
   const title = `أراضي بيت الوطن للبيع في ${city.nameAr} (موثّقة)`;
   const description = `قطع أراضي بيت الوطن في ${city.nameAr} للبيع بالتنازل بعد مراجعة المستندات والمعاينة، مع التكلفة الفعلية للمتر ومقارنتها بسعر الهيئة الرسمي الآن.`;
-  return bwMeta({ title, description, path: `${BW_BASE}/${city.slug}/`, noindex: !indexable(listings) });
+  return bwMeta({ title, description, path: `${BW_BASE}/${city.slug}/`, noindex: !resaleCityIndexable(listings) });
 }
 
 export default async function CityResalePage({ params }: Props) {
