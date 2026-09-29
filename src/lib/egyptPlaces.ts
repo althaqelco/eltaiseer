@@ -45,7 +45,7 @@ export const CITIES: Record<string, City> = {
     slug: "new-damietta",
     governorate: "دمياط",
     description: "مدينة دمياط الجديدة - مدينة صناعية وسكنية متكاملة على ساحل البحر المتوسط",
-    coordinates: { lat: 31.4175, lng: 31.8144 },
+    coordinates: { lat: 31.4368, lng: 31.667 }, // Wikidata Q12211943 P625 (31.4175, 31.8144 كانت لدمياط القديمة)
     isActive: true,
   },
   "new-mansoura": {
@@ -55,7 +55,7 @@ export const CITIES: Record<string, City> = {
     slug: "new-mansoura",
     governorate: "الدقهلية",
     description: "مدينة المنصورة الجديدة - مدينة الجيل الرابع على ساحل البحر المتوسط بمحافظة الدقهلية",
-    coordinates: { lat: 31.4500, lng: 31.7000 },
+    coordinates: { lat: 31.47969, lng: 31.43267 }, // Wikidata Q63122627 P625
     isActive: true,
   },
 };

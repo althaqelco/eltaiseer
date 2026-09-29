@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Phone, MapPin, Clock, Mail, MessageCircle, Building2 } from "lucide-react";
 import { COMPANY_TEL, COMPANY_WHATSAPP } from "@/lib/format";
+import { D11_OFFICE } from "@/lib/seo/owner-flags";
 
 export const metadata: Metadata = {
   title: "اتصل بنا | تواصل مع التيسير للعقارات",
@@ -136,14 +137,17 @@ export default function ContactPage() {
                   <p className="text-gray-600 leading-relaxed">
                     دمياط الجديدة، محافظة دمياط، مصر
                   </p>
-                  <a
-                    href="https://maps.google.com/?q=31.4175,31.8144"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-orange-600 hover:underline text-sm mt-2 inline-block"
-                  >
-                    عرض على خرائط جوجل ←
-                  </a>
+                  {/* [OWNER D11] دبوس المكتب يظهر فقط حين يرسله المالك (الإحداثيات القديمة كانت لدمياط القديمة) */}
+                  {D11_OFFICE?.hasMap && (
+                    <a
+                      href={D11_OFFICE.hasMap}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-orange-600 hover:underline text-sm mt-2 inline-block"
+                    >
+                      عرض على خرائط جوجل ←
+                    </a>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -202,7 +206,6 @@ export default function ContactPage() {
           <h2 className="text-2xl font-bold mb-3">عندك عقار وعايز تبيعه؟</h2>
           <p className="text-orange-100 mb-6 max-w-xl mx-auto">
             اعرض عقارك معنا مجاناً على صفحات التيسير للعقارات في دمياط الجديدة والمنصورة الجديدة
-            والمنصورة الجديدة
           </p>
           <Button asChild size="lg" variant="secondary" className="font-bold">
             <Link href="/add-property">أضف عقارك مجاناً</Link>
