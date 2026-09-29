@@ -19,7 +19,9 @@ import {
   fmtUsd,
   listingPath,
 } from "@/lib/bw/calc";
-import { BW_BASE, BW_DISCLAIMER, INDEPENDENCE_LINE, PLATFORM_PRICES_URL, PLATFORM_URL } from "@/lib/bw/constants";
+import { BW_BASE, BW_DISCLAIMER, ELIGIBILITY_CAVEAT, INDEPENDENCE_LINE } from "@/lib/bw/constants";
+import { BrandPlatformLink, PlatformLink } from "@/lib/bw/platformLinks";
+import { cairoIso, cairoLocalToIso } from "@/lib/seo/time";
 import { isPhase11 } from "@/lib/bw/publish";
 
 export function TrustStrip() {
@@ -188,7 +190,7 @@ function Phase11CompareView({ l, city }: { l: BwListing; city: BwLiveCity | null
       </p>
       {!city && (
         <p className="mt-2 text-gray-600">
-          أرقام المتاح الحية غير متاحة الآن؛ تابعها لحظيًا في <a href={PLATFORM_URL} className="underline">«التيسير — الحجز الذكي»</a>.
+          أرقام المتاح الحية غير متاحة الآن؛ تابعها لحظيًا في أداة <BrandPlatformLink className="underline" />.
         </p>
       )}
       {city && (
@@ -204,6 +206,7 @@ function Phase11CompareView({ l, city }: { l: BwListing; city: BwLiveCity | null
                 </>
               )}
               . قارن بالموقع والمساحة قبل أن تقرر.
+              <span className="block mt-1 text-sm text-gray-600">{ELIGIBILITY_CAVEAT}</span>
             </>
           ) : (
             <>لا توجد قطع متاحة الآن من الهيئة في {city.nameAr} حسب الرصد الحي.</>
@@ -212,7 +215,7 @@ function Phase11CompareView({ l, city }: { l: BwListing; city: BwLiveCity | null
       )}
       {city && (
         <p className="mt-2 text-xs text-gray-600">
-          المصدر: بيانات منصة «التيسير — الحجز الذكي» الحية، وتُحدَّث كل 6 ساعات. <a href={PLATFORM_URL} className="underline">المتاح لحظيًا</a>
+          المصدر: بيانات منصة <BrandPlatformLink className="underline" /> الحية، وتُحدَّث كل 6 ساعات.
         </p>
       )}
     </section>
@@ -232,15 +235,17 @@ export function OfficialCompareView({ l, city }: { l: BwListing; city: BwLiveCit
         أرض الطرح الحالي (المرحلة 11) في {city.nameAr} سعرها الرسمي من{" "}
         <b dir="ltr">{fmtUsd(cmp.officialMin)}</b> إلى <b dir="ltr">{fmtUsd(cmp.officialMax)}</b> للمتر، والوسيط{" "}
         <b dir="ltr">{fmtUsd(cmp.officialMedian)}</b> (سعر المتر الأساسي قبل علاوات الناصية والحديقة). المتاح منها الآن{" "}
-        {plotsCount(cmp.available)} من {cmp.total.toLocaleString("ar-EG")}.
+        {plotsCount(cmp.available)} من {cmp.total.toLocaleString("en-US")}.
       </p>
+      <p className="mt-1 text-sm text-gray-600">{ELIGIBILITY_CAVEAT}</p>
       <p className="mt-2 text-gray-800">
         التكلفة الفعلية للمتر في هذا الإعلان {above ? "أعلى" : "أقل"} من الوسيط الرسمي بـ{" "}
         <b dir="ltr">{fmtUsd(Math.abs(cmp.diffUsd))}</b> ({Math.abs(cmp.diffPct).toLocaleString("ar-EG", { maximumFractionDigits: 0 })}%).
       </p>
       <p className="mt-2 text-xs text-gray-600">
-        قطع المرحلة 11 في مواقع مختلفة ولم تُستلم بعد، فالمقارنة لتقدير الأوفر وليست تقييمًا. المصدر: بيانات منصة «التيسير — الحجز الذكي»
-        الحية، وتُحدَّث كل 6 ساعات. <a href={PLATFORM_PRICES_URL} className="underline">جدول أسعار بيت الوطن</a>
+        قطع المرحلة 11 في مواقع مختلفة ولم تُستلم بعد، فالمقارنة لتقدير الأوفر وليست تقييمًا. المصدر: بيانات منصة{" "}
+        <BrandPlatformLink className="underline" /> الحية، وتُحدَّث كل 6 ساعات.{" "}
+        <PlatformLink path="/baitelwatan/prices/" className="underline">جدول أسعار بيت الوطن</PlatformLink>
       </p>
     </section>
   );
@@ -253,7 +258,8 @@ export function VerifyStamp({ l }: { l: BwListing }) {
         <BadgeCheck className="h-5 w-5 text-emerald-600" aria-hidden /> ختم التوثيق
       </h2>
       <p className="text-sm text-gray-600 mb-3">
-        راجعنا هذا الإعلان في {fmtDate(l.verifiedAt)}، ونعيد التوثيق كل 45 يومًا وإلا ينتهي الإعلان.
+        راجعنا هذا الإعلان في <time dateTime={safeLocalIso(l.verifiedAt.slice(0, 10)) || undefined}>{fmtDate(l.verifiedAt)}</time>،
+        ونعيد التوثيق كل 45 يومًا وإلا ينتهي الإعلان.
       </p>
       <ul className="space-y-1.5 text-sm">
         {CHECK_ORDER.filter((k) => l.checks.includes(k)).map((k) => (
@@ -277,9 +283,8 @@ export function VerifyStamp({ l }: { l: BwListing }) {
 }
 
 export function OfficialTable({ live, counts }: { live: BwLive; counts: Record<string, number> }) {
-  const rows = Object.values(live.cities).sort(
-    (a, b) => (counts[b.slug] || 0) - (counts[a.slug] || 0) || b.total - a.total
-  );
+  // ترتيب محايد بالاسم (spec-final A0.4): لا ترتيب بعدد الإعلانات أو المحجوز
+  const rows = Object.values(live.cities).sort((a, b) => a.nameAr.localeCompare(b.nameAr, "ar"));
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
       <table className="w-full text-sm">
@@ -300,7 +305,7 @@ export function OfficialTable({ live, counts }: { live: BwLive; counts: Record<s
                 {r.ppmMin === r.ppmMax ? fmtUsd(r.ppmMin) : `${fmtUsd(r.ppmMin)} – ${fmtUsd(r.ppmMax)}`}
               </td>
               <td className="p-3 whitespace-nowrap">
-                {r.available.toLocaleString("ar-EG")} من {r.total.toLocaleString("ar-EG")}
+                {r.available.toLocaleString("en-US")} من {r.total.toLocaleString("en-US")}
               </td>
               <td className="p-3">
                 {counts[r.slug] ? (
@@ -319,10 +324,30 @@ export function OfficialTable({ live, counts }: { live: BwLive; counts: Record<s
   );
 }
 
+// generated_at نص محلي بتوقيت القاهرة («2026-09-28 17:40:43»)؛ صيغة غير متوقعة لا تُسقط الصفحة
+function safeLocalIso(s: string): string | null {
+  try {
+    return cairoLocalToIso(s);
+  } catch {
+    return null;
+  }
+}
+
+/** وقت لقطة الأرقام الحية (generated_at بتوقيت القاهرة، وإلا وقت الجلب) — نفسه في <time> وdateModified */
+export function liveIso(live: BwLive): string {
+  return (live.generatedAt && safeLocalIso(live.generatedAt)) || cairoIso(live.fetchedAt);
+}
+
 export function LiveStamp({ live }: { live: BwLive }) {
   return (
     <p className="text-xs text-gray-500 mt-2">
-      من بيانات منصة «التيسير — الحجز الذكي» الحية، لقطة {live.generatedAt ? `${live.generatedAt} بتوقيت القاهرة` : fmtDate(live.fetchedAt)}.
+      من بيانات منصة «التيسير — الحجز الذكي» الحية، لقطة{" "}
+      {live.generatedAt ? (
+        <time dateTime={liveIso(live)}>{live.generatedAt} بتوقيت القاهرة</time>
+      ) : (
+        <time dateTime={liveIso(live)}>{fmtDate(live.fetchedAt)}</time>
+      )}
+      .
       السعر هو سعر المتر الأساسي في الكراسة قبل علاوات الناصية والحديقة.
     </p>
   );

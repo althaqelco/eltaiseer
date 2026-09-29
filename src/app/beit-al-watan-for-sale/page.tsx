@@ -5,12 +5,20 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Disclaimer, ListingCard, LiveStamp, OfficialTable, TrustStrip } from "@/components/bw/BwParts";
+import { Disclaimer, ListingCard, LiveStamp, OfficialTable, TrustStrip, liveIso } from "@/components/bw/BwParts";
+import { Freshness } from "@/components/Freshness";
 import { getActiveListings, getSoldListings } from "@/lib/bw/listings";
 import { getBwLive } from "@/lib/bw/live";
-import { adsCount, areaLabel, fmtUsd, isLive, jsonLd, listingPath, marketByCity, plotsCount } from "@/lib/bw/calc";
+import { adsCount, fmtUsd, isLive, listingPath, marketByCity, plotsCount } from "@/lib/bw/calc";
 import { cityName } from "@/lib/bw/cities";
-import { BW_BASE, NO_DEPOSIT_LINE, PLATFORM_PRICES_URL, PLATFORM_URL, SITE } from "@/lib/bw/constants";
+import { BW_BASE, ELIGIBILITY_CAVEAT, NO_DEPOSIT_LINE } from "@/lib/bw/constants";
+import { BrandPlatformLink, PlatformLink } from "@/lib/bw/platformLinks";
+import { JsonLd } from "@/components/JsonLd";
+import { FaqList, TeaserLinks } from "@/components/Answers";
+import { answersFor, faqFrom, teaser } from "@/lib/answers";
+import { ID, breadcrumbNode, faqNode, graph, itemListNode, node, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { cairoIso, cairoLocalToIso, maxIso } from "@/lib/seo/time";
+import { BOOKED_MIN_DISPLAY } from "@/lib/seo/owner-flags";
 
 // الإعلانات من Firestore كل 5 دقائق؛ الأرقام الحية من المنصة لها ذاكرتها الخاصة (6 ساعات)
 export const revalidate = 300;
@@ -21,32 +29,17 @@ const DESC =
 
 export const metadata: Metadata = bwMeta({ title: TITLE, description: DESC, path: `${BW_BASE}/`, absoluteTitle: true });
 
-const FAQ = [
-  {
-    q: "هل يمكن بيع كود حجز بيت الوطن أو المسلسل؟",
-    a: "لا. كود الحجز لا ينتقل لشخص آخر، والمبالغ لا تُحوَّل بين الحاجزين، حسب كراسة الشروط. ما يُباع هو القطعة نفسها بعد صدور خطاب تخصيصها، بالتنازل الرسمي بموافقة جهاز المدينة. لذلك لا ننشر إعلانًا لقطعة من المرحلة 11 إلا بعد خطاب التخصيص.",
-  },
-  {
-    q: "ما القطع التي تقبلونها للبيع؟",
-    a: "القطع المخصصة أو المتعاقد عليها فقط، من أي مرحلة بما فيها المرحلة 11، ويكون المعلن صاحب التخصيص أو وكيلًا عنه بتوكيل رسمي. والقطع التي عليها أقساط تُقبل بعد تأكيد جهاز المدينة كتابيًا لشروط التنازل.",
-  },
-  {
-    q: "كيف تتأكدون أن الإعلان حقيقي؟",
-    a: "نطابق هوية البائع مع خطاب التخصيص أو العقد، ونراجع إيصالات السداد، ونرى حسابه على بوابة الهيئة في مكالمة فيديو دون أن نطلب كلمة السر، ونعاين القطعة بأنفسنا. ولا ننشر الإعلان قبل اكتمال ذلك، ونعيد التوثيق كل 45 يومًا.",
-  },
-  {
-    q: "هل تستلمون عربونًا أو أي مبالغ؟",
-    a: "لا. التيسير لا تستلم ولا تحتفظ ولا تحوّل أي مبالغ بين البائع والمشتري. الأوفر يُدفع للبائع مباشرة عند التوقيع أمام جهاز المدينة بشيك بنكي أو تحويل، وعمولة الوساطة وحدها يدفعها البائع بفاتورة بعد اعتماد التنازل.",
-  },
-  {
-    q: "كيف يتم نقل الأرض للمشتري؟",
-    a: "بالتنازل الرسمي: موافقة كتابية مسبقة من جهاز المدينة، وتوقيع الطرفين أمام الموظف المختص أو بتوكيل، ويحل المشتري محل البائع في كل الالتزامات ومنها الأقساط ومهلة البناء. رسوم التنازل حسب لائحة الهيئة وتُؤكَّد من الجهاز.",
-  },
-  {
-    q: "لماذا تقارنون بسعر المرحلة 11؟",
-    a: "لأنه تكلفة البديل: كم تدفع للمتر لو حجزت أرضًا جديدة من الهيئة الآن في نفس المدينة. الفرق بين التكلفة الفعلية للمتر في الإعلان والسعر الرسمي هو الأوفر الحقيقي، مع اختلاف الموقع والتسليم والخدمات.",
-  },
-];
+const PATH = `${BW_BASE}/`;
+// أسئلة يملكها المحور (faq-owners.json)؛ سؤال بيع كود الحجز مالكه صفحة المرحلة 11 فهنا رابط فقط
+const HUB_ANSWERS = ["M-RS-01", "M-RS-02", "M-RS-03", "M-RS-04", "M-RS-05"];
+
+function verifiedIso(d: string): string | null {
+  try {
+    return cairoLocalToIso(d.slice(0, 10));
+  } catch {
+    return null;
+  }
+}
 
 export default async function BeitAlWatanForSalePage() {
   const now = Date.now();
@@ -56,32 +49,42 @@ export default async function BeitAlWatanForSalePage() {
   for (const l of listings) counts[l.citySlug] = (counts[l.citySlug] || 0) + 1;
   const market = marketByCity([...listings, ...sold], now);
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-  };
-  const listSchema = listings.length
-    ? {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        name: "أراضي بيت الوطن للبيع (موثّقة)",
-        numberOfItems: listings.length,
-        itemListElement: listings.slice(0, 30).map((l, i) => ({
-          "@type": "ListItem",
-          position: i + 1,
-          url: `${SITE}${listingPath(l)}`,
-          name: `أرض ${areaLabel(l)} ${l.district} ${cityName(l.citySlug)}`,
-        })),
-      }
-    : null;
+  const booked = live ? live.total - live.available : 0;
+  const faq = answersFor(PATH, {}, HUB_ANSWERS);
+  const lastVerified = maxIso(listings.map((l) => verifiedIso(l.verifiedAt)));
+  const dataModified = maxIso([lastVerified, live ? liveIso(live) : null]);
+  const pageGraph = graph(
+    webPage({
+      path: PATH,
+      type: "CollectionPage",
+      name: TITLE,
+      about: ref(ID.serviceResale),
+      mainEntity: listings.length ? ref(`${pageUrl(PATH)}#itemlist`) : undefined,
+      hasPart: [ref(`${pageUrl(PATH)}#faq`)],
+      dateModified: dataModified ? cairoIso(dataModified) : undefined,
+    }),
+    listings.length
+      ? itemListNode(PATH, listings.slice(0, 30).map((l) => listingPath(l)), { total: listings.length })
+      : null,
+    node(ID.serviceResale, {
+      serviceType: "وساطة إعادة بيع أراضي بيت الوطن بالتنازل الرسمي",
+      areaServed: ref(ID.egypt),
+      isRelatedTo: ref(ID.program),
+      description:
+        "لا نستلم أي مبالغ بين البائع والمشتري؛ الأوفر يُدفع للبائع عند التوقيع أمام جهاز المدينة، والعمولة يدفعها البائع بعد اعتماد التنازل.",
+    }),
+    faqNode(PATH, faqFrom(faq)),
+    breadcrumbNode(PATH, [
+      { name: "الرئيسية", path: "/" },
+      { name: "أراضي بيت الوطن للبيع", path: PATH },
+    ])
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <Breadcrumb items={[{ label: "الرئيسية", href: "/" }, { label: "أراضي بيت الوطن للبيع" }]} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqSchema) }} />
-      {listSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(listSchema) }} />}
+      <Breadcrumb items={[{ label: "الرئيسية", href: "/" }, { label: "أراضي بيت الوطن للبيع" }]} path={PATH} schema={false} />
+      <JsonLd graph={pageGraph} />
 
       <div className="bg-gradient-to-l from-slate-900 via-slate-800 to-emerald-900">
         <div className="container mx-auto px-4 py-12 md:py-16">
@@ -110,10 +113,12 @@ export default async function BeitAlWatanForSalePage() {
         {(
           <section aria-labelledby="p11-h" className="rounded-xl bg-white border border-emerald-200 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 id="p11-h" className="text-xl font-bold text-gray-900">المرحلة 11: البيع مفتوح بعد التخصيص</h2>
+              <h2 id="p11-h" className="text-xl font-bold text-gray-900">المرحلة 11: ننشر إعلانات القطع المخصصة فقط</h2>
               <p className="text-gray-700 mt-1">
-                {live ? `حُجزت ${plotsCount(live.total - live.available)} حتى الآن حسب الرصد الحي. ` : ""}تُعرض كل قطعة للبيع بعد صدور خطاب
-                تخصيصها والتحقق منه، وكود الحجز نفسه لا يُباع.
+                لا ننشر إعلانًا لقطعة من المرحلة 11 قبل خطاب تخصيصها، وكود الحجز نفسه لا ينتقل لشخص آخر (كراسة الشروط ص3).
+                {live && booked >= BOOKED_MIN_DISPLAY
+                  ? ` حُجز من طرح الهيئة في المرحلة 11 حتى الآن ${plotsCount(booked)} حسب الرصد العام لموقع الهيئة (ليست حجوزات عبر التيسير).`
+                  : ""}
               </p>
             </div>
             <Link href={`${BW_BASE}/phase-11/`} className="shrink-0">
@@ -127,6 +132,7 @@ export default async function BeitAlWatanForSalePage() {
             <h2 id="listings-h" className="text-2xl font-bold text-gray-900">الإعلانات الموثّقة</h2>
             {listings.length > 0 && <span className="text-sm text-gray-600">{adsCount(listings.length)}</span>}
           </div>
+          <Freshness data={lastVerified} dataLabel="آخر توثيق لإعلان" className="freshness text-sm text-gray-500 mb-3" />
           {listings.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {listings.map((l) => (
@@ -173,11 +179,14 @@ export default async function BeitAlWatanForSalePage() {
           <section aria-labelledby="official-h">
             <h2 id="official-h" className="text-2xl font-bold text-gray-900 mb-2">تكلفة البديل: الطرح الحالي من الهيئة</h2>
             <p className="text-gray-600 mb-4 max-w-3xl">
-              قبل أن تدفع أوفر، اعرف كم يكلف المتر لو حجزت أرضًا جديدة الآن. هذه أسعار المرحلة 11 الرسمية والمتاح منها في كل مدينة.
-              للجدول الكامل بالمناطق والمساحات والمقدم: <a href={PLATFORM_PRICES_URL} className="text-orange-600 underline">جدول أسعار بيت الوطن</a>.
+              لمن له مسلسل في المرحلة 11: قبل أن تدفع أوفر، قارن بسعر المتر الرسمي والمتاح من الهيئة في كل مدينة.
+              <PlatformLink path="/baitelwatan/prices/" className="text-orange-600 underline">
+                {" "}جدول أسعار بيت الوطن
+              </PlatformLink>
             </p>
             <OfficialTable live={live} counts={counts} />
             <LiveStamp live={live} />
+            <p className="text-sm text-gray-600 mt-2">{ELIGIBILITY_CAVEAT}</p>
           </section>
         )}
 
@@ -203,24 +212,25 @@ export default async function BeitAlWatanForSalePage() {
           </div>
         </section>
 
-        <section aria-labelledby="faq-h">
-          <h2 id="faq-h" className="text-2xl font-bold text-gray-900 mb-4">أسئلة شائعة</h2>
-          <div className="space-y-3">
-            {FAQ.map((f) => (
-              <details key={f.q} className="rounded-xl bg-white border border-gray-200 p-4 group">
-                <summary className="font-bold text-gray-900 cursor-pointer">{f.q}</summary>
-                <p className="text-gray-700 mt-2 leading-relaxed">{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
+        <FaqList items={faq} title="أسئلة شائعة" id="faq" className="" />
+        <TeaserLinks
+          title="أسئلة تجيب عنها صفحات أخرى"
+          items={[teaser("Q101", "هل يجوز بيع كود الحجز أو المسلسل؟")]}
+        />
 
         <section className="rounded-xl bg-emerald-50 border border-emerald-200 p-6">
           <h2 className="text-xl font-bold text-gray-900">تحجز أرضًا جديدة من الهيئة؟</h2>
           <p className="text-gray-700 mt-2">
-            أداة «التيسير — الحجز الذكي» مجانية ومستقلة: تتابع المتاح لحظيًا في كل المدن، وتنبهك قبل نوافذ التسجيل.
+            أداة «التيسير — الحجز الذكي» مجانية للحاجزين ومستقلة: تتابع المتاح لحظيًا في كل المدن، وتنبهك قبل نوافذ التسجيل.
           </p>
-          <a href={PLATFORM_URL} className="inline-block mt-3 text-emerald-700 font-semibold hover:underline">التيسير — الحجز الذكي</a>
+          <p className="text-gray-700 mt-2">
+            الحجز نفسه يتم فقط على{" "}
+            <a href="https://lands.nuca.gov.eg/" rel="noopener" className="text-emerald-700 underline">
+              الموقع الرسمي للحجز (هيئة المجتمعات العمرانية)
+            </a>
+            .
+          </p>
+          <BrandPlatformLink className="inline-block mt-3 text-emerald-700 font-semibold hover:underline" />
         </section>
 
         <Disclaimer />

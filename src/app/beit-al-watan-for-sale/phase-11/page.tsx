@@ -5,44 +5,33 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Disclaimer, ListingCard, LiveStamp } from "@/components/bw/BwParts";
+import { Disclaimer, ListingCard, LiveStamp, liveIso } from "@/components/bw/BwParts";
 import { getActiveListings, getAllDemand } from "@/lib/bw/listings";
 import { getBwLive } from "@/lib/bw/live";
-import { adsCount, fmtUsd, isLive, jsonLd, plotsCount, requestsCount } from "@/lib/bw/calc";
+import { adsCount, fmtUsd, isLive, requestsCount } from "@/lib/bw/calc";
 import { isPhase11 } from "@/lib/bw/publish";
 import { MIN_POINTS } from "@/lib/bw/types";
-import { BW_BASE, NO_DEPOSIT_LINE, PLATFORM_URL } from "@/lib/bw/constants";
+import { BW_BASE, ELIGIBILITY_CAVEAT, NO_DEPOSIT_LINE } from "@/lib/bw/constants";
+import { BrandPlatformLink, PlatformLink } from "@/lib/bw/platformLinks";
+import { JsonLd } from "@/components/JsonLd";
+import { AnswerSection, FaqList } from "@/components/Answers";
+import { answersFor, faqFrom } from "@/lib/answers";
+import { ID, breadcrumbNode, faqNode, graph, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { cairoDateTime } from "@/lib/seo/time";
 
 export const revalidate = 300;
 
 const TITLE = "بيع أرض بيت الوطن المرحلة 11 بعد التخصيص";
 const DESC =
-  "تقدر تبيع أو تشتري أرض بيت الوطن من المرحلة 11 بعد صدور خطاب التخصيص، بالتنازل الرسمي بموافقة جهاز المدينة. المحجوز والمتاح والسعر الرسمي في كل مدينة من بيانات حية، وإعلانات موثّقة فقط.";
+  "ننشر إعلانات أرض بيت الوطن من المرحلة 11 بعد صدور خطاب تخصيصها، والبيع بالتنازل الرسمي بموافقة جهاز المدينة. المتاح والسعر الرسمي في كل مدينة من بيانات حية، وإعلانات موثّقة فقط.";
 
 export const metadata: Metadata = bwMeta({ title: TITLE, description: DESC, path: `${BW_BASE}/phase-11/` });
 
-const FAQ = [
-  {
-    q: "هل أقدر أبيع حجزي في المرحلة 11 دلوقتي؟",
-    a: "الحجز نفسه (كود الحجز أو المسلسل أو رصيد الحوالة) لا يُباع ولا يُنقل حسب كراسة الشروط. ما يُباع هو القطعة بعد صدور خطاب تخصيصها، بالتنازل الرسمي بموافقة جهاز المدينة. تقدر تسجل قطعتك من الآن، ونجهز ملفك وننشر الإعلان بعد وصول الخطاب والتحقق منه.",
-  },
-  {
-    q: "إيه اللي يدفعه المشتري؟",
-    a: "يدفع للبائع ما سدده للهيئة حتى تاريخه (المقدم وأي أقساط دفعها) مع الأوفر المتفق عليه، عند التوقيع أمام الجهاز. ويتحمل المشتري الأقساط المتبقية للهيئة في مواعيدها. رسوم التنازل حسب لائحة الهيئة وتُؤكَّد من الجهاز.",
-  },
-  {
-    q: "هل المشتري لازم تنطبق عليه شروط الحجز؟",
-    a: "شروط المشتري، مثل الجنسية والإقامة بالخارج والسداد بالدولار، تُؤكَّد من جهاز المدينة قبل التوقيع، ونراجعها معك قبل كشف رقم القطعة.",
-  },
-  {
-    q: "إزاي بتتأكدوا إن القطعة محجوزة فعلًا؟",
-    a: "نطابقها مع سجل الرصد في منصة التيسير: هل ظهرت محجوزة على موقع الهيئة ومتى، ونراجع خطاب التخصيص وإيصالات السداد وهوية البائع. ونعيد المطابقة في كل فحص للوحة الإدارة، ونوقف الإعلان تلقائيًا لو لم تعد القطعة محجوزة.",
-  },
-  {
-    q: "هل في قطع لسه متاحة بالسعر الرسمي؟",
-    a: "في مدن كثيرة نعم. قارن المتاح الآن من الهيئة بالسعر الرسمي في مدينتك قبل أن تدفع أوفر. نعرضه من بياناتنا الحية حين تتوفر، ولحظيًا في «التيسير — الحجز الذكي».",
-  },
-];
+const PATH = `${BW_BASE}/phase-11/`;
+// Q100 وQ101 أقسام بعنوان سؤال؛ الباقي أسئلة شائعة. كلها على مالكها هنا (faq-owners.json)
+const SECTION_ANSWERS = ["Q100", "Q101"];
+const FAQ_ANSWERS = ["Q119", "M-P11-01", "M-P11-02"];
+
 
 export default async function Phase11Page() {
   const now = Date.now();
@@ -50,31 +39,46 @@ export default async function Phase11Page() {
   const listings = active.filter((l) => isPhase11(l) && isLive(l, now)).sort((a, b) => b.verifiedAt.localeCompare(a.verifiedAt));
   const counts: Record<string, number> = {};
   for (const l of listings) counts[l.citySlug] = (counts[l.citySlug] || 0) + 1;
-  const rows = live
-    ? Object.values(live.cities)
-        .map((c) => ({ ...c, booked: c.total - c.available }))
-        .sort((a, b) => b.booked - a.booked || b.available - a.available)
-    : [];
-  const booked = live ? live.total - live.available : 0;
+  // ترتيب محايد بالاسم، وبلا عمود «محجوز» (spec-final A0.4 / §0.4 row 6)
+  const rows = live ? Object.values(live.cities).sort((a, b) => a.nameAr.localeCompare(b.nameAr, "ar")) : [];
+  const snapshotIso = live ? liveIso(live) : null;
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-  };
+  const sections = answersFor(PATH, {}, SECTION_ANSWERS);
+  const faq = answersFor(PATH, {}, FAQ_ANSWERS);
+  const pageGraph = graph(
+    webPage({
+      path: PATH,
+      name: TITLE,
+      about: [ref(ID.serviceResale), ref(ID.phase11)],
+      hasPart: [ref(`${pageUrl(PATH)}#faq`)],
+      dateModified: snapshotIso || undefined,
+    }),
+    faqNode(PATH, faqFrom([...sections, ...faq])),
+    breadcrumbNode(PATH, [
+      { name: "الرئيسية", path: "/" },
+      { name: "أراضي بيت الوطن للبيع", path: `${BW_BASE}/` },
+      { name: "المرحلة 11", path: PATH },
+    ])
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <Breadcrumb items={[{ label: "الرئيسية", href: "/" }, { label: "أراضي بيت الوطن للبيع", href: `${BW_BASE}/` }, { label: "المرحلة 11" }]} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqSchema) }} />
+      <Breadcrumb
+        items={[{ label: "الرئيسية", href: "/" }, { label: "أراضي بيت الوطن للبيع", href: `${BW_BASE}/` }, { label: "المرحلة 11" }]}
+        path={PATH}
+        schema={false}
+      />
+      <JsonLd graph={pageGraph} />
 
       <div className="bg-gradient-to-l from-slate-900 via-slate-800 to-emerald-900">
         <div className="container mx-auto px-4 py-12">
           <p className="text-emerald-300 text-sm font-medium mb-2">بيع وشراء بالتنازل الرسمي</p>
           <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight max-w-3xl">أراضي بيت الوطن المرحلة 11 للبيع</h1>
-          <p className="text-gray-200 text-lg mt-4 max-w-2xl leading-relaxed">
-            البيع مفتوح لكل قطعة بعد صدور خطاب تخصيصها والتحقق منه. كود الحجز نفسه لا يُباع، والتنازل يتم بموافقة جهاز المدينة.
+          <p className="answer-lede text-gray-200 text-lg mt-4 max-w-2xl leading-relaxed">
+            أرض بيت الوطن من المرحلة 11 تُنقل ملكيتها بالتنازل الرسمي بموافقة كتابية مسبقة من جهاز المدينة (كراسة الشروط ص1، وص7
+            البند 3)، أما كود الحجز والمبالغ المحوّلة فلا تنتقل لشخص آخر (ص3). لذلك ننشر هنا إعلانات القطع المخصصة فقط، ونسجل طلبات
+            الشراء حتى تُوثَّق قطعة. التيسير منصة مستقلة غير تابعة لهيئة المجتمعات العمرانية.
           </p>
           <div className="flex flex-wrap gap-3 mt-6">
             <Link href={`${BW_BASE}/sell/?phase=11`}>
@@ -102,12 +106,20 @@ export default async function Phase11Page() {
           <div className="rounded-xl bg-white border border-gray-200 p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-3">لا يُباع</h2>
             <ul className="list-disc pr-5 space-y-2 text-gray-700">
-              <li>كود الحجز أو المسلسل أو رصيد الحوالة، ولا أي حق قبل التخصيص.</li>
-              <li>ولا تُحوَّل المبالغ بين الحاجزين، ولا ترتيبات «إلغاء ثم إعادة حجز».</li>
+              <li>كود الحجز والمبالغ المحوّلة (كراسة الشروط ص3).</li>
+              <li>«مسلسل» أو «ترتيب»: لا يوجد في الكراسة ما يجيز بيعه، ولا ترتيبات «إلغاء ثم إعادة حجز».</li>
               <li>{NO_DEPOSIT_LINE}</li>
             </ul>
           </div>
         </section>
+
+        {sections.length > 0 && (
+          <div className="rounded-xl bg-white border border-gray-200 p-6 space-y-8">
+            {sections.map((item) => (
+              <AnswerSection key={item.id} item={item} />
+            ))}
+          </div>
+        )}
 
         <section aria-labelledby="ph-list-h" id="ph-listings">
           <h2 id="ph-list-h" className="text-2xl font-bold text-gray-900 mb-4">إعلانات المرحلة 11 الموثّقة</h2>
@@ -134,27 +146,32 @@ export default async function Phase11Page() {
           <section className="rounded-xl border border-gray-200 bg-white p-6">
             <h2 className="text-xl font-bold text-gray-900">المرحلة 11 الآن</h2>
             <p className="text-gray-700 mt-2">
-              الأرقام الحية غير متاحة في هذه اللحظة. تابع المتاح والمحجوز لحظيًا في{" "}
-              <a href={PLATFORM_URL} className="text-emerald-700 underline">«التيسير — الحجز الذكي»</a>.
+              الأرقام الحية غير متاحة في هذه اللحظة. تابع المتاح لحظيًا في أداة{" "}
+              <BrandPlatformLink className="text-emerald-700 underline" />.
             </p>
           </section>
         )}
 
         {live && rows.length > 0 && (
-          <section aria-labelledby="ph-live-h">
-            <h2 id="ph-live-h" className="text-2xl font-bold text-gray-900 mb-2">المرحلة 11 الآن في كل مدينة</h2>
-            <p className="text-gray-600 mb-4 max-w-3xl">
-              حُجزت حتى الآن {plotsCount(booked)} من {live.total.toLocaleString("ar-EG")} حسب الرصد الحي، وهي القطع التي يمكن بيعها بالتنازل
-              بعد تخصيصها. والمتاح من الهيئة ما زال بالسعر الرسمي بلا أوفر.
+          <section aria-labelledby="ph-live-h" id="official-available">
+            <h2 id="ph-live-h" className="text-2xl font-bold text-gray-900 mb-2">
+              البديل: المتاح من الهيئة بالسعر الرسمي لمن له مسلسل في المرحلة 11
+            </h2>
+            <p className="text-gray-600 mb-2 max-w-3xl">
+              حتى {snapshotIso ? <time dateTime={snapshotIso}>{cairoDateTime(snapshotIso)}</time> : "آخر لقطة"}، ما زالت{" "}
+              {live.available.toLocaleString("en-US")} قطعة من {live.total.toLocaleString("en-US")} في المرحلة 11 متاحة من الهيئة
+              بالسعر الرسمي، حسب رصد منصة «التيسير — الحجز الذكي» لموقع الهيئة. إن كان لك مسلسل في المرحلة 11، قارن المتاح في
+              مدينتك قبل أن تدفع أوفر.
             </p>
+            <p className="text-sm text-gray-600 mb-4 max-w-3xl">{ELIGIBILITY_CAVEAT}</p>
             <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
               <table className="w-full text-sm">
-                <caption className="sr-only">المحجوز والمتاح وسعر المتر الرسمي وطلبات الشراء في المرحلة 11 لكل مدينة</caption>
+                <caption className="sr-only">المتاح من الهيئة وسعر المتر الرسمي وطلبات الشراء في المرحلة 11 لكل مدينة، مرتبة بالاسم</caption>
                 <thead className="bg-slate-800 text-white">
                   <tr>
                     <th scope="col" className="p-3 text-right">المدينة</th>
-                    <th scope="col" className="p-3 text-right">محجوز</th>
-                    <th scope="col" className="p-3 text-right">متاح من الهيئة</th>
+                    <th scope="col" className="p-3 text-right">المتاح من الهيئة الآن</th>
+                    <th scope="col" className="p-3 text-right">من إجمالي المطروح</th>
                     <th scope="col" className="p-3 text-right">سعر المتر الرسمي</th>
                     <th scope="col" className="p-3 text-right">طلبات شراء لدينا</th>
                     <th scope="col" className="p-3 text-right">إعلانات</th>
@@ -166,8 +183,8 @@ export default async function Phase11Page() {
                     return (
                       <tr key={r.slug} className="border-t border-gray-100">
                         <th scope="row" className="p-3 text-right font-medium">{r.nameAr}</th>
-                        <td className="p-3">{r.booked.toLocaleString("ar-EG")}</td>
-                        <td className="p-3">{r.available.toLocaleString("ar-EG")}</td>
+                        <td className="p-3">{r.available.toLocaleString("en-US")}</td>
+                        <td className="p-3">{r.total.toLocaleString("en-US")}</td>
                         <td className="p-3 whitespace-nowrap" dir="ltr" style={{ textAlign: "right" }}>
                           {r.ppmMin === r.ppmMax ? fmtUsd(r.ppmMin) : `${fmtUsd(r.ppmMin)} – ${fmtUsd(r.ppmMax)}`}
                         </td>
@@ -187,6 +204,9 @@ export default async function Phase11Page() {
             </div>
             <LiveStamp live={live} />
             <p className="text-xs text-gray-500 mt-1">طلبات الشراء تظهر للمدينة من 3 طلبات فأكثر.</p>
+            <PlatformLink path="/baitelwatan/phase-11/" className="inline-block mt-2 text-emerald-700 font-semibold hover:underline">
+              بيت الوطن المرحلة 11
+            </PlatformLink>
           </section>
         )}
 
@@ -207,21 +227,13 @@ export default async function Phase11Page() {
               <li>لو المنطقة اللي عايزها نفدت، سجّل طلب شراء بالمدينة والميزانية.</li>
               <li>نبعتلك الإعلانات الموثّقة المطابقة، ونكشف رقم القطعة بعد التحقق من هويتك لتتحقق منها في الجهاز.</li>
             </ol>
-            <a href={PLATFORM_URL} className="inline-block mt-4 text-emerald-700 font-semibold hover:underline">المتاح لحظيًا في «التيسير — الحجز الذكي»</a>
+            <p className="mt-4 text-gray-700">
+              المتاح لحظيًا في أداة <BrandPlatformLink className="text-emerald-700 font-semibold hover:underline" />.
+            </p>
           </div>
         </section>
 
-        <section aria-labelledby="ph-faq-h">
-          <h2 id="ph-faq-h" className="text-2xl font-bold text-gray-900 mb-4">أسئلة عن بيع المرحلة 11</h2>
-          <div className="space-y-3">
-            {FAQ.map((f) => (
-              <details key={f.q} className="rounded-xl bg-white border border-gray-200 p-4">
-                <summary className="font-bold text-gray-900 cursor-pointer">{f.q}</summary>
-                <p className="text-gray-700 mt-2 leading-relaxed">{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
+        <FaqList items={faq} title="أسئلة عن بيع المرحلة 11" id="faq" className="" />
 
         <Disclaimer />
       </main>

@@ -12,7 +12,8 @@ import { getBwLive } from "@/lib/bw/live";
 import { fmtUsd, isLive, plotsCount } from "@/lib/bw/calc";
 import { cityBySlug } from "@/lib/bw/cities";
 import { MIN_POINTS, type BwListing } from "@/lib/bw/types";
-import { BW_BASE, PLATFORM_PRICES_URL } from "@/lib/bw/constants";
+import { BW_BASE, ELIGIBILITY_CAVEAT } from "@/lib/bw/constants";
+import { BrandPlatformLink, PlatformLink } from "@/lib/bw/platformLinks";
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -90,7 +91,7 @@ export default async function CityResalePage({ params }: Props) {
                 <div className="rounded-xl bg-white border border-gray-200 p-4">
                   <p className="text-sm text-gray-600">المتاح الآن من الهيئة</p>
                   <p className="text-2xl font-bold text-slate-800 mt-1">
-                    {plotsCount(liveCity.available)} <span className="text-base font-normal text-gray-600">من {liveCity.total.toLocaleString("ar-EG")}</span>
+                    {plotsCount(liveCity.available)} <span className="text-base font-normal text-gray-600">من {liveCity.total.toLocaleString("en-US")}</span>
                   </p>
                 </div>
               </>
@@ -104,6 +105,7 @@ export default async function CityResalePage({ params }: Props) {
           </section>
         )}
         {live && liveCity && <LiveStamp live={live} />}
+        {liveCity && <p className="text-sm text-gray-600 -mt-4">{ELIGIBILITY_CAVEAT}</p>}
 
         {listings.length > 0 ? (
           Array.from(groups.entries()).map(([district, ls]) => (
@@ -135,7 +137,13 @@ export default async function CityResalePage({ params }: Props) {
           {listings.some((l) => l.phase !== null && l.phase >= 11) && (
             <Link href={`${BW_BASE}/phase-11/`} className="self-center text-sm text-orange-600 hover:underline">بيع وشراء المرحلة 11</Link>
           )}
-          <a href={PLATFORM_PRICES_URL} className="self-center text-sm text-emerald-700 hover:underline">جدول أسعار بيت الوطن</a>
+          <PlatformLink
+            path="/baitelwatan/prices/"
+            className="self-center text-sm text-emerald-700 hover:underline"
+            fallback={<BrandPlatformLink className="self-center text-sm text-emerald-700 hover:underline" />}
+          >
+            جدول أسعار بيت الوطن
+          </PlatformLink>
         </div>
 
         <TrustStrip />

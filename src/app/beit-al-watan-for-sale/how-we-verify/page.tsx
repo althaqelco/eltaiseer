@@ -5,7 +5,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Disclaimer } from "@/components/bw/BwParts";
-import { BW_BASE, NO_DEPOSIT_LINE, PLATFORM_URL } from "@/lib/bw/constants";
+import { BW_BASE, NO_DEPOSIT_LINE } from "@/lib/bw/constants";
+import { BrandPlatformLink } from "@/lib/bw/platformLinks";
 
 const TITLE = "كيف نوثّق إعلانات أراضي بيت الوطن";
 const DESC =
@@ -81,11 +82,11 @@ export default function HowWeVerifyPage() {
           <h2 className="text-2xl font-bold text-gray-900">تعارض المصالح</h2>
           <ul className="list-disc pr-5 space-y-2 text-gray-700">
             <li>
-              أداة <a href={PLATFORM_URL} className="text-orange-600 underline">«التيسير — الحجز الذكي»</a> مجانية ومستقلة. لا تعرض الإعلانات ولا ترفعها،
+              أداة <BrandPlatformLink className="text-orange-600 underline" /> مجانية للحاجزين ومستقلة. لا تعرض الإعلانات ولا ترفعها،
               ولا يستخدم مكتب الوساطة ترتيبها الذكي أو بيانات الحاجزين.
             </li>
             <li>الأرقام الحية المعروضة مع الإعلانات عامة ومجمّعة: السعر الرسمي والمتاح في المدينة. ولا ننشر أي رقم محسوب من أقل من 3 إعلانات أو طلبات.</li>
-            <li>لا نكتب «حُجزت عبر التيسير» على أي قطعة، ولا نستخدم شعار الهيئة، ولا نعد بعائد أو نمو سعري.</li>
+            <li>لا نكتب «حُجزت عبر التيسير» على أي قطعة، ولا نستخدم شعار الهيئة، ولا نقدم وعودًا عن أسعار المستقبل.</li>
           </ul>
         </section>
 

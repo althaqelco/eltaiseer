@@ -4,6 +4,8 @@
 
 import type { Metadata } from "next";
 import { SITE } from "./constants";
+import { ROBOTS_INDEX, ROBOTS_NOINDEX } from "../seo/robots";
+import { SITE_NAME } from "../seo/owner-flags";
 
 const DEFAULT_IMAGE = { url: "/og-image.jpg", width: 1200, height: 630 };
 
@@ -23,8 +25,9 @@ export function bwMeta(o: {
     title: o.absoluteTitle ? { absolute: o.title } : o.title,
     description: o.description,
     alternates: { canonical: url },
-    robots: o.noindex ? { index: false, follow: true } : undefined,
-    openGraph: { title: o.title, description: o.description, url, type: o.type || "website", locale: "ar_EG", siteName: "التيسير للعقارات", images },
+    // robots صريح: undefined كان يلغي robots الجذر فتفقد الصفحات max-snippet وmax-image-preview
+    robots: o.noindex ? ROBOTS_NOINDEX : ROBOTS_INDEX,
+    openGraph: { title: o.title, description: o.description, url, type: o.type || "website", locale: "ar_EG", siteName: SITE_NAME, images },
     twitter: { card: "summary_large_image", title: o.title, description: o.description, images: images.map((i) => i.url) },
   };
 }

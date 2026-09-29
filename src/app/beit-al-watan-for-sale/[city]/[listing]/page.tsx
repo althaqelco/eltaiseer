@@ -11,10 +11,14 @@ import { Button } from "@/components/ui/button";
 import { CostCardView, Disclaimer, OfficialCompareView, VerifyStamp } from "@/components/bw/BwParts";
 import { getDemand, getListing } from "@/lib/bw/listings";
 import { getBwLive } from "@/lib/bw/live";
-import { areaLabel, costCard, fmtDate, fmtEgp, fmtUsd, idFromSlug, jsonLd, lifecycle, listingPath, listingSlug } from "@/lib/bw/calc";
+import { areaLabel, costCard, fmtDate, fmtEgp, fmtUsd, idFromSlug, lifecycle, listingPath, listingSlug } from "@/lib/bw/calc";
 import { cityBySlug, cityName } from "@/lib/bw/cities";
-import { MIN_POINTS, STAGE_LABEL, type BwListing } from "@/lib/bw/types";
-import { BW_BASE, NO_DEPOSIT_LINE, SITE } from "@/lib/bw/constants";
+import { MIN_POINTS, REVERIFY_DAYS, STAGE_LABEL, type BwListing } from "@/lib/bw/types";
+import { BW_BASE, NO_DEPOSIT_LINE } from "@/lib/bw/constants";
+import { JsonLd } from "@/components/JsonLd";
+import { ID, ORG, REG, breadcrumbNode, cityId, graph, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { cairoIso, cairoLocalToIso } from "@/lib/seo/time";
+import { D16_BROKER_AS_OFFERER } from "@/lib/seo/owner-flags";
 import { COMPANY_WHATSAPP } from "@/lib/format";
 
 // ديناميكية لا ISR: Next 14.2 يخزّن رد permanentRedirect في كاش ISR بحالة 308 دون ترويسة Location،
@@ -22,6 +26,14 @@ import { COMPANY_WHATSAPP } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 type Props = { params: { city: string; listing: string } };
+
+function safeLocalIso(d: string): string | null {
+  try {
+    return cairoLocalToIso(d);
+  } catch {
+    return null;
+  }
+}
 
 function headline(l: BwListing): string {
   return `أرض بيت الوطن ${areaLabel(l)} في ${l.district}، ${cityName(l.citySlug)}`;
@@ -61,22 +73,71 @@ export default async function ListingPage({ params }: Props) {
   )}`;
 
   const askingUsd = c.officialTotalUsd !== null && c.usdEgp > 0 ? Math.round(c.officialTotalUsd + c.premiumEgp / c.usdEgp) : null;
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: headline(l),
-    description: l.summary || headline(l),
-    sku: l.id,
-    category: "أرض سكنية",
-    ...(l.photos.length ? { image: l.photos } : {}),
-    offers: {
+  // رسم الإعلان (spec-final A1.3): صفحة RealEstateListing + Product #product + Offer #offer. لا بائع مجهول،
+  // ولا offeredBy [OWNER D16]: البائع الفرد هو البائع. السعر = المسدَّد + الأوفر + المتبقي، بلا فوائد ولا رسوم.
+  const path = listingPath(l);
+  const u = pageUrl(path);
+  const verified = safeLocalIso(l.verifiedAt.slice(0, 10));
+  const posted = l.createdAt ? cairoIso(l.createdAt) : verified;
+  const validUntil = verified
+    ? new Date(Date.parse(verified) + REVERIFY_DAYS * 86400e3).toISOString().slice(0, 10)
+    : undefined;
+  const cityRef = REG.stubs[cityId(l.citySlug)] ? [ref(cityId(l.citySlug))] : [];
+  const prop = (name: string, value: unknown, extra: Record<string, string> = {}) =>
+    value === null || value === undefined ? null : { "@type": "PropertyValue", name, value, ...extra };
+  const pageGraph = graph(
+    {
+      ...webPage({
+        path,
+        type: "RealEstateListing",
+        name: `${headline(l)} للبيع`,
+        mainEntity: ref(`${u}#product`),
+        about: [...cityRef, ref(ID.program)],
+        dateModified: verified || undefined,
+      }),
+      ...(posted ? { datePosted: posted } : {}),
+    },
+    {
+      "@type": "Product",
+      "@id": `${u}#product`,
+      name: headline(l),
+      description: l.summary || headline(l),
+      sku: l.id,
+      category: "أرض سكنية — بيت الوطن",
+      ...(l.photos.length ? { image: l.photos } : {}),
+      isRelatedTo: ref(ID.program),
+      additionalProperty: [
+        prop("المساحة", l.area, { unitCode: "MTK" }),
+        prop("المرحلة", l.phase),
+        prop("حالة القطعة", STAGE_LABEL[l.stage]),
+        prop("ناصية", l.corner),
+        prop("مطل على حديقة", l.garden),
+        prop("مطل على البحر", l.sea),
+        prop("تاريخ التوثيق", l.verifiedAt.slice(0, 10)),
+        prop("المسدَّد للهيئة حتى تاريخه", c.paidUsd, { unitText: "USD" }),
+        prop("الأوفر المطلوب", c.premiumEgp, { unitText: "EGP" }),
+        prop("الأقساط المتبقية للهيئة (يتحملها المشتري، بدون فوائد التقسيط)", c.remainingUsd, { unitText: "USD" }),
+      ].filter(Boolean),
+      offers: ref(`${u}#offer`),
+    },
+    {
       "@type": "Offer",
-      url: `${SITE}${listingPath(l)}`,
+      "@id": `${u}#offer`,
+      url: u,
       availability: sold ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
       ...(askingUsd ? { price: askingUsd, priceCurrency: "USD" } : {}),
-      seller: { "@type": "RealEstateAgent", name: "التيسير للعقارات", url: SITE },
+      ...(validUntil ? { priceValidUntil: validUntil } : {}),
+      businessFunction: "http://purl.org/goodrelations/v1#Sell",
+      ...(D16_BROKER_AS_OFFERER ? { offeredBy: ORG } : {}),
+      description: `السعر = المسدَّد للهيئة + الأوفر (بسعر تحويل ${l.usdEgp} جنيه للدولار بتاريخ ${l.usdEgpDate}) + الأقساط المتبقية للهيئة، دون فوائد التقسيط أو رسوم التنازل.`,
     },
-  };
+    breadcrumbNode(path, [
+      { name: "الرئيسية", path: "/" },
+      { name: "أراضي بيت الوطن للبيع", path: `${BW_BASE}/` },
+      { name: city, path: `${BW_BASE}/${l.citySlug}/` },
+      { name: `${areaLabel(l)} ${l.district}`, path },
+    ])
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -88,8 +149,10 @@ export default async function ListingPage({ params }: Props) {
           { label: city, href: `${BW_BASE}/${l.citySlug}/` },
           { label: `${areaLabel(l)} ${l.district}` },
         ]}
+        path={path}
+        schema={false}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />
+      <JsonLd graph={pageGraph} />
 
       {sold && (
         <div className="bg-gray-900 text-white">
