@@ -84,9 +84,11 @@ interface PropertiesClientProps {
   initialProperties: Property[];
   // رقم الصفحة من الرابط (?page=N) — يُعرض من الخادم
   page?: number;
+  /** «آخر تحديث للعروض» (<Freshness> من الخادم؛ نفس dateModified في JSON-LD) */
+  freshnessSlot?: React.ReactNode;
 }
 
-export default function PropertiesClient({ initialProperties, page = 1 }: PropertiesClientProps) {
+export default function PropertiesClient({ initialProperties, page = 1, freshnessSlot }: PropertiesClientProps) {
   const [properties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -201,6 +203,7 @@ export default function PropertiesClient({ initialProperties, page = 1 }: Proper
           <p className="text-gray-300">
             تصفح {filteredProperties.length} عقار متاح للبيع في دمياط الجديدة والمنصورة الجديدة
           </p>
+          {freshnessSlot}
         </div>
       </div>
 

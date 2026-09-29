@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { editorialIso } from "@/lib/seo/editorial";
+import { Freshness } from "@/components/Freshness";
 
 export const metadata: Metadata = {
   title: "المدونة | نصائح ومقالات عقارية",
@@ -171,6 +172,8 @@ export default function BlogPage() {
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
             مقالات عن الشراء والأحياء والإجراءات في دمياط الجديدة والمنصورة الجديدة
           </p>
+          {/* نفس dateModified في JSON-LD (src/lib/seo/editorial.ts) */}
+          <Freshness data={editorialIso("/blog/", "modified")} dataLabel="آخر مراجعة لهذه الصفحة" className="freshness text-sm text-gray-300 mt-3" />
         </div>
       </div>
 

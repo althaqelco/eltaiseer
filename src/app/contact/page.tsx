@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 import { JsonLd } from "@/components/JsonLd";
 import { ORG, breadcrumbNode, graph, webPage } from "@/lib/seo/schema";
 import { editorialIso } from "@/lib/seo/editorial";
+import { Freshness } from "@/components/Freshness";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Phone, MapPin, Clock, Mail, MessageCircle, Building2 } from "lucide-react";
@@ -95,6 +96,8 @@ export default function ContactPage() {
             سواء تبحث عن شقة أو فيلا أو أرض في دمياط الجديدة أو المنصورة الجديدة، أو
             تريد عرض عقارك للبيع — فريقنا جاهز لمساعدتك
           </p>
+          {/* نفس dateModified في JSON-LD (src/lib/seo/editorial.ts) */}
+          <Freshness data={editorialIso("/contact/", "modified")} dataLabel="آخر مراجعة لهذه الصفحة" className="freshness text-sm text-gray-300 mt-3" />
         </div>
       </div>
 

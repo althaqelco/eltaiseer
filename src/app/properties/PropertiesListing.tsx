@@ -3,6 +3,7 @@ import PropertiesClient from "./PropertiesClient";
 import { getPropertiesForIsr, serializeProperties } from "@/lib/serverProperties";
 import { getPropertyUrl } from "@/lib/districtSlugs";
 import { JsonLd } from "@/components/JsonLd";
+import { Freshness } from "@/components/Freshness";
 import { breadcrumbNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { breadcrumbPresets } from "@/components/Breadcrumb";
 import { cairoIso, maxIso } from "@/lib/seo/time";
@@ -42,7 +43,13 @@ export default async function PropertiesListing({ page }: { page: number }) {
   return (
     <>
       {pageGraph && <JsonLd graph={pageGraph} />}
-      <PropertiesClient initialProperties={serializeProperties(all)} page={page} />
+      <PropertiesClient
+        initialProperties={serializeProperties(all)}
+        page={page}
+        freshnessSlot={
+          <Freshness data={dataModified} dataLabel="آخر تحديث للعروض" className="freshness text-sm text-gray-300 mt-2" />
+        }
+      />
     </>
   );
 }
