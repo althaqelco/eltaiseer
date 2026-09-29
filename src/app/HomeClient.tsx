@@ -13,12 +13,21 @@ import { Button } from "@/components/ui/button";
 import { LayoutGrid, List, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-// faqSlot: قسم الأسئلة يُبنى في page.tsx (مكوّن خادم) ويُمرَّر هنا — لا محتوى أسئلة في حزمة المتصفح
+// المحتوى النصي كله يُبنى في page.tsx (مكوّن خادم) ويُمرَّر هنا نصًا أو عقدًا جاهزة — لا نصوص إجابات في حزمة المتصفح:
+// lede نص المقدمة، وfreshnessSlot تاريخ آخر تحديث، وintroSlot «أسعار العروض الحالية باختصار»، وfaqSlot روابط الأسئلة
 export default function HomeClient({
   initialProperties = [],
+  lede,
+  bwListings = 0,
+  freshnessSlot,
+  introSlot,
   faqSlot,
 }: {
   initialProperties?: Property[];
+  lede?: string;
+  bwListings?: number;
+  freshnessSlot?: React.ReactNode;
+  introSlot?: React.ReactNode;
   faqSlot?: React.ReactNode;
 }) {
   const [properties] = useState<Property[]>(
@@ -164,11 +173,15 @@ export default function HomeClient({
     <div className="min-h-screen">
       <Header />
       
-      <HeroSection 
-        onSearch={handleHeroSearch} 
+      <HeroSection
+        onSearch={handleHeroSearch}
         totalProperties={properties.filter((p) => p.status !== "تم البيع").length}
-        totalDistricts={new Set(properties.filter((p) => p.status !== "تم البيع").map((p) => p.location.district)).size}
+        bwListings={bwListings}
+        lede={lede}
+        freshness={freshnessSlot}
       />
+
+      {introSlot}
 
 
       {/* Properties Section */}

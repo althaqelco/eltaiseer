@@ -29,11 +29,16 @@ interface CityClientProps {
   initialProperties: Property[];
   // رقم الصفحة من الرابط (?page=N) — يُعرض من الخادم
   page?: number;
-  // أسئلة المدينة وروابطها تُبنى في الخادم (CityListing) — لا نص أسئلة في حزمة المتصفح
+  // أسئلة المدينة وروابطها تُبنى في الخادم (CityListing) — لا نص أسئلة في حزمة المتصفح.
+  // حين يُمرَّر تحل محل قسم «عقارات للبيع في {المدينة}» العام (الصفحة الأولى فقط).
   answersSlot?: React.ReactNode;
+  // مقدمة الإجابة (answer-lede): نص محسوب في الخادم يُعرض بعد H1 مباشرة (الصفحة الأولى)
+  lede?: string;
+  // سطر المصادر وتاريخ آخر تحديث ورابط جدول الأسعار — عقد خادم جاهزة تحت المقدمة
+  heroSlot?: React.ReactNode;
 }
 
-export default function CityClient({ citySlug, initialProperties, page = 1, answersSlot }: CityClientProps) {
+export default function CityClient({ citySlug, initialProperties, page = 1, answersSlot, lede, heroSlot }: CityClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const cityData = CITY_DATA[cityId];
@@ -139,14 +144,21 @@ export default function CityClient({ citySlug, initialProperties, page = 1, answ
               <h1 className="text-3xl md:text-4xl font-bold text-white">
                 عقارات {city.nameAr}
               </h1>
-              <p className="text-gray-300 mt-2">
-                {filteredProperties.length} عقار متاح للبيع في {city.nameAr}
-              </p>
+              {lede ? (
+                <p className="answer-lede text-gray-200 mt-3 leading-loose max-w-4xl">{lede}</p>
+              ) : (
+                <p className="text-gray-300 mt-2">
+                  {filteredProperties.length} عقار متاح للبيع في {city.nameAr}
+                </p>
+              )}
+              {heroSlot}
             </div>
           </div>
-          <p className="text-gray-400 text-sm max-w-2xl">
-            {city.description}
-          </p>
+          {!lede && (
+            <p className="text-gray-400 text-sm max-w-2xl">
+              {city.description}
+            </p>
+          )}
 
           {/* Districts Quick Links */}
           <div className="mt-6 flex flex-wrap gap-2">
@@ -298,7 +310,8 @@ export default function CityClient({ citySlug, initialProperties, page = 1, answ
           )}
         </div>
 
-        {/* SEO Content */}
+        {/* محتوى الصفحة الأولى (أسئلة المدينة وروابط الأحياء) من الخادم؛ صفحات الترقيم تعرض روابط الأحياء فقط */}
+        {answersSlot ?? (
         <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             عقارات للبيع في {city.nameAr}
@@ -336,9 +349,8 @@ export default function CityClient({ citySlug, initialProperties, page = 1, answ
             </div>
           </div>
         </div>
+        )}
 
-        {/* الأسئلة الشائعة وروابط الأسئلة التي تملكها صفحات أخرى (من الخادم) */}
-        {answersSlot}
       </main>
 
       <Footer />

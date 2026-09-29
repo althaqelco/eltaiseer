@@ -15,32 +15,24 @@ import { MapPin, ChevronRight, Building2 } from "lucide-react";
 import { getCategoryByDistrict, CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
-import type { DistrictEditorial } from "@/lib/districtContent";
 
 // كل عروض الحي تُعرض في صفحة واحدة بلا ترقيم (أكبر حي اليوم 25 عرضاً) —
 // الترقيم بالأزرار كان يخفي عن الزاحف كل ما بعد أول 12 عرضاً
 const PROPERTY_TYPES = ["الكل", "شقة", "شقة فاخرة", "فيلا منفصلة", "دوبلكس", "محل تجاري", "أرض"];
 
-export interface DistrictStats {
-  count: number;
-  minPrice: number;
-  maxPrice: number;
-  /** وسيط سعر متر الشقق في الحي (3 شقق على الأقل)، وإلا null */
-  apartmentMedianPpm: { value: number; n: number } | null;
-  types: string[];
-}
-
 interface DistrictClientProps {
   citySlug: string;
   districtSlug: string;
   initialProperties: Property[];
-  districtStats?: DistrictStats | null;
-  editorial?: DistrictEditorial | null;
+  // مقدمة الإجابة (answer-lede): النص التحريري + المعروض الآن، محسوبة في الخادم وتُعرض بعد H1 مباشرة
+  lede?: string;
   // «آخر تحديث للعروض» يُبنى في الخادم (page.tsx) بتاريخ يطابق dateModified في JSON-LD
   freshnessSlot?: React.ReactNode;
+  // أسئلة الحي (سعر المتر، لمن يناسب، وصندوق بيت الوطن) من الخادم — لا نصوص إجابات في حزمة المتصفح
+  answersSlot?: React.ReactNode;
 }
 
-export default function DistrictClient({ citySlug, districtSlug, initialProperties, districtStats, editorial, freshnessSlot }: DistrictClientProps) {
+export default function DistrictClient({ citySlug, districtSlug, initialProperties, lede, freshnessSlot, answersSlot }: DistrictClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const districtName = SLUG_TO_DISTRICT[districtSlug] || decodeURIComponent(districtSlug).replace(/-/g, " ");
@@ -79,9 +71,13 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
               <h1 className="text-3xl md:text-4xl font-bold text-white">
                 عقارات {districtName}
               </h1>
-              <p className="text-gray-300 mt-2">
-                {filteredProperties.length} عقار متاح للبيع في {districtName}
-              </p>
+              {lede ? (
+                <p className="answer-lede text-gray-200 mt-3 leading-loose max-w-4xl">{lede}</p>
+              ) : (
+                <p className="text-gray-300 mt-2">
+                  {filteredProperties.length} عقار متاح للبيع في {districtName}
+                </p>
+              )}
             </div>
           </div>
           {category && (
@@ -141,67 +137,8 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
           </div>
         )}
 
-        {/* SEO Content */}
-        <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            عقارات للبيع في {districtName} - {city?.nameAr}
-          </h2>
-          <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-            {editorial ? (
-              <>
-                <p className="text-base leading-loose">{editorial.intro}</p>
-                <div className="not-prose flex flex-wrap gap-2 my-4">
-                  {editorial.bestFor.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`text-sm px-3 py-1.5 rounded-full ${
-                        isNM ? "bg-emerald-50 text-emerald-700" : "bg-orange-50 text-orange-700"
-                      }`}
-                    >
-                      ✓ {tag}
-                    </span>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <p>
-                عقارات للبيع في {districtName} ب{city?.nameAr}: العروض الحالية بأسعارها كما يعرضها
-                البائعون، ولكل عقار صفحة بمساحته وتشطيبه وطريقة الدفع.
-              </p>
-            )}
-            {districtStats && (
-              <div className="not-prose grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <p className={`text-2xl font-bold text-${themeColor}-600`}>{districtStats.count}</p>
-                  <p className="text-sm text-gray-500">عقار متاح الآن</p>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <p className={`text-2xl font-bold text-${themeColor}-600`} dir="ltr">
-                    {(districtStats.minPrice / 1000000).toFixed(1)}م - {(districtStats.maxPrice / 1000000).toFixed(1)}م
-                  </p>
-                  <p className="text-sm text-gray-500">نطاق الأسعار (جنيه)</p>
-                </div>
-                {districtStats.apartmentMedianPpm && (
-                  <div className="bg-gray-50 rounded-lg p-4 text-center">
-                    <p className={`text-2xl font-bold text-${themeColor}-600`}>
-                      {districtStats.apartmentMedianPpm.value.toLocaleString("en-US")}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      وسيط سعر متر الشقق بالجنيه (عدد الشقق: {districtStats.apartmentMedianPpm.n.toLocaleString("en-US")})
-                    </p>
-                  </div>
-                )}
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <p className="text-base font-bold text-gray-700 leading-relaxed">
-                    {districtStats.types.slice(0, 3).join("، ")}
-                  </p>
-                  <p className="text-sm text-gray-500">الأنواع المتاحة</p>
-                </div>
-              </div>
-            )}
-
-          </div>
-        </div>
+        {/* أسئلة الحي وأرقامه من الخادم (page.tsx) */}
+        {answersSlot}
 
         {freshnessSlot}
 

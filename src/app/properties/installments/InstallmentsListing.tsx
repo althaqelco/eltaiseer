@@ -6,7 +6,7 @@ import { CATEGORY_PAGE_SIZE, totalPages } from "@/lib/pagination";
 import { getPropertyUrl } from "@/lib/districtSlugs";
 import type { Property } from "@/lib/types";
 import { JsonLd } from "@/components/JsonLd";
-import { FaqList } from "@/components/Answers";
+import { AnswerSection, FaqList } from "@/components/Answers";
 import { Freshness } from "@/components/Freshness";
 import { answersFor, faqFrom } from "@/lib/answers";
 import type { InstallmentFacts } from "@/lib/answers/types";
@@ -15,8 +15,9 @@ import { faqNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/s
 import { cairoIso, maxIso } from "@/lib/seo/time";
 
 const PATH = "/properties/installments/";
-// Q168 وQ180 يملكهما هذا المسار (faq-owners.json)؛ M-IN-01 مرئي بلا Question
-const ANSWERS = ["Q168", "Q180", "M-IN-01"];
+// Q168 وQ180 يملكهما هذا المسار (faq-owners.json) كقسمين بعنوان السؤال (H2)؛ M-IN-01 مرئي بلا Question
+const SECTIONS = ["Q168", "Q180"];
+const ANSWERS = [...SECTIONS, "M-IN-01"];
 
 // حقائق التقسيط لكل مدينة من شقق العروض النشطة نفسها: العدد، وأطول مدة، وأقل مقدم معلن
 function installmentFacts(list: Property[], cityId: string): InstallmentFacts {
@@ -60,7 +61,14 @@ export default async function InstallmentsListing({ page }: { page: number }) {
     const faq = faqNode(PATH, faqFrom(items));
     faqSlot = (
       <>
-        <FaqList items={items} title="أسئلة شائعة عن التقسيط" id="faq" className="" />
+        <div className="space-y-8 mb-8">
+          {items
+            .filter((i) => SECTIONS.includes(i.id))
+            .map((i) => (
+              <AnswerSection key={i.id} item={i} />
+            ))}
+        </div>
+        <FaqList items={items.filter((i) => !SECTIONS.includes(i.id))} title="أسئلة شائعة عن التقسيط" id="faq" className="" />
         <Freshness data={dataModified} dataLabel="آخر تحديث للعروض" className="freshness text-sm text-gray-500 mt-4" />
       </>
     );
