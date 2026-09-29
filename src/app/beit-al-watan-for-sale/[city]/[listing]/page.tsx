@@ -17,7 +17,9 @@ import { MIN_POINTS, REVERIFY_DAYS, STAGE_LABEL, type BwListing } from "@/lib/bw
 import { BW_BASE, NO_DEPOSIT_LINE } from "@/lib/bw/constants";
 import { JsonLd } from "@/components/JsonLd";
 import { ID, ORG, REG, breadcrumbNode, cityId, graph, pageUrl, ref, webPage } from "@/lib/seo/schema";
-import { cairoIso, cairoLocalToIso } from "@/lib/seo/time";
+import { cairoDate, cairoIso, cairoLocalToIso } from "@/lib/seo/time";
+import { fmtN } from "@/lib/answers/format";
+import { usd } from "@/lib/answers/resale";
 import { D16_BROKER_AS_OFFERER } from "@/lib/seo/owner-flags";
 import { COMPANY_WHATSAPP } from "@/lib/format";
 
@@ -35,8 +37,26 @@ function safeLocalIso(d: string): string | null {
   }
 }
 
+function addDays(day: string, n: number): string {
+  const [y, m, d] = day.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10);
+}
+
 function headline(l: BwListing): string {
   return `أرض بيت الوطن ${areaLabel(l)} في ${l.district}، ${cityName(l.citySlug)}`;
+}
+
+// الفقرة الافتتاحية (spec-final A2.9): أرقام لاتينية، والسعر الرسمي من لقطة المنصة الحية إن وُجدت
+function listingLede(l: BwListing, perM2Usd: number | null, officialPpm: number | null): string {
+  const area = `${l.approx ? "نحو " : ""}${fmtN(l.area)} م²`;
+  const parts = [`أرض ${area} في ${l.district}، ${cityName(l.citySlug)}، ${STAGE_LABEL[l.stage]}${l.phase ? `، المرحلة ${l.phase}` : ""}.`];
+  let money = `الأوفر المطلوب ${fmtN(l.premiumEgp)} جنيه`;
+  if (perM2Usd !== null) {
+    money += `، والتكلفة الفعلية للمتر ${usd(perM2Usd)}`;
+    if (officialPpm) money += `، مقابل وسيط سعر المتر الرسمي الأساسي في المرحلة 11 بنفس المدينة الآن: ${usd(officialPpm)}`;
+  }
+  parts.push(`${money}.`);
+  return parts.join(" ");
 }
 
 // التحويلات و404 تُحسم هنا (تُستدعى من generateMetadata والصفحة). تخرج بحالة HTTP صحيحة (308/404) فقط لأن
@@ -79,9 +99,8 @@ export default async function ListingPage({ params }: Props) {
   const u = pageUrl(path);
   const verified = safeLocalIso(l.verifiedAt.slice(0, 10));
   const posted = l.createdAt ? cairoIso(l.createdAt) : verified;
-  const validUntil = verified
-    ? new Date(Date.parse(verified) + REVERIFY_DAYS * 86400e3).toISOString().slice(0, 10)
-    : undefined;
+  // آخر يوم يبقى فيه الإعلان حيًا بلا إعادة توثيق: تاريخ التوثيق (يوم بتوقيت القاهرة) + 45 يومًا، بحساب الأيام لا الساعات
+  const validUntil = verified ? addDays(l.verifiedAt.slice(0, 10), REVERIFY_DAYS) : undefined;
   const cityRef = REG.stubs[cityId(l.citySlug)] ? [ref(cityId(l.citySlug))] : [];
   const prop = (name: string, value: unknown, extra: Record<string, string> = {}) =>
     value === null || value === undefined ? null : { "@type": "PropertyValue", name, value, ...extra };
@@ -168,7 +187,8 @@ export default async function ListingPage({ params }: Props) {
           <div className="flex flex-wrap items-center gap-2 mb-2">
             {!sold && (
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 text-white text-xs font-bold px-3 py-1">
-                <BadgeCheck className="h-3.5 w-3.5" aria-hidden /> موثّق {fmtDate(l.verifiedAt)}
+                <BadgeCheck className="h-3.5 w-3.5" aria-hidden /> موثّق{" "}
+                <time dateTime={verified || undefined}>{fmtDate(l.verifiedAt)}</time>
               </span>
             )}
             <span className="rounded-full bg-gray-200 text-gray-800 text-xs font-medium px-3 py-1">{STAGE_LABEL[l.stage]}</span>
@@ -184,6 +204,14 @@ export default async function ListingPage({ params }: Props) {
             {l.sea && <span className="rounded-full bg-gray-200 text-gray-800 text-xs font-medium px-3 py-1">على البحر</span>}
           </div>
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 leading-tight">{headline(l)}</h1>
+          <p className="answer-lede text-gray-800 text-lg mt-3 leading-relaxed max-w-3xl">
+            {listingLede(l, c.perM2Usd, live?.cities[l.citySlug]?.ppmMedian ?? null)}{" "}
+            {verified ? (
+              <>
+                موثّقة في <time dateTime={verified}>{cairoDate(verified)}</time>.
+              </>
+            ) : null}
+          </p>
           <p className="text-gray-600 mt-2">كود الإعلان {l.id}</p>
         </header>
 

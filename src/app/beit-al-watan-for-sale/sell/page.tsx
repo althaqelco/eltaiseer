@@ -7,6 +7,7 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 import { Disclaimer } from "@/components/bw/BwParts";
 import { RequestForm } from "@/components/bw/RequestForm";
 import { cityBySlug } from "@/lib/bw/cities";
+import { getAnswer } from "@/lib/answers";
 import { BW_BASE } from "@/lib/bw/constants";
 
 const TITLE = "بيع أرض بيت الوطن بالتنازل: وساطة موثّقة";
@@ -18,6 +19,8 @@ export const metadata: Metadata = bwMeta({ title: TITLE, description: DESC, path
 export default function SellPage({ searchParams }: { searchParams: { city?: string; phase?: string } }) {
   const city = cityBySlug(searchParams.city || "")?.slug || "";
   const phase = searchParams.phase === "11" ? "11" : undefined;
+  // الفقرة الافتتاحية تجيب Q110 (src/lib/answers/resale.ts)
+  const lede = getAnswer("Q110")?.a({}) ?? null;
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -26,9 +29,7 @@ export default function SellPage({ searchParams }: { searchParams: { city?: stri
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 max-w-6xl mx-auto">
           <div className="lg:col-span-2 space-y-5">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">عايز تبيع أرض بيت الوطن؟</h1>
-            <p className="text-gray-700 text-lg leading-relaxed">
-              نعرض قطعتك على مشترين جادين من مصر والخارج، بعد توثيقها، ومع حساب واضح للتكلفة والأوفر ومقارنة بسعر الهيئة الرسمي.
-            </p>
+            {lede && <p className="answer-lede text-gray-700 text-lg leading-relaxed">{lede}</p>}
             <div className="rounded-xl bg-white border border-gray-200 p-5">
               <h2 className="font-bold text-gray-900 mb-2">نقبل للنشر</h2>
               <ul className="list-disc pr-5 space-y-1 text-gray-700">

@@ -181,6 +181,9 @@ const SITE_GRAPH = siteGraph(
       availableLanguage: ["Arabic"],
       url: "https://wa.me/201500775974",
     },
+    // مصادر الأرقام وسياسة التصحيح: قسما #sources و#corrections في /about/ (spec-final A1.2 / A2.7)
+    publishingPrinciples: `${SITE}/about/#sources`,
+    correctionsPolicy: `${SITE}/about/#corrections`,
   }),
   node(ID.logo, { caption: "شعار التيسير" }),
   node(ID.website, {

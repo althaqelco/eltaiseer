@@ -1,5 +1,53 @@
 [
  {
+  "id": "M-AB-01",
+  "owner_url": "https://eltaiseer.com/about/#business-model",
+  "normalized_question": "كيف تربح التيسير",
+  "status": "pending"
+ },
+ {
+  "id": "M-AB-02",
+  "owner_url": "https://eltaiseer.com/about/#independence",
+  "normalized_question": "هل التيسير تابعه لهيئه المجتمعات العمرانيه",
+  "status": "verified"
+ },
+ {
+  "id": "M-AB-03",
+  "owner_url": "https://eltaiseer.com/about/#sources",
+  "normalized_question": "من اين تاتي الارقام علي موقع التيسير",
+  "status": "verified"
+ },
+ {
+  "id": "M-AB-04",
+  "owner_url": "https://eltaiseer.com/about/#other-taiseer",
+  "normalized_question": "هل للتيسير للعقارات علاقه بشركات اخري اسمها «التيسير»",
+  "status": "verified"
+ },
+ {
+  "id": "M-AB-05",
+  "owner_url": "https://eltaiseer.com/about/#corrections",
+  "normalized_question": "كيف تصحح التيسير الاخطاء في ارقامها",
+  "status": "verified"
+ },
+ {
+  "id": "M-HV-01",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/how-we-verify/#commission",
+  "normalized_question": "من يدفع عموله الوساطه في اعاده بيع ارض بيت الوطن ومتي",
+  "status": "verified"
+ },
+ {
+  "id": "M-HV-02",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/how-we-verify/#verified-meaning",
+  "normalized_question": "ماذا يعني اعلان «موثق» لارض بيت الوطن علي التيسير",
+  "status": "verified"
+ },
+ {
+  "id": "M-HV-03",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/how-we-verify/#report",
+  "normalized_question": "كيف ابلغ عن اعلان ارض بيت الوطن او نزاع عليه",
+  "status": "verified"
+ },
+ {
   "id": "M-IN-01",
   "owner_url": "https://eltaiseer.com/properties/installments/",
   "normalized_question": "هل التقسيط مباشر مع المالك ام عن طريق بنك",
@@ -69,18 +117,6 @@
   "id": "M-RS-02",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
   "normalized_question": "كيف تتاكدون ان الاعلان حقيقي",
-  "status": "verified"
- },
- {
-  "id": "M-RS-03",
-  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
-  "normalized_question": "هل تستلمون عربونا او اي مبالغ",
-  "status": "verified"
- },
- {
-  "id": "M-RS-04",
-  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
-  "normalized_question": "كيف يتم نقل الارض للمشتري",
   "status": "verified"
  },
  {
@@ -663,7 +699,7 @@
   "id": "Q099",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#can-i-sell",
   "normalized_question": "هل يجوز بيع ارض بيت الوطن",
-  "status": "external"
+  "status": "verified"
  },
  {
   "id": "Q100",
@@ -680,26 +716,26 @@
  {
   "id": "Q102",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#transfer",
-  "normalized_question": "ما هي خطوات التنازل عن ارض بيت الوطن",
-  "status": "external"
+  "normalized_question": "كيف يتم بيع ارض بيت الوطن والتنازل عنها خطوه بخطوه",
+  "status": "verified"
  },
  {
   "id": "Q103",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#transfer-fees",
   "normalized_question": "كم رسوم التنازل عن ارض بيت الوطن",
-  "status": "external"
+  "status": "pending"
  },
  {
   "id": "Q104",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#contract",
   "normalized_question": "ما هو عقد بيع ارض بيت الوطن",
-  "status": "external"
+  "status": "pending"
  },
  {
   "id": "Q105",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#overage",
-  "normalized_question": "ما هو «الاوفر» في ارض بيت الوطن وكيف يحسب",
-  "status": "external"
+  "normalized_question": "ما هو الاوفر في ارض بيت الوطن وكيف يحسب",
+  "status": "verified"
  },
  {
   "id": "Q106",
@@ -729,37 +765,37 @@
   "id": "Q110",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/sell/",
   "normalized_question": "كيف ابيع ارضي في بيت الوطن",
-  "status": "external"
+  "status": "verified"
  },
  {
   "id": "Q111",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/buy-request/",
   "normalized_question": "كيف اشتري ارض بيت الوطن بالتنازل بامان",
-  "status": "external"
+  "status": "verified"
  },
  {
   "id": "Q112",
-  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/how-we-verify/",
-  "normalized_question": "كيف اتاكد ان اعلان ارض بيت الوطن ليس نصبا",
-  "status": "external"
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/how-we-verify/#scam-check",
+  "normalized_question": "كيف تتاكد ان اعلان ارض بيت الوطن ليس نصبا",
+  "status": "verified"
  },
  {
   "id": "Q113",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#faq",
   "normalized_question": "هل ادفع عربونا قبل التنازل عن ارض بيت الوطن",
-  "status": "external"
+  "status": "verified"
  },
  {
   "id": "Q114",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#faq",
   "normalized_question": "هل يلتزم المشتري بالاقساط ومهله البناء بعد التنازل",
-  "status": "external"
+  "status": "verified"
  },
  {
   "id": "Q115",
   "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#faq",
   "normalized_question": "هل يمكن التنازل عن ارض بيت الوطن قبل سداد كامل الثمن",
-  "status": "external"
+  "status": "pending"
  },
  {
   "id": "Q116",
@@ -775,9 +811,9 @@
  },
  {
   "id": "Q118",
-  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/",
+  "owner_url": "https://eltaiseer.com/beit-al-watan-for-sale/#official-vs-resale",
   "normalized_question": "هل سعر اعاده بيع ارض بيت الوطن اعلي من سعر الهيئه",
-  "status": "external"
+  "status": "verified"
  },
  {
   "id": "Q119",

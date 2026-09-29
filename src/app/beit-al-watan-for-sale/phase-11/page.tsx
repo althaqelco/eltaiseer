@@ -16,8 +16,11 @@ import { BrandPlatformLink, PlatformLink } from "@/lib/bw/platformLinks";
 import { JsonLd } from "@/components/JsonLd";
 import { AnswerSection, FaqList } from "@/components/Answers";
 import { answersFor, faqFrom } from "@/lib/answers";
-import { ID, breadcrumbNode, faqNode, graph, pageUrl, ref, webPage } from "@/lib/seo/schema";
-import { cairoDateTime } from "@/lib/seo/time";
+import { P11_LEDE } from "@/lib/answers/resale";
+import { ID, ORG, breadcrumbNode, faqNode, graph, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { cairoDateTime, cairoIso, cairoLocalToIso, maxIso } from "@/lib/seo/time";
+import { editorialIso } from "@/lib/seo/editorial";
+import { Freshness } from "@/components/Freshness";
 
 export const revalidate = 300;
 
@@ -32,6 +35,13 @@ const PATH = `${BW_BASE}/phase-11/`;
 const SECTION_ANSWERS = ["Q100", "Q101"];
 const FAQ_ANSWERS = ["Q119", "M-P11-01", "M-P11-02"];
 
+function verifiedIso(d: string): string | null {
+  try {
+    return cairoLocalToIso(d.slice(0, 10));
+  } catch {
+    return null;
+  }
+}
 
 export default async function Phase11Page() {
   const now = Date.now();
@@ -42,6 +52,10 @@ export default async function Phase11Page() {
   // ترتيب محايد بالاسم، وبلا عمود «محجوز» (spec-final A0.4 / §0.4 row 6)
   const rows = live ? Object.values(live.cities).sort((a, b) => a.nameAr.localeCompare(b.nameAr, "ar")) : [];
   const snapshotIso = live ? liveIso(live) : null;
+  // آخر تغيير في بيانات الصفحة: لقطة الأرقام الحية أو أحدث توثيق لإعلان من المرحلة 11، وإلا آخر تعديل تحريري (A3.2)
+  const lastVerified = maxIso(listings.map((l) => verifiedIso(l.verifiedAt)));
+  const dataModified = maxIso([snapshotIso, lastVerified]);
+  const editedAt = editorialIso(PATH, "modified");
 
   const sections = answersFor(PATH, {}, SECTION_ANSWERS);
   const faq = answersFor(PATH, {}, FAQ_ANSWERS);
@@ -51,7 +65,9 @@ export default async function Phase11Page() {
       name: TITLE,
       about: [ref(ID.serviceResale), ref(ID.phase11)],
       hasPart: [ref(`${pageUrl(PATH)}#faq`)],
-      dateModified: snapshotIso || undefined,
+      dateModified: dataModified ? cairoIso(dataModified) : editedAt,
+      lastReviewed: editorialIso(PATH, "reviewed"),
+      reviewedBy: ORG,
     }),
     faqNode(PATH, faqFrom([...sections, ...faq])),
     breadcrumbNode(PATH, [
@@ -75,11 +91,7 @@ export default async function Phase11Page() {
         <div className="container mx-auto px-4 py-12">
           <p className="text-emerald-300 text-sm font-medium mb-2">بيع وشراء بالتنازل الرسمي</p>
           <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight max-w-3xl">أراضي بيت الوطن المرحلة 11 للبيع</h1>
-          <p className="answer-lede text-gray-200 text-lg mt-4 max-w-2xl leading-relaxed">
-            أرض بيت الوطن من المرحلة 11 تُنقل ملكيتها بالتنازل الرسمي بموافقة كتابية مسبقة من جهاز المدينة (كراسة الشروط ص1، وص7
-            البند 3)، أما كود الحجز والمبالغ المحوّلة فلا تنتقل لشخص آخر (ص3). لذلك ننشر هنا إعلانات القطع المخصصة فقط، ونسجل طلبات
-            الشراء حتى تُوثَّق قطعة. التيسير منصة مستقلة غير تابعة لهيئة المجتمعات العمرانية.
-          </p>
+          <p className="answer-lede text-gray-200 text-lg mt-4 max-w-2xl leading-relaxed">{P11_LEDE}</p>
           <div className="flex flex-wrap gap-3 mt-6">
             <Link href={`${BW_BASE}/sell/?phase=11`}>
               <Button className="bg-orange-600 hover:bg-orange-700 h-11 px-6 text-base">سجّل قطعتك للبيع</Button>
@@ -96,7 +108,7 @@ export default async function Phase11Page() {
       <main className="container mx-auto px-4 py-10 space-y-12">
         <section aria-labelledby="rules-h" className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="rounded-xl bg-white border border-gray-200 p-6">
-            <h2 id="rules-h" className="text-xl font-bold text-gray-900 mb-3">يُباع</h2>
+            <h2 id="rules-h" className="text-xl font-bold text-gray-900 mb-3">ماذا يُباع في المرحلة 11؟</h2>
             <ul className="list-disc pr-5 space-y-2 text-gray-700">
               <li>القطعة بعد صدور خطاب تخصيصها أو التعاقد عليها.</li>
               <li>بالتنازل الرسمي: موافقة كتابية من جهاز المدينة وتوقيع الطرفين أمام الموظف المختص أو بتوكيل.</li>
@@ -104,10 +116,11 @@ export default async function Phase11Page() {
             </ul>
           </div>
           <div className="rounded-xl bg-white border border-gray-200 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">لا يُباع</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-3">ماذا لا يُباع؟</h2>
             <ul className="list-disc pr-5 space-y-2 text-gray-700">
               <li>كود الحجز والمبالغ المحوّلة (كراسة الشروط ص3).</li>
-              <li>«مسلسل» أو «ترتيب»: لا يوجد في الكراسة ما يجيز بيعه، ولا ترتيبات «إلغاء ثم إعادة حجز».</li>
+              <li>«مسلسل» أو «ترتيب»: لا يوجد في الكراسة ما يجيز بيعه.</li>
+              <li>ترتيبات «إلغاء ثم إعادة حجز» لنقل قطعة لشخص آخر: لا ننشرها.</li>
               <li>{NO_DEPOSIT_LINE}</li>
             </ul>
           </div>
@@ -122,7 +135,12 @@ export default async function Phase11Page() {
         )}
 
         <section aria-labelledby="ph-list-h" id="ph-listings">
-          <h2 id="ph-list-h" className="text-2xl font-bold text-gray-900 mb-4">إعلانات المرحلة 11 الموثّقة</h2>
+          <h2 id="ph-list-h" className="text-2xl font-bold text-gray-900 mb-2">إعلانات المرحلة 11 الموثّقة</h2>
+          {lastVerified ? (
+            <Freshness data={lastVerified} dataLabel="آخر توثيق لإعلان" className="freshness text-sm text-gray-500 mb-3" />
+          ) : !snapshotIso ? (
+            <Freshness data={editedAt} dataLabel="آخر تحديث لهذه الصفحة" className="freshness text-sm text-gray-500 mb-3" />
+          ) : null}
           {listings.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {listings.map((l) => (
@@ -149,6 +167,8 @@ export default async function Phase11Page() {
               الأرقام الحية غير متاحة في هذه اللحظة. تابع المتاح لحظيًا في أداة{" "}
               <BrandPlatformLink className="text-emerald-700 underline" />.
             </p>
+            {/* خطوات المشتري أدناه تعرض المتاح من الهيئة كخيار، فشرط الأهلية يظهر حتى بلا أرقام حية (§0.1.9) */}
+            <p className="text-sm text-gray-600 mt-2 max-w-3xl">{ELIGIBILITY_CAVEAT}</p>
           </section>
         )}
 
@@ -223,7 +243,7 @@ export default async function Phase11Page() {
           <div className="rounded-xl bg-white border border-gray-200 p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-3">لو عايز تشتري</h2>
             <ol className="list-decimal pr-5 space-y-2 text-gray-700">
-              <li>شوف الأول المتاح من الهيئة بالسعر الرسمي في مدينتك.</li>
+              <li>لو لك مسلسل في المرحلة 11، شوف الأول المتاح من الهيئة بالسعر الرسمي في مدينتك.</li>
               <li>لو المنطقة اللي عايزها نفدت، سجّل طلب شراء بالمدينة والميزانية.</li>
               <li>نبعتلك الإعلانات الموثّقة المطابقة، ونكشف رقم القطعة بعد التحقق من هويتك لتتحقق منها في الجهاز.</li>
             </ol>

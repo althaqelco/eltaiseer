@@ -21,8 +21,8 @@ export const EDITORIAL: Record<string, EditorialDates> = {
   "/beit-al-watan-for-sale/": { published: "2026-09-28", modified: "2026-09-29", reviewed: "2026-09-29" },
   "/beit-al-watan-for-sale/phase-11/": { published: "2026-09-28", modified: "2026-09-29", reviewed: "2026-09-29" },
   "/beit-al-watan-for-sale/how-we-verify/": { published: "2026-09-28", modified: "2026-09-29", reviewed: "2026-09-29" },
-  "/beit-al-watan-for-sale/sell/": { published: "2026-09-28", modified: "2026-09-28", reviewed: "2026-09-28" },
-  "/beit-al-watan-for-sale/buy-request/": { published: "2026-09-28", modified: "2026-09-28", reviewed: "2026-09-28" },
+  "/beit-al-watan-for-sale/sell/": { published: "2026-09-28", modified: "2026-09-29", reviewed: "2026-09-29" },
+  "/beit-al-watan-for-sale/buy-request/": { published: "2026-09-28", modified: "2026-09-29", reviewed: "2026-09-29" },
   // صفحات تجمع إعلانات: dateModified من الإعلانات، وهذا لتاريخ مراجعة النص فقط
   "/": { published: "2026-01-01", modified: "2026-09-29", reviewed: "2026-09-29" },
   "/prices/": { published: "2026-08-17", modified: "2026-09-29", reviewed: "2026-09-29" },
