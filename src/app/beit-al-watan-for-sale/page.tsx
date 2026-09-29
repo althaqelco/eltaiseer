@@ -5,7 +5,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Disclaimer, ListingCard, LiveStamp, OfficialTable, TrustStrip, liveIso } from "@/components/bw/BwParts";
+import { Disclaimer, ListingCard, LiveStamp, OfficialTable, TrustStrip } from "@/components/bw/BwParts";
+import { resaleModified, verifiedIso } from "@/lib/bw/modified";
 import { Freshness } from "@/components/Freshness";
 import { getActiveListings, getSoldListings } from "@/lib/bw/listings";
 import { getBwLive } from "@/lib/bw/live";
@@ -34,7 +35,7 @@ import {
   ref,
   webPage,
 } from "@/lib/seo/schema";
-import { cairoDateTime, cairoDay, cairoIso, cairoLocalToIso, maxIso } from "@/lib/seo/time";
+import { cairoDateTime, cairoDay, cairoIso, maxIso } from "@/lib/seo/time";
 import { editorialIso } from "@/lib/seo/editorial";
 import { BOOKED_MIN_DISPLAY } from "@/lib/seo/owner-flags";
 
@@ -58,14 +59,6 @@ const FAQ_ITEMS = ["Q113", "Q114", "M-RS-01", "M-RS-02", "M-RS-05", "Q115"];
 // FAQPage (≤ 6، spec-final A2.5): الأقسام الأربعة ثم Q113 وQ114؛ بقية الأسئلة مرئية بلا Question
 const FAQ_SCHEMA = ["Q099", "Q118", "Q105", "Q102", "Q113", "Q114"];
 
-function verifiedIso(d: string): string | null {
-  try {
-    return cairoLocalToIso(d.slice(0, 10));
-  } catch {
-    return null;
-  }
-}
-
 /** تاريخ نقطة السعر في السوق: البيع للمباع، والتوثيق للنشط (كما في marketByCity) */
 function marketPointIso(l: BwListing): string | null {
   if (l.status === "sold" && l.soldAt) return maxIso([l.soldAt]);
@@ -85,9 +78,9 @@ export default async function BeitAlWatanForSalePage() {
   const booked = live ? live.total - live.available : 0;
   const reviewed = editorialIso(PATH, "reviewed");
   const editedAt = editorialIso(PATH, "modified");
-  const lastVerified = maxIso(listings.map((l) => verifiedIso(l.verifiedAt)));
-  const liveAt = live ? liveIso(live) : null;
-  const dataModified = maxIso([lastVerified, liveAt]);
+  // dateModified = lastmod في sitemap.xml (نفس الدالة): أحدث توثيق أو لقطة حية، وإلا التحريري
+  const { lastVerified, liveAt, dateModified } = resaleModified(PATH, listings, live);
+  const dataModified = lastVerified || liveAt;
 
   const byId = new Map(answersFor(PATH, {}, [...SECTIONS, ...FAQ_ITEMS]).map((a) => [a.id, a]));
   const section = (id: string) => byId.get(id);
@@ -144,7 +137,7 @@ export default async function BeitAlWatanForSalePage() {
       mainEntity: listings.length ? ref(`${PAGE_URL}#itemlist`) : undefined,
       hasPart: [...(faq ? [ref(`${PAGE_URL}#faq`)] : []), ...(dataset ? [ref(`${PAGE_URL}#dataset-resale-market`)] : [])],
       // بلا إعلانات ولا لقطة حية: آخر تعديل تحريري للصفحة (يظهر في <time> تحت عنوان الإعلانات)
-      dateModified: dataModified ? cairoIso(dataModified) : editedAt,
+      dateModified,
       lastReviewed: reviewed,
       reviewedBy: ORG,
     }),

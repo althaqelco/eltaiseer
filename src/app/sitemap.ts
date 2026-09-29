@@ -7,6 +7,9 @@ import { isCategoryIndexable, isDistrictIndexable } from "@/lib/indexRules";
 import { getActiveListings } from "@/lib/bw/listings";
 import { isLive, listingPath, resaleCityIndexable } from "@/lib/bw/calc";
 import { BW_BASE } from "@/lib/bw/constants";
+import { getBwLive } from "@/lib/bw/live";
+import { resaleModified } from "@/lib/bw/modified";
+import { isPhase11 } from "@/lib/bw/publish";
 import type { Property } from "@/lib/types";
 import { BLOG_SLUGS, editorialIso } from "@/lib/seo/editorial";
 import { cairoIso, cairoLocalToIso } from "@/lib/seo/time";
@@ -141,13 +144,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // أراضي بيت الوطن للبيع: الصفحات الثابتة، والإعلانات الموثّقة النشطة، والمدن القابلة للفهرسة فقط (5 إعلانات أو حي فيه 3)
   let bwPages: MetadataRoute.Sitemap = [];
-  let bwListingsLastmod: Date | undefined;
+  // المركز والمرحلة 11: نفس dateModified في الصفحة (أحدث توثيق أو لقطة الأرقام الحية، وإلا التحريري) — lib/bw/modified.ts
+  const liveSnapshot = await getBwLive(); // null عند الفشل، كما في الصفحتين
+  let bwHubLastmod = resaleModified(`${BW_BASE}/`, [], liveSnapshot).dateModified;
+  let bwPhase11Lastmod = resaleModified(`${BW_BASE}/phase-11/`, [], liveSnapshot).dateModified;
   try {
     const now = Date.now();
     const live = (await getActiveListings()).filter((l) => isLive(l, now));
+    bwHubLastmod = resaleModified(`${BW_BASE}/`, live, liveSnapshot).dateModified;
+    bwPhase11Lastmod = resaleModified(`${BW_BASE}/phase-11/`, live.filter(isPhase11), liveSnapshot).dateModified;
     // نفس dateModified في صفحة الإعلان: تاريخ التوثيق (بتوقيت القاهرة)
     const listingLastmod = (l: (typeof live)[number]) => validDate(verifiedIso(l.verifiedAt));
-    bwListingsLastmod = maxDate(live.map(listingLastmod));
     const byCity: Record<string, { lastmod?: Date }> = {};
     for (const l of live) {
       const c = (byCity[l.citySlug] ||= {});
@@ -167,11 +174,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // فشل Firestore لا يكسر بقية الـ sitemap
   }
   bwPages = [
-    entry(BW_BASE, maxDate([validDate(ed(`${BW_BASE}/`)), bwListingsLastmod]), "daily", 0.9),
+    entry(BW_BASE, bwHubLastmod, "daily", 0.9),
     entry(`${BW_BASE}/buy-request`, ed(`${BW_BASE}/buy-request/`), "monthly", 0.7),
     entry(`${BW_BASE}/sell`, ed(`${BW_BASE}/sell/`), "monthly", 0.7),
     entry(`${BW_BASE}/how-we-verify`, ed(`${BW_BASE}/how-we-verify/`), "monthly", 0.6),
-    entry(`${BW_BASE}/phase-11`, ed(`${BW_BASE}/phase-11/`), "daily", 0.8),
+    entry(`${BW_BASE}/phase-11`, bwPhase11Lastmod, "daily", 0.8),
     ...bwPages,
   ];
 

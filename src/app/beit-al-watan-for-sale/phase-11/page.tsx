@@ -5,7 +5,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Disclaimer, ListingCard, LiveStamp, liveIso } from "@/components/bw/BwParts";
+import { Disclaimer, ListingCard, LiveStamp } from "@/components/bw/BwParts";
+import { resaleModified } from "@/lib/bw/modified";
 import { getActiveListings, getAllDemand } from "@/lib/bw/listings";
 import { getBwLive } from "@/lib/bw/live";
 import { adsCount, fmtUsd, isLive, requestsCount } from "@/lib/bw/calc";
@@ -18,7 +19,7 @@ import { AnswerSection, FaqList } from "@/components/Answers";
 import { answersFor, faqFrom } from "@/lib/answers";
 import { P11_LEDE } from "@/lib/answers/resale";
 import { ID, ORG, breadcrumbNode, faqNode, graph, pageUrl, ref, webPage } from "@/lib/seo/schema";
-import { cairoDateTime, cairoIso, cairoLocalToIso, maxIso } from "@/lib/seo/time";
+import { cairoDateTime } from "@/lib/seo/time";
 import { editorialIso } from "@/lib/seo/editorial";
 import { Freshness } from "@/components/Freshness";
 
@@ -35,14 +36,6 @@ const PATH = `${BW_BASE}/phase-11/`;
 const SECTION_ANSWERS = ["Q100", "Q101"];
 const FAQ_ANSWERS = ["Q119", "M-P11-01", "M-P11-02"];
 
-function verifiedIso(d: string): string | null {
-  try {
-    return cairoLocalToIso(d.slice(0, 10));
-  } catch {
-    return null;
-  }
-}
-
 export default async function Phase11Page() {
   const now = Date.now();
   const [active, live, demand] = await Promise.all([getActiveListings(), getBwLive(), getAllDemand()]);
@@ -51,10 +44,9 @@ export default async function Phase11Page() {
   for (const l of listings) counts[l.citySlug] = (counts[l.citySlug] || 0) + 1;
   // ترتيب محايد بالاسم، وبلا عمود «محجوز» (spec-final A0.4 / §0.4 row 6)
   const rows = live ? Object.values(live.cities).sort((a, b) => a.nameAr.localeCompare(b.nameAr, "ar")) : [];
-  const snapshotIso = live ? liveIso(live) : null;
   // آخر تغيير في بيانات الصفحة: لقطة الأرقام الحية أو أحدث توثيق لإعلان من المرحلة 11، وإلا آخر تعديل تحريري (A3.2)
-  const lastVerified = maxIso(listings.map((l) => verifiedIso(l.verifiedAt)));
-  const dataModified = maxIso([snapshotIso, lastVerified]);
+  // dateModified = lastmod في sitemap.xml (نفس الدالة)
+  const { lastVerified, liveAt: snapshotIso, dateModified } = resaleModified(PATH, listings, live);
   const editedAt = editorialIso(PATH, "modified");
 
   const sections = answersFor(PATH, {}, SECTION_ANSWERS);
@@ -65,7 +57,7 @@ export default async function Phase11Page() {
       name: TITLE,
       about: [ref(ID.serviceResale), ref(ID.phase11)],
       hasPart: [ref(`${pageUrl(PATH)}#faq`)],
-      dateModified: dataModified ? cairoIso(dataModified) : editedAt,
+      dateModified,
       lastReviewed: editorialIso(PATH, "reviewed"),
       reviewedBy: ORG,
     }),

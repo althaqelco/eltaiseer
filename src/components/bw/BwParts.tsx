@@ -21,7 +21,7 @@ import {
 } from "@/lib/bw/calc";
 import { BW_BASE, BW_DISCLAIMER, ELIGIBILITY_CAVEAT, INDEPENDENCE_LINE } from "@/lib/bw/constants";
 import { BrandPlatformLink, PlatformLink } from "@/lib/bw/platformLinks";
-import { cairoIso, cairoLocalToIso } from "@/lib/seo/time";
+import { liveIso, safeLocalIso } from "@/lib/bw/modified";
 import { isPhase11 } from "@/lib/bw/publish";
 
 export function TrustStrip() {
@@ -332,19 +332,8 @@ export function OfficialTable({
   );
 }
 
-// generated_at نص محلي بتوقيت القاهرة («2026-09-28 17:40:43»)؛ صيغة غير متوقعة لا تُسقط الصفحة
-function safeLocalIso(s: string): string | null {
-  try {
-    return cairoLocalToIso(s);
-  } catch {
-    return null;
-  }
-}
-
-/** وقت لقطة الأرقام الحية (generated_at بتوقيت القاهرة، وإلا وقت الجلب) — نفسه في <time> وdateModified */
-export function liveIso(live: BwLive): string {
-  return (live.generatedAt && safeLocalIso(live.generatedAt)) || cairoIso(live.fetchedAt);
-}
+// liveIso وsafeLocalIso في lib/bw/modified.ts: نفس الوقت في <time> وdateModified وlastmod في sitemap.xml
+export { liveIso };
 
 export function LiveStamp({ live }: { live: BwLive }) {
   return (
