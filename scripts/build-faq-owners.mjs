@@ -46,6 +46,11 @@ const bank = JSON.parse(fs.readFileSync(qPath, "utf8")).questions;
 const ERRATA_OWNER = {
   Q119: `${SITE}/beit-al-watan-for-sale/phase-11/`,
   Q099: `${SITE}/beit-al-watan-for-sale/#can-i-sell`,
+  // مالك بنك الأسئلة noindex الآن (حي أو فئة بلا عروض ونص أقل من 250 كلمة، lib/indexRules.ts):
+  // السؤال وإجابته على صفحة قابلة للفهرسة، وصفحة البنك تعرض رابطًا إليه فقط (نفس بديل B5)
+  Q163: `${SITE}/new-damietta/#beit-al-watan`,
+  Q171: `${SITE}/prices/#national-housing`,
+  Q182: `${SITE}/new-damietta/#lands`,
 };
 // صفحات مدن إعادة البيع noindex حتى 3 إعلانات موثّقة: أسئلتها يملكها المحور مؤقتًا (B5 fallback)
 const RESALE_HUB = `${SITE}/beit-al-watan-for-sale/`;

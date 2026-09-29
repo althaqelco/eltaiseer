@@ -13,13 +13,15 @@ import { CITY_LEDE_SOURCES, cityLede } from "@/lib/answers/local";
 import { computePriceStats, toPriceInput } from "@/lib/seo/prices";
 import { breadcrumbNode, cityId, faqNode, graph, itemListNode, pageUrl, ref, SITE, webPage } from "@/lib/seo/schema";
 import { cairoIso, maxIso } from "@/lib/seo/time";
+import { categoryProperties, isAvailable } from "@/lib/listingCategories";
 import { BeitAlWatanBox, DistrictLinks, RelatedPosts, resaleCityHref } from "./CitySections";
 
 const VALID_CITIES = ["new-damietta", "new-mansoura"];
 
 // أسئلة كل مدينة على صفحتها المالكة (faq-owners.json): H2 للأسئلة المرئية كأقسام، والباقي في «أسئلة شائعة»
 const CITY_SECTIONS: Record<string, string[]> = {
-  "new-damietta": ["Q169", "Q170", "Q183"],
+  // Q182 (#lands) وQ163 (#beit-al-watan) هنا لأن صفحتي الأراضي وبيت الوطن - شرق noindex ما دامتا بلا عروض
+  "new-damietta": ["Q169", "Q170", "Q183", "Q182", "Q163"],
   "new-mansoura": ["Q178", "Q179", "M-NM-01"],
 };
 const CITY_FAQ_ITEMS: Record<string, string[]> = {
@@ -79,7 +81,8 @@ export default async function CityListing({ city, page }: { city: string; page: 
     const active = cityProperties.filter((p) => p.status !== "تم البيع");
     const dataModified = maxIso(active.map((p) => p.updatedAt || p.createdAt));
     const prices = computePriceStats(all.map(toPriceInput));
-    const data = { prices, dataModified, ndDistrictCount: getCityDistrictSlugs("new-damietta").length };
+    const landCounts = { [city]: categoryProperties(cityProperties, "lands").filter(isAvailable).length };
+    const data = { prices, dataModified, ndDistrictCount: getCityDistrictSlugs("new-damietta").length, landCounts };
     const sections = answersFor(path, data, CITY_SECTIONS[city]);
     const faqItems = answersFor(path, data, CITY_FAQ_ITEMS[city]);
     const faq = faqNode(path, faqFrom([...sections, ...faqItems]));
@@ -141,8 +144,15 @@ export default async function CityListing({ city, page }: { city: string; page: 
                 </AnswerSection>
               )}
               {byId.get("Q183") && <AnswerSection item={byId.get("Q183")!} />}
+              {byId.get("Q182") && <AnswerSection item={byId.get("Q182")!} />}
               {installmentsLine}
-              <BeitAlWatanBox citySlug={city} resaleHref={resaleHref} />
+              {byId.get("Q163") ? (
+                <AnswerSection item={byId.get("Q163")!}>
+                  <BeitAlWatanBox citySlug={city} resaleHref={resaleHref} linksOnly />
+                </AnswerSection>
+              ) : (
+                <BeitAlWatanBox citySlug={city} resaleHref={resaleHref} />
+              )}
             </>
           ) : (
             <>

@@ -105,8 +105,8 @@ function cityInstallments(city: CitySlug) {
   };
 }
 
-// ── مشروعات الإسكان القومي في دمياط الجديدة (Q171 على /new-damietta/dar-misr-1/) ─────
-const ND_PROJECTS = [
+// ── مشروعات الإسكان القومي في دمياط الجديدة (Q171 على /prices/#national-housing) ─────
+export const ND_PROJECTS = [
   "مشروع جنة",
   "دار مصر - موقع 1",
   "دار مصر - موقع 2",
@@ -349,7 +349,9 @@ export const LOCAL: Answer[] = [
       "«بيت الوطن» في دمياط الجديدة اسم ثلاث مناطق سكنية قائمة في المدينة: بيت الوطن - شرق، وبيت الوطن - غرب، وبيت الوطن - امتداد الشاطئ. العقارات المعروضة فيها على التيسير بيع بين أفراد، ولكل منطقة صفحة بعروضها الحالية.\n\nويحمل الاسم أيضًا قطاعان من طرح المرحلة 11 في المدينة (بيت الوطن بالساحل، وبيت الوطن غرب المدينة) وفق كراسة الشروط، وقطعهما تُحجز فقط من موقع هيئة المجتمعات العمرانية لمن سجّل في المرحلة 11 وفق نوافذ المسلسل.",
     sources: [`${BOOKLET_LONG}: أسماء قطاعات المرحلة 11 في دمياط الجديدة`],
     status: "verified",
-    owner: "/new-damietta/beit-al-watan-east/",
+    // صفحة بيت الوطن - شرق noindex ما دامت بلا عروض: المالك صفحة المدينة (قسم #beit-al-watan)، وصفحات الأحياء الثلاثة رابط إليه
+    owner: "/new-damietta/",
+    anchor: "beit-al-watan",
   },
   {
     // [VERIFY] Appendix 2: تسمية «غرب حورس» تحتاج مصدرًا (جهاز المدينة أو خريطة موثقة) قبل أي نص
@@ -366,24 +368,30 @@ export const LOCAL: Answer[] = [
     a: ndProjects,
     sources: [PRICES_SOURCE],
     status: "verified",
-    owner: "/new-damietta/dar-misr-1/",
+    // صفحات المشروعات noindex ما دامت بلا عروض: المالك /prices/ (جدول الأحياء نفسه)، وصفحات المشروعات رابط إليه
+    owner: "/prices/",
+    anchor: "national-housing",
   },
 
-  // ── /properties/lands/ (Q182) ─────────────────────────────────────────────
+  // ── /new-damietta/#lands (Q182) ───────────────────────────────────────────
   {
+    // /properties/lands/ noindex ما دامت بلا أراضٍ متاحة: المالك صفحة المدينة، وصفحة الأراضي رابط إليه
     id: "Q182",
     q: "أين أجد أراضي للبيع في دمياط الجديدة؟",
     a: (d) => {
-      const n = d.counts?.["new-damietta"];
+      const n = d.landCounts?.["new-damietta"];
       if (n === undefined) return null;
       const date = asOf(d.dataModified);
-      return n === 0
-        ? `لا توجد أراضٍ معروضة للبيع في دمياط الجديدة على التيسير الآن${date ? ` (${date})` : ""}، وهذه الصفحة تتحدث تلقائيًا عند إضافة أرض. ووسيط سعر متر الأرض في المدينة حين يتوفر في [صفحة أسعار العقارات](/prices/#new-damietta-land).`
-        : `في هذه الصفحة كل الأراضي المعروضة للبيع الآن على التيسير، ومنها في دمياط الجديدة ${landPlots(n)}${date ? ` ${date}` : ""}، ولكل قطعة صفحة بمساحتها وسعرها وطريقة الدفع. ووسيط سعر متر الأرض في المدينة في [صفحة أسعار العقارات](/prices/#new-damietta-land).`;
+      const first =
+        n === 0
+          ? `لا توجد أراضٍ معروضة للبيع في دمياط الجديدة على التيسير الآن${date ? ` (${date})` : ""}، وتظهر في هذه الصفحة وفي [صفحة الأراضي للبيع](/properties/lands/) عند إضافتها. ووسيط سعر متر الأرض في المدينة حين يتوفر في [صفحة أسعار العقارات](/prices/#new-damietta-land).`
+          : `المعروض للبيع من الأراضي في دمياط الجديدة على التيسير: ${landPlots(n)}${date ? ` (${date})` : ""}، تجدها في هذه الصفحة وفي [صفحة الأراضي للبيع](/properties/lands/)، ولكل قطعة صفحة بمساحتها وسعرها وطريقة الدفع. ووسيط سعر متر الأرض في المدينة في [صفحة أسعار العقارات](/prices/#new-damietta-land).`;
+      return `${first}\n\nأما أراضي بيت الوطن المخصصة فتُشترى بالتنازل الرسمي في جهاز المدينة، وإعلاناتها الموثّقة في [أراضي بيت الوطن للبيع](/beit-al-watan-for-sale/).`;
     },
     sources: ["إعلانات البيع النشطة على eltaiseer.com"],
     status: "verified",
-    owner: "/properties/lands/",
+    owner: "/new-damietta/",
+    anchor: "lands",
   },
 
   // ── المقالات ──────────────────────────────────────────────────────────────
@@ -625,7 +633,7 @@ export const HUB: Record<
 > = {
   apartments: { plural: "الشقق", none: "شقق", count: apartments, group: "apartment", priceQuestion: true },
   villas: { plural: "الفيلات", none: "فيلات", count: villas, group: "villa", priceQuestion: true },
-  // سؤال سعر الأرض يملكه /prices/#…-land (Q165/Q175)؛ صفحة الأراضي تملك Q182
+  // سؤال سعر الأرض يملكه /prices/#…-land (Q165/Q175)؛ وQ182 يملكه /new-damietta/#lands (رابط من صفحة الأراضي)
   lands: { plural: "الأراضي", none: "أراضٍ", count: landPlots, group: "land", priceQuestion: false },
   shops: { plural: "المحلات والمقرات التجارية", none: "محلات أو مقرات تجارية", count: units, group: "commercial", priceQuestion: true },
   clinics: { plural: "العيادات", none: "عيادات", count: clinics, group: "commercial", priceQuestion: true },

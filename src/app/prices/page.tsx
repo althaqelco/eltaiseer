@@ -10,6 +10,7 @@ import { Freshness } from "@/components/Freshness";
 import { AnswerSection, FaqList } from "@/components/Answers";
 import { getPropertiesForIsr } from "@/lib/serverProperties";
 import { getDistrictSlug } from "@/lib/districtSlugs";
+import { ND_PROJECTS } from "@/lib/answers/local";
 import { answersFor, faqFrom } from "@/lib/answers";
 import {
   GROUP_LABEL,
@@ -64,7 +65,8 @@ const CITIES = [
   { slug: "new-damietta", name: "دمياط الجديدة", accent: "orange" as const, apt: "Q166", land: "Q165" },
   { slug: "new-mansoura", name: "المنصورة الجديدة", accent: "emerald" as const, apt: "Q176", land: "Q175" },
 ];
-const FAQ_ORDER = ["Q166", "Q165", "Q176", "Q175", "M-PR-01", "M-PR-02"];
+// FAQPage (≤ 6): أسئلة البنك وسؤال القائمة المرئية؛ M-PR-01 قسم H2 مرئي («كيف نحسب») بلا Question
+const FAQ_ORDER = ["Q166", "Q165", "Q171", "Q176", "Q175", "M-PR-02"];
 const OTHER_GROUPS: TypeGroup[] = ["villa", "commercial", "chalet"];
 
 const METHOD_STEPS = [
@@ -166,7 +168,7 @@ export default async function PricesPage() {
   const all = await getPropertiesForIsr();
   const stats = computePriceStats(all.map(toPriceInput));
   const data = { prices: stats, dataModified: stats.dataModified };
-  const byId = new Map(answersFor(PATH, data, [...FAQ_ORDER, "M-PR-03"]).map((a) => [a.id, a]));
+  const byId = new Map(answersFor(PATH, data, [...FAQ_ORDER, "M-PR-01", "M-PR-03"]).map((a) => [a.id, a]));
   const faqItems = FAQ_ORDER.map((id) => byId.get(id)).filter((a): a is NonNullable<typeof a> => !!a);
   const seen = new Set<string>();
   const modifiedIso = stats.dataModified ? cairoIso(stats.dataModified) : undefined;
@@ -213,6 +215,7 @@ export default async function PricesPage() {
   );
 
   const method = byId.get("M-PR-01");
+  const projects = byId.get("Q171");
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -265,6 +268,20 @@ export default async function PricesPage() {
                     accent={c.accent}
                     seen={seen}
                   />
+                </AnswerSection>
+              )}
+              {/* Q171: مشروعات الإسكان القومي (صفحاتها noindex ما دامت بلا عروض، فالسؤال هنا) */}
+              {c.slug === "new-damietta" && projects && (
+                <AnswerSection item={projects}>
+                  <ul className="list-disc pr-5 space-y-1 text-sm mt-2">
+                    {ND_PROJECTS.map((name) => (
+                      <li key={name}>
+                        <Link href={`/new-damietta/${getDistrictSlug(name)}/`} prefetch={false} className="text-orange-700 hover:underline">
+                          عقارات {name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </AnswerSection>
               )}
             </section>

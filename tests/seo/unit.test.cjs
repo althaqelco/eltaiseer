@@ -243,6 +243,7 @@ function sampleData() {
     ndDistrictCount: slugs.getCityDistrictSlugs("new-damietta").length,
     installments: { "new-damietta": { k: 7, maxYears: 5, minDown: 250000 }, "new-mansoura": { k: 0, maxYears: null, minDown: null } },
     counts: { "new-damietta": 12, "new-mansoura": 0 },
+    landCounts: { "new-damietta": 3 },
   };
 }
 
@@ -285,8 +286,16 @@ test("faq-owners.json: سؤال مطبَّع واحد لمالك واحد، وا
 
 test("answersFor يعرض على المالك فقط، والمعلّق لا يظهر، وfaqFrom ≤ 6", () => {
   const data = sampleData();
-  const nd = answers.answersFor("/new-damietta/", data, ["Q169", "Q170", "Q183", "M-ND-01", "Q166"]);
-  assert.deepEqual(nd.map((a) => a.id), ["Q169", "Q170", "M-ND-01"]); // Q183 معلّق، وQ166 مالكه /prices/
+  const nd = answers.answersFor("/new-damietta/", data, ["Q169", "Q170", "Q183", "Q182", "Q163", "M-ND-01", "Q166"]);
+  assert.deepEqual(nd.map((a) => a.id), ["Q169", "Q170", "Q182", "Q163", "M-ND-01"]); // Q183 معلّق، وQ166 مالكه /prices/
+  // أسئلة مالكها في البنك صفحة noindex الآن: على صفحة قابلة للفهرسة، وعلى الصفحة القديمة رابط فقط
+  assert.deepEqual(answers.answersFor("/new-damietta/beit-al-watan-east/", data, ["Q163"]), []);
+  assert.deepEqual(answers.answersFor("/new-damietta/dar-misr-1/", data, ["Q171"]), []);
+  assert.deepEqual(answers.answersFor("/properties/lands/", data, ["Q182"]), []);
+  assert.deepEqual(answers.teaser("Q163"), { q: "ما هو بيت الوطن في دمياط الجديدة وأين يقع؟", href: "/new-damietta/#beit-al-watan" });
+  assert.equal(answers.teaser("Q171").href, "/prices/#national-housing");
+  assert.equal(answers.teaser("Q182").href, "/new-damietta/#lands");
+  assert.ok(answers.getAnswer("Q182").a({ ...data, landCounts: { "new-damietta": 0 } }).includes("لا توجد أراضٍ"));
   const faq = answers.faqFrom(answers.answersFor("/prices/", data, ["Q166", "Q165", "Q176", "Q175", "M-PR-01", "M-PR-02", "M-PR-03"]));
   assert.equal(faq.length, 6);
   assert.ok(!faq.some((f) => f.id === "M-PR-03")); // مرئي فقط

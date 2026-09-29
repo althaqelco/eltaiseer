@@ -6,10 +6,10 @@ import { filterByCity, getPropertiesForIsr, getPropertiesServerResult, serialize
 import { getPropertyUrl } from "@/lib/districtSlugs";
 import { JsonLd } from "@/components/JsonLd";
 import { Freshness } from "@/components/Freshness";
-import { AnswerSection, RichText } from "@/components/Answers";
-import { answersFor, faqFrom } from "@/lib/answers";
+import { RichText, TeaserLinks } from "@/components/Answers";
+import { teaser } from "@/lib/answers";
 import { HUB, hubCityStats, hubLede, hubPriceAnswer, hubPriceQuestion } from "@/lib/answers/local";
-import { breadcrumbNode, faqNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
+import { breadcrumbNode, graph, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { breadcrumbPresets } from "@/components/Breadcrumb";
 import { cairoIso, maxIso } from "@/lib/seo/time";
 import {
@@ -60,9 +60,8 @@ function hubContent(slug: TypeCategorySlug, available: Property[], dataModified:
     area: Number(p.details?.area_sqm) || 0,
     cityId: p.location.cityId || "new-damietta",
   }));
-  // Q182 على صفحة الأراضي وحدها (faq-owners.json)؛ سؤال السعر المحسوب لباقي الأنواع بلا Question
-  const owned = answersFor(path, { dataModified, counts: { "new-damietta": nd.length, "new-mansoura": nm.length } }, slug === "lands" ? ["Q182"] : []);
-  const faq = faqNode(path, faqFrom(owned));
+  // لا Question مملوك هنا: سؤال السعر المحسوب بلا Question، وQ182 («أين أجد أراضي للبيع في دمياط الجديدة؟»)
+  // مالكه /new-damietta/#lands لأن صفحة الأراضي noindex ما دامت بلا أراضٍ متاحة — هنا رابط إليه فقط
   const priceAnswer = HUB[slug].priceQuestion
     ? hubPriceAnswer(slug, {
         cities: {
@@ -75,9 +74,6 @@ function hubContent(slug: TypeCategorySlug, available: Property[], dataModified:
 
   const answersSlot = (
     <div className="mt-12 bg-white rounded-xl p-6 shadow-sm space-y-8">
-      {owned.map((item) => (
-        <AnswerSection key={item.id} item={item} id="where" />
-      ))}
       {priceAnswer && (
         <section id="price" className="scroll-mt-24">
           <h2 className="text-2xl font-bold text-gray-900 mb-3">{hubPriceQuestion(slug)}</h2>
@@ -91,6 +87,7 @@ function hubContent(slug: TypeCategorySlug, available: Property[], dataModified:
           </p>
         </section>
       )}
+      {slug === "lands" && <TeaserLinks title="أسئلة تجيب عنها صفحات أخرى" items={[teaser("Q182")]} />}
       {slug === "lands" && (
         <p className="text-gray-700">
           تبحث عن أرض بيت الوطن؟{" "}
@@ -102,7 +99,7 @@ function hubContent(slug: TypeCategorySlug, available: Property[], dataModified:
       <Freshness data={dataModified} dataLabel="آخر تحديث للعروض" className="freshness text-sm text-gray-500" />
     </div>
   );
-  return { lede, answersSlot, faq };
+  return { lede, answersSlot };
 }
 
 
@@ -153,7 +150,6 @@ export default async function CategoryListing({
             type: "CollectionPage",
             name: LIST_NAMES[slug],
             mainEntity: available.length ? ref(`${pageUrl(path)}#itemlist`) : undefined,
-            hasPart: content?.faq ? [ref(`${pageUrl(path)}#faq`)] : undefined,
             dateModified: dataModified ? cairoIso(dataModified) : undefined,
           }),
           available.length
@@ -162,7 +158,6 @@ export default async function CategoryListing({
                 total: available.length,
               })
             : null,
-          content?.faq ?? null,
           // نفس حلقات مسار التنقل الظاهر (المكوّن بلا schema) داخل الرسم الواحد
           breadcrumbNode(
             path,

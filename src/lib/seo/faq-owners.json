@@ -1081,7 +1081,7 @@
  },
  {
   "id": "Q163",
-  "owner_url": "https://eltaiseer.com/new-damietta/beit-al-watan-east/",
+  "owner_url": "https://eltaiseer.com/new-damietta/#beit-al-watan",
   "normalized_question": "ما هو بيت الوطن في دمياط الجديده واين يقع",
   "status": "verified"
  },
@@ -1129,7 +1129,7 @@
  },
  {
   "id": "Q171",
-  "owner_url": "https://eltaiseer.com/new-damietta/dar-misr-1/",
+  "owner_url": "https://eltaiseer.com/prices/#national-housing",
   "normalized_question": "كم سعر شقق دار مصر وجنه وسكن مصر في دمياط الجديده",
   "status": "verified"
  },
@@ -1195,7 +1195,7 @@
  },
  {
   "id": "Q182",
-  "owner_url": "https://eltaiseer.com/properties/lands/",
+  "owner_url": "https://eltaiseer.com/new-damietta/#lands",
   "normalized_question": "اين اجد اراضي للبيع في دمياط الجديده",
   "status": "verified"
  },

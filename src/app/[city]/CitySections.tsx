@@ -58,22 +58,50 @@ const BW_DISTRICTS = [
 /**
  * صندوق «بيت الوطن في {المدينة}» (عنوان خبري، ليس في FAQPage، بلا أرقام حية ولا getBwLive).
  * skipDistrict: صفحة حي بيت الوطن الحالية لا تربط نفسها.
+ * linksOnly: الروابط وحدها، داخل قسم Q163 على /new-damietta/ (القسم نفسه يحمل #beit-al-watan وعنوان السؤال).
  */
 export function BeitAlWatanBox({
   citySlug,
   resaleHref,
   skipDistrict,
   withText = true,
+  linksOnly = false,
 }: {
   citySlug: string;
   resaleHref: string;
   skipDistrict?: string;
   withText?: boolean;
+  linksOnly?: boolean;
 }) {
   const box = BW_BOX[citySlug];
   if (!box) return null;
   const platformPath = `/baitelwatan/cities/${citySlug}/`;
   const [before, after] = box.text.split("{PLATFORM}");
+  const links = (
+    <ul className="mt-3 space-y-1 text-sm">
+      {citySlug === "new-damietta" &&
+        BW_DISTRICTS.filter((d) => d.slug !== skipDistrict).map((d) => (
+          <li key={d.slug}>
+            <Link href={`/new-damietta/${d.slug}/`} prefetch={false} className={LINK}>
+              {d.label}
+            </Link>
+          </li>
+        ))}
+      <li>
+        <Link href={resaleHref} prefetch={false} className={LINK}>
+          {RESALE_ANCHOR[citySlug]}
+        </Link>
+      </li>
+      {after === undefined && platformLive(platformPath) && (
+        <li>
+          <a href={platformPath} className={LINK}>
+            {box.platformAnchor}
+          </a>
+        </li>
+      )}
+    </ul>
+  );
+  if (linksOnly) return links;
   return (
     <aside id="beit-al-watan" className="rounded-xl border border-orange-200 bg-orange-50 p-5 scroll-mt-24">
       <h2 className="text-xl font-bold text-gray-900 mb-2">{box.heading}</h2>
@@ -90,28 +118,7 @@ export function BeitAlWatanBox({
           )}
         </p>
       )}
-      <ul className="mt-3 space-y-1 text-sm">
-        {citySlug === "new-damietta" &&
-          BW_DISTRICTS.filter((d) => d.slug !== skipDistrict).map((d) => (
-            <li key={d.slug}>
-              <Link href={`/new-damietta/${d.slug}/`} prefetch={false} className={LINK}>
-                {d.label}
-              </Link>
-            </li>
-          ))}
-        <li>
-          <Link href={resaleHref} prefetch={false} className={LINK}>
-            {RESALE_ANCHOR[citySlug]}
-          </Link>
-        </li>
-        {after === undefined && platformLive(platformPath) && (
-          <li>
-            <a href={platformPath} className={LINK}>
-              {box.platformAnchor}
-            </a>
-          </li>
-        )}
-      </ul>
+      {links}
     </aside>
   );
 }

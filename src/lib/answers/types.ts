@@ -13,8 +13,10 @@ export type PageData = {
   dataModified?: string | null;
   installments?: Record<string, InstallmentFacts>;
   ndDistrictCount?: number;
-  /** عدد العروض النشطة لكل مدينة في الصفحة المعنية (مثل الأراضي في /properties/lands/) */
+  /** عدد العروض النشطة لكل مدينة في الصفحة المعنية (صفحات الأنواع) */
   counts?: Record<string, number>;
+  /** عدد الأراضي المعروضة المتاحة لكل مدينة (Q182 على /new-damietta/#lands) */
+  landCounts?: Record<string, number>;
 };
 
 export type Answer = {

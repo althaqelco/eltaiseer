@@ -11,15 +11,16 @@ import { SLUG_TO_DISTRICT, getCityDistrictSlugs, getPropertyUrl, isCityDistrictS
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { Freshness } from "@/components/Freshness";
-import { AnswerSection, RichText } from "@/components/Answers";
+import { AnswerSection, RichText, TeaserLinks } from "@/components/Answers";
 import { computePriceStats, toPriceInput, TYPE_GROUP } from "@/lib/seo/prices";
 import { breadcrumbNode, districtPlaceId, faqNode, graphWith, itemListNode, pageUrl, ref, webPage } from "@/lib/seo/schema";
 import { cairoIso, maxIso } from "@/lib/seo/time";
 import { getDistrictEditorial } from "@/lib/districtContent";
 import { isAvailable } from "@/lib/listingCategories";
 import { isDistrictIndexable, NOINDEX_FOLLOW } from "@/lib/indexRules";
-import { answersFor, faqFrom } from "@/lib/answers";
+import { answersFor, faqFrom, teaser } from "@/lib/answers";
 import {
+  ND_PROJECTS,
   districtFitQuestion,
   districtGroups,
   districtLede,
@@ -34,13 +35,19 @@ export const dynamicParams = true;
 
 const VALID_CITIES = ["new-damietta", "new-mansoura"] as const;
 
-// أسئلة يملكها حي بعينه (faq-owners.json): Q163 على بيت الوطن - شرق، وQ171 على دار مصر - موقع 1.
-// Q164 (بيت الوطن - غرب) معلّق [VERIFY] فلا يظهر. المعرّف الثابت للقسم حين لا يعطيه questions.json جزء رابط.
+// أسئلة يملكها حي بعينه (faq-owners.json): Q164 (بيت الوطن - غرب) معلّق [VERIFY] فلا يظهر.
+// المعرّف الثابت للقسم حين لا يعطيه questions.json جزء رابط.
 const DISTRICT_ANSWERS: Record<string, { id: string; anchor: string }[]> = {
-  "beit-al-watan-east": [{ id: "Q163", anchor: "what-is-beit-al-watan" }],
   "beit-al-watan-west": [{ id: "Q164", anchor: "map" }],
-  "dar-misr-1": [{ id: "Q171", anchor: "projects" }],
 };
+// أسئلة كانت على صفحات أحياء noindex (بلا عروض): مالكها الآن صفحة قابلة للفهرسة، وهنا رابط إليها فقط.
+// Q163 → /new-damietta/#beit-al-watan (أحياء بيت الوطن الثلاثة)، Q171 → /prices/#national-housing (مشروعات الإسكان القومي)
+function districtTeasers(city: string, district: string, districtName: string): string[] {
+  if (city !== "new-damietta") return [];
+  if (district.startsWith("beit-al-watan-")) return ["Q163"];
+  if (ND_PROJECTS.includes(districtName)) return ["Q171"];
+  return [];
+}
 // «بيت الوطن» في دمياط الجديدة اسم مناطق سكنية قائمة (spec-final §0.3): صندوق المدينة على صفحاتها الثلاث
 const BW_DISTRICTS = ["beit-al-watan-east", "beit-al-watan-west", "beit-al-watan-beach"];
 const LINK = "text-orange-700 underline";
@@ -107,7 +114,7 @@ export default async function DistrictPage({ params }: Props) {
     maxPrice: prices.length ? Math.max(...prices) : 0,
     dataModified,
   });
-  // أسئلة الحي المملوكة (Q163/Q171) وحدها تدخل FAQPage؛ سؤالا السعر و«لمن يناسب» محسوبان لكل حي بلا Question
+  // أسئلة الحي المملوكة وحدها تدخل FAQPage؛ سؤالا السعر و«لمن يناسب» محسوبان لكل حي بلا Question
   const own = DISTRICT_ANSWERS[district] || [];
   const owned = answersFor(path, { prices: stats, dataModified: stats.dataModified }, own.map((o) => o.id));
   const faq = faqNode(path, faqFrom(owned));
@@ -161,9 +168,8 @@ export default async function DistrictPage({ params }: Props) {
           .
         </p>
       )}
-      {isBw && resaleHref && (
-        <BeitAlWatanBox citySlug={city} resaleHref={resaleHref} skipDistrict={district} withText={district !== "beit-al-watan-east"} />
-      )}
+      {isBw && resaleHref && <BeitAlWatanBox citySlug={city} resaleHref={resaleHref} skipDistrict={district} />}
+      <TeaserLinks title="أسئلة تجيب عنها صفحات أخرى" items={districtTeasers(city, district, districtName).map((id) => teaser(id))} />
     </div>
   );
   const pageGraph = graphWith(
