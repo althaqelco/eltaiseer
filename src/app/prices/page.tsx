@@ -193,7 +193,7 @@ export default async function PricesPage() {
                 أسعار العقارات اليوم في دمياط الجديدة والمنصورة الجديدة
               </h1>
               <p className="text-gray-300 mt-2">
-                متوسطات محسوبة من {snapshot.total} عقاراً معروضاً فعلاً — آخر تحديث:{" "}
+                متوسطات محسوبة من العقارات المعروضة فعلاً (العدد: {snapshot.total}) — آخر تحديث:{" "}
                 <time dateTime={snapshot.asOf}>{updatedAt}</time>
               </p>
             </div>
@@ -226,7 +226,7 @@ export default async function PricesPage() {
             </h2>
             <CityPriceTable city={nd} accent="orange" />
             <p className="text-sm text-gray-500">
-              محسوب من {nd.stats?.count ?? 0} عقاراً معروضاً حالياً — متوسط المتر بالجنيه، وبين القوسين عدد الوحدات الداخلة في الحساب. اضغط اسم الحي لتصفح عقاراته.
+              عدد العقارات الداخلة في الحساب: {nd.stats?.count ?? 0} — متوسط المتر بالجنيه، وبين القوسين عدد الوحدات الداخلة في الحساب. اضغط اسم الحي لتصفح عقاراته.
             </p>
           </section>
         )}
@@ -238,7 +238,7 @@ export default async function PricesPage() {
             </h2>
             <CityPriceTable city={nm} accent="emerald" />
             <p className="text-sm text-gray-500">
-              محسوب من {nm.stats?.count ?? 0} عقاراً معروضاً حالياً — متوسط المتر بالجنيه، وبين القوسين عدد الوحدات.
+              عدد العقارات الداخلة في الحساب: {nm.stats?.count ?? 0} — متوسط المتر بالجنيه، وبين القوسين عدد الوحدات.
             </p>
           </section>
         )}

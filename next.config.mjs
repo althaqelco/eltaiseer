@@ -54,6 +54,22 @@ const nextConfig = {
                 { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
                 { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
                 { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+                // HSTS: المتصفح يلتزم بـ HTTPS لستة أشهر. بلا includeSubDomains ولا preload عمداً
+                // (نطاقات فرعية مستقبلية قد لا تكون على HTTPS، والـ preload صعب التراجع عنه)
+                { key: 'Strict-Transport-Security', value: 'max-age=15552000' },
+                // روابط اكتشاف لوكلاء الذكاء الاصطناعي والزواحف (RFC 8288): فهرس الموقع النصي، الخريطة، الخلاصة
+                {
+                  key: 'Link',
+                  value:
+                    '</llms.txt>; rel="describedby"; type="text/plain", </sitemap.xml>; rel="sitemap"; type="application/xml", </feed.xml>; rel="alternate"; type="application/rss+xml"',
+                },
+              ],
+            },
+            {
+              // صور public كانت تخرج max-age=0 فلا يخزنها Cloudflare ولا المتصفح
+              source: '/:file(og-image.jpg|og-new-damietta.jpg|og-new-mansoura.jpg|logo.png|icon-192.png|icon-512.png)',
+              headers: [
+                { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
               ],
             },
             {
