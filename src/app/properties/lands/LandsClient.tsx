@@ -18,7 +18,14 @@ import { Property } from "@/lib/mockData";
 
 const ITEMS_PER_PAGE = 12;
 
-export default function LandsClient({ initialProperties }: { initialProperties: Property[] }) {
+export default function LandsClient({
+  initialProperties,
+  summary,
+}: {
+  initialProperties: Property[];
+  /* ملخص حي مبني على الخادم من المعروض الفعلي (lib/liveFacts.ts) */
+  summary?: string;
+}) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -56,10 +63,12 @@ export default function LandsClient({ initialProperties }: { initialProperties: 
               <p className="text-gray-300 mt-2">{filteredProperties.length} قطعة أرض متاحة للبيع</p>
             </div>
           </div>
-          <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفضل الأراضي للبيع في دمياط الجديدة والمنصورة الجديدة. أراضي سكنية وتجارية بمواقع مميزة. 
-            مساحات متنوعة من 150 متر حتى 5000 متر. أسعار تنافسية وإمكانية التقسيط.
-          </p>
+          {/* الإجابة المباشرة: عدد المعروض ونطاق الأسعار ومتوسط المتر — من البيانات الفعلية */}
+          {summary && (
+            <p className="category-summary text-gray-200 text-sm md:text-base max-w-3xl leading-relaxed">
+              {summary}
+            </p>
+          )}
         </div>
       </div>
 

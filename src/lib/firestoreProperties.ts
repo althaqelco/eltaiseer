@@ -16,6 +16,7 @@ import {
   DocumentData
 } from "firebase/firestore";
 import { Property } from "./mockData";
+import { normalizeListingTitle, normalizeListingDescription } from "./format";
 
 // Check if user is authenticated as admin
 function isAdminAuthenticated(): boolean {
@@ -78,9 +79,23 @@ function removeUndefined<T extends Record<string, unknown>>(obj: T): T {
 
 // Convert Firestore document to Property
 function docToProperty(docData: DocumentData, id: string): Property {
+  const cityId: string | undefined = docData.location?.cityId;
   return {
     ...docData,
     id,
+    // تصحيح عند القراءة: عنوان/وصف/اسم مدينة يناقض cityId الفعلي للعقار (راجع format.ts)
+    title: normalizeListingTitle(docData.title, cityId),
+    description: normalizeListingDescription(docData.description, cityId),
+    ...(docData.location
+      ? {
+          location: {
+            ...docData.location,
+            ...(cityId === "new-mansoura" || cityId === "new-damietta"
+              ? { city: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة" }
+              : {}),
+          },
+        }
+      : {}),
     createdAt: docData.createdAt?.toDate?.() || new Date(docData.createdAt),
   } as Property;
 }

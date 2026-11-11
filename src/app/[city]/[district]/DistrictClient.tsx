@@ -17,29 +17,25 @@ import { getCategoryByDistrict, CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
 import type { DistrictEditorial } from "@/lib/districtContent";
+import type { DistrictStats } from "@/lib/districtFaq";
+import type { FaqItem } from "@/lib/homeFaq";
 
 const ITEMS_PER_PAGE = 12;
 
 // District slug mapping
 const PROPERTY_TYPES = ["الكل", "شقة", "شقة فاخرة", "فيلا منفصلة", "دوبلكس", "محل تجاري", "أرض"];
 
-export interface DistrictStats {
-  count: number;
-  minPrice: number;
-  maxPrice: number;
-  avgPerSqm: number | null;
-  types: string[];
-}
-
+export 
 interface DistrictClientProps {
   citySlug: string;
   districtSlug: string;
   initialProperties: Property[];
   districtStats?: DistrictStats | null;
   editorial?: DistrictEditorial | null;
+  faq?: FaqItem[];
 }
 
-export default function DistrictClient({ citySlug, districtSlug, initialProperties, districtStats, editorial }: DistrictClientProps) {
+export default function DistrictClient({ citySlug, districtSlug, initialProperties, districtStats, editorial, faq = [] }: DistrictClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const districtName = SLUG_TO_DISTRICT[districtSlug] || decodeURIComponent(districtSlug).replace(/-/g, " ");
@@ -213,11 +209,6 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
                       ✓ {tag}
                     </span>
                   ))}
-                  {editorial.pricePerSqm && (
-                    <span className="text-sm px-3 py-1.5 rounded-full bg-gray-100 text-gray-700">
-                      سعر المتر: {editorial.pricePerSqm}
-                    </span>
-                  )}
                 </div>
               </>
             ) : (
@@ -239,14 +230,15 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
                   </p>
                   <p className="text-sm text-gray-500">نطاق الأسعار (جنيه)</p>
                 </div>
-                {districtStats.avgPerSqm && (
-                  <div className="bg-gray-50 rounded-lg p-4 text-center">
+                {/* متوسط المتر لكل فئة على حدة — خلط المحلات بالشقق في رقم واحد كان يضلل */}
+                {districtStats.sqmGroups.map((g) => (
+                  <div key={g.label} className="bg-gray-50 rounded-lg p-4 text-center">
                     <p className={`text-2xl font-bold text-${themeColor}-600`}>
-                      {districtStats.avgPerSqm.toLocaleString("ar-EG")}
+                      {g.avg.toLocaleString("en-US")}
                     </p>
-                    <p className="text-sm text-gray-500">متوسط سعر المتر (جنيه)</p>
+                    <p className="text-sm text-gray-500">متوسط متر {g.label} (جنيه)</p>
                   </div>
-                )}
+                ))}
                 <div className="bg-gray-50 rounded-lg p-4 text-center">
                   <p className="text-base font-bold text-gray-700 leading-relaxed">
                     {districtStats.types.slice(0, 3).join("، ")}
@@ -256,16 +248,32 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
               </div>
             )}
 
-            <h3 className="text-xl font-bold text-gray-800 mt-6 mb-3">
-              لماذا {districtName}؟
-            </h3>
-            <ul className="list-disc list-inside space-y-2">
-              <li>موقع استراتيجي في قلب {city?.nameAr}</li>
-              <li>قريب من الخدمات والمرافق الأساسية</li>
-              <li>بنية تحتية متطورة وشوارع واسعة</li>
-              <li>مجتمع آمن ومناسب للعائلات</li>
-              {isNM && <li>مدينة الجيل الرابع بتصميم عصري</li>}
-            </ul>
+            {/* أسئلة وأجوبة من أرقام الحي الفعلية — تطابق schema الـ FAQPage في الصفحة حرفياً */}
+            {faq.length > 0 && (
+              <div className="not-prose mt-8">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  أسئلة شائعة عن عقارات {districtName}
+                </h3>
+                <div className="space-y-4">
+                  {faq.map((item) => (
+                    <div key={item.question} className="border-r-4 border-gray-200 pr-4">
+                      <h4 className="font-bold text-gray-800 mb-1">{item.question}</h4>
+                      <p className="text-gray-600 leading-relaxed">{item.answer}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-4 text-sm text-gray-500">
+                  للمقارنة بباقي الأحياء:{" "}
+                  <Link href="/prices" className="underline">
+                    أسعار العقارات اليوم
+                  </Link>
+                  {" "}·{" "}
+                  <Link href="/properties/installments" className="underline">
+                    عقارات بالتقسيط
+                  </Link>
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

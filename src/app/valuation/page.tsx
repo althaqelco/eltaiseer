@@ -101,7 +101,7 @@ export default function ValuationPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">خبرة واسعة</h3>
-                  <p className="text-gray-600">فريق من الخبراء بخبرة +10 سنوات في سوق دمياط الجديدة</p>
+                  <p className="text-gray-600">فريق متخصص في سوق دمياط الجديدة والمنصورة الجديدة</p>
                 </div>
               </div>
               

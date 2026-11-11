@@ -4,6 +4,8 @@ import { getCityDistrictSlugs, getDistrictSlug } from "@/lib/districtSlugs";
 import { getActiveListings } from "@/lib/bw/listings";
 import { isLive, listingPath } from "@/lib/bw/calc";
 import { BW_BASE } from "@/lib/bw/constants";
+import { BLOG_POSTS } from "@/lib/blogPosts";
+import { inGroup } from "@/lib/liveFacts";
 
 const BASE_URL = "https://eltaiseer.com";
 
@@ -17,11 +19,24 @@ function url(path: string): string {
 }
 
 // تواريخ ثابتة للمحتوى الثابت — lastModified وهمي "الآن" لكل الصفحات يفقد مصداقية الـ sitemap
-const BLOG_PUBLISHED = new Date("2026-01-18");
+const BLOG_PUBLISHED = new Date(
+  Math.max(...BLOG_POSTS.map((p) => +new Date(p.updated)))
+);
 const LEGAL_UPDATED = new Date("2026-01-12");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const listingsDate = new Date();
+
+  // العقارات تُجلب مرة واحدة أولاً: تحدد صفحات العقارات وأي فئات فيها معروض فعلاً
+  let allProperties: Awaited<ReturnType<typeof getPropertiesFromFirestore>> = [];
+  let propertiesLoaded = false;
+  try {
+    allProperties = await getPropertiesFromFirestore();
+    propertiesLoaded = allProperties.length > 0;
+  } catch {
+    // فشل الاتصال بـ Firestore وقت البناء لا يجب أن يكسر بقية الـ sitemap
+  }
+  const liveProperties = allProperties.filter((p) => p.status !== "تم البيع");
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -41,27 +56,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: url("sitemap-page"), lastModified: LEGAL_UPDATED, changeFrequency: "monthly", priority: 0.5 },
   ];
 
-  // Blog posts
-  const blogSlugs = [
-    "buying-steps-legal",
-    "damietta-vs-mansoura",
-    "buying-apartment-guide",
-    "best-districts",
-    "national-housing-projects",
-    "investment-guide",
-    "finishing-tips",
-    "new-mansoura-districts",
-    "new-mansoura-investment",
-  ];
-  const blogPages: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
-    url: url(`blog/${slug}`),
-    lastModified: BLOG_PUBLISHED,
+  // Blog posts — التاريخ الفعلي لآخر تحديث كل مقال من سجل المدونة (كان تاريخاً واحداً قديماً للجميع)
+  const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
+    url: url(`blog/${post.slug}`),
+    lastModified: new Date(post.updated),
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
   // Category pages
-  const categorySlugs = ["apartments", "villas", "lands", "shops", "clinics", "chalets"];
+  // الفئة الفارغة (بلا أي عقار معروض) تخرج noindex من صفحتها، فلا تُدرج هنا؛ تعود تلقائياً عند توفر معروض.
+  // إذا تعذر جلب العقارات تُدرج كل الفئات (لا نحذف صفحات بسبب عطل مؤقت).
+  const categorySlugs = (["apartments", "villas", "lands", "shops", "clinics", "chalets"] as const).filter(
+    (slug) => !propertiesLoaded || inGroup(liveProperties, slug).length > 0
+  );
   const categoryPages: MetadataRoute.Sitemap = categorySlugs.map((slug) => ({
     url: url(`properties/${slug}`),
     lastModified: listingsDate,
@@ -90,25 +98,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
-  // Property detail pages — صفحات المال الحقيقية، تُجلب من Firestore
-  let propertyPages: MetadataRoute.Sitemap = [];
-  try {
-    const properties = await getPropertiesFromFirestore();
-    propertyPages = properties
-      .filter((p) => p.status !== "تم البيع")
-      .map((p) => {
-        const citySlug = p.location.cityId || "new-damietta";
-        const districtSlug = getDistrictSlug(p.location.district);
-        return {
-          url: url(`${citySlug}/${districtSlug}/${p.id}`),
-          lastModified: p.createdAt ? new Date(p.createdAt) : listingsDate,
-          changeFrequency: "weekly" as const,
-          priority: 0.8,
-        };
-      });
-  } catch {
-    // فشل الاتصال بـ Firestore وقت البناء لا يجب أن يكسر بقية الـ sitemap
-  }
+  // Property detail pages — صفحات المال الحقيقية
+  const propertyPages: MetadataRoute.Sitemap = liveProperties.map((p) => {
+    const citySlug = p.location.cityId || "new-damietta";
+    const districtSlug = getDistrictSlug(p.location.district);
+    return {
+      url: url(`${citySlug}/${districtSlug}/${p.id}`),
+      lastModified: p.createdAt ? new Date(p.createdAt) : listingsDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    };
+  });
 
   // أراضي بيت الوطن للبيع: الصفحات الثابتة، والإعلانات الموثّقة النشطة، والمدن القابلة للفهرسة فقط (5 إعلانات أو حي فيه 3)
   const BW_UPDATED = new Date("2026-09-28");

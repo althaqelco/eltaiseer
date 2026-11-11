@@ -83,15 +83,17 @@ export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 
       <div className="container mx-auto px-4 py-8 md:py-16 relative z-10">
         {/* Header */}
         <div className="text-center mb-6 md:mb-12">
-          <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-4">
+          {/* اسم العلامة فقرة، والـ H1 هو الجملة التي تصف الصفحة — نفس الشكل تماماً.
+              H1 = "التيسير للعقارات" وحده لا يقول لمحرك البحث ما موضوع الصفحة */}
+          <p className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-4">
             التيسير <span className="text-orange-400">للعقارات</span>
-          </h1>
-          <p className="hero-description text-sm sm:text-base md:text-xl text-gray-300 max-w-3xl mx-auto px-2">
+          </p>
+          <h1 className="hero-description font-normal text-sm sm:text-base md:text-xl text-gray-300 max-w-3xl mx-auto px-2">
             منصتك الأولى للبحث عن عقارات للبيع في{" "}
             <span className="text-orange-400 font-semibold">دمياط الجديدة</span>
             {" "}و{" "}
             <span className="text-emerald-400 font-semibold">المنصورة الجديدة</span>
-          </p>
+          </h1>
 
           {/* City Tags */}
           <div className="flex justify-center gap-3 mt-4">

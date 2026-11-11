@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { WhyUsSection } from "@/components/WhyUsSection";
 import { HomeFaqSection } from "@/components/HomeFaqSection";
+import type { FaqItem } from "@/lib/homeFaq";
 import { PropertyCard } from "@/components/PropertyCard";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Footer } from "@/components/Footer";
@@ -15,7 +16,17 @@ import { Button } from "@/components/ui/button";
 import { LayoutGrid, List, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export default function HomeClient({ initialProperties = [] }: { initialProperties?: Property[] }) {
+export default function HomeClient({
+  initialProperties = [],
+  marketSummary = null,
+  faq = [],
+}: {
+  initialProperties?: Property[];
+  /* الأسئلة الشائعة المبنية على الخادم من المعروض الفعلي — نفس القائمة في الـ schema */
+  faq?: FaqItem[];
+  /* فقرة ملخص السوق المحسوبة على الخادم من المعروض الفعلي */
+  marketSummary?: string | null;
+}) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -170,6 +181,23 @@ export default function HomeClient({ initialProperties = [] }: { initialProperti
         totalProperties={properties.length}
         totalDistricts={new Set(properties.map(p => p.location.district)).size}
       />
+
+      {/* الإجابة المباشرة: كم عقاراً معروضاً وبكم — نص خادم يراه الزاحف ووكلاء الذكاء الاصطناعي */}
+      {marketSummary && (
+        <section aria-labelledby="market-summary-title" className="bg-white border-b">
+          <div className="container mx-auto px-4 py-5">
+            <h2 id="market-summary-title" className="text-base md:text-lg font-bold text-gray-800 mb-1">
+              سوق العقارات في دمياط الجديدة والمنصورة الجديدة اليوم
+            </h2>
+            <p className="market-summary text-sm md:text-base text-gray-700 leading-relaxed">
+              {marketSummary}{" "}
+              <Link href="/prices" className="text-orange-600 font-semibold underline">
+                أسعار كل حي بالتفصيل
+              </Link>
+            </p>
+          </div>
+        </section>
+      )}
 
 
       {/* Properties Section */}
@@ -380,7 +408,7 @@ export default function HomeClient({ initialProperties = [] }: { initialProperti
       <WhyUsSection />
 
       {/* FAQ - visible content matching the FAQPage schema */}
-      <HomeFaqSection />
+      <HomeFaqSection items={faq} />
 
       <Footer />
     </div>

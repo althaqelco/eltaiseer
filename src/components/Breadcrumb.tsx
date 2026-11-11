@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Home, ChevronLeft } from "lucide-react";
+import { absUrl } from "@/lib/site";
 
 export interface BreadcrumbItem {
   label: string;
@@ -21,7 +22,8 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.label,
-      ...(item.href && { "item": `https://eltaiseer.com${item.href}` }),
+      // absUrl يضيف الشرطة الختامية — روابط الـ schema كانت تمر بتحويل 308 قبل الوصول للصفحة
+      ...(item.href && { "item": absUrl(item.href) }),
     })),
   };
 

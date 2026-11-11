@@ -25,7 +25,14 @@ import { Property } from "@/lib/mockData";
 const ITEMS_PER_PAGE = 12;
 const VILLA_TYPES = ["فيلا منفصلة", "تاون هاوس", "توين هاوس"];
 
-export default function VillasClient({ initialProperties }: { initialProperties: Property[] }) {
+export default function VillasClient({
+  initialProperties,
+  summary,
+}: {
+  initialProperties: Property[];
+  /* ملخص حي مبني على الخادم من المعروض الفعلي (lib/liveFacts.ts) */
+  summary?: string;
+}) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -73,10 +80,12 @@ export default function VillasClient({ initialProperties }: { initialProperties:
             </div>
           </div>
           
-          <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفخم الفيلات للبيع في دمياط الجديدة والمنصورة الجديدة. فيلات مستقلة بحدائق خاصة، تاون هاوس، 
-            توين هاوس بمساحات من 200 متر حتى 1000 متر. تشطيبات فاخرة وحمامات سباحة خاصة.
-          </p>
+          {/* الإجابة المباشرة: عدد المعروض ونطاق الأسعار ومتوسط المتر — من البيانات الفعلية */}
+          {summary && (
+            <p className="category-summary text-gray-200 text-sm md:text-base max-w-3xl leading-relaxed">
+              {summary}
+            </p>
+          )}
         </div>
       </div>
 

@@ -25,7 +25,14 @@ import { Property } from "@/lib/mockData";
 const ITEMS_PER_PAGE = 12;
 const APARTMENT_TYPES = ["شقة", "شقة فاخرة", "دوبلكس", "بنتهاوس", "روف"];
 
-export default function ApartmentsClient({ initialProperties }: { initialProperties: Property[] }) {
+export default function ApartmentsClient({
+  initialProperties,
+  summary,
+}: {
+  initialProperties: Property[];
+  /* ملخص حي مبني على الخادم من المعروض الفعلي (lib/liveFacts.ts) */
+  summary?: string;
+}) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -73,11 +80,12 @@ export default function ApartmentsClient({ initialProperties }: { initialPropert
             </div>
           </div>
           
-          {/* SEO Content */}
-          <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفضل الشقق للبيع في دمياط الجديدة والمنصورة الجديدة. نوفر شقق تمليك بمساحات متنوعة من 80 متر حتى 300 متر، 
-            شقق نصف تشطيب وتشطيب كامل سوبر لوكس. أسعار تبدأ من 500,000 جنيه مع إمكانية التقسيط حتى 10 سنوات.
-          </p>
+          {/* الإجابة المباشرة: عدد المعروض ونطاق الأسعار ومتوسط المتر — من البيانات الفعلية */}
+          {summary && (
+            <p className="category-summary text-gray-200 text-sm md:text-base max-w-3xl leading-relaxed">
+              {summary}
+            </p>
+          )}
         </div>
       </div>
 
@@ -181,7 +189,6 @@ export default function ApartmentsClient({ initialProperties }: { initialPropert
               <li>مواقف سيارات خاصة</li>
               <li>أمن وحراسة 24 ساعة</li>
               <li>قريبة من المدارس والخدمات</li>
-              <li>إمكانية التقسيط حتى 10 سنوات</li>
             </ul>
           </div>
         </div>

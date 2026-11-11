@@ -88,7 +88,7 @@ export default function InstallmentsClient({ initialProperties, faq }: Installme
                 عقارات بالتقسيط في دمياط الجديدة والمنصورة الجديدة
               </h1>
               <p className="text-gray-300 mt-2">
-                {filteredProperties.length} عقاراً متاحاً بالتقسيط — مقدم من 10% وأقساط حتى 10 سنوات
+                عدد العقارات المتاحة بالتقسيط الآن: {filteredProperties.length} — المقدم والقسط والمدة لكل وحدة
               </p>
             </div>
           </div>
@@ -178,10 +178,10 @@ export default function InstallmentsClient({ initialProperties, faq }: Installme
               <Link href="/new-damietta" className="text-orange-600 hover:underline">دمياط الجديدة</Link>{" "}
               و<Link href="/new-mansoura" className="text-emerald-600 hover:underline">المنصورة الجديدة</Link>{" "}
               نوعان: تقسيط مباشر مع المالك أو المطور (الأسرع والأبسط — اتفاق وعقد دون بنوك)،
-              وتمويل عقاري بنكي بمدد أطول وفوائد أعلى. مشاريع الإسكان القومي مثل{" "}
+              وتمويل عقاري بنكي بشروط يحددها البنك. مشاريع الإسكان القومي مثل{" "}
               <Link href="/new-damietta/janna-project" className="text-orange-600 hover:underline">جنة</Link> و
               <Link href="/new-mansoura/sakan-kol-misryeen" className="text-emerald-600 hover:underline">سكن لكل المصريين</Link>{" "}
-              تقدم أفضل شروط تقسيط مدعومة بمقدمات تبدأ من 10%.
+              لها أنظمة سداد خاصة تحددها الجهة المالكة للمشروع.
             </p>
           </div>
 

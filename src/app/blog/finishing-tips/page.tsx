@@ -6,6 +6,8 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, Paintbrush, CheckCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleDates } from "@/components/ArticleDates";
+import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
   title: "نصائح التشطيب الذكي 2026 | كيف تشطب شقتك بأقل تكلفة وأعلى جودة",
@@ -82,7 +84,7 @@ export default function FinishingTipsArticle() {
               <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full">التشطيب</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                28 ديسمبر 2024
+                <ArticleDates slug="finishing-tips" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -97,6 +99,8 @@ export default function FinishingTipsArticle() {
               في تشطيب الشقق بدمياط الجديدة، مع نصائح عملية لتوفير المال وتجنب الأخطاء الشائعة.
             </p>
           </header>
+
+          <ArticlePriceNote />
 
           {/* Featured Image */}
           <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-10">

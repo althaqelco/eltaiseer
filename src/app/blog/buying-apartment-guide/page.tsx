@@ -6,6 +6,8 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleDates } from "@/components/ArticleDates";
+import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
   title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026 | نصائح الخبراء",
@@ -83,7 +85,7 @@ export default function BuyingGuideArticle() {
               <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full">نصائح الشراء</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                15 يناير 2026
+                <ArticleDates slug="buying-apartment-guide" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -98,6 +100,8 @@ export default function BuyingGuideArticle() {
               من اختيار المنطقة المناسبة إلى إتمام عملية الشراء بنجاح.
             </p>
           </header>
+
+          <ArticlePriceNote />
 
           {/* Featured Image */}
           <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-10">

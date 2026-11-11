@@ -4,6 +4,7 @@ import "./globals.css";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { MetaPixel } from "@/components/MetaPixel";
 import { Suspense } from "react";
+import { ORG_EMAIL, ORG_SOCIAL } from "@/lib/site";
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     default: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة",
     template: "%s | التيسير للعقارات",
   },
-  description: "شقق وفيلات وأراضي ومحلات للبيع في دمياط الجديدة والمنصورة الجديدة بأسعار تنافسية وتقسيط حتى 10 سنوات. تصفح أكثر من 100 عقار مع التيسير للعقارات.",
+  description: "شقق ودوبلكس ومحلات وعيادات ومقرات إدارية للبيع في دمياط الجديدة والمنصورة الجديدة، بأسعار ومواصفات كل وحدة وطريقة الدفع (كاش أو تقسيط) مع التيسير للعقارات.",
   keywords: [
     "عقارات دمياط الجديدة",
     "شقق للبيع في دمياط الجديدة",
@@ -128,6 +129,7 @@ export default function RootLayout({
     logo: "https://eltaiseer.com/logo.png",
     image: "https://eltaiseer.com/logo.png",
     telephone: "+201500775974",
+    email: ORG_EMAIL,
     address: {
       "@type": "PostalAddress",
       addressLocality: "دمياط الجديدة",
@@ -154,17 +156,18 @@ export default function RootLayout({
     contactPoint: {
       "@type": "ContactPoint",
       telephone: "+201500775974",
+      email: ORG_EMAIL,
       contactType: "sales",
+      areaServed: "EG",
       availableLanguage: ["Arabic"],
     },
-    sameAs: [
-      "https://wa.me/201500775974",
-    ],
+    // الحسابات الرسمية — بها يربط محرك البحث ومحركات الإجابة الموقع بكيان واحد معروف
+    sameAs: [...ORG_SOCIAL, "https://wa.me/201500775974"],
     priceRange: "$$",
     paymentAccepted: "Cash, Bank Transfer",
     currenciesAccepted: "EGP",
     foundingDate: "2024",
-    numberOfEmployees: { "@type": "QuantitativeValue", value: "5-10" },
+    numberOfEmployees: { "@type": "QuantitativeValue", minValue: 5, maxValue: 10 },
     knowsAbout: ["عقارات دمياط الجديدة", "عقارات المنصورة الجديدة", "بيع شقق", "بيع فيلات", "بيع أراضي"],
   };
 

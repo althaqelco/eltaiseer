@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { buildCategorySummary, buildCategoryDescription } from "@/lib/liveFacts";
 import LandsClient from "./LandsClient";
 import {
   getPropertiesServer,
@@ -10,6 +12,16 @@ import {
 export const revalidate = 300;
 
 const TYPES = ["أرض"];
+
+// وصف الصفحة من المعروض الفعلي؛ الفئة الفارغة لا تُفهرس (صفحة بلا عقارات = محتوى ضعيف) وتعود للفهرسة تلقائياً عند توفر معروض
+export async function generateMetadata(): Promise<Metadata> {
+  const all = await getPropertiesServer();
+  const empty = filterByTypes(all, TYPES).filter((p) => p.status !== "تم البيع").length === 0;
+  return {
+    description: buildCategoryDescription(all, "lands", "أراضي سكنية وتجارية للبيع في دمياط الجديدة والمنصورة الجديدة."),
+    ...(empty ? { robots: { index: false, follow: true } } : {}),
+  };
+}
 
 export default async function Page() {
   const all = await getPropertiesServer();
@@ -28,7 +40,10 @@ export default async function Page() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
         />
       )}
-      <LandsClient initialProperties={serializeProperties(filtered)} />
+      <LandsClient
+        initialProperties={serializeProperties(filtered)}
+        summary={buildCategorySummary(all, "lands")}
+      />
     </>
   );
 }

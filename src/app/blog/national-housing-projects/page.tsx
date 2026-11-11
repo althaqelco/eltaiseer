@@ -6,6 +6,8 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, Building2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleDates } from "@/components/ArticleDates";
+import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
   title: "مشاريع الإسكان القومية في دمياط الجديدة 2026 | جنة - دار مصر - سكن مصر",
@@ -74,7 +76,7 @@ export default function NationalHousingArticle() {
               <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">المشاريع</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                5 يناير 2026
+                <ArticleDates slug="national-housing-projects" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -89,6 +91,8 @@ export default function NationalHousingArticle() {
               مقارنة شاملة للأسعار والمميزات وطرق الحجز.
             </p>
           </header>
+
+          <ArticlePriceNote />
 
           {/* Featured Image */}
           <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-10">

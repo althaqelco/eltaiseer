@@ -9,6 +9,8 @@ import {
 } from "@/lib/serverProperties";
 import { SLUG_TO_DISTRICT, getCityDistrictSlugs } from "@/lib/districtSlugs";
 import { getDistrictEditorial } from "@/lib/districtContent";
+import { computeDistrictStats, buildDistrictFaq } from "@/lib/districtFaq";
+import { buildFaqSchema } from "@/lib/homeFaq";
 
 // ISR كل 5 دقائق — العقارات تظهر في HTML الخادم مع بقاء البيانات حديثة
 export const revalidate = 300;
@@ -40,22 +42,11 @@ export default async function DistrictPage({
   const available = districtProperties.filter((p) => p.status !== "تم البيع");
 
   // إحصاءات حية تجعل محتوى كل حي فريداً ومحدثاً تلقائياً (بدل النص المكرر في 53 صفحة)
-  const prices = available.map((p) => p.price).filter((n) => n > 0);
-  const perSqm = available
-    .filter((p) => p.price > 0 && p.details?.area_sqm > 0)
-    .map((p) => Math.round(p.price / p.details.area_sqm));
-  const districtStats =
-    available.length > 0
-      ? {
-          count: available.length,
-          minPrice: Math.min(...prices),
-          maxPrice: Math.max(...prices),
-          avgPerSqm: perSqm.length
-            ? Math.round(perSqm.reduce((a, b) => a + b, 0) / perSqm.length)
-            : null,
-          types: Array.from(new Set(available.map((p) => p.type))),
-        }
-      : null;
+  const districtStats = computeDistrictStats(available);
+  const editorial = getDistrictEditorial(district);
+  const cityName = city === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
+  // أسئلة وأجوبة من نفس الأرقام — القسم المرئي والـ schema من مصدر واحد
+  const faq = buildDistrictFaq(districtName, cityName, districtStats, editorial);
 
   const itemListSchema = buildItemListSchema(available, `عقارات للبيع في ${districtName}`);
 
@@ -67,12 +58,19 @@ export default async function DistrictPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
         />
       )}
+      {faq.length >= 2 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(faq)) }}
+        />
+      )}
       <DistrictClient
         citySlug={city}
         districtSlug={district}
         initialProperties={serializeProperties(districtProperties)}
         districtStats={districtStats}
-        editorial={getDistrictEditorial(district)}
+        editorial={editorial}
+        faq={faq}
       />
     </>
   );

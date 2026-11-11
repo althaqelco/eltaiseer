@@ -31,6 +31,8 @@ import { Property } from "@/lib/mockData";
 import { PropertyCard } from "@/components/PropertyCard";
 import { trackEvent } from "@/components/MetaPixel";
 import { getWhatsAppUrl, formatPriceFull as formatPrice, COMPANY_WHATSAPP } from "@/lib/format";
+import { buildPropertySummary, pricePerSqm, formatNumber } from "@/lib/propertySummary";
+import { formatArabicDate } from "@/lib/blogPosts";
 import { isFavorite as checkIsFavorite, toggleFavorite as toggleFavoriteStore } from "@/lib/favoritesStore";
 
 interface PropertyPageClientProps {
@@ -306,9 +308,12 @@ export default function PropertyPageClient({
                   <p className="text-2xl font-bold text-white">
                     {formatPrice(property.price)}
                   </p>
-                  <p className="text-xs text-white/80">
-                    {Math.round(property.price / property.details.area_sqm).toLocaleString()} جنيه/م²
-                  </p>
+                  {/* سعر المتر يُخفى إذا كانت مساحة/سعر الإعلان غير معقولين (خطأ إدخال) بدل عرض رقم مستحيل */}
+                  {pricePerSqm(property) !== null && (
+                    <p className="text-xs text-white/80">
+                      {formatNumber(pricePerSqm(property)!)} جنيه/م²
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex items-start justify-between mb-6">
@@ -318,6 +323,19 @@ export default function PropertyPageClient({
                       <MapPin className={`h-5 w-5 text-${themeColor}-500`} />
                       <span className="font-medium">{property.location.district} - {property.location.city || city?.nameAr}</span>
                     </div>
+                    {/* الإجابة المباشرة: جملة حقائق واحدة مكتملة — نفس نص وصف الصفحة والـ schema */}
+                    <p className="property-summary mt-3 text-gray-700 leading-relaxed">
+                      {buildPropertySummary(property)}
+                    </p>
+                    {property.createdAt && (
+                      <p className="mt-2 text-xs text-gray-500">
+                        تاريخ النشر:{" "}
+                        <time dateTime={new Date(property.createdAt).toISOString().slice(0, 10)}>
+                          {formatArabicDate(new Date(property.createdAt).toISOString())}
+                        </time>
+                        {" "}· كود العقار: {property.id}
+                      </p>
+                    )}
                   </div>
                   <Badge className={`bg-${themeColor}-100 text-${themeColor}-700 border-0 text-sm px-3 py-1`}>
                     {property.type}
@@ -407,9 +425,11 @@ export default function PropertyPageClient({
                     {formatPrice(property.price)}
                   </p>
                   <div className="flex items-center gap-4 mt-3 text-sm">
-                    <span className="bg-white/25 backdrop-blur-sm px-3 py-1 rounded-full text-white font-medium">
-                      {Math.round(property.price / property.details.area_sqm).toLocaleString()} جنيه/م²
-                    </span>
+                    {pricePerSqm(property) !== null && (
+                      <span className="bg-white/25 backdrop-blur-sm px-3 py-1 rounded-full text-white font-medium">
+                        {formatNumber(pricePerSqm(property)!)} جنيه/م²
+                      </span>
+                    )}
                     {property.isVerified && (
                       <span className="flex items-center gap-1 text-white bg-white/20 px-2 py-1 rounded-full">
                         <CheckCircle2 className="h-4 w-4" />

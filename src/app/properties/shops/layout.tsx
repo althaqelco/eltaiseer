@@ -23,21 +23,9 @@ export const metadata: Metadata = {
 };
 
 export default function ShopsLayout({ children }: { children: React.ReactNode }) {
-  const itemListSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة والمنصورة الجديدة",
-    description: "محلات ومقرات إدارية بمواقع استراتيجية",
-    url: "https://eltaiseer.com/properties/shops/",
-    itemListOrder: "https://schema.org/ItemListUnordered",
-  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-      />
       {children}
     </>
   );

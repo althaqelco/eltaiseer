@@ -10,6 +10,9 @@
  */
 
 import { getDistrictSlug } from "./districtSlugs";
+import { buildPropertySummary, pricePerSqm } from "./propertySummary";
+import { ORG_ID, ORG_NAME, SITE_URL, WEBSITE_ID, cityNameOf } from "./site";
+import type { Property } from "./types";
 
 interface PropertySEOInput {
   type: string;
@@ -238,96 +241,123 @@ export function generateMetaKeywords(input: PropertySEOInput): string[] {
   return Array.from(new Set(keywords));
 }
 
-/**
- * Generate Schema.org structured data for property (JSON-LD)
- * Optimized for Google and AI search engines
- */
-export function generatePropertySchema(
-  input: PropertySEOInput & {
-    id: string;
-    title: string;
-    images: string[];
-    contact_whatsapp: string;
-    datePosted?: string;
-  }
-): object {
-  const {
-    id,
-    title,
-    district,
-    area_sqm,
-    price,
-    bedrooms,
-    bathrooms,
-    images,
-    status,
-    cityId,
-    datePosted,
-  } = input;
+// نوع schema.org الصحيح لكل نوع عقار — كان كل شيء يُعلن "Residence" حتى المحل والأرض والعيادة
+const SCHEMA_TYPE: Record<string, string> = {
+  "شقة": "Apartment",
+  "شقة فاخرة": "Apartment",
+  "دوبلكس": "Apartment",
+  "بنتهاوس": "Apartment",
+  "روف": "Apartment",
+  "فيلا منفصلة": "SingleFamilyResidence",
+  "تاون هاوس": "House",
+  "شاليه": "House",
+};
 
-  const citySlug = cityId || "new-damietta";
+/**
+ * Schema.org structured data for a property page (JSON-LD).
+ * RealEstateListing (الصفحة) → mainEntity (العقار نفسه بنوعه الصحيح) + Offer بالسعر وسعر المتر.
+ * كل القيم حقائق من بيانات الإعلان؛ لا عبارات تسويقية داخل الـ schema.
+ */
+export function generatePropertySchema(property: Property): object {
+  const cityId = property.location?.cityId || "new-damietta";
+  const cityName = cityNameOf(cityId);
+  const district = property.location?.district?.trim() || "";
   const districtSlug = getDistrictSlug(district);
-  const propertyUrl = `https://eltaiseer.com/${citySlug}/${districtSlug}/${id}/`;
+  const propertyUrl = `${SITE_URL}/${cityId}/${districtSlug}/${property.id}/`;
+  const d = property.details || ({} as Property["details"]);
+  const images = property.images || [];
+  const summary = buildPropertySummary(property);
+  const sqm = pricePerSqm(property);
+  const sold = property.status === "تم البيع";
+
+  const schemaType = SCHEMA_TYPE[property.type] || "Place";
+  const isAccommodation = schemaType !== "Place";
+
+  const facts: Array<[string, string | number | undefined]> = [
+    ["نوع العقار", property.type],
+    ["المساحة (م²)", d.area_sqm > 0 ? d.area_sqm : undefined],
+    ["الدور", d.level || undefined],
+    ["التشطيب", d.finishing || undefined],
+    ["حالة العقار", property.status],
+    ["طريقة الدفع", property.payment?.type],
+    ["المقدم (جنيه)", property.payment?.downPayment || undefined],
+    ["القسط الشهري (جنيه)", property.payment?.monthlyInstallment || undefined],
+    ["مدة التقسيط (سنوات)", property.payment?.installmentYears || undefined],
+    ["سعر المتر (جنيه)", sqm || undefined],
+  ];
+
+  const address = {
+    "@type": "PostalAddress",
+    ...(district ? { addressLocality: district } : {}),
+    addressRegion: cityName,
+    addressCountry: "EG",
+  };
+
+  const mainEntity = {
+    "@type": schemaType,
+    name: property.title,
+    ...(isAccommodation
+      ? {
+          ...(d.bedrooms > 0 ? { numberOfBedrooms: d.bedrooms, numberOfRooms: d.bedrooms } : {}),
+          ...(d.bathrooms > 0 ? { numberOfBathroomsTotal: d.bathrooms } : {}),
+          ...(d.area_sqm > 0
+            ? { floorSize: { "@type": "QuantitativeValue", value: d.area_sqm, unitCode: "MTK" } }
+            : {}),
+        }
+      : {}),
+    address,
+    containedInPlace: {
+      "@type": "Place",
+      name: district ? `${district}، ${cityName}` : cityName,
+      ...(district ? { url: `${SITE_URL}/${cityId}/${districtSlug}/` } : {}),
+    },
+    additionalProperty: facts
+      .filter(([, v]) => v !== undefined && v !== "")
+      .map(([name, value]) => ({ "@type": "PropertyValue", name, value })),
+    ...(property.amenities?.length
+      ? {
+          amenityFeature: property.amenities.map((a) => ({
+            "@type": "LocationFeatureSpecification",
+            name: a,
+            value: true,
+          })),
+        }
+      : {}),
+    ...(images.length ? { image: images } : {}),
+  };
 
   return {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
     "@id": propertyUrl,
-    name: title,
-    description: generateSEODescription(input),
     url: propertyUrl,
-    ...(datePosted ? { datePosted } : {}),
-
-    // Property details
-    about: {
-      "@type": "Residence",
-      name: title,
-      numberOfRooms: bedrooms,
-      numberOfBathroomsTotal: bathrooms,
-      floorSize: {
-        "@type": "QuantitativeValue",
-        value: area_sqm,
-        unitCode: "MTK", // Square meters
-      },
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: district,
-        addressRegion: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",
-        addressCountry: "EG",
-      },
-    },
-
-    // Price
+    name: property.title,
+    description: summary,
+    inLanguage: "ar-EG",
+    isPartOf: { "@type": "WebSite", "@id": WEBSITE_ID },
+    ...(property.createdAt ? { datePosted: new Date(property.createdAt).toISOString() } : {}),
+    ...(images.length ? { image: images, primaryImageOfPage: { "@type": "ImageObject", url: images[0] } } : {}),
+    mainEntity,
     offers: {
       "@type": "Offer",
-      price: price,
+      url: propertyUrl,
+      price: property.price,
       priceCurrency: "EGP",
-      availability: status === "تم البيع"
-        ? "https://schema.org/SoldOut"
-        : "https://schema.org/InStock",
-    },
-
-    // Images
-    image: images.length > 0 ? images : undefined,
-
-    // Seller info
-    seller: {
-      "@type": "RealEstateAgent",
-      name: "التيسير للعقارات",
-      telephone: "+201500775974",
-      url: "https://eltaiseer.com",
-    },
-
-    // Location
-    contentLocation: {
-      "@type": "Place",
-      name: `${district}، ${cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة"}`,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: district,
-        addressRegion: cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة",
-        addressCountry: "مصر",
-      },
+      businessFunction: "http://purl.org/goodrelations/v1#Sell",
+      availability: sold ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
+      ...(sqm
+        ? {
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: sqm,
+              priceCurrency: "EGP",
+              unitCode: "MTK",
+              name: "سعر المتر المربع",
+            },
+          }
+        : {}),
+      // البائع هو نفس كيان الشركة المعرّف في كل الصفحات (@id) — لا نسخة مجهولة جديدة
+      seller: { "@type": "RealEstateAgent", "@id": ORG_ID, name: ORG_NAME },
     },
   };
 }
@@ -386,7 +416,8 @@ export function enhanceDescription(userDescription: string, input: PropertySEOIn
 
   // Add closing brand if not present
   if (!enhanced.includes("التيسير")) {
-    enhanced += " | التيسير للعقارات - دمياط الجديدة";
+    const cityName = input.cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
+    enhanced += ` | التيسير للعقارات - ${cityName}`;
   }
 
   return enhanced;

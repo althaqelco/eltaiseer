@@ -23,7 +23,8 @@ export function bwMeta(o: {
     title: o.absoluteTitle ? { absolute: o.title } : o.title,
     description: o.description,
     alternates: { canonical: url },
-    robots: o.noindex ? { index: false, follow: true } : undefined,
+    // بدون noindex لا نكتب المفتاح أصلًا: robots: undefined كان يمسح إعدادات الجذر (max-snippet / max-image-preview) من كل صفحات القسم
+    ...(o.noindex ? { robots: { index: false, follow: true } } : {}),
     openGraph: { title: o.title, description: o.description, url, type: o.type || "website", locale: "ar_EG", siteName: "التيسير للعقارات", images },
     twitter: { card: "summary_large_image", title: o.title, description: o.description, images: images.map((i) => i.url) },
   };

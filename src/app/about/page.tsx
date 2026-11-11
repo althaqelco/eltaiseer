@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Building2, Users, Shield, Award, MapPin, Phone, Clock, CheckCircle } from "lucide-react";
+import { getPropertiesServer } from "@/lib/serverProperties";
+import { getCityDistrictSlugs } from "@/lib/districtSlugs";
+import { hasInstallment } from "@/lib/propertySummary";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -37,16 +40,17 @@ export const metadata: Metadata = {
   },
 };
 
-const features = [
+// الأرقام تُمرَّر من المعروض الفعلي — كانت "أكثر من 100 عقار" و"48+ منطقة" ثابتة ولا تطابق الموقع
+const buildFeatures = (total: number, nd: number, nm: number) => [
   {
     icon: Building2,
-    title: "أكثر من 100 عقار",
-    description: "تشكيلة واسعة من الشقق والفيلات والأراضي والمحلات التجارية في دمياط الجديدة والمنصورة الجديدة.",
+    title: `${total} عقاراً معروضاً الآن`,
+    description: "شقق ودوبلكس ومحلات وعيادات ومقرات إدارية للبيع في دمياط الجديدة والمنصورة الجديدة، بسعر ومواصفات كل وحدة.",
   },
   {
     icon: MapPin,
-    title: "تغطية 48+ منطقة",
-    description: "نغطي جميع أحياء دمياط الجديدة (18 حي) والمنصورة الجديدة (30+ منطقة) بما يشمل مشاريع الإسكان القومي.",
+    title: `صفحة لكل حي (${nd + nm})`,
+    description: `لكل حي ومنطقة صفحة بمعروضها ومتوسط سعر المتر فيها: ${nd} في دمياط الجديدة و${nm} في المنصورة الجديدة، وتشمل مشاريع الإسكان القومي.`,
   },
   {
     icon: Shield,
@@ -61,7 +65,7 @@ const features = [
   {
     icon: Award,
     title: "خيارات دفع مرنة",
-    description: "نوفر خيارات دفع تناسب الجميع: كاش بخصم خاص أو تقسيط حتى 10 سنوات بمقدم يبدأ من 10%.",
+    description: "كاش أو تقسيط حسب كل وحدة — المقدم والقسط ومدة السداد يحددها المالك ومكتوبة في صفحة كل عقار.",
   },
   {
     icon: Clock,
@@ -70,14 +74,24 @@ const features = [
   },
 ];
 
-const stats = [
-  { number: "100+", label: "عقار متاح" },
-  { number: "48+", label: "منطقة وحي" },
+const buildStats = (total: number, districts: number, installments: number) => [
+  { number: String(total), label: "عقار معروض الآن" },
+  { number: String(districts), label: "صفحة حي ومنطقة" },
   { number: "2", label: "مدن جديدة" },
-  { number: "10", label: "سنوات تقسيط" },
+  { number: String(installments), label: "عقار متاح بالتقسيط" },
 ];
 
-export default function AboutPage() {
+// ISR كل 5 دقائق — أرقام الصفحة من المعروض الفعلي
+export const revalidate = 300;
+
+export default async function AboutPage() {
+  const live = (await getPropertiesServer()).filter((p) => p.status !== "تم البيع");
+  const total = live.length;
+  const nd = getCityDistrictSlugs("new-damietta").length;
+  const nm = getCityDistrictSlugs("new-mansoura").length;
+  const features = buildFeatures(total, nd, nm);
+  const stats = buildStats(total, nd + nm, live.filter(hasInstallment).length);
+
   const aboutSchema = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
@@ -89,7 +103,7 @@ export default function AboutPage() {
       "@id": "https://eltaiseer.com/#organization",
       name: "التيسير للعقارات",
       alternateName: "El Taiseer Real Estate",
-      description: "شركة التيسير للعقارات متخصصة في بيع الشقق والفيلات والأراضي والمحلات التجارية في دمياط الجديدة والمنصورة الجديدة. نقدم أكثر من 100 عقار في 48+ منطقة مع خيارات دفع مرنة تشمل الكاش والتقسيط حتى 10 سنوات.",
+      description: "شركة وساطة عقارية مقرها دمياط الجديدة، متخصصة في بيع الشقق والدوبلكس والمحلات والعيادات والمقرات الإدارية والأراضي في دمياط الجديدة والمنصورة الجديدة.",
       url: "https://eltaiseer.com",
       telephone: "+201500775974",
       areaServed: [
@@ -167,15 +181,15 @@ export default function AboutPage() {
                 نؤمن بأن إيجاد العقار المناسب يجب أن يكون تجربة سهلة وموثوقة، ولذلك نعمل بجد لتقديم أفضل الخيارات العقارية مع الشفافية الكاملة في الأسعار والمعلومات.
               </p>
               <p>
-                نقدم تشكيلة واسعة تضم أكثر من <strong>100 عقار</strong> متنوع يشمل الشقق السكنية، الفيلات المستقلة، الدوبلكس، البنتهاوس، 
-                الأراضي السكنية والتجارية، المحلات التجارية، العيادات الطبية، والشاليهات. تغطي عقاراتنا <strong>48+ منطقة وحي</strong> في المدينتين.
+                عدد العقارات المعروضة للبيع الآن على الموقع: <strong>{total}</strong>، تشمل الشقق والدوبلكس والمحلات التجارية والمقرات الإدارية
+                والعيادات، ولكل حي ومنطقة في المدينتين صفحة مستقلة (<strong>{nd + nm} صفحة</strong>) تعرض معروضها ومتوسط سعر المتر فيها.
               </p>
               <p>
                 في <strong>دمياط الجديدة</strong>، نغطي جميع الأحياء من الحي الأول إلى السادس، إضافة إلى مشاريع الإسكان القومي مثل مشروع جنة ودار مصر وسكن مصر وبيت الوطن. 
                 وفي <strong>المنصورة الجديدة</strong>، نوفر عقارات في مناطق R1 إلى R7، حي الفيلات، داون تاون، سكن لكل المصريين، والعديد من المناطق الأخرى.
               </p>
               <p>
-                نوفر <strong>خيارات دفع مرنة</strong> تناسب جميع الميزانيات، من الدفع الكاش بخصم خاص إلى التقسيط حتى 10 سنوات بمقدم يبدأ من 10%. 
+                <strong>طريقة الدفع</strong> كاش أو تقسيط حسب كل وحدة، والمقدم والقسط ومدة السداد مكتوبة في صفحة كل عقار. 
                 كما نقدم خدمة <strong>التقييم العقاري المجاني</strong> لمساعدتك في معرفة القيمة الحقيقية لعقارك.
               </p>
             </div>

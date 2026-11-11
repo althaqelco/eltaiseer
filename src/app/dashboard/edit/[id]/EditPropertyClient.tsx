@@ -22,7 +22,7 @@ export default function EditPropertyClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [property, setProperty] = useState<Property | null>(null);
   const form = usePropertyForm();
-  const { formData, selectedAmenities, imageUrls, buildSeoInput, loadFromProperty } = form;
+  const { formData, selectedAmenities, imageUrls, buildSeoInput, confirmSanePricePerSqm, loadFromProperty } = form;
 
   useEffect(() => {
     const loadProperty = async () => {
@@ -53,6 +53,7 @@ export default function EditPropertyClient() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!property) return;
+    if (!confirmSanePricePerSqm()) return;
 
     setIsSubmitting(true);
 

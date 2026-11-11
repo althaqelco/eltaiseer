@@ -8,6 +8,7 @@ import { calculateSimilarity } from "@/lib/propertyStore";
 import { generatePropertySchema } from "@/lib/seoOptimizer";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
 import { Property } from "@/lib/mockData";
+import { buildPropertySummary } from "@/lib/propertySummary";
 
 // صفحات العقارات ديناميكية - تُجلب من Firestore عند كل طلب لضمان حداثة البيانات
 export const dynamic = "force-dynamic";
@@ -59,8 +60,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const bedroomsText = property.details.bedrooms > 0 ? `${property.details.bedrooms} غرف نوم` : "";
   const areaText = `${property.details.area_sqm} متر`;
 
-  const title = `${property.type} ${areaText} ${bedroomsText ? bedroomsText + " " : ""}${districtName} - ${priceText}`;
-  const description = `${property.type} للبيع في ${districtName} ب${cityName}. المساحة: ${areaText}. ${bedroomsText ? bedroomsText + ". " : ""}التشطيب: ${property.details.finishing || "غير محدد"}. السعر: ${priceText}. ${property.payment?.type === "تقسيط" || property.payment?.type === "كاش أو تقسيط" ? "متاح التقسيط. " : ""}التيسير للعقارات - شريكك الموثوق.`;
+  // المدينة في العنوان: اسم الحي وحده ("الحي الثالث") لا يحدد المدينة لمن يقرأ النتيجة
+  const title = `${property.type} ${areaText} ${bedroomsText ? bedroomsText + " " : ""}للبيع في ${districtName ? districtName + " " : ""}${cityName} - ${priceText}`;
+  // وصف الصفحة = نفس جملة الحقائق المعروضة تحت العنوان وفي الـ schema (سطح واحد، لا ثلاث صياغات)
+  const description = buildPropertySummary(property);
 
   // الرابط الأساسي يُبنى من بيانات العقار نفسه لضمان canonical واحد صحيح دائماً
   const canonicalSlug = getDistrictSlug(property.location.district);
@@ -110,28 +113,7 @@ export default async function PropertyDetailPage({ params }: Props) {
 
   const schemas: object[] = [];
   if (property) {
-    schemas.push(
-      generatePropertySchema({
-        id: property.id,
-        title: property.title,
-        images: property.images || [],
-        contact_whatsapp: property.contact_whatsapp,
-        type: property.type,
-        district: property.location.district,
-        area_sqm: property.details.area_sqm,
-        price: property.price,
-        bedrooms: property.details.bedrooms,
-        bathrooms: property.details.bathrooms,
-        level: property.details.level,
-        finishing: property.details.finishing,
-        amenities: property.amenities || [],
-        status: property.status,
-        paymentType: property.payment?.type,
-        description: property.description,
-        cityId: property.location.cityId,
-        datePosted: property.createdAt ? new Date(property.createdAt).toISOString() : undefined,
-      })
-    );
+    schemas.push(generatePropertySchema(property));
   }
 
   // العقارات المشابهة تُحسب وتُعرض من الخادم — روابط داخلية بين صفحات العقارات يراها الزاحف

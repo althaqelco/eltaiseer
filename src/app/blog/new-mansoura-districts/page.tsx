@@ -6,6 +6,8 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, MapPin, CheckCircle, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleDates } from "@/components/ArticleDates";
+import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
     title: "أفضل المناطق للسكن في المنصورة الجديدة 2026 | دليل شامل",
@@ -76,7 +78,7 @@ export default function NewMansouraDistrictsArticle() {
                             <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">المنصورة الجديدة</span>
                             <span className="flex items-center gap-1">
                                 <Calendar className="h-4 w-4" />
-                                17 يناير 2026
+                                <ArticleDates slug="new-mansoura-districts" />
                             </span>
                             <span className="flex items-center gap-1">
                                 <Clock className="h-4 w-4" />
@@ -91,6 +93,8 @@ export default function NewMansouraDistrictsArticle() {
                             لمساعدتك في اختيار الموقع المثالي لمنزلك أو استثمارك.
                         </p>
                     </header>
+
+                    <ArticlePriceNote />
 
                     {/* Featured Image */}
                     <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-10">

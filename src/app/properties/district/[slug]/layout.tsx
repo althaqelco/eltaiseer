@@ -2,10 +2,7 @@ import { Metadata } from "next";
 import { getCategoryByDistrict, getCityByDistrict } from "@/lib/egyptPlaces";
 import { SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
 
-// مسار قديم — النسخة الأساسية هي /{city}/{district} والـ canonical يشير إليها دائماً
-export function generateStaticParams() {
-  return Object.keys(SLUG_TO_DISTRICT).map((slug) => ({ slug }));
-}
+// مسار قديم — الصفحة تحوّل 308 إلى /{city}/{district}/ (راجع page.tsx)؛ لا بناء مسبق لنسخ مكررة
 
 type Props = {
   params: { slug: string };

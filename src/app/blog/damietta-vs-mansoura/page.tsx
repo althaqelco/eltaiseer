@@ -5,7 +5,12 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleDates } from "@/components/ArticleDates";
+import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 import { buildFaqSchema } from "@/lib/homeFaq";
+import { getPropertiesServer } from "@/lib/serverProperties";
+import { buildCityFacts, sqmAnswer, MIN_POINTS, type CityFacts } from "@/lib/liveFacts";
+import { formatNumber } from "@/lib/propertySummary";
 
 export const metadata: Metadata = {
   title: "دمياط الجديدة أم المنصورة الجديدة؟ مقارنة شاملة 2026",
@@ -32,7 +37,8 @@ export const metadata: Metadata = {
 };
 
 // الأسئلة تُعرض مرئياً بالأسفل ويولَّد منها الـ schema — مصدر واحد فلا تعارض
-const COMPARISON_FAQ = [
+// سؤال الأسعار يُبنى من المعروض الفعلي (lib/liveFacts.ts) — كانت أرقاماً ثابتة تناقض قوائم العقارات
+const buildComparisonFaq = (nd: CityFacts, nm: CityFacts) => [
   {
     question: "أيهما أفضل للسكن الفوري: دمياط الجديدة أم المنصورة الجديدة؟",
     answer:
@@ -41,17 +47,34 @@ const COMPARISON_FAQ = [
   {
     question: "أيهما أفضل للاستثمار العقاري في 2026؟",
     answer:
-      "المنصورة الجديدة تتقدم للاستثمار طويل المدى: مدينة جيل رابع في بداية منحنى النمو، والأسعار ترتفع مع اكتمال كل مرحلة بنية تحتية، بعوائد متوقعة 30-40% خلال 3-5 سنوات. دمياط الجديدة أنسب للاستثمار الإيجاري الفوري لوجود طلب سكني حقيقي قائم بالفعل.",
+      "المنصورة الجديدة تتقدم للاستثمار طويل المدى: مدينة جيل رابع في بداية منحنى النمو، ويقصدها من يشتري بأفق زمني أطول مع اكتمال مراحلها. دمياط الجديدة أنسب لمن يريد وحدة جاهزة تُسكن أو تؤجَّر فوراً لوجود طلب سكني قائم بالفعل. لا يوجد عائد مضمون في أي من المدينتين، والتيسير للعقارات لا تعد بنسبة ربح محددة.",
   },
   {
     question: "ما الفرق في الأسعار بين المدينتين؟",
     answer:
-      "متوسط سعر متر الشقق في دمياط الجديدة بين 5,000 و20,000 جنيه، وفي المنصورة الجديدة بين 6,000 و25,000 جنيه. الشقق تبدأ من 500,000 جنيه في دمياط الجديدة ومن 600,000 جنيه في المنصورة الجديدة (سكن لكل المصريين).",
+      `دمياط الجديدة: ${sqmAnswer(nd)} المنصورة الجديدة: ${sqmAnswer(nm)}`,
   },
 ];
 
-export default function DamiettaVsMansouraArticle() {
+// ISR كل 5 دقائق — أرقام المقارنة من المعروض الفعلي
+export const revalidate = 300;
+
+// "متوسط كذا (عدد الوحدات)" أو تصريح بعدم كفاية البيانات
+function sqmCell(c: CityFacts, key: "apartments"): string {
+  const g = c.groups[key];
+  return g.sqm && g.sqm.count >= MIN_POINTS
+    ? `${formatNumber(g.sqm.avg)} جنيه في المتوسط (عدد الوحدات: ${g.sqm.count})`
+    : `المعروض (${g.count}) لا يكفي لحساب متوسط`;
+}
+
+export default async function DamiettaVsMansouraArticle() {
+  const all = await getPropertiesServer();
+  const nd = buildCityFacts(all, "new-damietta");
+  const nm = buildCityFacts(all, "new-mansoura");
+  const COMPARISON_FAQ = buildComparisonFaq(nd, nm);
   const faqSchema = buildFaqSchema(COMPARISON_FAQ);
+  const minApt = (c: CityFacts) =>
+    c.groups.apartments.count > 0 ? `${formatNumber(c.groups.apartments.minPrice)} جنيه` : "لا يوجد معروض حالياً";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -92,7 +115,7 @@ export default function DamiettaVsMansouraArticle() {
               <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full">مقارنات</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                17 أغسطس 2026
+                <ArticleDates slug="damietta-vs-mansoura" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -108,6 +131,8 @@ export default function DamiettaVsMansouraArticle() {
               المنصورة الجديدة</strong> — وإليك التفاصيل الكاملة بالأرقام لتقرر بنفسك.
             </p>
           </header>
+
+          <ArticlePriceNote />
 
           <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm">
             {/* جدول المقارنة السريع */}
@@ -128,14 +153,14 @@ export default function DamiettaVsMansouraArticle() {
                     <td className="p-4">جيل رابع قيد التطوير</td>
                   </tr>
                   <tr className="border-b bg-gray-50">
-                    <td className="p-4 font-semibold">سعر متر الشقق</td>
-                    <td className="p-4">5,000 - 20,000 جنيه</td>
-                    <td className="p-4">6,000 - 25,000 جنيه</td>
+                    <td className="p-4 font-semibold">سعر متر الشقق المعروضة الآن</td>
+                    <td className="p-4">{sqmCell(nd, "apartments")}</td>
+                    <td className="p-4">{sqmCell(nm, "apartments")}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-semibold">أقل سعر شقة</td>
-                    <td className="p-4">من 500,000 جنيه</td>
-                    <td className="p-4">من 600,000 جنيه</td>
+                    <td className="p-4 font-semibold">أقل سعر شقة معروضة الآن</td>
+                    <td className="p-4">{minApt(nd)}</td>
+                    <td className="p-4">{minApt(nm)}</td>
                   </tr>
                   <tr className="border-b bg-gray-50">
                     <td className="p-4 font-semibold">الخدمات القائمة</td>
@@ -150,7 +175,7 @@ export default function DamiettaVsMansouraArticle() {
                   <tr className="border-b bg-gray-50">
                     <td className="p-4 font-semibold">أفق النمو السعري</td>
                     <td className="p-4">نمو مستقر</td>
-                    <td className="p-4">نمو متسارع (30-40% متوقعة في 3-5 سنوات)</td>
+                    <td className="p-4">مرتبط باكتمال مراحل المدينة — أفق أطول وبلا عائد مضمون</td>
                   </tr>
                   <tr>
                     <td className="p-4 font-semibold">الأنسب لـ</td>
@@ -173,7 +198,7 @@ export default function DamiettaVsMansouraArticle() {
               {[
                 "تريد السكن فوراً دون انتظار سنوات التسليم",
                 "تبحث عن مدينة بحياة يومية قائمة بالفعل (مدارس ومواصلات وأسواق)",
-                "ميزانيتك تبدأ من 500,000 جنيه وتريد أوسع اختيارات جاهزة",
+                "تريد أوسع اختيارات من الوحدات الجاهزة",
                 "تخطط لشراء وحدة وتأجيرها فوراً — الطلب الإيجاري حقيقي وقائم",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
@@ -203,7 +228,7 @@ export default function DamiettaVsMansouraArticle() {
                 "مستثمراً يشتري في بداية منحنى النمو — الأسعار ترتفع مع اكتمال كل مرحلة",
                 "تقبل الانتظار 2-4 سنوات مقابل قيمة شرائية أعلى مستقبلاً",
                 "تبحث عن فيلات وتاون هاوس بتصميمات عالمية حديثة",
-                "تريد وحدة مدعومة في سكن لكل المصريين من 600,000 جنيه",
+                "تريد وحدة في مشروع سكن لكل المصريين",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-emerald-500 flex-shrink-0 mt-1" />

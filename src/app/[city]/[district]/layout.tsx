@@ -1,5 +1,8 @@
 import { Metadata } from "next";
 import { SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
+import { getPropertiesServer, filterByCity, filterByDistrict } from "@/lib/serverProperties";
+import { computeDistrictStats } from "@/lib/districtFaq";
+import { formatNumber } from "@/lib/propertySummary";
 
 type Props = {
   params: Promise<{ city: string; district: string }>;
@@ -25,7 +28,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const citySlug = isNM ? "new-mansoura" : "new-damietta";
 
   const title = `عقارات ${districtName} - ${cityName} | شقق وفيلات للبيع 2026`;
-  const description = `شقق وفيلات وأراضي للبيع في ${districtName} ب${cityName}. أسعار تنافسية وتقسيط مريح. تصفح أفضل العقارات المتاحة في ${districtName}. التيسير للعقارات - شريكك الموثوق.`;
+  // وصف من المعروض الفعلي في الحي (كان نصاً واحداً مكرراً في 53 صفحة بلا أي معلومة عن الحي)
+  const stats = computeDistrictStats(
+    filterByDistrict(filterByCity(await getPropertiesServer(), citySlug), districtName).filter(
+      (p) => p.status !== "تم البيع"
+    )
+  );
+  const description = stats
+    ? `عدد العقارات المعروضة للبيع الآن في ${districtName} ب${cityName}: ${stats.count}${
+        stats.minPrice
+          ? stats.minPrice === stats.maxPrice
+            ? `، السعر ${formatNumber(stats.minPrice)} جنيه`
+            : `، الأسعار بين ${formatNumber(stats.minPrice)} و${formatNumber(stats.maxPrice)} جنيه`
+          : ""
+      }. الأنواع: ${stats.typeCounts.map((t) => t.type).join("، ")}. متوسط سعر المتر ومواصفات كل وحدة وطريقة الدفع على التيسير للعقارات.`
+    : `تعريف بـ${districtName} في ${cityName} والمناطق المجاورة له. لا يوجد معروض للبيع في الحي حالياً على التيسير للعقارات — المعروض يتحدث باستمرار.`;
 
   const keywords = [
     `عقارات ${districtName}`,

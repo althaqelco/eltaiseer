@@ -7,6 +7,7 @@ import {
   buildItemListSchema,
 } from "@/lib/serverProperties";
 import { CITIES, CityId } from "@/lib/egyptPlaces";
+import { buildCityFaq, buildCityFacts, inventorySentence, sqmAnswer } from "@/lib/liveFacts";
 
 // ISR كل 5 دقائق: العقارات تظهر في HTML الخادم للزواحف مع بقاء البيانات حديثة
 export const revalidate = 300;
@@ -29,6 +30,11 @@ export default async function CityPage({ params }: { params: { city: string } })
   const cityProperties = filterByCity(all, city);
   const cityName = CITIES[city as CityId]?.nameAr || "دمياط الجديدة";
 
+  // أسئلة وأجوبة وملخص من المعروض الفعلي في المدينة (مرئية + schema من نفس القائمة)
+  const faq = buildCityFaq(all, city);
+  const facts = buildCityFacts(all, city);
+  const summary = `${inventorySentence(facts)} ${sqmAnswer(facts)}`;
+
   const itemListSchema = buildItemListSchema(
     cityProperties.filter((p) => p.status !== "تم البيع"),
     `عقارات للبيع في ${cityName}`
@@ -45,6 +51,8 @@ export default async function CityPage({ params }: { params: { city: string } })
       <CityClient
         citySlug={city}
         initialProperties={serializeProperties(cityProperties)}
+        faq={faq}
+        summary={summary}
       />
     </>
   );

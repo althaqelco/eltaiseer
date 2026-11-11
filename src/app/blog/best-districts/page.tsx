@@ -6,6 +6,8 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, User, Share2, MapPin, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleDates } from "@/components/ArticleDates";
+import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
   title: "أفضل الأحياء للسكن في دمياط الجديدة 2026 | مقارنة شاملة",
@@ -74,7 +76,7 @@ export default function BestDistrictsArticle() {
               <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">المناطق</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                10 يناير 2026
+                <ArticleDates slug="best-districts" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
@@ -89,6 +91,8 @@ export default function BestDistrictsArticle() {
               لمساعدتك في اتخاذ القرار الصحيح.
             </p>
           </header>
+
+          <ArticlePriceNote />
 
           {/* Featured Image */}
           <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-10">

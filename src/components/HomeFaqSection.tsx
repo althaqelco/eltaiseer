@@ -1,9 +1,10 @@
 // قسم الأسئلة الشائعة المرئي — يستخدم <details> بدون JavaScript
 // فيظهر نصه كاملاً في HTML المُرسل لمحركات البحث ووكلاء الذكاء الاصطناعي
 
-import { HOME_FAQ } from "@/lib/homeFaq";
+import type { FaqItem } from "@/lib/homeFaq";
 
-export function HomeFaqSection() {
+export function HomeFaqSection({ items }: { items: FaqItem[] }) {
+  if (items.length === 0) return null;
   return (
     <section id="faq" className="py-12 bg-white" aria-labelledby="faq-heading">
       <div className="container mx-auto px-4 max-w-4xl">
@@ -11,10 +12,10 @@ export function HomeFaqSection() {
           الأسئلة الشائعة عن عقارات دمياط الجديدة والمنصورة الجديدة
         </h2>
         <p className="text-gray-500 text-center mb-8">
-          إجابات مباشرة عن أكثر ما يسأل عنه عملاؤنا قبل الشراء
+          إجابات مباشرة بأرقام محسوبة من العقارات المعروضة الآن على الموقع
         </p>
         <div className="space-y-3">
-          {HOME_FAQ.map((item) => (
+          {items.map((item) => (
             <details
               key={item.question}
               className="group bg-gray-50 rounded-xl border border-gray-200 open:bg-orange-50/50 open:border-orange-200 transition-colors"

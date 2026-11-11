@@ -20,7 +20,7 @@ export default function AddPropertyPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = usePropertyForm([DEFAULT_IMAGE]);
-  const { formData, selectedAmenities, imageUrls, buildSeoInput } = form;
+  const { formData, selectedAmenities, imageUrls, buildSeoInput, confirmSanePricePerSqm } = form;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +30,8 @@ export default function AddPropertyPage() {
       alert("يرجى اختيار المنطقة");
       return;
     }
+
+    if (!confirmSanePricePerSqm()) return;
 
     setIsSubmitting(true);
 

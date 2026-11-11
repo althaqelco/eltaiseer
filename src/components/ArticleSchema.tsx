@@ -1,3 +1,6 @@
+import { ORG_ID, WEBSITE_ID, ORG_NAME, SITE_URL, absUrl } from "@/lib/site";
+import { getBlogPost } from "@/lib/blogPosts";
+
 interface ArticleSchemaProps {
   title: string;
   description: string;
@@ -19,35 +22,45 @@ export function ArticleSchema({
   isHowTo,
   howToSteps,
 }: ArticleSchemaProps) {
+  // الصفحات تمرر الرابط بدون شرطة ختامية؛ الـ canonical بشرطة — نوحّدهما هنا مرة واحدة
+  const pageUrl = absUrl(url);
+  // التاريخان من سجل المدونة (نفس مصدر التاريخ المرئي والـ RSS والـ sitemap)؛ القيم الممررة احتياط لمقال غير مسجل
+  const post = getBlogPost(pageUrl.replace(/\/$/, "").split("/").pop() || "");
+  const published = post?.published || datePublished;
+  const modified = post?.updated || dateModified || datePublished;
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: title,
     description: description,
     image: image,
-    datePublished: datePublished,
-    dateModified: dateModified || datePublished,
+    datePublished: published,
+    dateModified: modified,
+    // الكاتب والناشر هما نفس الكيان المعرّف في الصفحة الرئيسية (@id) — لا كيان مجهول جديد في كل مقال
     author: {
-      "@type": "Organization",
-      name: "التيسير للعقارات",
-      url: "https://eltaiseer.com",
+      "@type": "RealEstateAgent",
+      "@id": ORG_ID,
+      name: ORG_NAME,
+      url: `${SITE_URL}/about/`,
     },
     publisher: {
-      "@type": "Organization",
-      name: "التيسير للعقارات",
+      "@type": "RealEstateAgent",
+      "@id": ORG_ID,
+      name: ORG_NAME,
       logo: {
         "@type": "ImageObject",
-        url: "https://eltaiseer.com/logo.png",
+        url: `${SITE_URL}/logo.png`,
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": url,
+      "@id": pageUrl,
     },
-    inLanguage: "ar",
+    url: pageUrl,
+    inLanguage: "ar-EG",
     isPartOf: {
       "@type": "WebSite",
-      "@id": "https://eltaiseer.com/#website",
+      "@id": WEBSITE_ID,
     },
   };
 
@@ -59,19 +72,19 @@ export function ArticleSchema({
         "@type": "ListItem",
         position: 1,
         name: "الرئيسية",
-        item: "https://eltaiseer.com",
+        item: `${SITE_URL}/`,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "المدونة",
-        item: "https://eltaiseer.com/blog",
+        item: `${SITE_URL}/blog/`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: title,
-        item: url,
+        item: pageUrl,
       },
     ],
   };

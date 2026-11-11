@@ -180,6 +180,21 @@ export function usePropertyForm(initialImages: string[] = []) {
     cityId: formData.city,
   });
 
+  // حماية من خطأ إدخال المساحة/السعر: سعر متر خارج 1,000–500,000 جنيه شبه مؤكد أنه خطأ
+  // (حالتان فعليتان: مساحة 0.35 م²، ومساحة كُتب فيها سعر المتر 95,000). يعيد true إذا يُكمل الحفظ.
+  const confirmSanePricePerSqm = (): boolean => {
+    const area = Number(formData.area_sqm);
+    const price = Number(formData.price);
+    if (!(area > 0) || !(price > 0)) return true;
+    const perSqm = Math.round(price / area);
+    if (perSqm >= 1000 && perSqm <= 500000) return true;
+    return window.confirm(
+      `سعر المتر الناتج ${perSqm.toLocaleString("en-US")} جنيه/م² (السعر ${price.toLocaleString("en-US")} ÷ المساحة ${area} م²) يبدو غير منطقي.\n` +
+        "راجع خانتي المساحة والسعر — هذا الرقم يُستبعد من متوسطات الأسعار ولا يظهر سعر المتر في صفحة العقار.\n\n" +
+        "اضغط «موافق» للحفظ كما هو، أو «إلغاء» للتصحيح."
+    );
+  };
+
   return {
     formData,
     selectedAmenities,
@@ -196,6 +211,7 @@ export function usePropertyForm(initialImages: string[] = []) {
     removeImageUrl,
     handleFileUpload,
     buildSeoInput,
+    confirmSanePricePerSqm,
   };
 }
 

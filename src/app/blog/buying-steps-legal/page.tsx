@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Calendar, Clock, FileCheck, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleSchema } from "@/components/ArticleSchema";
+import { ArticleDates } from "@/components/ArticleDates";
 
 export const metadata: Metadata = {
   title: "خطوات شراء عقار في دمياط الجديدة والمنصورة الجديدة: الأوراق والإجراءات",
@@ -99,7 +100,7 @@ export default function BuyingStepsLegalArticle() {
               <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">إجراءات وقانون</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                17 أغسطس 2026
+                <ArticleDates slug="buying-steps-legal" />
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />

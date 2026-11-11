@@ -1,11 +1,14 @@
 import { Metadata } from "next";
 import HomeClient from "./HomeClient";
-import { HOME_FAQ, buildFaqSchema } from "@/lib/homeFaq";
+import { buildFaqSchema } from "@/lib/homeFaq";
+import { buildHomeFaq } from "@/lib/liveFacts";
 import {
   getPropertiesServer,
   serializeProperties,
   buildItemListSchema,
 } from "@/lib/serverProperties";
+import { buildMarketSnapshot, buildHomeSummary } from "@/lib/marketSnapshot";
+import { ORG_ID, WEBSITE_ID } from "@/lib/site";
 
 // ISR كل 5 دقائق — عقارات الرئيسية تظهر في HTML الخادم
 export const revalidate = 300;
@@ -14,7 +17,7 @@ export const metadata: Metadata = {
   title: {
     absolute: "التيسير للعقارات | شقق وفيلات وأراضي للبيع في دمياط الجديدة والمنصورة الجديدة 2026",
   },
-  description: "أفضل عقارات دمياط الجديدة والمنصورة الجديدة للبيع 2026 — شقق وفيلات وأراضي بأسعار تنافسية وتقسيط حتى 10 سنوات. أكثر من 100 عقار في جميع الأحياء.",
+  description: "عقارات للبيع في دمياط الجديدة والمنصورة الجديدة 2026 — شقق ودوبلكس ومحلات وعيادات ومقرات إدارية بأسعار وصور ومواصفات كل وحدة، كاش أو تقسيط، مع متوسط سعر المتر لكل حي.",
   keywords: [
     "عقارات دمياط الجديدة",
     "شقق للبيع في دمياط الجديدة",
@@ -65,22 +68,32 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const homepageFaqSchema = buildFaqSchema(HOME_FAQ);
   const allProperties = await getPropertiesServer();
+  // الأسئلة الشائعة تُبنى من المعروض الفعلي — لا أرقام ثابتة تناقض قائمة العقارات في نفس الصفحة
+  const homeFaq = buildHomeFaq(allProperties);
+  const homepageFaqSchema = buildFaqSchema(homeFaq);
   const itemListSchema = buildItemListSchema(
     allProperties.filter((p) => p.status !== "تم البيع"),
     "أحدث عقارات دمياط الجديدة والمنصورة الجديدة"
   );
 
+  const snapshot = buildMarketSnapshot(allProperties);
+  const marketSummary = buildHomeSummary(snapshot);
+
   const speakableSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
+    "@id": "https://eltaiseer.com/#webpage",
     "name": "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة",
+    "url": "https://eltaiseer.com/",
+    "inLanguage": "ar-EG",
+    "isPartOf": { "@id": WEBSITE_ID },
+    "about": { "@id": ORG_ID },
+    "dateModified": snapshot.asOf,
     "speakable": {
       "@type": "SpeakableSpecification",
-      "cssSelector": ["h1", "h2", ".hero-description"]
-    },
-    "url": "https://eltaiseer.com/"
+      "cssSelector": [".hero-description", ".market-summary"]
+    }
   };
 
   return (
@@ -99,7 +112,11 @@ export default async function Home() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
         />
       )}
-      <HomeClient initialProperties={serializeProperties(allProperties)} />
+      <HomeClient
+        initialProperties={serializeProperties(allProperties)}
+        marketSummary={marketSummary}
+        faq={homeFaq}
+      />
     </>
   );
 }

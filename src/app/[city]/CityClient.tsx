@@ -22,17 +22,20 @@ import { getAllPropertiesAsync } from "@/lib/propertyStore";
 import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictSlug } from "@/lib/districtSlugs";
-import { CITY_FAQ } from "@/lib/cityFaq";
 import { buildFaqSchema } from "@/lib/homeFaq";
+import type { FaqItem } from "@/lib/homeFaq";
 
 const ITEMS_PER_PAGE = 20;
 
 interface CityClientProps {
   citySlug: string;
   initialProperties: Property[];
+  /* مبنية على الخادم من المعروض الفعلي (lib/liveFacts.ts) */
+  faq?: FaqItem[];
+  summary?: string;
 }
 
-export default function CityClient({ citySlug, initialProperties }: CityClientProps) {
+export default function CityClient({ citySlug, initialProperties, faq = [], summary }: CityClientProps) {
   const cityId = citySlug as CityId;
   const city = CITIES[cityId];
   const cityData = CITY_DATA[cityId];
@@ -162,6 +165,12 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
           <p className="text-gray-400 text-sm max-w-2xl">
             {city.description}
           </p>
+          {/* الإجابة المباشرة: المعروض ونطاق الأسعار ومتوسط سعر المتر — نص خادم من البيانات الفعلية */}
+          {summary && (
+            <p className="city-summary text-gray-200 text-sm md:text-base max-w-4xl leading-relaxed mt-3">
+              {summary}
+            </p>
+          )}
 
           {/* Districts Quick Links */}
           <div className="mt-6 flex flex-wrap gap-2">
@@ -385,17 +394,17 @@ export default function CityClient({ citySlug, initialProperties }: CityClientPr
         </div>
 
         {/* الأسئلة الشائعة — محتوى مرئي مطابق للـ schema */}
-        {(CITY_FAQ[citySlug] || []).length > 0 && (
+        {faq.length > 0 && (
           <section className="mt-8 bg-white rounded-xl p-6 shadow-sm" aria-labelledby="city-faq-heading">
             <script
               type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(CITY_FAQ[citySlug])) }}
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(faq)) }}
             />
             <h2 id="city-faq-heading" className="text-2xl font-bold text-gray-800 mb-4">
               أسئلة شائعة عن عقارات {city.nameAr}
             </h2>
             <div className="space-y-3">
-              {CITY_FAQ[citySlug].map((item) => (
+              {faq.map((item) => (
                 <details key={item.question} className="group bg-gray-50 rounded-lg border border-gray-200 p-4">
                   <summary className="cursor-pointer list-none font-semibold text-gray-800 flex items-center justify-between">
                     <h3 className="text-base font-semibold">{item.question}</h3>

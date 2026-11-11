@@ -19,7 +19,14 @@ import { Property } from "@/lib/mockData";
 const ITEMS_PER_PAGE = 12;
 const COMMERCIAL_TYPES = ["محل تجاري", "مقر إداري", "مكتب"];
 
-export default function ShopsClient({ initialProperties }: { initialProperties: Property[] }) {
+export default function ShopsClient({
+  initialProperties,
+  summary,
+}: {
+  initialProperties: Property[];
+  /* ملخص حي مبني على الخادم من المعروض الفعلي (lib/liveFacts.ts) */
+  summary?: string;
+}) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -57,10 +64,12 @@ export default function ShopsClient({ initialProperties }: { initialProperties: 
               <p className="text-gray-300 mt-2">{filteredProperties.length} محل تجاري ومقر إداري متاح للبيع</p>
             </div>
           </div>
-          <p className="text-gray-400 text-sm max-w-3xl leading-relaxed">
-            اكتشف أفضل المحلات التجارية والمقرات الإدارية للبيع في دمياط الجديدة والمنصورة الجديدة. مواقع استراتيجية على الشوارع الرئيسية.
-            مساحات متنوعة تناسب جميع الأنشطة التجارية.
-          </p>
+          {/* الإجابة المباشرة: عدد المعروض ونطاق الأسعار ومتوسط المتر — من البيانات الفعلية */}
+          {summary && (
+            <p className="category-summary text-gray-200 text-sm md:text-base max-w-3xl leading-relaxed">
+              {summary}
+            </p>
+          )}
         </div>
       </div>
 
