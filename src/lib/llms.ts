@@ -5,7 +5,7 @@
 
 import type { Property } from "./types";
 import { buildMarketSnapshot, type MarketSnapshot } from "./marketSnapshot";
-import { formatNumber, pricePerSqm } from "./propertySummary";
+import { formatNumber, pricePerSqm, plausibleArea } from "./propertySummary";
 import { getPropertyUrl, getCityDistrictSlugs } from "./districtSlugs";
 import { BLOG_POSTS, formatArabicDate } from "./blogPosts";
 import { LLMS_SHORT_BODY, LLMS_FULL_BODY } from "./llmsStatic";
@@ -81,7 +81,8 @@ function listingsSection(all: Property[]): string {
     const bits = [
       p.type,
       `${p.location?.district || "—"}، ${p.location?.cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة"}`,
-      p.details?.area_sqm ? `${formatNumber(p.details.area_sqm)} م²` : "",
+      // نفس حماية صفحات العقارات: مساحة تعطي سعر متر مستحيلاً (خطأ إدخال) لا تُكتب في الملف
+      plausibleArea(p) ? `${formatNumber(plausibleArea(p)!)} م²` : "",
       p.price ? `${formatNumber(p.price)} جنيه${sqm ? ` (${formatNumber(sqm)}/م²)` : ""}` : "",
       p.status,
       p.payment?.type || "",
