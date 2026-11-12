@@ -305,12 +305,13 @@ export default function PropertyDetailClient() {
                     <Button
                       variant="outline"
                       size="icon"
+aria-label="مشاركة العقار"
                       onClick={handleShare}
                       title="مشاركة"
                     >
                       <Share2 className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="icon" title="حفظ">
+                    <Button variant="outline" size="icon" aria-label="إضافة إلى المفضلة" title="حفظ">
                       <Heart className="h-4 w-4" />
                     </Button>
                   </div>
@@ -566,7 +567,7 @@ export default function PropertyDetailClient() {
                   {/* Favorite Button */}
                   <Button
                     variant="outline"
-                    size="icon"
+                    size="icon" aria-label="إضافة إلى المفضلة"
                     className={`h-12 w-12 border-2 ${
                       isFav 
                         ? "border-red-500 bg-red-50 text-red-500" 
@@ -584,6 +585,7 @@ export default function PropertyDetailClient() {
                   <Button
                     variant="outline"
                     size="icon"
+aria-label="مشاركة العقار"
                     className="h-12 w-12 border-2 border-gray-300 text-gray-400 hover:border-orange-500 hover:text-orange-500"
                     onClick={handleShare}
                   >

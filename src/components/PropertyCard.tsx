@@ -124,6 +124,8 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
           {/* Favorite Button */}
           <button
             onClick={handleFavoriteClick}
+            aria-label={isFav ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
+            aria-pressed={isFav}
             className={`absolute top-2 left-2 sm:top-3 sm:left-3 p-1.5 rounded-full transition-all ${isFav
               ? "bg-red-500 text-white"
               : "bg-white/80 text-gray-600 hover:bg-red-500 hover:text-white"

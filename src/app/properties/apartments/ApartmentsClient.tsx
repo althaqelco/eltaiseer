@@ -139,7 +139,7 @@ export default function ApartmentsClient({
           <div className="flex items-center justify-center gap-2 mt-8">
             <Button
               variant="outline"
-              size="icon"
+              size="icon" aria-label="الصفحة السابقة"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
             >
@@ -158,7 +158,7 @@ export default function ApartmentsClient({
             ))}
             <Button
               variant="outline"
-              size="icon"
+              size="icon" aria-label="الصفحة التالية"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
             >

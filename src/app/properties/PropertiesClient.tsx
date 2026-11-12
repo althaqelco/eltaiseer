@@ -309,7 +309,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                 <div className="flex items-center bg-gray-100 rounded-lg p-1">
                   <Button
                     variant={viewMode === "grid" ? "default" : "ghost"}
-                    size="icon"
+                    size="icon" aria-label="عرض شبكي"
                     onClick={() => setViewMode("grid")}
                     className={viewMode === "grid" ? "bg-orange-500" : ""}
                   >
@@ -317,7 +317,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                   </Button>
                   <Button
                     variant={viewMode === "list" ? "default" : "ghost"}
-                    size="icon"
+                    size="icon" aria-label="عرض قائمة"
                     onClick={() => setViewMode("list")}
                     className={viewMode === "list" ? "bg-orange-500" : ""}
                   >
@@ -497,7 +497,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
           <div className="flex items-center justify-center gap-2 mt-8">
             <Button
               variant="outline"
-              size="icon"
+              size="icon" aria-label="الصفحة السابقة"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
             >
@@ -530,7 +530,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
 
             <Button
               variant="outline"
-              size="icon"
+              size="icon" aria-label="الصفحة التالية"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
             >

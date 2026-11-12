@@ -106,11 +106,11 @@ export default function ClinicsClient({
 
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-8">
-            <Button variant="outline" size="icon" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1}><ChevronRight className="h-4 w-4" /></Button>
+            <Button variant="outline" size="icon" aria-label="الصفحة السابقة" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1}><ChevronRight className="h-4 w-4" /></Button>
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map((page) => (
               <Button key={page} variant={currentPage === page ? "default" : "outline"} size="icon" onClick={() => setCurrentPage(page)} className={currentPage === page ? "bg-orange-500" : ""}>{page}</Button>
             ))}
-            <Button variant="outline" size="icon" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}><ChevronLeft className="h-4 w-4" /></Button>
+            <Button variant="outline" size="icon" aria-label="الصفحة التالية" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}><ChevronLeft className="h-4 w-4" /></Button>
           </div>
         )}
 

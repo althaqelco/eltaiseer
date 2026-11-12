@@ -215,7 +215,7 @@ export default function PropertyPageClient({
                   <>
                     <Button
                       variant="ghost"
-                      size="icon"
+                      size="icon" aria-label="الصفحة التالية"
                       className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 text-gray-800 hover:bg-white shadow-lg h-10 w-10 rounded-full"
                       onClick={() => setCurrentImageIndex(i => (i + 1) % property.images.length)}
                     >
@@ -223,7 +223,7 @@ export default function PropertyPageClient({
                     </Button>
                     <Button
                       variant="ghost"
-                      size="icon"
+                      size="icon" aria-label="الصفحة السابقة"
                       className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 text-gray-800 hover:bg-white shadow-lg h-10 w-10 rounded-full"
                       onClick={() => setCurrentImageIndex(i => (i - 1 + property.images.length) % property.images.length)}
                     >
@@ -250,6 +250,7 @@ export default function PropertyPageClient({
                   <Button
                     variant="ghost"
                     size="icon"
+aria-label="إضافة إلى المفضلة"
                     className="bg-white/95 hover:bg-white shadow-md h-10 w-10 rounded-full"
                     onClick={toggleFavorite}
                   >
@@ -258,6 +259,7 @@ export default function PropertyPageClient({
                   <Button
                     variant="ghost"
                     size="icon"
+aria-label="مشاركة العقار"
                     className="bg-white/95 hover:bg-white shadow-md h-10 w-10 rounded-full"
                     onClick={handleShare}
                   >
@@ -553,6 +555,7 @@ export default function PropertyPageClient({
               <Button
                 variant="outline"
                 size="icon"
+aria-label="إضافة إلى المفضلة"
                 className="h-12 w-12"
                 onClick={toggleFavorite}
               >
@@ -561,6 +564,7 @@ export default function PropertyPageClient({
               <Button
                 variant="outline"
                 size="icon"
+aria-label="مشاركة العقار"
                 className="h-12 w-12"
                 onClick={handleShare}
               >

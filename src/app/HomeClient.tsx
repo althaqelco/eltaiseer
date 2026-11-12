@@ -239,7 +239,7 @@ export default function HomeClient({
               <div className="flex items-center gap-2 bg-white rounded-lg p-1 border">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
-                  size="icon"
+                  size="icon" aria-label="عرض شبكي"
                   onClick={() => setViewMode("grid")}
                   className={viewMode === "grid" ? "bg-orange-500" : ""}
                 >
@@ -247,7 +247,7 @@ export default function HomeClient({
                 </Button>
                 <Button
                   variant={viewMode === "list" ? "default" : "ghost"}
-                  size="icon"
+                  size="icon" aria-label="عرض قائمة"
                   onClick={() => setViewMode("list")}
                   className={viewMode === "list" ? "bg-orange-500" : ""}
                 >
@@ -290,7 +290,7 @@ export default function HomeClient({
                     <h3 className="font-bold">الفلاتر</h3>
                     <Button
                       variant="ghost"
-                      size="icon"
+                      size="icon" aria-label="إغلاق"
                       onClick={() => setShowMobileFilters(false)}
                     >
                       <X className="h-5 w-5" />
@@ -356,7 +356,7 @@ export default function HomeClient({
                       {/* Previous Button */}
                       <Button
                         variant="outline"
-                        size="icon"
+                        size="icon" aria-label="الصفحة السابقة"
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
                         className="h-10 w-10"
@@ -389,7 +389,7 @@ export default function HomeClient({
                       {/* Next Button */}
                       <Button
                         variant="outline"
-                        size="icon"
+                        size="icon" aria-label="الصفحة التالية"
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
                         className="h-10 w-10"

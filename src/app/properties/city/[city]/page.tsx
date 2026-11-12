@@ -217,7 +217,7 @@ export default function CityPage() {
           <div className="flex items-center gap-2">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}
-              size="icon"
+              size="icon" aria-label="عرض شبكي"
               onClick={() => setViewMode("grid")}
               className={viewMode === "grid" ? `bg-${themeColor}-500` : ""}
             >
@@ -225,7 +225,7 @@ export default function CityPage() {
             </Button>
             <Button
               variant={viewMode === "list" ? "default" : "outline"}
-              size="icon"
+              size="icon" aria-label="عرض قائمة"
               onClick={() => setViewMode("list")}
               className={viewMode === "list" ? `bg-${themeColor}-500` : ""}
             >
@@ -286,7 +286,7 @@ export default function CityPage() {
               <div className="flex items-center justify-center gap-2 mt-8">
                 <Button
                   variant="outline"
-                  size="icon"
+                  size="icon" aria-label="الصفحة السابقة"
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
                 >
@@ -311,7 +311,7 @@ export default function CityPage() {
                 )}
                 <Button
                   variant="outline"
-                  size="icon"
+                  size="icon" aria-label="الصفحة التالية"
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
                 >
@@ -328,7 +328,7 @@ export default function CityPage() {
               <div className="absolute inset-y-0 right-0 w-full max-w-sm bg-white overflow-y-auto">
                 <div className="flex items-center justify-between p-4 border-b">
                   <h3 className="font-bold">الفلاتر</h3>
-                  <Button variant="ghost" size="icon" onClick={() => setShowMobileFilters(false)}>
+                  <Button variant="ghost" size="icon" aria-label="إغلاق" onClick={() => setShowMobileFilters(false)}>
                     <X className="h-5 w-5" />
                   </Button>
                 </div>
