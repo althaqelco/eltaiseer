@@ -103,7 +103,7 @@ export default function InstallmentsClient({ initialProperties, faq }: Installme
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3 mb-8">
           <Select value={selectedCity} onValueChange={setSelectedCity}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px]" aria-label="المدينة">
               <SelectValue placeholder="المدينة" />
             </SelectTrigger>
             <SelectContent>
@@ -114,7 +114,7 @@ export default function InstallmentsClient({ initialProperties, faq }: Installme
           </Select>
 
           <Select value={maxDownPayment} onValueChange={setMaxDownPayment}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-[200px]" aria-label="أقصى مقدم">
               <SelectValue placeholder="أقصى مقدم" />
             </SelectTrigger>
             <SelectContent>

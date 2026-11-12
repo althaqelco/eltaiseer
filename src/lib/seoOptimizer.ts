@@ -10,7 +10,7 @@
  */
 
 import { getDistrictSlug } from "./districtSlugs";
-import { buildPropertySummary, pricePerSqm } from "./propertySummary";
+import { buildPropertySummary, pricePerSqm, plausibleArea } from "./propertySummary";
 import { ORG_ID, ORG_NAME, SITE_URL, WEBSITE_ID, cityNameOf } from "./site";
 import type { Property } from "./types";
 
@@ -268,6 +268,7 @@ export function generatePropertySchema(property: Property): object {
   const images = property.images || [];
   const summary = buildPropertySummary(property);
   const sqm = pricePerSqm(property);
+  const area = plausibleArea(property);
   const sold = property.status === "تم البيع";
 
   const schemaType = SCHEMA_TYPE[property.type] || "Place";
@@ -275,7 +276,7 @@ export function generatePropertySchema(property: Property): object {
 
   const facts: Array<[string, string | number | undefined]> = [
     ["نوع العقار", property.type],
-    ["المساحة (م²)", d.area_sqm > 0 ? d.area_sqm : undefined],
+    ["المساحة (م²)", area ?? undefined],
     ["الدور", d.level || undefined],
     ["التشطيب", d.finishing || undefined],
     ["حالة العقار", property.status],
@@ -300,9 +301,7 @@ export function generatePropertySchema(property: Property): object {
       ? {
           ...(d.bedrooms > 0 ? { numberOfBedrooms: d.bedrooms, numberOfRooms: d.bedrooms } : {}),
           ...(d.bathrooms > 0 ? { numberOfBathroomsTotal: d.bathrooms } : {}),
-          ...(d.area_sqm > 0
-            ? { floorSize: { "@type": "QuantitativeValue", value: d.area_sqm, unitCode: "MTK" } }
-            : {}),
+          ...(area ? { floorSize: { "@type": "QuantitativeValue", value: area, unitCode: "MTK" } } : {}),
         }
       : {}),
     address,

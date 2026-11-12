@@ -8,7 +8,7 @@ import { calculateSimilarity } from "@/lib/propertyStore";
 import { generatePropertySchema } from "@/lib/seoOptimizer";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";
 import { Property } from "@/lib/mockData";
-import { buildPropertySummary } from "@/lib/propertySummary";
+import { buildPropertySummary, plausibleArea } from "@/lib/propertySummary";
 
 // صفحات العقارات ديناميكية - تُجلب من Firestore عند كل طلب لضمان حداثة البيانات
 export const dynamic = "force-dynamic";
@@ -58,10 +58,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const districtName = property.location.district || SLUG_TO_DISTRICT[district] || "";
   const priceText = formatPrice(property.price);
   const bedroomsText = property.details.bedrooms > 0 ? `${property.details.bedrooms} غرف نوم` : "";
-  const areaText = `${property.details.area_sqm} متر`;
+  const areaText = plausibleArea(property) ? `${plausibleArea(property)} متر` : "";
 
   // المدينة في العنوان: اسم الحي وحده ("الحي الثالث") لا يحدد المدينة لمن يقرأ النتيجة
-  const title = `${property.type} ${areaText} ${bedroomsText ? bedroomsText + " " : ""}للبيع في ${districtName ? districtName + " " : ""}${cityName} - ${priceText}`;
+  const title = `${property.type} ${areaText ? areaText + " " : ""}${bedroomsText ? bedroomsText + " " : ""}للبيع في ${districtName ? districtName + " " : ""}${cityName} - ${priceText}`;
   // وصف الصفحة = نفس جملة الحقائق المعروضة تحت العنوان وفي الـ schema (سطح واحد، لا ثلاث صياغات)
   const description = buildPropertySummary(property);
 

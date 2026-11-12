@@ -199,7 +199,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                   setCurrentPage(1);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger aria-label="المدينة">
                   <SelectValue placeholder="المدينة" />
                 </SelectTrigger>
                 <SelectContent>
@@ -220,7 +220,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                   setCurrentPage(1);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger aria-label="المنطقة">
                   <SelectValue placeholder="المنطقة" />
                 </SelectTrigger>
                 <SelectContent className="max-h-80">
@@ -251,7 +251,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                   setCurrentPage(1);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger aria-label="نوع العقار">
                   <SelectValue placeholder="نوع العقار" />
                 </SelectTrigger>
                 <SelectContent>
@@ -275,7 +275,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                   setCurrentPage(1);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger aria-label="حالة العقار">
                   <SelectValue placeholder="حالة العقار" />
                 </SelectTrigger>
                 <SelectContent>
@@ -293,7 +293,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
                   setCurrentPage(1);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger aria-label="طريقة الدفع">
                   <SelectValue placeholder="طريقة الدفع" />
                 </SelectTrigger>
                 <SelectContent>

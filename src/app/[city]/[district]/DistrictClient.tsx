@@ -123,7 +123,7 @@ export default function DistrictClient({ citySlug, districtSlug, initialProperti
           <CardContent className="p-4">
             <div className="flex flex-wrap items-center gap-4">
               <Select value={selectedType} onValueChange={setSelectedType}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px]" aria-label="نوع العقار">
                   <SelectValue placeholder="نوع العقار" />
                 </SelectTrigger>
                 <SelectContent>

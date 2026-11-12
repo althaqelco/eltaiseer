@@ -65,7 +65,7 @@ export function htmlToMarkdown(html: string, pageUrl: string, origin: string): M
   // 1) حذف ما ليس محتوى
   body = body
     .replace(/<!--[\s\S]*?-->/g, "")
-    .replace(/<(script|style|svg|noscript|template|iframe|button|form|select|header|footer|nav)\b[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<(script|style|svg|noscript|template|iframe|button|form|select|label|header|footer|nav)\b[\s\S]*?<\/\1>/gi, " ")
     .replace(/<(img|input|link|meta)\b[^>]*>/gi, " ");
 
   // 2) الجداول أولاً (قبل أن تُفكك خلاياها)

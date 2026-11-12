@@ -95,7 +95,7 @@ export default function ApartmentsClient({
           <CardContent className="p-4">
             <div className="flex flex-wrap items-center gap-4">
               <Select value={selectedDistrict} onValueChange={setSelectedDistrict}>
-                <SelectTrigger className="w-[200px]">
+                <SelectTrigger className="w-[200px]" aria-label="الحي">
                   <SelectValue placeholder="اختر الحي" />
                 </SelectTrigger>
                 <SelectContent>

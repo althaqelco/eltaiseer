@@ -31,7 +31,7 @@ import { Property } from "@/lib/mockData";
 import { PropertyCard } from "@/components/PropertyCard";
 import { trackEvent } from "@/components/MetaPixel";
 import { getWhatsAppUrl, formatPriceFull as formatPrice, COMPANY_WHATSAPP } from "@/lib/format";
-import { buildPropertySummary, pricePerSqm, formatNumber } from "@/lib/propertySummary";
+import { buildPropertySummary, pricePerSqm, formatNumber, plausibleArea } from "@/lib/propertySummary";
 import { formatArabicDate } from "@/lib/blogPosts";
 import { isFavorite as checkIsFavorite, toggleFavorite as toggleFavoriteStore } from "@/lib/favoritesStore";
 
@@ -349,7 +349,9 @@ export default function PropertyPageClient({
                     <div className="bg-white rounded-lg p-3 text-center shadow-sm">
                       <Maximize className={`h-6 w-6 text-${themeColor}-500 mx-auto mb-2`} />
                       <p className="text-xs text-gray-500 mb-1">المساحة</p>
-                      <p className="font-bold text-gray-900">{property.details.area_sqm} م²</p>
+                      <p className="font-bold text-gray-900">
+                        {plausibleArea(property) ? `${formatNumber(plausibleArea(property)!)} م²` : "تُؤكَّد عند التواصل"}
+                      </p>
                     </div>
                     <div className="bg-white rounded-lg p-3 text-center shadow-sm">
                       <Bed className={`h-6 w-6 text-${themeColor}-500 mx-auto mb-2`} />

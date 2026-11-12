@@ -175,7 +175,9 @@ export default function HomeClient({
   return (
     <div className="min-h-screen">
       <Header />
-      
+
+      {/* معلم <main>: قارئات الشاشة ووكلاء الذكاء الاصطناعي يقفزون به مباشرة إلى المحتوى */}
+      <main>
       <HeroSection 
         onSearch={handleHeroSearch} 
         totalProperties={properties.length}
@@ -409,6 +411,7 @@ export default function HomeClient({
 
       {/* FAQ - visible content matching the FAQPage schema */}
       <HomeFaqSection items={faq} />
+      </main>
 
       <Footer />
     </div>

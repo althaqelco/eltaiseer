@@ -94,7 +94,7 @@ export default function VillasClient({
         <Card className="mb-8">
           <CardContent className="p-4">
             <Select value={selectedDistrict} onValueChange={setSelectedDistrict}>
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-[200px]" aria-label="الحي">
                 <SelectValue placeholder="اختر الحي" />
               </SelectTrigger>
               <SelectContent>

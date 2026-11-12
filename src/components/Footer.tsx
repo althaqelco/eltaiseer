@@ -194,7 +194,7 @@ export function Footer() {
         </div>
 
         {/* Legal Links */}
-        <div className="border-t border-gray-800 mt-4 pt-6 flex flex-wrap justify-center gap-4 text-xs text-gray-500">
+        <div className="border-t border-gray-800 mt-4 pt-6 flex flex-wrap justify-center gap-4 text-xs text-gray-400">
           <Link href="/terms" className="hover:text-orange-400 transition-colors">الشروط والأحكام</Link>
           <span>•</span>
           <Link href="/privacy" className="hover:text-orange-400 transition-colors">سياسة الخصوصية</Link>
@@ -205,11 +205,11 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-4 pt-4 text-center text-gray-500">
+        <div className="mt-4 pt-4 text-center text-gray-400">
           <p className="mb-2">
             © {new Date().getFullYear()} التيسير للعقارات. جميع الحقوق محفوظة.
           </p>
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-gray-400">
             التيسير للعقارات - شريكك الموثوق في عقارات دمياط الجديدة والمنصورة الجديدة | شقق للبيع | فيلات | دوبلكس | أراضي | محلات تجارية
           </p>
         </div>

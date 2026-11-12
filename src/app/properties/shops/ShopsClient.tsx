@@ -77,7 +77,7 @@ export default function ShopsClient({
         <Card className="mb-8">
           <CardContent className="p-4">
             <Select value={selectedDistrict} onValueChange={setSelectedDistrict}>
-              <SelectTrigger className="w-[200px]"><SelectValue placeholder="اختر الحي" /></SelectTrigger>
+              <SelectTrigger className="w-[200px]" aria-label="الحي"><SelectValue placeholder="اختر الحي" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">جميع الأحياء</SelectItem>
                 {PLACE_CATEGORIES.map((cat) => (

@@ -122,7 +122,7 @@ export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 
                 onValueChange={handleCityChange}
                 dir="rtl"
               >
-                <SelectTrigger className="bg-white border-0 text-right">
+                <SelectTrigger className="bg-white border-0 text-right" aria-label="المدينة">
                   <SelectValue placeholder="اختر المدينة" />
                 </SelectTrigger>
                 <SelectContent>
@@ -147,7 +147,7 @@ export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 
                 onValueChange={setSelectedDistrict}
                 dir="rtl"
               >
-                <SelectTrigger className="bg-white border-0 text-right">
+                <SelectTrigger className="bg-white border-0 text-right" aria-label="المنطقة">
                   <SelectValue placeholder="اختر المنطقة" />
                 </SelectTrigger>
                 <SelectContent className="max-h-80">
@@ -182,7 +182,7 @@ export function HeroSection({ onSearch, totalProperties = 100, totalDistricts = 
                 onValueChange={setSelectedType}
                 dir="rtl"
               >
-                <SelectTrigger className="bg-white border-0 text-right">
+                <SelectTrigger className="bg-white border-0 text-right" aria-label="النوع">
                   <SelectValue placeholder="اختر النوع" />
                 </SelectTrigger>
                 <SelectContent>

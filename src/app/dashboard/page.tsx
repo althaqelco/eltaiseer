@@ -370,7 +370,7 @@ export default function DashboardPage() {
 
                 {/* Status Filter */}
                 <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilter)}>
-                  <SelectTrigger className="w-[140px] h-9">
+                  <SelectTrigger className="w-[140px] h-9" aria-label="الحالة">
                     <SelectValue placeholder="الحالة" />
                   </SelectTrigger>
                   <SelectContent>
@@ -383,7 +383,7 @@ export default function DashboardPage() {
 
                 {/* Sort */}
                 <Select value={sortMode} onValueChange={(v) => setSortMode(v as SortMode)}>
-                  <SelectTrigger className="w-[150px] h-9">
+                  <SelectTrigger className="w-[150px] h-9" aria-label="الترتيب">
                     <SelectValue placeholder="الترتيب" />
                   </SelectTrigger>
                   <SelectContent>

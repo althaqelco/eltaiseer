@@ -111,7 +111,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                     value={formData.type}
                     onValueChange={(value) => handleChange("type", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="النوع">
                       <SelectValue placeholder="اختر النوع" />
                     </SelectTrigger>
                     <SelectContent>
@@ -162,7 +162,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                     handleChange("district", ""); // Reset district when city changes
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger aria-label="المدينة">
                     <SelectValue placeholder="اختر المدينة" />
                   </SelectTrigger>
                   <SelectContent>
@@ -184,7 +184,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                   value={formData.district}
                   onValueChange={(value) => handleChange("district", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger aria-label="المنطقة">
                     <SelectValue placeholder="اختر المنطقة" />
                   </SelectTrigger>
                   <SelectContent className="max-h-80">
@@ -279,7 +279,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                     value={formData.level}
                     onValueChange={(value) => handleChange("level", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="اختر">
                       <SelectValue placeholder="اختر" />
                     </SelectTrigger>
                     <SelectContent>
@@ -301,7 +301,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                   value={formData.finishing}
                   onValueChange={(value) => handleChange("finishing", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger aria-label="نوع التشطيب">
                     <SelectValue placeholder="اختر نوع التشطيب" />
                   </SelectTrigger>
                   <SelectContent>
@@ -324,7 +324,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                     value={formData.status}
                     onValueChange={(value) => handleChange("status", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="حالة العقار">
                       <SelectValue placeholder="اختر حالة العقار" />
                     </SelectTrigger>
                     <SelectContent>
@@ -400,7 +400,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                     value={formData.paymentType}
                     onValueChange={(value) => handleChange("paymentType", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="طريقة الدفع">
                       <SelectValue placeholder="اختر طريقة الدفع" />
                     </SelectTrigger>
                     <SelectContent>
@@ -420,7 +420,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                       value={formData.status}
                       onValueChange={(value) => handleChange("status", value)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger aria-label="حالة العقار">
                         <SelectValue placeholder="اختر حالة العقار" />
                       </SelectTrigger>
                       <SelectContent>
@@ -438,7 +438,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                       value={formData.paymentType}
                       onValueChange={(value) => handleChange("paymentType", value)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger aria-label="طريقة الدفع">
                         <SelectValue placeholder="اختر طريقة الدفع" />
                       </SelectTrigger>
                       <SelectContent>
@@ -487,7 +487,7 @@ export function PropertyForm({ mode, form, isSubmitting, onSubmit, extraSidebar 
                       value={formData.installmentYears}
                       onValueChange={(value) => handleChange("installmentYears", value)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger aria-label="اختر">
                         <SelectValue placeholder="اختر" />
                       </SelectTrigger>
                       <SelectContent>

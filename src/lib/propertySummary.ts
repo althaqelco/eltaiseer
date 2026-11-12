@@ -27,6 +27,16 @@ export function pricePerSqm(p: Pick<Property, "price" | "details">): number | nu
   return v >= SQM_MIN && v <= SQM_MAX ? v : null;
 }
 
+// مساحة العقار إن كانت معقولة، وإلا null. إعلان بسعر ومساحة يعطيان سعر متر مستحيلاً
+// (0.35 م² أو 95,000 م² لمحل) فيه خطأ إدخال في المساحة — لا ننشر رقماً نعرف أنه خطأ
+// في الجملة التعريفية ولا الـ schema ولا بطاقة المواصفات حتى يصححه المعلن من لوحة التحكم.
+export function plausibleArea(p: Pick<Property, "price" | "details">): number | null {
+  const area = p.details?.area_sqm;
+  if (!area || area < 1) return null;
+  if (p.price > 0 && pricePerSqm(p) === null) return null;
+  return area;
+}
+
 // متوسط سعر المتر لمجموعة عقارات — يتجاهل الإعلانات ذات البيانات غير المعقولة
 export function averagePerSqm(list: Array<Pick<Property, "price" | "details">>): { avg: number; count: number } | null {
   const v = list.map(pricePerSqm).filter((n): n is number => n !== null);
@@ -58,7 +68,8 @@ export function buildPropertySummary(p: Property): string {
 
   const where = district ? `في ${district} ب${city}` : `في ${city}`;
   const facts: string[] = [];
-  if (d.area_sqm >= 1) facts.push(`مساحة ${formatNumber(d.area_sqm)} م²`);
+  const area = plausibleArea(p);
+  if (area) facts.push(`مساحة ${formatNumber(area)} م²`);
   if (RESIDENTIAL_WITH_ROOMS.includes(p.type) && d.bedrooms > 0) {
     facts.push(d.bathrooms > 0 ? `${d.bedrooms} غرف نوم و${d.bathrooms} حمام` : `${d.bedrooms} غرف نوم`);
   }

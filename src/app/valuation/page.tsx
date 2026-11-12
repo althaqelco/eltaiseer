@@ -190,7 +190,7 @@ export default function ValuationPage() {
                       <div>
                         <Label>نوع العقار</Label>
                         <Select onValueChange={(v) => setFormData({ ...formData, propertyType: v })}>
-                          <SelectTrigger>
+                          <SelectTrigger aria-label="نوع العقار">
                             <SelectValue placeholder="اختر نوع العقار" />
                           </SelectTrigger>
                           <SelectContent>
@@ -204,7 +204,7 @@ export default function ValuationPage() {
                       <div>
                         <Label>المنطقة</Label>
                         <Select onValueChange={(v) => setFormData({ ...formData, district: v })}>
-                          <SelectTrigger>
+                          <SelectTrigger aria-label="المنطقة">
                             <SelectValue placeholder="اختر المنطقة" />
                           </SelectTrigger>
                           <SelectContent>
@@ -232,7 +232,7 @@ export default function ValuationPage() {
                         <div>
                           <Label>التشطيب</Label>
                           <Select onValueChange={(v) => setFormData({ ...formData, finishing: v })}>
-                            <SelectTrigger>
+                            <SelectTrigger aria-label="نوع التشطيب">
                               <SelectValue placeholder="نوع التشطيب" />
                             </SelectTrigger>
                             <SelectContent>

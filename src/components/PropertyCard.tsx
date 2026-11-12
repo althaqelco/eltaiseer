@@ -5,6 +5,7 @@ import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";
 import { getPropertyUrl } from "@/lib/districtSlugs";
 import { getWhatsAppUrl, formatPriceShort as formatPrice, COMPANY_WHATSAPP, COMPANY_TEL } from "@/lib/format";
+import { plausibleArea } from "@/lib/propertySummary";
 import { isFavorite, toggleFavorite } from "@/lib/favoritesStore";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -192,7 +193,7 @@ export function PropertyCard({ property, onFavoriteChange }: PropertyCardProps) 
         <div className="grid grid-cols-3 gap-1 sm:gap-2 pt-2 border-t text-xs sm:text-sm">
           <div className="flex items-center gap-1 text-gray-600">
             <Maximize className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-            <span>{property.details.area_sqm}م²</span>
+            <span>{plausibleArea(property) ? `${plausibleArea(property)}م²` : "—"}</span>
           </div>
           {property.details.bedrooms > 0 && (
             <div className="flex items-center gap-1 text-gray-600">
