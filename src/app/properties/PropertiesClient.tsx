@@ -35,7 +35,6 @@ import {
   SlidersHorizontal,
   CheckCircle2,
   Building2,
-  Loader2,
 } from "lucide-react";
 import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
 import { getAllPropertiesAsync } from "@/lib/propertyStoreLazy";
@@ -62,8 +61,18 @@ const PROPERTY_TYPES = [
 
 const ITEMS_PER_PAGE = 20;
 
-function PropertiesContent({ initialProperties }: { initialProperties: Property[] }) {
+// useSearchParams داخل مكوّن الصفحة كان يُخرج الصفحة كلها من HTML الخادم (يظهر للزاحف "جاري التحميل" فقط بلا H1 ولا عقارات).
+// القراءة الآن في مكوّن صغير معزول داخل Suspense، وباقي الصفحة يُعرض كاملاً من الخادم.
+function SearchParamsSync({ onParams }: { onParams: (params: URLSearchParams) => void }) {
   const searchParams = useSearchParams();
+  useEffect(() => {
+    onParams(new URLSearchParams(searchParams.toString()));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+  return null;
+}
+
+function PropertiesContent({ initialProperties }: { initialProperties: Property[] }) {
   const [properties, setProperties] = useState<Property[]>(
     () => initialProperties.map((p) => ({ ...p, createdAt: new Date(p.createdAt) }))
   );
@@ -84,15 +93,17 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
         setProperties(firestoreProperties);
       }
     }).catch(console.error);
+  }, []);
 
-    // Check URL params (يدعم search الذي يستخدمه SearchAction schema)
-    const district = searchParams.get("district");
-    const type = searchParams.get("type");
-    const search = searchParams.get("search");
+  // Check URL params (يدعم search الذي يستخدمه SearchAction schema)
+  const applyUrlParams = (params: URLSearchParams) => {
+    const district = params.get("district");
+    const type = params.get("type");
+    const search = params.get("search");
     if (district) setSelectedDistrict(district);
     if (type) setSelectedType(type);
     if (search) setSearchQuery(search);
-  }, [searchParams]);
+  };
 
   const filteredProperties = useMemo(() => {
     return properties.filter((p) => {
@@ -154,6 +165,9 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Suspense fallback={null}>
+        <SearchParamsSync onParams={applyUrlParams} />
+      </Suspense>
       <Header />
 
       {/* Breadcrumb */}
@@ -163,7 +177,7 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
       <div className="bg-gradient-to-l from-slate-900 via-slate-800 to-orange-900 py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            جميع العقارات
+            جميع العقارات للبيع في دمياط الجديدة والمنصورة الجديدة
           </h1>
           <p className="text-gray-300">
             تصفح {filteredProperties.length} عقار متاح للبيع في دمياط الجديدة والمنصورة الجديدة
@@ -545,27 +559,6 @@ function PropertiesContent({ initialProperties }: { initialProperties: Property[
   );
 }
 
-// Loading component for Suspense fallback
-function PropertiesLoading() {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-orange-500 mx-auto mb-4" />
-          <p className="text-gray-600">جاري تحميل العقارات...</p>
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
-}
-
-// Main export with Suspense boundary
 export default function PropertiesClient({ initialProperties }: { initialProperties: Property[] }) {
-  return (
-    <Suspense fallback={<PropertiesLoading />}>
-      <PropertiesContent initialProperties={initialProperties} />
-    </Suspense>
-  );
+  return <PropertiesContent initialProperties={initialProperties} />;
 }

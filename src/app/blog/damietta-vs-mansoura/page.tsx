@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -291,6 +292,8 @@ export default async function DamiettaVsMansouraArticle() {
           </div>
         </div>
       </article>
+
+      <RelatedArticles slug="damietta-vs-mansoura" />
 
       <Footer />
     </div>

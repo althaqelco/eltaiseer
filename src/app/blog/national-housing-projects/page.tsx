@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
@@ -10,7 +11,7 @@ import { ArticleDates } from "@/components/ArticleDates";
 import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
-  title: "مشاريع الإسكان القومية في دمياط الجديدة 2026 | جنة - دار مصر - سكن مصر",
+  title: { absolute: "مشاريع الإسكان القومية في دمياط الجديدة: جنة ودار مصر وسكن مصر" },
   description: "دليل شامل لمشاريع الإسكان القومية في دمياط الجديدة: مشروع جنة، دار مصر، سكن مصر. تعرف على الأسعار، المساحات، طرق الحجز، والمميزات.",
   keywords: [
     "مشروع جنة دمياط الجديدة",
@@ -385,6 +386,8 @@ export default function NationalHousingArticle() {
 
         </div>
       </article>
+
+      <RelatedArticles slug="national-housing-projects" />
 
       <Footer />
     </div>

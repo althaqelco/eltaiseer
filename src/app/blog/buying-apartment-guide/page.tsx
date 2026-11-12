@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
@@ -10,7 +11,7 @@ import { ArticleDates } from "@/components/ArticleDates";
 import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
-  title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026 | نصائح الخبراء",
+  title: "دليلك الشامل لشراء شقة في دمياط الجديدة 2026",
   description: "دليل شامل ومفصل لشراء شقة في دمياط الجديدة. تعرف على أفضل المناطق، الأسعار، نصائح التفاوض، والإجراءات القانونية. كل ما تحتاج معرفته قبل شراء شقتك.",
   keywords: [
     "شراء شقة دمياط الجديدة",
@@ -384,6 +385,8 @@ export default function BuyingGuideArticle() {
 
         </div>
       </article>
+
+      <RelatedArticles slug="buying-apartment-guide" />
 
       <Footer />
     </div>

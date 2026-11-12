@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { getPropertiesFromFirestore } from "@/lib/firestoreProperties";
-import { getCityDistrictSlugs, getDistrictSlug } from "@/lib/districtSlugs";
+import { getCityDistrictSlugs, getDistrictSlug, SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
 import { getActiveListings } from "@/lib/bw/listings";
 import { isLive, listingPath } from "@/lib/bw/calc";
 import { BW_BASE } from "@/lib/bw/constants";
@@ -84,13 +84,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // District pages — مشتقة من نفس مصدر البيانات المستخدم في المسارات (لا قوائم يدوية)
+  // الحي الذي لا معروض فيه يخرج noindex من صفحته (soft 404)، فلا يُدرج هنا؛ يعود تلقائياً مع أول عقار.
+  // إذا تعذر جلب العقارات تُدرج كل الأحياء.
+  const districtsWithListings = new Set(
+    liveProperties.map((p) => `${p.location.cityId || "new-damietta"}/${getDistrictSlug(p.location.district)}`)
+  );
   const districtPages: MetadataRoute.Sitemap = (
     [
       ["new-damietta", getCityDistrictSlugs("new-damietta")],
       ["new-mansoura", getCityDistrictSlugs("new-mansoura")],
     ] as const
   ).flatMap(([city, slugs]) =>
-    slugs.map((slug) => ({
+    slugs
+      .filter((slug) => !propertiesLoaded || districtsWithListings.has(`${city}/${slug}`))
+      .map((slug) => ({
       url: url(`${city}/${slug}`),
       lastModified: listingsDate,
       changeFrequency: "daily" as const,
@@ -99,7 +106,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   // Property detail pages — صفحات المال الحقيقية
-  const propertyPages: MetadataRoute.Sitemap = liveProperties.map((p) => {
+  // عقار بحي غير مُعرّف في districtSlugs تخرج صفحته noindex (رابط غير نهائي) — لا يُدرج حتى يُصحَّح حيّه
+  const propertyPages: MetadataRoute.Sitemap = liveProperties
+    .filter((p) => SLUG_TO_DISTRICT[getDistrictSlug(p.location.district)] !== undefined)
+    .map((p) => {
     const citySlug = p.location.cityId || "new-damietta";
     const districtSlug = getDistrictSlug(p.location.district);
     return {

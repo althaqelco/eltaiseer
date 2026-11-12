@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -8,7 +9,7 @@ import { ArticleSchema } from "@/components/ArticleSchema";
 import { ArticleDates } from "@/components/ArticleDates";
 
 export const metadata: Metadata = {
-  title: "خطوات شراء عقار في دمياط الجديدة والمنصورة الجديدة: الأوراق والإجراءات",
+  title: { absolute: "خطوات شراء عقار في دمياط الجديدة والمنصورة الجديدة: الأوراق والإجراءات" },
   description:
     "دليل عملي خطوة بخطوة لشراء عقار في دمياط الجديدة والمنصورة الجديدة: فحص الأوراق، العقد الابتدائي، صحة التوقيع، التسجيل في الشهر العقاري، والأخطاء الشائعة التي تكلف المشترين.",
   keywords: [
@@ -195,6 +196,8 @@ export default function BuyingStepsLegalArticle() {
           </div>
         </div>
       </article>
+
+      <RelatedArticles slug="buying-steps-legal" />
 
       <Footer />
     </div>

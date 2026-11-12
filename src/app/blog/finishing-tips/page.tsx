@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
@@ -10,7 +11,7 @@ import { ArticleDates } from "@/components/ArticleDates";
 import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
-  title: "نصائح التشطيب الذكي 2026 | كيف تشطب شقتك بأقل تكلفة وأعلى جودة",
+  title: { absolute: "نصائح التشطيب 2026: كيف تشطب شقتك بأقل تكلفة وأعلى جودة" },
   description: "دليل شامل لتشطيب الشقق في دمياط الجديدة. نصائح الخبراء لتوفير المال، اختيار المواد، تجنب الأخطاء الشائعة، ومراحل التشطيب خطوة بخطوة.",
   keywords: [
     "تشطيب شقق دمياط الجديدة",
@@ -406,6 +407,8 @@ export default function FinishingTipsArticle() {
 
         </div>
       </article>
+
+      <RelatedArticles slug="finishing-tips" />
 
       <Footer />
     </div>

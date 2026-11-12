@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
@@ -10,7 +11,7 @@ import { ArticleDates } from "@/components/ArticleDates";
 import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
-    title: "أفضل المناطق للسكن في المنصورة الجديدة 2026 | دليل شامل",
+    title: "أفضل المناطق للسكن في المنصورة الجديدة 2026",
     description: "دليل تفصيلي لأفضل المناطق السكنية في المنصورة الجديدة. مقارنة شاملة بين أحياء R1 وR2 وR3 والفيلات وداون تاون من حيث الأسعار والخدمات والموقع.",
     keywords: [
         "أحياء المنصورة الجديدة",
@@ -346,6 +347,8 @@ export default function NewMansouraDistrictsArticle() {
 
                 </div>
             </article>
+
+            <RelatedArticles slug="new-mansoura-districts" />
 
             <Footer />
         </div>

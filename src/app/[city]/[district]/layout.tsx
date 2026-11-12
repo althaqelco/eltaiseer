@@ -1,8 +1,10 @@
 import { Metadata } from "next";
 import { SLUG_TO_DISTRICT } from "@/lib/districtSlugs";
 import { getPropertiesServer, filterByCity, filterByDistrict } from "@/lib/serverProperties";
-import { computeDistrictStats } from "@/lib/districtFaq";
+import { computeDistrictStats, buildDistrictTitle } from "@/lib/districtFaq";
 import { formatNumber } from "@/lib/propertySummary";
+import { getDistrictEditorial } from "@/lib/districtContent";
+import { ogImages } from "@/lib/site";
 
 type Props = {
   params: Promise<{ city: string; district: string }>;
@@ -27,13 +29,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cityName = isNM ? "المنصورة الجديدة" : "دمياط الجديدة";
   const citySlug = isNM ? "new-mansoura" : "new-damietta";
 
-  const title = `عقارات ${districtName} - ${cityName} | شقق وفيلات للبيع 2026`;
-  // وصف من المعروض الفعلي في الحي (كان نصاً واحداً مكرراً في 53 صفحة بلا أي معلومة عن الحي)
+  // وصف وعنوان من المعروض الفعلي في الحي (كان نصاً واحداً مكرراً في 53 صفحة بلا أي معلومة عن الحي)
+  const all = await getPropertiesServer();
   const stats = computeDistrictStats(
-    filterByDistrict(filterByCity(await getPropertiesServer(), citySlug), districtName).filter(
-      (p) => p.status !== "تم البيع"
-    )
+    filterByDistrict(filterByCity(all, citySlug), districtName).filter((p) => p.status !== "تم البيع")
   );
+  // العنوان يذكر الأنواع المعروضة فعلاً في الحي بصيغة البحث ("شقق للبيع في …")
+  const title = buildDistrictTitle(districtName, cityName, stats);
+  // حي بلا أي معروض = صفحة "لا توجد عقارات" يصنفها جوجل soft 404 وتضعف تقييم الموقع ككل:
+  // لا تُفهرس (مع بقاء روابطها متبوعة) وتعود للفهرسة تلقائياً مع أول عقار.
+  // all.length === 0 يعني تعذر جلب البيانات لا حياً فارغاً — لا نُخرج صفحات من الفهرس بسبب عطل مؤقت.
+  const indexable = stats !== null || all.length === 0;
   const description = stats
     ? `عدد العقارات المعروضة للبيع الآن في ${districtName} ب${cityName}: ${stats.count}${
         stats.minPrice
@@ -58,7 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ];
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords,
     openGraph: {
@@ -68,17 +74,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "website",
       locale: "ar_EG",
       siteName: "التيسير للعقارات",
+      images: ogImages(citySlug, `${districtName} - ${cityName}`),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: ogImages(citySlug).map((i) => i.url),
     },
     alternates: {
       canonical: `https://eltaiseer.com/${citySlug}/${district}/`,
     },
     robots: {
-      index: true,
+      index: indexable,
       follow: true,
     },
   };
@@ -105,7 +113,8 @@ export default async function DistrictLayout({ children, params }: { children: R
     additionalType: "https://schema.org/Neighborhood",
     name: districtName,
     url: `https://eltaiseer.com/${citySlug}/${district}/`,
-    description: `${districtName} - منطقة سكنية في ${cityName}. تصفح شقق وفيلات وأراضي للبيع في ${districtName} بأسعار تنافسية.`,
+    // التعريف التحريري للحي إن وُجد (كان نصاً تسويقياً واحداً يصف كل حي بأنه "منطقة سكنية" حتى المناطق التجارية)
+    description: getDistrictEditorial(district)?.intro || `${districtName} — أحد أحياء ${cityName}.`,
     containedInPlace: {
       "@type": "City",
       name: cityName,

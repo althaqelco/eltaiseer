@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "تقييم العقارات مجاناً | اعرف سعر عقارك في دمياط الجديدة والمنصورة الجديدة",
+  title: "تقييم عقارك مجاناً في دمياط الجديدة والمنصورة الجديدة",
   description: "احصل على تقييم مجاني لعقارك في دمياط الجديدة أو المنصورة الجديدة. خبراء التيسير للعقارات يقدمون تقييماً دقيقاً بناءً على أسعار السوق الحالية 2026. شقق، فيلات، أراضي، محلات.",
   keywords: [
     "تقييم عقارات دمياط الجديدة",
@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ar_EG",
     siteName: "التيسير للعقارات",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة" }],
   },
   twitter: {
     card: "summary_large_image",

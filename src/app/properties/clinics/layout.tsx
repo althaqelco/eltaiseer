@@ -16,6 +16,8 @@ export const metadata: Metadata = {
     title: "عيادات للبيع في دمياط الجديدة والمنصورة الجديدة",
     description: "عيادات طبية جاهزة بتراخيص ومواقع مميزة",
     url: "https://eltaiseer.com/properties/clinics/",
+    type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة" }],
   },
   alternates: { canonical: "https://eltaiseer.com/properties/clinics/" },
 };

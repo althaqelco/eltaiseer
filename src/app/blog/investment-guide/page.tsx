@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
@@ -10,7 +11,7 @@ import { ArticleDates } from "@/components/ArticleDates";
 import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
-  title: "الاستثمار العقاري في دمياط الجديدة 2026 | دليل المستثمر الذكي",
+  title: "الاستثمار العقاري في دمياط الجديدة 2026",
   description: "دليل شامل للاستثمار العقاري في دمياط الجديدة. تعرف على أفضل المناطق للاستثمار، العائد المتوقع، نصائح الخبراء، وكيفية تحقيق أرباح من العقارات.",
   keywords: [
     "استثمار عقاري دمياط الجديدة",
@@ -341,6 +342,8 @@ export default function InvestmentGuideArticle() {
 
         </div>
       </article>
+
+      <RelatedArticles slug="investment-guide" />
 
       <Footer />
     </div>

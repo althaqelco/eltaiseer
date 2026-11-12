@@ -18,6 +18,8 @@ export const metadata: Metadata = {
     title: "محلات تجارية للبيع في دمياط الجديدة والمنصورة الجديدة",
     description: "محلات ومقرات إدارية بمواقع استراتيجية",
     url: "https://eltaiseer.com/properties/shops/",
+    type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة" }],
   },
   alternates: { canonical: "https://eltaiseer.com/properties/shops/" },
 };

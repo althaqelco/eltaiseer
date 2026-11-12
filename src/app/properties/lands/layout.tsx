@@ -17,6 +17,8 @@ export const metadata: Metadata = {
     title: "أراضي للبيع في دمياط الجديدة والمنصورة الجديدة | التيسير للعقارات",
     description: "أفضل الأراضي للبيع - أراضي سكنية وتجارية بمواقع مميزة",
     url: "https://eltaiseer.com/properties/lands/",
+    type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة" }],
   },
   alternates: { canonical: "https://eltaiseer.com/properties/lands/" },
 };

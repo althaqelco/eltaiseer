@@ -28,6 +28,14 @@ export function absUrl(path: string): string {
   return `${SITE_URL}${clean.replace(/\/+$/, "")}/`;
 }
 
+// صورة المشاركة (og:image): openGraph في أي صفحة فرعية يستبدل openGraph الجذر كاملاً ولا يدمجه،
+// فكل صفحة تعرّف openGraph يجب أن تضع images بنفسها وإلا خرجت بلا صورة (كان هذا حال 59 صفحة)
+export function ogImages(cityId?: string, alt: string = "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة") {
+  const url =
+    cityId === "new-mansoura" ? "/og-new-mansoura.jpg" : cityId === "new-damietta" ? "/og-new-damietta.jpg" : "/og-image.jpg";
+  return [{ url, width: 1200, height: 630, alt }];
+}
+
 export function cityNameOf(cityId?: string): "دمياط الجديدة" | "المنصورة الجديدة" {
   return cityId === "new-mansoura" ? "المنصورة الجديدة" : "دمياط الجديدة";
 }

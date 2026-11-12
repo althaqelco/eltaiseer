@@ -20,6 +20,8 @@ export const metadata: Metadata = {
     title: "فيلات للبيع في دمياط الجديدة والمنصورة الجديدة | التيسير للعقارات",
     description: "أفخم فيلات للبيع في دمياط الجديدة والمنصورة الجديدة - فيلات مستقلة وتاون هاوس بتشطيبات فاخرة",
     url: "https://eltaiseer.com/properties/villas/",
+    type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة" }],
   },
   alternates: {
     canonical: "https://eltaiseer.com/properties/villas/",

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
@@ -10,7 +11,7 @@ import { ArticleDates } from "@/components/ArticleDates";
 import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
-    title: "الاستثمار العقاري في المنصورة الجديدة 2026 | دليل المستثمر الذكي",
+    title: "الاستثمار العقاري في المنصورة الجديدة 2026",
     description: "دليل شامل للاستثمار العقاري في المنصورة الجديدة. فرص الاستثمار، العوائد المتوقعة، أفضل المناطق للشراء، ونصائح الخبراء لتحقيق أرباح مضاعفة.",
     keywords: [
         "استثمار عقاري المنصورة الجديدة",
@@ -369,6 +370,8 @@ export default function NewMansouraInvestmentArticle() {
 
                 </div>
             </article>
+
+            <RelatedArticles slug="new-mansoura-investment" />
 
             <Footer />
         </div>

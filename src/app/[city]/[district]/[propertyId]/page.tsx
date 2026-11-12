@@ -59,9 +59,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const priceText = formatPrice(property.price);
   const bedroomsText = property.details.bedrooms > 0 ? `${property.details.bedrooms} غرف نوم` : "";
   const areaText = plausibleArea(property) ? `${plausibleArea(property)} متر` : "";
+  // الدور يميّز وحدات العمارة الواحدة (نفس النوع والمساحة والسعر) — كانت تخرج بعنوان واحد مكرر
+  const level = (property.details.level || "").trim();
+  const levelText = bedroomsText ? "" : level.includes("الدور") ? level : level === "أرضي" ? "الدور الأرضي" : "";
 
   // المدينة في العنوان: اسم الحي وحده ("الحي الثالث") لا يحدد المدينة لمن يقرأ النتيجة
-  const title = `${property.type} ${areaText ? areaText + " " : ""}${bedroomsText ? bedroomsText + " " : ""}للبيع في ${districtName ? districtName + " " : ""}${cityName} - ${priceText}`;
+  const title = `${property.type} ${areaText ? areaText + " " : ""}${bedroomsText ? bedroomsText + " " : ""}${levelText ? levelText + " " : ""}للبيع في ${districtName ? districtName + " " : ""}${cityName} - ${priceText}`;
   // وصف الصفحة = نفس جملة الحقائق المعروضة تحت العنوان وفي الـ schema (سطح واحد، لا ثلاث صياغات)
   const description = buildPropertySummary(property);
 
@@ -84,6 +87,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: canonicalUrl },
+    // صريح هنا حتى لا ترث صفحة العقار قرار فهرسة صفحة الحي (الحي الفارغ noindex).
+    // عقار بحي غير مُعرّف رابطه غير نهائي (unknown-district) فلا يُفهرس حتى يُصحَّح حيّه من لوحة التحكم.
+    robots: { index: SLUG_TO_DISTRICT[canonicalSlug] !== undefined, follow: true },
     openGraph: {
       title,
       description,

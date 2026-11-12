@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "عن التيسير للعقارات | شريكك الموثوق في عقارات دمياط الجديدة والمنصورة الجديدة",
+  title: { absolute: "عن التيسير للعقارات | وسيط عقاري في دمياط الجديدة والمنصورة الجديدة" },
   description: "التيسير للعقارات - شركة عقارية متخصصة في بيع الشقق والفيلات والأراضي في دمياط الجديدة والمنصورة الجديدة. خبرة واسعة في سوق العقارات المصرية وفريق محترف يساعدك في إيجاد العقار المناسب.",
   keywords: [
     "التيسير للعقارات",
@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ar_EG",
     siteName: "التيسير للعقارات",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة" }],
   },
   twitter: {
     card: "summary_large_image",

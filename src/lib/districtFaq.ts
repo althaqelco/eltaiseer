@@ -38,6 +38,40 @@ export interface DistrictStats {
 }
 
 // available = عقارات الحي غير المباعة
+// صيغة الجمع لكل نوع — لعنوان صفحة الحي (العنوان يذكر الأنواع المعروضة فعلاً، لا "شقق وفيلات" لحي كله محلات)
+const TYPE_PLURAL: Record<string, string> = {
+  "شقة": "شقق",
+  "شقة فاخرة": "شقق",
+  "دوبلكس": "دوبلكس",
+  "بنتهاوس": "بنتهاوس",
+  "روف": "روف",
+  "فيلا منفصلة": "فيلات",
+  "تاون هاوس": "تاون هاوس",
+  "توين هاوس": "توين هاوس",
+  "شاليه": "شاليهات",
+  "محل تجاري": "محلات",
+  "مقر إداري": "مقرات إدارية",
+  "مكتب": "مكاتب",
+  "عيادة": "عيادات",
+  "أرض": "أراضي",
+};
+
+const BRAND_SUFFIX = " | التيسير للعقارات";
+
+// عنوان صفحة الحي من المعروض الفعلي: أكثر نوعين عدداً + "للبيع في" + الحي والمدينة (صيغة ما يكتبه الباحث)
+export function buildDistrictTitle(districtName: string, cityName: string, stats: DistrictStats | null): string {
+  if (!stats) return `عقارات ${districtName} - ${cityName}`;
+  const labels: string[] = [];
+  for (const { type } of stats.typeCounts) {
+    const label = TYPE_PLURAL[type];
+    if (label && !labels.includes(label)) labels.push(label);
+    if (labels.length === 2) break;
+  }
+  const what = labels.length ? labels.join(" و") : "عقارات";
+  const title = `${what} للبيع في ${districtName} ${cityName}`;
+  return title.length + BRAND_SUFFIX.length <= 70 ? title + BRAND_SUFFIX : title;
+}
+
 export function computeDistrictStats(available: Property[]): DistrictStats | null {
   if (available.length === 0) return null;
   const prices = available.map((p) => p.price).filter((n) => n > 0);

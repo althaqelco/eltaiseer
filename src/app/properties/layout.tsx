@@ -3,7 +3,7 @@ import { Metadata } from "next";
 // صفحة /properties هي أكثر صفحة مرتبطة داخلياً — هذا الـ layout يمنحها metadata خاصة بها
 // (كانت metadata.ts ملفاً ميتاً لا يقرؤه Next.js لأن page.tsx مكوّن عميل)
 export const metadata: Metadata = {
-  title: "جميع العقارات للبيع في دمياط الجديدة والمنصورة الجديدة | شقق وفيلات وأراضي",
+  title: "عقارات للبيع في دمياط الجديدة والمنصورة الجديدة",
   description:
     "كل العقارات المعروضة للبيع الآن في دمياط الجديدة والمنصورة الجديدة. شقق تمليك، فيلات مستقلة، دوبلكس، بنتهاوس، محلات تجارية، أراضي. سعر ومواصفات كل وحدة وطريقة الدفع.",
   keywords: [
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     description: "كل العقارات المعروضة للبيع الآن - شقق، فيلات، دوبلكس، أراضي بأسعار تنافسية",
     url: "https://eltaiseer.com/properties/",
     type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "التيسير للعقارات - عقارات دمياط الجديدة والمنصورة الجديدة" }],
   },
   alternates: {
     canonical: "https://eltaiseer.com/properties/",

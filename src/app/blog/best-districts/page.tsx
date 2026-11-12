@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { RelatedArticles } from "@/components/RelatedArticles";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
@@ -10,7 +11,7 @@ import { ArticleDates } from "@/components/ArticleDates";
 import { ArticlePriceNote } from "@/components/ArticlePriceNote";
 
 export const metadata: Metadata = {
-  title: "أفضل الأحياء للسكن في دمياط الجديدة 2026 | مقارنة شاملة",
+  title: "أفضل الأحياء للسكن في دمياط الجديدة 2026",
   description: "دليل شامل لأفضل الأحياء السكنية في دمياط الجديدة. مقارنة تفصيلية بين الحي الأول والثاني والثالث ومشاريع الإسكان القومي من حيث الأسعار والخدمات والموقع.",
   keywords: [
     "أحياء دمياط الجديدة",
@@ -357,6 +358,8 @@ export default function BestDistrictsArticle() {
 
         </div>
       </article>
+
+      <RelatedArticles slug="best-districts" />
 
       <Footer />
     </div>

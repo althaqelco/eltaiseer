@@ -23,6 +23,7 @@ import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictSlug } from "@/lib/districtSlugs";
 import { buildFaqSchema } from "@/lib/homeFaq";
+import { CityGuides } from "@/components/RelatedArticles";
 import type { FaqItem } from "@/lib/homeFaq";
 
 const ITEMS_PER_PAGE = 20;
@@ -416,6 +417,9 @@ export default function CityClient({ citySlug, initialProperties, faq = [], summ
             </div>
           </section>
         )}
+
+        {/* أدلة ومقالات المدينة — روابط داخلية سياقية للمقالات */}
+        <CityGuides citySlug={citySlug} cityName={city.nameAr} />
       </main>
 
       <Footer />
