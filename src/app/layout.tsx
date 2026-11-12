@@ -108,6 +108,11 @@ export const metadata: Metadata = {
     "apple-mobile-web-app-status-bar-style": "default",
     "format-detection": "telephone=yes",
   },
+  // إثبات ملكية Bing Webmaster Tools (وسم msvalidate.01) — لا يُحذف حتى بعد نجاح التحقق.
+  // Google مُثبت بالملف public/googlefd6145e8df2ffd46.html، وBing أيضاً بالملف public/BingSiteAuth.xml
+  verification: {
+    other: { "msvalidate.01": "7899AB68C2F333DA156C7F106AB93956" },
+  },
   category: "real estate",
   classification: "Business",
 };
