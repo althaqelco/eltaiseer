@@ -243,6 +243,22 @@ export function Header() {
               المفضلة
             </Link>
 
+            {/* صفحتان أساسيتان كانتا بلا رابط في القائمة (بيت الوطن برابط واحد في الفوتر فقط) —
+                Search Console أظهر القسم كله "مكتشف وغير مفهرس"؛ الرابط من كل صفحة يرفع أولوية زحفه */}
+            <Link
+              href="/prices"
+              className="hidden lg:inline-flex text-gray-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-lg hover:bg-orange-50"
+            >
+              الأسعار
+            </Link>
+
+            <Link
+              href="/beit-al-watan-for-sale"
+              className="hidden lg:inline-flex text-gray-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-lg hover:bg-orange-50"
+            >
+              أراضي بيت الوطن
+            </Link>
+
             <Link
               href="/blog"
               className="text-gray-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-lg hover:bg-orange-50"
@@ -362,6 +378,22 @@ export function Header() {
               >
                 <Heart className="h-4 w-4" />
                 المفضلة
+              </Link>
+
+              <Link
+                href="/prices"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-gray-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-lg hover:bg-orange-50"
+              >
+                أسعار العقارات اليوم
+              </Link>
+
+              <Link
+                href="/beit-al-watan-for-sale"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-gray-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-lg hover:bg-orange-50"
+              >
+                أراضي بيت الوطن للبيع
               </Link>
 
               <Link

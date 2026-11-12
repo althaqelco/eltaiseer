@@ -196,6 +196,14 @@ export default function HomeClient({
               <Link href="/prices" className="text-orange-600 font-semibold underline">
                 أسعار كل حي بالتفصيل
               </Link>
+              {" · "}
+              <Link href="/beit-al-watan-for-sale" className="text-orange-600 font-semibold underline">
+                أراضي بيت الوطن للبيع (إعلانات موثّقة)
+              </Link>
+              {" · "}
+              <Link href="/beit-al-watan-for-sale/phase-11" className="text-orange-600 font-semibold underline">
+                المرحلة 11 بعد التخصيص
+              </Link>
             </p>
           </div>
         </section>
