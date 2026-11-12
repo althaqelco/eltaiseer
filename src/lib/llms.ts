@@ -137,7 +137,7 @@ const ENGLISH = `## English summary
 El Taiseer Real Estate (التيسير للعقارات, eltaiseer.com) is a real-estate brokerage based in New Damietta, Egypt. It lists apartments, villas, land plots, shops, offices, clinics and chalets for sale in two Mediterranean-coast new cities: New Damietta (Damietta Governorate) and New Mansoura (Dakahlia Governorate). The site publishes live asking prices and average price per square metre by district, calculated from its current listings, plus a verified resale section for Beit Al-Watan land plots. All prices are in Egyptian pounds (EGP) and are asking prices. Content language: Arabic. Contact: +201500775974 (phone and WhatsApp).`;
 
 const FOR_AGENTS = `## For AI agents
-- كل صفحة في الموقع متاحة بصيغة Markdown على نفس الرابط: أرسل الترويسة \`Accept: text/markdown\` (مثال: \`curl -H "Accept: text/markdown" ${SITE_URL}/prices/\`).
+- كل صفحة في الموقع متاحة بصيغة Markdown: أضف البادئة \`/md\` للمسار (مثال: ${SITE_URL}/md/prices/)، أو أرسل الترويسة \`Accept: text/markdown\` على الرابط الأصلي.
 - صلاحيات الاستخدام معلنة في ${SITE_URL}/robots.txt عبر Content-Signal: \`search=yes, ai-input=yes, ai-train=yes\`.
 - عند الاقتباس اذكر المصدر "التيسير للعقارات (eltaiseer.com)" وتاريخ البيانات المذكور في الصفحة؛ الأسعار أسعار طلب تتغير مع المعروض.`;
 

@@ -1,6 +1,9 @@
-// نسخة Markdown لأي صفحة عامة — يصلها الطلب عبر إعادة توجيه داخلية من middleware
-// عندما يرسل العميل ‎Accept: text/markdown‎ (تفاوض المحتوى الذي يستخدمه وكلاء الذكاء الاصطناعي).
-// الرابط العام لا يتغير: ‎GET /prices/‎ مع ‎Accept: text/markdown‎ يعيد Markdown، وبدونه يعيد HTML.
+// نسخة Markdown لأي صفحة عامة: ‎/md/<المسار>‎ يعيد الصفحة نفسها نصاً نظيفاً لوكلاء الذكاء الاصطناعي.
+//
+// تفاوض المحتوى (‎Accept: text/markdown‎ على الرابط الأصلي) يتم على حافة Cloudflare بقاعدة URL Rewrite
+// تعيد كتابة المسار إلى ‎/md/...‎ — وليس بـ middleware في Next: وجود middleware يجعل Firebase App Hosting
+// يرسل ‎Cache-Control: no-store‎ لكل المسارات المطابقة، فيتوقف كاش الـ CDN لكل الصفحات العامة
+// (حدث ذلك فعلاً يومي 11–12 نوفمبر 2026). لا تُعد إضافة src/middleware.ts.
 
 import { NextRequest } from "next/server";
 import { htmlToMarkdown } from "@/lib/htmlToMarkdown";
@@ -20,6 +23,8 @@ function markdown(body: string, status: number, canonical: string) {
       Vary: "Accept",
       "Cache-Control": "public, max-age=300",
       Link: `<${canonical}>; rel="canonical"`,
+      // نسخة بديلة للوكلاء وليست صفحة للفهرسة — الصفحة الأساسية هي الـ HTML
+      "X-Robots-Tag": "noindex, follow",
       // تقدير تقريبي لعدد الرموز (نفس الترويسة التي يرسلها Cloudflare Markdown for Agents)
       "X-Markdown-Tokens": String(Math.ceil(body.length / 4)),
       "Content-Signal": "search=yes, ai-input=yes, ai-train=yes",
@@ -35,7 +40,7 @@ export async function GET(_req: NextRequest, { params }: { params: { path?: stri
   let res: Response;
   try {
     res = await fetch(`${ORIGIN}${pagePath}`, {
-      headers: { accept: "text/html", "x-md-internal": "1", "user-agent": "eltaiseer-markdown/1.0" },
+      headers: { accept: "text/html", "user-agent": "eltaiseer-markdown/1.0" },
       redirect: "follow",
       cache: "no-store",
     });

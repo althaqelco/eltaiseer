@@ -9,9 +9,10 @@
 const BASE_URL = "https://eltaiseer.com";
 const SIGNAL = "Content-Signal: search=yes, ai-input=yes, ai-train=yes";
 
-// صفحات خاصة أو بلا محتوى للفهرسة؛ ‎/md/‎ هو المسار الداخلي لنسخة Markdown (تُقدَّم على رابط الصفحة نفسه)
-const PRIVATE = ["/dashboard/", "/login/", "/add-property/", "/api/", "/md/"];
-const AI_PRIVATE = ["/dashboard/", "/api/", "/md/"];
+// صفحات خاصة أو بلا محتوى للفهرسة. ‎/md/‎ (نسخة Markdown) مسموح للزواحف والوكلاء؛ ترويسة Link canonical
+// و X-Robots-Tag: noindex في ردّه تمنع فهرسته كنسخة مكررة في محركات البحث
+const PRIVATE = ["/dashboard/", "/login/", "/add-property/", "/api/"];
+const AI_PRIVATE = ["/dashboard/", "/api/"];
 
 const GROUPS: Array<{ agent: string; disallow: string[] }> = [
   { agent: "*", disallow: PRIVATE },
