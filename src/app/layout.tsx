@@ -216,11 +216,16 @@ export default function RootLayout({
       <body
         className={`${cairo.variable} font-sans antialiased bg-gray-50`}
       >
+        {/* إيقاف "Email Address Obfuscation" في Cloudflare لمحتوى الصفحة: الخاصية كانت تستبدل بريد
+            التواصل برابط مشفّر لا تقرؤه محركات البحث والإجابة، وتحقن سكربت email-decode.min.js
+            الذي يحجب العرض في كل صفحة. التعليقان email_off هما طريقة Cloudflare الرسمية للاستثناء. */}
+        <span hidden dangerouslySetInnerHTML={{ __html: "<!--email_off-->" }} />
         <Suspense fallback={null}>
           <MetaPixel />
         </Suspense>
         {children}
         <FloatingWhatsApp />
+        <span hidden dangerouslySetInnerHTML={{ __html: "<!--/email_off-->" }} />
       </body>
     </html>
   );
