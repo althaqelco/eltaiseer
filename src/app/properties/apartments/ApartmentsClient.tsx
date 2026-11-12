@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Building2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
+import { getAllPropertiesAsync } from "@/lib/propertyStoreLazy";
 import { PLACE_CATEGORIES } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 

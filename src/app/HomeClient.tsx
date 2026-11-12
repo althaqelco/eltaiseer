@@ -10,7 +10,7 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Footer } from "@/components/Footer";
 import { Property } from "@/lib/mockData";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
+import { getAllPropertiesAsync } from "@/lib/propertyStoreLazy";
 import { CityId } from "@/lib/egyptPlaces";
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, List, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";

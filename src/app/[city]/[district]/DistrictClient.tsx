@@ -12,7 +12,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { MapPin, ChevronRight, ChevronLeft, Building2 } from "lucide-react";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
+import { getAllPropertiesAsync } from "@/lib/propertyStoreLazy";
 import { getCategoryByDistrict, CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { SLUG_TO_DISTRICT, getDistrictSlug } from "@/lib/districtSlugs";

@@ -38,7 +38,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { Breadcrumb, breadcrumbPresets } from "@/components/Breadcrumb";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
+import { getAllPropertiesAsync } from "@/lib/propertyStoreLazy";
 import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictColor } from "@/lib/egyptPlaces";

@@ -25,7 +25,7 @@ import {
   Share2,
   Loader2,
 } from "lucide-react";
-import { getPropertyByIdAsync, getRelatedPropertiesAsync } from "@/lib/propertyStore";
+import { getPropertyByIdAsync, getRelatedPropertiesAsync } from "@/lib/propertyStoreLazy";
 import { CITIES, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { PropertyCard } from "@/components/PropertyCard";

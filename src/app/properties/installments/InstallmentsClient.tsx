@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { CreditCard, ChevronLeft, ChevronRight, Building2 } from "lucide-react";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
+import { getAllPropertiesAsync } from "@/lib/propertyStoreLazy";
 import { Property } from "@/lib/mockData";
 import type { FaqItem } from "@/lib/homeFaq";
 

@@ -18,7 +18,7 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
-import { getAllPropertiesAsync } from "@/lib/propertyStore";
+import { getAllPropertiesAsync } from "@/lib/propertyStoreLazy";
 import { CITIES, CITY_DATA, CityId } from "@/lib/egyptPlaces";
 import { Property } from "@/lib/mockData";
 import { getDistrictSlug } from "@/lib/districtSlugs";
