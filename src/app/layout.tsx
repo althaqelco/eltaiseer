@@ -187,7 +187,8 @@ export default function RootLayout({
     inLanguage: "ar-EG",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://eltaiseer.com/properties?search={search_term_string}",
+      // بشرطة ختامية: Google يزحف القالب حرفياً، وبدونها كان يمر بتحويل 308 ويظهر في "صفحة تتضمن إعادة توجيه"
+      target: "https://eltaiseer.com/properties/?search={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };

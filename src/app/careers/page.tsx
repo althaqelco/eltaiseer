@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Home, ChevronLeft, Briefcase, Users, TrendingUp, Heart, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ORG_ID, ORG_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "وظائف | انضم لفريق التيسير للعقارات",
@@ -42,31 +43,40 @@ const openPositions = [
 ];
 
 export default function CareersPage() {
-  const jobPostingSchemas = openPositions.map((position) => ({
-    "@context": "https://schema.org",
-    "@type": "JobPosting",
-    title: position.title,
-    description: position.description,
-    employmentType: position.type === "دوام كامل" ? "FULL_TIME" : "PART_TIME",
-    jobLocation: {
-      "@type": "Place",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "دمياط الجديدة",
-        addressRegion: "دمياط",
-        addressCountry: "EG",
+  const jobPostingSchemas = openPositions.map((position) => {
+    const remote = position.location.includes("عن بعد");
+    return {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      title: position.title,
+      description: position.description,
+      employmentType: position.type === "دوام كامل" ? "FULL_TIME" : "PART_TIME",
+      jobLocation: {
+        "@type": "Place",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "دمياط الجديدة",
+          addressRegion: "دمياط",
+          // نفس الرمز البريدي في schema الشركة (layout.tsx)
+          postalCode: "34511",
+          addressCountry: "EG",
+        },
       },
-    },
-    hiringOrganization: {
-      "@type": "Organization",
-      name: "التيسير للعقارات",
-      sameAs: "https://eltaiseer.com",
-      logo: "https://eltaiseer.com/logo.png",
-    },
-    datePosted: "2026-08-01",
-    validThrough: "2027-06-30",
-    jobLocationType: position.location.includes("عن بعد") ? "TELECOMMUTE" : undefined,
-  }));
+      hiringOrganization: {
+        "@type": "Organization",
+        "@id": ORG_ID,
+        name: ORG_NAME,
+        sameAs: `${SITE_URL}/`,
+        logo: `${SITE_URL}/logo.png`,
+      },
+      datePosted: "2026-08-01",
+      validThrough: "2027-06-30",
+      // وظيفة عن بعد: Google يشترط applicantLocationRequirements وإلا اعتبر العنصر غير صالح (خطأ Search Console)
+      ...(remote
+        ? { jobLocationType: "TELECOMMUTE", applicantLocationRequirements: { "@type": "Country", name: "Egypt" } }
+        : {}),
+    };
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">

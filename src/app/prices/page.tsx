@@ -21,7 +21,7 @@ import {
   type TypeGroupKey,
 } from "@/lib/liveFacts";
 import { formatArabicDate } from "@/lib/blogPosts";
-import { ORG_ID, SITE_URL } from "@/lib/site";
+import { ORG_ID, ORG_NAME, SITE_URL } from "@/lib/site";
 
 // ISR كل 5 دقائق — أسعار حية من العقارات المعروضة فعلاً
 export const revalidate = 300;
@@ -140,6 +140,7 @@ export default async function PricesPage() {
   };
 
   // Dataset: الصفحة جدول بيانات فعلي (متوسطات أسعار طلب) — يعرّفه لمحركات البحث والإجابة كمصدر أرقام قابل للاقتباس
+  const datasetOrg = { "@type": "Organization", "@id": ORG_ID, name: ORG_NAME, url: `${SITE_URL}/` };
   const datasetSchema = {
     "@context": "https://schema.org",
     "@type": "Dataset",
@@ -151,11 +152,23 @@ export default async function PricesPage() {
     inLanguage: "ar-EG",
     dateModified: snapshot.asOf,
     isAccessibleForFree: true,
-    creator: { "@id": ORG_ID },
-    publisher: { "@id": ORG_ID },
+    // مدقق Google للـ Dataset لا يتبع مرجع @id وحده ولا يقبل الأنواع الفرعية (City):
+    // creator/publisher يجب أن يكونا Organization صريحة، وspatialCoverage من نوع Place (تنبيهات Search Console 13/11/2026)
+    creator: datasetOrg,
+    publisher: datasetOrg,
+    // شروط الاستخدام المنشورة على الموقع — لا تمنح ترخيصاً جديداً، فقط تشير لما يحكم استخدام البيانات
+    license: `${SITE_URL}/terms/`,
     spatialCoverage: [
-      { "@type": "City", name: "دمياط الجديدة" },
-      { "@type": "City", name: "المنصورة الجديدة" },
+      {
+        "@type": "Place",
+        name: "دمياط الجديدة",
+        address: { "@type": "PostalAddress", addressLocality: "دمياط الجديدة", addressRegion: "دمياط", addressCountry: "EG" },
+      },
+      {
+        "@type": "Place",
+        name: "المنصورة الجديدة",
+        address: { "@type": "PostalAddress", addressLocality: "المنصورة الجديدة", addressRegion: "الدقهلية", addressCountry: "EG" },
+      },
     ],
     variableMeasured: ["متوسط سعر المتر المربع (جنيه مصري)", "نطاق أسعار الطلب (جنيه مصري)", "عدد العقارات المعروضة"],
     measurementTechnique: "السعر ÷ المساحة لكل إعلان بيع نشط، ثم المتوسط لكل حي وفئة؛ لا يُنشر متوسط من أقل من 3 وحدات للمدينة",
